@@ -1,5 +1,5 @@
 name: fuels
-description: A starting point for Dart libraries or applications.
+description: Dart FFI bridge to Fuel Rust SDK
 version: 1.0.1
 homepage: https://github.com/Fuelet/fuels-dart/tree/main/packages/fuels
 
