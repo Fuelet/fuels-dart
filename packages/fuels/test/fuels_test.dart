@@ -1,26 +1,22 @@
 import 'dart:ffi';
-import 'dart:io' as io;
-
 import 'package:fuels/fuels.dart';
 import 'package:test/test.dart';
 
-void main() {
-  // TODO: get rid of the absolute paths
-  final DynamicLibrary dynLib = io.Platform.isIOS
-      ? DynamicLibrary.executable()
-      : DynamicLibrary.open(
-          "/Users/ilyavirnik/Documents/Development/pulse-inc/projects/fuel-dart-sdk/pulse_native/target/debug/libpulse_native.dylib");
-  var pulseNative = PulseNativeImpl(dynLib);
+const path = '/Users/ilyavirnik/Documents/Development/pulse-inc/projects/fuels-dart/target/debug/libfuels.dylib';
 
-  var betaApiUrl = "https://node-beta-2.fuel.network";
+void main() {
+  final dynLib = DynamicLibrary.open(path);
+  var pulseNative = createWrapper(dynLib);
+
+  var betaApiUrl = 'https://node-beta-2.fuel.network';
 
   var testWalletAddress =
-      "fuel1lcghw4e6gucsw4hj0me9cu3fkhdg65gf5ujck2tlywn8drrcedqq2htmt3";
+      'fuel1lcghw4e6gucsw4hj0me9cu3fkhdg65gf5ujck2tlywn8drrcedqq2htmt3';
   var testSeedPhrase =
-      "sorry suit fade strike crucial theory rubber sign scrub burden enough trash";
+      'sorry suit fade strike crucial theory rubber sign scrub burden enough trash';
 
   const ETH_ASSET =
-      "0x0000000000000000000000000000000000000000000000000000000000000000";
+      '0x0000000000000000000000000000000000000000000000000000000000000000';
 
   test('test wallet', () async {
     WalletUnlocked wallet =
@@ -61,7 +57,7 @@ void main() {
     for (var i = 0; i < balances.assets.length; i++) {
       var asset = balances.assets[i];
       var assetBalance = balances.balances[i];
-      print("$asset -> $assetBalance");
+      print('$asset -> $assetBalance');
     }
   });
 
