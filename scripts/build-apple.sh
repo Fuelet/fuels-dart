@@ -35,3 +35,12 @@ zip -r $FRAMEWORK.zip $FRAMEWORK
 
 # Cleanup
 rm -rf ios-sim-lipo mac-lipo $FRAMEWORK
+
+# Copy the binaries to the needed location
+CURR_VERSION=fuels-v`awk '/^version: /{print $2}' packages/fuels/pubspec.yaml`
+
+cp platform-build/FlutterFuels.xcframework.zip packages/flutter_fuels/macos/Frameworks/$CURR_VERSION.zip
+echo "[macos] Copied file!"
+
+cp platform-build/FlutterFuels.xcframework.zip packages/flutter_fuels/ios/Frameworks/$CURR_VERSION.zip
+echo "[ios] Copied file!"
