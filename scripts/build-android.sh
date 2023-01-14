@@ -33,8 +33,9 @@ cd -
 
 # Cleanup
 rm -rf $JNI_DIR
+cd ..
 
 # Copy the binary to the needed location
-CURR_VERSION=library_name-v`awk '/^version: /{print $2}' packages/library_name/pubspec.yaml`
+CURR_VERSION=library_name-v`awk '/^version: /{print $2}' packages/fuels/pubspec.yaml`
 cp platform-build/android.tar.gz packages/flutter_fuels/android/$CURR_VERSION.tar.gz
 echo "[android] Copied file!"
