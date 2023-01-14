@@ -1,0 +1,21 @@
+default: clean gen
+
+clean:
+    rm -f native/src/bridge_generated.rs
+    rm -f native/src/bridge_generated.io.rs
+    sed -i '' '/mod bridge_generated;/d' native/src/lib.rs
+
+gen:
+    cargo build --manifest-path=native/Cargo.toml
+    flutter pub get
+    flutter_rust_bridge_codegen \
+        --rust-input native/src/api.rs \
+        --dart-output lib/src/bridge_generated.dart \
+        --c-output '../flutter_fuels/ios/Classes/frb.h' \
+        --c-output '../flutter_fuels/macos/Classes/frb.h' \
+        --wasm \
+        --llvm-path /opt/homebrew/opt/llvm 
+    flutter format .
+    cargo build --manifest-path=native/Cargo.toml
+
+# vim:expandtab:sw=4:ts=4

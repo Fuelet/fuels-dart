@@ -293,10 +293,10 @@ edition = "2018"
 crate-type = ["staticlib", "cdylib"]
 
 [build-dependencies]
-flutter_rust_bridge_codegen = "1.56.*"
+flutter_rust_bridge_codegen = "1.61.*"
 
 [dependencies]
-flutter_rust_bridge = "1.56.*"
+flutter_rust_bridge = "1.61.*"
 EOF
 
 touch $RUST_BASE/src/api.rs
