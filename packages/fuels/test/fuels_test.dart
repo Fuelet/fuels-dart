@@ -1,3 +1,5 @@
+// ignore_for_file: avoid_print
+
 import 'dart:ffi';
 import 'package:fuels/fuels.dart';
 import 'package:test/test.dart';
@@ -8,14 +10,14 @@ void main() {
   final dynLib = DynamicLibrary.open(path);
   var pulseNative = createWrapper(dynLib);
 
-  var betaApiUrl = 'https://node-beta-2.fuel.network';
+  const betaApiUrl = 'https://node-beta-2.fuel.network';
 
-  var testWalletAddress =
+  const testWalletAddress =
       'fuel1lcghw4e6gucsw4hj0me9cu3fkhdg65gf5ujck2tlywn8drrcedqq2htmt3';
-  var testSeedPhrase =
+  const testSeedPhrase =
       'sorry suit fade strike crucial theory rubber sign scrub burden enough trash';
 
-  const ETH_ASSET =
+  const ethAsset =
       '0x0000000000000000000000000000000000000000000000000000000000000000';
 
   test('test wallet', () async {
@@ -44,7 +46,7 @@ void main() {
         bridge: pulseNative, phrase: testSeedPhrase, apiUrl: betaApiUrl);
 
     wallet.address().then((addr) => expect(addr, testWalletAddress));
-    var ethBalance = await wallet.getAssetBalance(asset: ETH_ASSET);
+    var ethBalance = await wallet.getAssetBalance(asset: ethAsset);
     print(ethBalance);
   });
 
