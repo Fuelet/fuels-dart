@@ -1,6 +1,4 @@
 import 'dart:async';
-import 'dart:ffi';
-import 'dart:io' as io;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_fuels/flutter_fuels.dart';
@@ -19,23 +17,16 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
+  static const _defaultWalletAddressTitle = 'Not generated yet';
+
   late final Fuels _fuels;
-  var _wallet = 'Not generated yet';
+  var _walletAddress = _defaultWalletAddressTitle;
 
   @override
   void initState() {
     super.initState();
 
     _fuels = createLib();
-  }
-
-  Future<void> _generateWallet() async {
-    final wallet = await WalletUnlocked.newRandom(
-      bridge: _fuels,
-      apiUrl: _betaApiUrl,
-    );
-
-    _wallet = await wallet.address();
   }
 
   @override
@@ -49,23 +40,39 @@ class _MyAppState extends State<MyApp> {
         ),
         body: SingleChildScrollView(
           child: Container(
-            padding: const EdgeInsets.all(10),
+            padding: const EdgeInsets.all(16),
+            alignment: Alignment.center,
             child: Column(
               children: [
                 Text(
-                  _wallet,
+                  _walletAddress,
                   style: textStyle,
                   textAlign: TextAlign.center,
+                ),
+                const SizedBox(height: 8),
+                OutlinedButton(
+                  onPressed: _generateWallet,
+                  child: Text(
+                    _walletAddress == _defaultWalletAddressTitle
+                        ? 'Generate address'
+                        : 'Regenerate address',
+                  ),
                 ),
               ],
             ),
           ),
         ),
-        floatingActionButton: FloatingActionButton(
-          onPressed: _generateWallet,
-          child: const Icon(Icons.add),
-        ),
       ),
     );
+  }
+
+  Future<void> _generateWallet() async {
+    final wallet = await WalletUnlocked.newRandom(
+      bridge: _fuels,
+      apiUrl: _betaApiUrl,
+    );
+
+    final walletAddress = await wallet.address();
+    setState(() => _walletAddress = walletAddress);
   }
 }
