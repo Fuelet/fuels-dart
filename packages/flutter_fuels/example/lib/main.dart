@@ -1,7 +1,11 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
+import 'dart:ffi';
+import 'dart:io' as io;
 
-import 'package:flutter_fuels/flutter_fuels.dart' as flutter_fuels;
+import 'package:flutter/material.dart';
+import 'package:flutter_fuels/flutter_fuels.dart';
+
+const _betaApiUrl = 'https://node-beta-2.fuel.network';
 
 void main() {
   runApp(const MyApp());
@@ -15,58 +19,51 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  late int sumResult;
-  late Future<int> sumAsyncResult;
+  late final Fuels _fuels;
+  var _wallet = 'Not generated yet';
 
   @override
   void initState() {
     super.initState();
-    sumResult = flutter_fuels.sum(1, 2);
-    sumAsyncResult = flutter_fuels.sumAsync(3, 4);
+
+    _fuels = createLib();
+  }
+
+  Future<void> _generateWallet() async {
+    final wallet = await WalletUnlocked.newRandom(
+      bridge: _fuels,
+      apiUrl: _betaApiUrl,
+    );
+
+    _wallet = await wallet.address();
   }
 
   @override
   Widget build(BuildContext context) {
     const textStyle = TextStyle(fontSize: 25);
-    const spacerSmall = SizedBox(height: 10);
+
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(
-          title: const Text('Native Packages'),
+          title: const Text('Fuel SDK'),
         ),
         body: SingleChildScrollView(
           child: Container(
             padding: const EdgeInsets.all(10),
             child: Column(
               children: [
-                const Text(
-                  'This calls a native function through FFI that is shipped as source in the package. '
-                  'The native code is built as part of the Flutter Runner build.',
-                  style: textStyle,
-                  textAlign: TextAlign.center,
-                ),
-                spacerSmall,
                 Text(
-                  'sum(1, 2) = $sumResult',
+                  _wallet,
                   style: textStyle,
                   textAlign: TextAlign.center,
-                ),
-                spacerSmall,
-                FutureBuilder<int>(
-                  future: sumAsyncResult,
-                  builder: (BuildContext context, AsyncSnapshot<int> value) {
-                    final displayValue =
-                        (value.hasData) ? value.data : 'loading';
-                    return Text(
-                      'await sumAsync(3, 4) = $displayValue',
-                      style: textStyle,
-                      textAlign: TextAlign.center,
-                    );
-                  },
                 ),
               ],
             ),
           ),
+        ),
+        floatingActionButton: FloatingActionButton(
+          onPressed: _generateWallet,
+          child: const Icon(Icons.add),
         ),
       ),
     );
