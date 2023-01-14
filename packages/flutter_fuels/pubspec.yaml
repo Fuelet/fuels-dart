@@ -1,7 +1,7 @@
 name: flutter_fuels
 description: A new Flutter FFI plugin project.
 version: 0.0.1
-# homepage:
+homepage: https://github.com/Fuelet/fuels-dart/tree/main/packages/flutter_fuels
 
 publish_to: none # do not publish yet
 
