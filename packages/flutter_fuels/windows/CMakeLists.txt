@@ -1,4 +1,4 @@
-# The Flutter tooling requires that developers have a version of Visual Studio
+set(LibraryVersion "fuels-v1.0.1") # generated; do not edit
 # installed that includes CMake 3.14 or later. You should not increase this
 # version, as doing so will cause the plugin to fail to compile for some
 # customers of the plugin.
