@@ -1,3 +1,7 @@
+## 1.0.2
+
+ - **DOCS**: update fuels sdk description.
+
 ## 1.0.1
 
  - **DOCS**: update homepages in pubspec.yaml files.
