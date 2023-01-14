@@ -1,0 +1,40 @@
+name: flutter_fuels
+description: A new Flutter FFI plugin project.
+version: 0.0.1
+# homepage:
+
+publish_to: none # do not publish yet
+
+environment:
+  sdk: '>=2.18.6 <3.0.0'
+  flutter: ">=2.11.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+  plugin_platform_interface: ^2.0.2
+  fuels:
+    path: ../fuels
+
+dev_dependencies:
+  flutter_lints: ^2.0.0
+  ffi: ^2.0.1
+  ffigen: ^7.2.4
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+
+flutter:
+  plugin:
+    platforms:
+      android:
+        ffiPlugin: true
+      ios:
+        ffiPlugin: true
+      linux:
+        ffiPlugin: true
+      macos:
+        ffiPlugin: true
+      windows:
+        ffiPlugin: true
