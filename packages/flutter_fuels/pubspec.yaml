@@ -1,9 +1,7 @@
 name: flutter_fuels
-description: A new Flutter FFI plugin project.
+description: Flutter Plugin for Fuel SDK
 version: 0.0.1
 homepage: https://github.com/Fuelet/fuels-dart/tree/main/packages/flutter_fuels
-
-publish_to: none # do not publish yet
 
 environment:
   sdk: '>=2.18.6 <3.0.0'
@@ -13,8 +11,7 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
-  fuels:
-    path: ../fuels
+  fuels: ^1.0.2
 
 dev_dependencies:
   flutter_lints: ^2.0.0
