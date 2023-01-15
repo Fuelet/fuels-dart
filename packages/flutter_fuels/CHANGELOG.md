@@ -1,3 +1,7 @@
+## 0.0.1+3
+
+ - Minor updates
+
 ## 0.0.1+2
 
  - **FIX**: update fuels lib reference in flutter_fuels.

@@ -1,3 +1,7 @@
+## 1.0.3
+
+ - Minor updates
+
 ## 1.0.2
 
  - **DOCS**: update fuels sdk description.
