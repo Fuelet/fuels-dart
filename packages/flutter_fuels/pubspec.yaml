@@ -11,7 +11,10 @@ dependencies:
   flutter:
     sdk: flutter
   plugin_platform_interface: ^2.0.2
-  fuels: ^1.0.2
+  fuels: # TODO replace ref OR reference to pub.dev after publishing
+    git:
+      url: git@github.com:Fuelet/fuels-dart.git
+      path: packages/fuels
 
 dev_dependencies:
   flutter_lints: ^2.0.0
