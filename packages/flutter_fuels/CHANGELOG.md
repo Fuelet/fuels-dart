@@ -1,3 +1,7 @@
+## 0.0.1+2
+
+ - **FIX**: update fuels lib reference in flutter_fuels.
+
 ## 0.0.1+1
 
  - **FIX**: correctly resolve fuels dependency in flutter_fuels.
