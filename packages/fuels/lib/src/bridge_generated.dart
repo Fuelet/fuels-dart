@@ -19,17 +19,37 @@ import 'package:meta/meta.dart';
 part 'bridge_generated.freezed.dart';
 
 abstract class Fuels {
+  Future<Provider> createProvider({required String url, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kCreateProviderConstMeta;
+
   Future<WalletUnlocked> newRandomStaticMethodWalletUnlocked(
-      {required String apiUrl, dynamic hint});
+      {Provider? provider, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta
       get kNewRandomStaticMethodWalletUnlockedConstMeta;
 
-  Future<WalletUnlocked> fromMnemonicPhraseStaticMethodWalletUnlocked(
-      {required String phrase, required String apiUrl, dynamic hint});
+  Future<WalletUnlocked> newFromPrivateKeyStaticMethodWalletUnlocked(
+      {required String privateKey, Provider? provider, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta
-      get kFromMnemonicPhraseStaticMethodWalletUnlockedConstMeta;
+      get kNewFromPrivateKeyStaticMethodWalletUnlockedConstMeta;
+
+  Future<WalletUnlocked> newFromMnemonicPhraseStaticMethodWalletUnlocked(
+      {required String phrase, Provider? provider, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta
+      get kNewFromMnemonicPhraseStaticMethodWalletUnlockedConstMeta;
+
+  Future<WalletUnlocked>
+      newFromMnemonicPhraseWithPathStaticMethodWalletUnlocked(
+          {required String phrase,
+          Provider? provider,
+          required String path,
+          dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta
+      get kNewFromMnemonicPhraseWithPathStaticMethodWalletUnlockedConstMeta;
 
   Future<String> addressMethodWalletUnlocked(
       {required WalletUnlocked that, dynamic hint});
@@ -56,9 +76,28 @@ abstract class Fuels {
   FlutterRustBridgeTaskConstMeta
       get kGetTransactionsMethodWalletUnlockedConstMeta;
 
+  DropFnType get dropOpaqueNativeProvider;
+  ShareFnType get shareOpaqueNativeProvider;
+  OpaqueTypeFinalizer get NativeProviderFinalizer;
+
   DropFnType get dropOpaqueNativeWalletUnlocked;
   ShareFnType get shareOpaqueNativeWalletUnlocked;
   OpaqueTypeFinalizer get NativeWalletUnlockedFinalizer;
+}
+
+@sealed
+class NativeProvider extends FrbOpaque {
+  final Fuels bridge;
+  NativeProvider.fromRaw(int ptr, int size, this.bridge)
+      : super.unsafe(ptr, size);
+  @override
+  DropFnType get dropFn => bridge.dropOpaqueNativeProvider;
+
+  @override
+  ShareFnType get shareFn => bridge.shareOpaqueNativeProvider;
+
+  @override
+  OpaqueTypeFinalizer get staticFinalizer => bridge.NativeProviderFinalizer;
 }
 
 @sealed
@@ -204,6 +243,14 @@ class Output with _$Output {
   }) = Output_ContractCreated;
 }
 
+class Provider {
+  final NativeProvider nativeProvider;
+
+  Provider({
+    required this.nativeProvider,
+  });
+}
+
 class Script {
   final int gasPrice;
   final int gasLimit;
@@ -303,28 +350,44 @@ class UtxoId {
 
 class WalletUnlocked {
   final Fuels bridge;
-  final NativeWalletUnlocked walletUnlocked;
+  final NativeWalletUnlocked nativeWalletUnlocked;
   final String privateKey;
-  final String mnemonicPhrase;
 
   WalletUnlocked({
     required this.bridge,
-    required this.walletUnlocked,
+    required this.nativeWalletUnlocked,
     required this.privateKey,
-    required this.mnemonicPhrase,
   });
 
   static Future<WalletUnlocked> newRandom(
-          {required Fuels bridge, required String apiUrl, dynamic hint}) =>
-      bridge.newRandomStaticMethodWalletUnlocked(apiUrl: apiUrl, hint: hint);
+          {required Fuels bridge, Provider? provider, dynamic hint}) =>
+      bridge.newRandomStaticMethodWalletUnlocked(
+          provider: provider, hint: hint);
 
-  static Future<WalletUnlocked> fromMnemonicPhrase(
+  static Future<WalletUnlocked> newFromPrivateKey(
+          {required Fuels bridge,
+          required String privateKey,
+          Provider? provider,
+          dynamic hint}) =>
+      bridge.newFromPrivateKeyStaticMethodWalletUnlocked(
+          privateKey: privateKey, provider: provider, hint: hint);
+
+  static Future<WalletUnlocked> newFromMnemonicPhrase(
           {required Fuels bridge,
           required String phrase,
-          required String apiUrl,
+          Provider? provider,
           dynamic hint}) =>
-      bridge.fromMnemonicPhraseStaticMethodWalletUnlocked(
-          phrase: phrase, apiUrl: apiUrl, hint: hint);
+      bridge.newFromMnemonicPhraseStaticMethodWalletUnlocked(
+          phrase: phrase, provider: provider, hint: hint);
+
+  static Future<WalletUnlocked> newFromMnemonicPhraseWithPath(
+          {required Fuels bridge,
+          required String phrase,
+          Provider? provider,
+          required String path,
+          dynamic hint}) =>
+      bridge.newFromMnemonicPhraseWithPathStaticMethodWalletUnlocked(
+          phrase: phrase, provider: provider, path: path, hint: hint);
 
   Future<String> address({dynamic hint}) => bridge.addressMethodWalletUnlocked(
         that: this,
@@ -367,15 +430,32 @@ class FuelsImpl implements Fuels {
   factory FuelsImpl.wasm(FutureOr<WasmModule> module) =>
       FuelsImpl(module as ExternalLibrary);
   FuelsImpl.raw(this._platform);
+  Future<Provider> createProvider({required String url, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(url);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner.wire_create_provider(port_, arg0),
+      parseSuccessData: _wire2api_provider,
+      constMeta: kCreateProviderConstMeta,
+      argValues: [url],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kCreateProviderConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "create_provider",
+        argNames: ["url"],
+      );
+
   Future<WalletUnlocked> newRandomStaticMethodWalletUnlocked(
-      {required String apiUrl, dynamic hint}) {
-    var arg0 = _platform.api2wire_String(apiUrl);
+      {Provider? provider, dynamic hint}) {
+    var arg0 = _platform.api2wire_opt_box_autoadd_provider(provider);
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) => _platform.inner
           .wire_new_random__static_method__WalletUnlocked(port_, arg0),
       parseSuccessData: (d) => _wire2api_wallet_unlocked(d),
       constMeta: kNewRandomStaticMethodWalletUnlockedConstMeta,
-      argValues: [apiUrl],
+      argValues: [provider],
       hint: hint,
     ));
   }
@@ -384,29 +464,81 @@ class FuelsImpl implements Fuels {
       get kNewRandomStaticMethodWalletUnlockedConstMeta =>
           const FlutterRustBridgeTaskConstMeta(
             debugName: "new_random__static_method__WalletUnlocked",
-            argNames: ["apiUrl"],
+            argNames: ["provider"],
           );
 
-  Future<WalletUnlocked> fromMnemonicPhraseStaticMethodWalletUnlocked(
-      {required String phrase, required String apiUrl, dynamic hint}) {
-    var arg0 = _platform.api2wire_String(phrase);
-    var arg1 = _platform.api2wire_String(apiUrl);
+  Future<WalletUnlocked> newFromPrivateKeyStaticMethodWalletUnlocked(
+      {required String privateKey, Provider? provider, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(privateKey);
+    var arg1 = _platform.api2wire_opt_box_autoadd_provider(provider);
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) => _platform.inner
-          .wire_from_mnemonic_phrase__static_method__WalletUnlocked(
+          .wire_new_from_private_key__static_method__WalletUnlocked(
               port_, arg0, arg1),
       parseSuccessData: (d) => _wire2api_wallet_unlocked(d),
-      constMeta: kFromMnemonicPhraseStaticMethodWalletUnlockedConstMeta,
-      argValues: [phrase, apiUrl],
+      constMeta: kNewFromPrivateKeyStaticMethodWalletUnlockedConstMeta,
+      argValues: [privateKey, provider],
       hint: hint,
     ));
   }
 
   FlutterRustBridgeTaskConstMeta
-      get kFromMnemonicPhraseStaticMethodWalletUnlockedConstMeta =>
+      get kNewFromPrivateKeyStaticMethodWalletUnlockedConstMeta =>
           const FlutterRustBridgeTaskConstMeta(
-            debugName: "from_mnemonic_phrase__static_method__WalletUnlocked",
-            argNames: ["phrase", "apiUrl"],
+            debugName: "new_from_private_key__static_method__WalletUnlocked",
+            argNames: ["privateKey", "provider"],
+          );
+
+  Future<WalletUnlocked> newFromMnemonicPhraseStaticMethodWalletUnlocked(
+      {required String phrase, Provider? provider, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(phrase);
+    var arg1 = _platform.api2wire_opt_box_autoadd_provider(provider);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_new_from_mnemonic_phrase__static_method__WalletUnlocked(
+              port_, arg0, arg1),
+      parseSuccessData: (d) => _wire2api_wallet_unlocked(d),
+      constMeta: kNewFromMnemonicPhraseStaticMethodWalletUnlockedConstMeta,
+      argValues: [phrase, provider],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta
+      get kNewFromMnemonicPhraseStaticMethodWalletUnlockedConstMeta =>
+          const FlutterRustBridgeTaskConstMeta(
+            debugName:
+                "new_from_mnemonic_phrase__static_method__WalletUnlocked",
+            argNames: ["phrase", "provider"],
+          );
+
+  Future<WalletUnlocked>
+      newFromMnemonicPhraseWithPathStaticMethodWalletUnlocked(
+          {required String phrase,
+          Provider? provider,
+          required String path,
+          dynamic hint}) {
+    var arg0 = _platform.api2wire_String(phrase);
+    var arg1 = _platform.api2wire_opt_box_autoadd_provider(provider);
+    var arg2 = _platform.api2wire_String(path);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(
+              port_, arg0, arg1, arg2),
+      parseSuccessData: (d) => _wire2api_wallet_unlocked(d),
+      constMeta:
+          kNewFromMnemonicPhraseWithPathStaticMethodWalletUnlockedConstMeta,
+      argValues: [phrase, provider, path],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta
+      get kNewFromMnemonicPhraseWithPathStaticMethodWalletUnlockedConstMeta =>
+          const FlutterRustBridgeTaskConstMeta(
+            debugName:
+                "new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked",
+            argNames: ["phrase", "provider", "path"],
           );
 
   Future<String> addressMethodWalletUnlocked(
@@ -495,6 +627,13 @@ class FuelsImpl implements Fuels {
             argNames: ["that", "pageSize", "cursor"],
           );
 
+  DropFnType get dropOpaqueNativeProvider =>
+      _platform.inner.drop_opaque_NativeProvider;
+  ShareFnType get shareOpaqueNativeProvider =>
+      _platform.inner.share_opaque_NativeProvider;
+  OpaqueTypeFinalizer get NativeProviderFinalizer =>
+      _platform.NativeProviderFinalizer;
+
   DropFnType get dropOpaqueNativeWalletUnlocked =>
       _platform.inner.drop_opaque_NativeWalletUnlocked;
   ShareFnType get shareOpaqueNativeWalletUnlocked =>
@@ -506,6 +645,10 @@ class FuelsImpl implements Fuels {
     _platform.dispose();
   }
 // Section: wire2api
+
+  NativeProvider _wire2api_NativeProvider(dynamic raw) {
+    return NativeProvider.fromRaw(raw[0], raw[1], this);
+  }
 
   NativeWalletUnlocked _wire2api_NativeWalletUnlocked(dynamic raw) {
     return NativeWalletUnlocked.fromRaw(raw[0], raw[1], this);
@@ -703,6 +846,15 @@ class FuelsImpl implements Fuels {
     }
   }
 
+  Provider _wire2api_provider(dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
+    return Provider(
+      nativeProvider: _wire2api_NativeProvider(arr[0]),
+    );
+  }
+
   Script _wire2api_script(dynamic raw) {
     final arr = raw as List<dynamic>;
     if (arr.length != 9)
@@ -815,13 +967,12 @@ class FuelsImpl implements Fuels {
 
   WalletUnlocked _wire2api_wallet_unlocked(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 3)
-      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
     return WalletUnlocked(
       bridge: this,
-      walletUnlocked: _wire2api_NativeWalletUnlocked(arr[0]),
+      nativeWalletUnlocked: _wire2api_NativeWalletUnlocked(arr[0]),
       privateKey: _wire2api_String(arr[1]),
-      mnemonicPhrase: _wire2api_String(arr[2]),
     );
   }
 

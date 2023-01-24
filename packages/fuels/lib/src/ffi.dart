@@ -10,5 +10,4 @@ Fuels createWrapper(ExternalLibrary lib) {
   return _wrapper!;
 }
 
-Fuels createLib() => 
-    createWrapper(createLibraryImpl());
+Fuels createLib() => createWrapper(createLibraryImpl());
