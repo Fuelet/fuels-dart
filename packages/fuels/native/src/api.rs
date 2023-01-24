@@ -31,7 +31,7 @@ impl WalletUnlocked {
     pub fn new_random(provider: Option<Provider>) -> WalletUnlocked {
         let mut rng = rand::thread_rng();
         let mnemonic_phrase = generate_mnemonic_phrase(&mut rng, 12).unwrap();
-        WalletUnlocked::from_mnemonic_phrase(mnemonic_phrase, provider)
+        WalletUnlocked::new_from_mnemonic_phrase(mnemonic_phrase, provider)
     }
 
     pub fn new_from_private_key(private_key: String, provider: Option<Provider>) -> WalletUnlocked {
@@ -44,7 +44,7 @@ impl WalletUnlocked {
         }
     }
 
-    pub fn from_mnemonic_phrase(phrase: String, provider: Option<Provider>) -> WalletUnlocked {
+    pub fn new_from_mnemonic_phrase(phrase: String, provider: Option<Provider>) -> WalletUnlocked {
         let path = format!("{}/0'/0/0", DEFAULT_DERIVATION_PATH_PREFIX);
         WalletUnlocked::new_from_mnemonic_phrase_with_path(phrase, provider, path)
     }
