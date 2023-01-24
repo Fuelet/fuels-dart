@@ -19,6 +19,7 @@ use std::sync::Arc;
 
 // Section: imports
 
+use crate::model::provider::Provider;
 use crate::model::transaction::Create;
 use crate::model::transaction::Input;
 use crate::model::transaction::Mint;
@@ -34,9 +35,22 @@ use crate::model::transaction::Witness;
 
 // Section: wire functions
 
+fn wire_create_provider_impl(port_: MessagePort, url: impl Wire2Api<String> + UnwindSafe) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "create_provider",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_url = url.wire2api();
+            move |task_callback| Ok(create_provider(api_url))
+        },
+    )
+}
 fn wire_new_random__static_method__WalletUnlocked_impl(
     port_: MessagePort,
-    api_url: impl Wire2Api<String> + UnwindSafe,
+    provider: impl Wire2Api<Option<Provider>> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap(
         WrapInfo {
@@ -45,29 +59,78 @@ fn wire_new_random__static_method__WalletUnlocked_impl(
             mode: FfiCallMode::Normal,
         },
         move || {
-            let api_api_url = api_url.wire2api();
-            move |task_callback| Ok(WalletUnlocked::new_random(api_api_url))
+            let api_provider = provider.wire2api();
+            move |task_callback| Ok(WalletUnlocked::new_random(api_provider))
         },
     )
 }
-fn wire_from_mnemonic_phrase__static_method__WalletUnlocked_impl(
+fn wire_new_from_private_key__static_method__WalletUnlocked_impl(
     port_: MessagePort,
-    phrase: impl Wire2Api<String> + UnwindSafe,
-    api_url: impl Wire2Api<String> + UnwindSafe,
+    private_key: impl Wire2Api<String> + UnwindSafe,
+    provider: impl Wire2Api<Option<Provider>> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap(
         WrapInfo {
-            debug_name: "from_mnemonic_phrase__static_method__WalletUnlocked",
+            debug_name: "new_from_private_key__static_method__WalletUnlocked",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_private_key = private_key.wire2api();
+            let api_provider = provider.wire2api();
+            move |task_callback| {
+                Ok(WalletUnlocked::new_from_private_key(
+                    api_private_key,
+                    api_provider,
+                ))
+            }
+        },
+    )
+}
+fn wire_new_from_mnemonic_phrase__static_method__WalletUnlocked_impl(
+    port_: MessagePort,
+    phrase: impl Wire2Api<String> + UnwindSafe,
+    provider: impl Wire2Api<Option<Provider>> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "new_from_mnemonic_phrase__static_method__WalletUnlocked",
             port: Some(port_),
             mode: FfiCallMode::Normal,
         },
         move || {
             let api_phrase = phrase.wire2api();
-            let api_api_url = api_url.wire2api();
+            let api_provider = provider.wire2api();
             move |task_callback| {
-                Ok(WalletUnlocked::from_mnemonic_phrase(
+                Ok(WalletUnlocked::new_from_mnemonic_phrase(
                     api_phrase,
-                    api_api_url,
+                    api_provider,
+                ))
+            }
+        },
+    )
+}
+fn wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked_impl(
+    port_: MessagePort,
+    phrase: impl Wire2Api<String> + UnwindSafe,
+    provider: impl Wire2Api<Option<Provider>> + UnwindSafe,
+    path: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_phrase = phrase.wire2api();
+            let api_provider = provider.wire2api();
+            let api_path = path.wire2api();
+            move |task_callback| {
+                Ok(WalletUnlocked::new_from_mnemonic_phrase_with_path(
+                    api_phrase,
+                    api_provider,
+                    api_path,
                 ))
             }
         },
@@ -377,6 +440,13 @@ impl support::IntoDart for Output {
     }
 }
 impl support::IntoDartExceptPrimitive for Output {}
+impl support::IntoDart for Provider {
+    fn into_dart(self) -> support::DartAbi {
+        vec![self.native_provider.into_dart()].into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for Provider {}
+
 impl support::IntoDart for Script {
     fn into_dart(self) -> support::DartAbi {
         vec![
@@ -454,9 +524,8 @@ impl support::IntoDartExceptPrimitive for UtxoId {}
 impl support::IntoDart for WalletUnlocked {
     fn into_dart(self) -> support::DartAbi {
         vec![
-            self.wallet_unlocked.into_dart(),
+            self.native_wallet_unlocked.into_dart(),
             self.private_key.into_dart(),
-            self.mnemonic_phrase.into_dart(),
         ]
         .into_dart()
     }

@@ -16,6 +16,13 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
 // Section: api2wire
 
   @protected
+  wire_NativeProvider api2wire_NativeProvider(NativeProvider raw) {
+    final ptr = inner.new_NativeProvider();
+    _api_fill_to_wire_NativeProvider(raw, ptr);
+    return ptr;
+  }
+
+  @protected
   wire_NativeWalletUnlocked api2wire_NativeWalletUnlocked(
       NativeWalletUnlocked raw) {
     final ptr = inner.new_NativeWalletUnlocked();
@@ -26,6 +33,13 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
   @protected
   ffi.Pointer<wire_uint_8_list> api2wire_String(String raw) {
     return api2wire_uint_8_list(utf8.encoder.convert(raw));
+  }
+
+  @protected
+  ffi.Pointer<wire_Provider> api2wire_box_autoadd_provider(Provider raw) {
+    final ptr = inner.new_box_autoadd_provider_0();
+    _api_fill_to_wire_provider(raw, ptr.ref);
+    return ptr;
   }
 
   @protected
@@ -42,6 +56,11 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
   }
 
   @protected
+  ffi.Pointer<wire_Provider> api2wire_opt_box_autoadd_provider(Provider? raw) {
+    return raw == null ? ffi.nullptr : api2wire_box_autoadd_provider(raw);
+  }
+
+  @protected
   ffi.Pointer<wire_uint_8_list> api2wire_uint_8_list(Uint8List raw) {
     final ans = inner.new_uint_8_list_0(raw.length);
     ans.ref.ptr.asTypedList(raw.length).setAll(0, raw);
@@ -50,15 +69,28 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
 
 // Section: finalizer
 
+  late final OpaqueTypeFinalizer _NativeProviderFinalizer =
+      OpaqueTypeFinalizer(inner._drop_opaque_NativeProviderPtr);
+  OpaqueTypeFinalizer get NativeProviderFinalizer => _NativeProviderFinalizer;
   late final OpaqueTypeFinalizer _NativeWalletUnlockedFinalizer =
       OpaqueTypeFinalizer(inner._drop_opaque_NativeWalletUnlockedPtr);
   OpaqueTypeFinalizer get NativeWalletUnlockedFinalizer =>
       _NativeWalletUnlockedFinalizer;
 // Section: api_fill_to_wire
 
+  void _api_fill_to_wire_NativeProvider(
+      NativeProvider apiObj, wire_NativeProvider wireObj) {
+    wireObj.ptr = apiObj.shareOrMove();
+  }
+
   void _api_fill_to_wire_NativeWalletUnlocked(
       NativeWalletUnlocked apiObj, wire_NativeWalletUnlocked wireObj) {
     wireObj.ptr = apiObj.shareOrMove();
+  }
+
+  void _api_fill_to_wire_box_autoadd_provider(
+      Provider apiObj, ffi.Pointer<wire_Provider> wireObj) {
+    _api_fill_to_wire_provider(apiObj, wireObj.ref);
   }
 
   void _api_fill_to_wire_box_autoadd_wallet_unlocked(
@@ -66,12 +98,20 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
     _api_fill_to_wire_wallet_unlocked(apiObj, wireObj.ref);
   }
 
+  void _api_fill_to_wire_opt_box_autoadd_provider(
+      Provider? apiObj, ffi.Pointer<wire_Provider> wireObj) {
+    if (apiObj != null) _api_fill_to_wire_box_autoadd_provider(apiObj, wireObj);
+  }
+
+  void _api_fill_to_wire_provider(Provider apiObj, wire_Provider wireObj) {
+    wireObj.native_provider = api2wire_NativeProvider(apiObj.nativeProvider);
+  }
+
   void _api_fill_to_wire_wallet_unlocked(
       WalletUnlocked apiObj, wire_WalletUnlocked wireObj) {
-    wireObj.wallet_unlocked =
-        api2wire_NativeWalletUnlocked(apiObj.walletUnlocked);
+    wireObj.native_wallet_unlocked =
+        api2wire_NativeWalletUnlocked(apiObj.nativeWalletUnlocked);
     wireObj.private_key = api2wire_String(apiObj.privateKey);
-    wireObj.mnemonic_phrase = api2wire_String(apiObj.mnemonicPhrase);
   }
 }
 
@@ -170,46 +210,116 @@ class FuelsWire implements FlutterRustBridgeWireBase {
   late final _init_frb_dart_api_dl = _init_frb_dart_api_dlPtr
       .asFunction<int Function(ffi.Pointer<ffi.Void>)>();
 
+  void wire_create_provider(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> url,
+  ) {
+    return _wire_create_provider(
+      port_,
+      url,
+    );
+  }
+
+  late final _wire_create_providerPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Int64,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_create_provider');
+  late final _wire_create_provider = _wire_create_providerPtr
+      .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+
   void wire_new_random__static_method__WalletUnlocked(
     int port_,
-    ffi.Pointer<wire_uint_8_list> api_url,
+    ffi.Pointer<wire_Provider> provider,
   ) {
     return _wire_new_random__static_method__WalletUnlocked(
       port_,
-      api_url,
+      provider,
     );
   }
 
   late final _wire_new_random__static_method__WalletUnlockedPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>(
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_Provider>)>>(
       'wire_new_random__static_method__WalletUnlocked');
   late final _wire_new_random__static_method__WalletUnlocked =
       _wire_new_random__static_method__WalletUnlockedPtr
-          .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+          .asFunction<void Function(int, ffi.Pointer<wire_Provider>)>();
 
-  void wire_from_mnemonic_phrase__static_method__WalletUnlocked(
+  void wire_new_from_private_key__static_method__WalletUnlocked(
     int port_,
-    ffi.Pointer<wire_uint_8_list> phrase,
-    ffi.Pointer<wire_uint_8_list> api_url,
+    ffi.Pointer<wire_uint_8_list> private_key,
+    ffi.Pointer<wire_Provider> provider,
   ) {
-    return _wire_from_mnemonic_phrase__static_method__WalletUnlocked(
+    return _wire_new_from_private_key__static_method__WalletUnlocked(
       port_,
-      phrase,
-      api_url,
+      private_key,
+      provider,
     );
   }
 
-  late final _wire_from_mnemonic_phrase__static_method__WalletUnlockedPtr =
+  late final _wire_new_from_private_key__static_method__WalletUnlockedPtr =
       _lookup<
               ffi.NativeFunction<
                   ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>,
-                      ffi.Pointer<wire_uint_8_list>)>>(
-          'wire_from_mnemonic_phrase__static_method__WalletUnlocked');
-  late final _wire_from_mnemonic_phrase__static_method__WalletUnlocked =
-      _wire_from_mnemonic_phrase__static_method__WalletUnlockedPtr.asFunction<
+                      ffi.Pointer<wire_Provider>)>>(
+          'wire_new_from_private_key__static_method__WalletUnlocked');
+  late final _wire_new_from_private_key__static_method__WalletUnlocked =
+      _wire_new_from_private_key__static_method__WalletUnlockedPtr.asFunction<
           void Function(int, ffi.Pointer<wire_uint_8_list>,
-              ffi.Pointer<wire_uint_8_list>)>();
+              ffi.Pointer<wire_Provider>)>();
+
+  void wire_new_from_mnemonic_phrase__static_method__WalletUnlocked(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> phrase,
+    ffi.Pointer<wire_Provider> provider,
+  ) {
+    return _wire_new_from_mnemonic_phrase__static_method__WalletUnlocked(
+      port_,
+      phrase,
+      provider,
+    );
+  }
+
+  late final _wire_new_from_mnemonic_phrase__static_method__WalletUnlockedPtr =
+      _lookup<
+              ffi.NativeFunction<
+                  ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>,
+                      ffi.Pointer<wire_Provider>)>>(
+          'wire_new_from_mnemonic_phrase__static_method__WalletUnlocked');
+  late final _wire_new_from_mnemonic_phrase__static_method__WalletUnlocked =
+      _wire_new_from_mnemonic_phrase__static_method__WalletUnlockedPtr
+          .asFunction<
+              void Function(int, ffi.Pointer<wire_uint_8_list>,
+                  ffi.Pointer<wire_Provider>)>();
+
+  void wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> phrase,
+    ffi.Pointer<wire_Provider> provider,
+    ffi.Pointer<wire_uint_8_list> path,
+  ) {
+    return _wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(
+      port_,
+      phrase,
+      provider,
+      path,
+    );
+  }
+
+  late final _wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlockedPtr =
+      _lookup<
+              ffi.NativeFunction<
+                  ffi.Void Function(
+                      ffi.Int64,
+                      ffi.Pointer<wire_uint_8_list>,
+                      ffi.Pointer<wire_Provider>,
+                      ffi.Pointer<wire_uint_8_list>)>>(
+          'wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked');
+  late final _wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked =
+      _wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlockedPtr
+          .asFunction<
+              void Function(int, ffi.Pointer<wire_uint_8_list>,
+                  ffi.Pointer<wire_Provider>, ffi.Pointer<wire_uint_8_list>)>();
 
   void wire_address__method__WalletUnlocked(
     int port_,
@@ -293,6 +403,16 @@ class FuelsWire implements FlutterRustBridgeWireBase {
           void Function(int, ffi.Pointer<wire_WalletUnlocked>, int,
               ffi.Pointer<wire_uint_8_list>)>();
 
+  wire_NativeProvider new_NativeProvider() {
+    return _new_NativeProvider();
+  }
+
+  late final _new_NativeProviderPtr =
+      _lookup<ffi.NativeFunction<wire_NativeProvider Function()>>(
+          'new_NativeProvider');
+  late final _new_NativeProvider =
+      _new_NativeProviderPtr.asFunction<wire_NativeProvider Function()>();
+
   wire_NativeWalletUnlocked new_NativeWalletUnlocked() {
     return _new_NativeWalletUnlocked();
   }
@@ -302,6 +422,16 @@ class FuelsWire implements FlutterRustBridgeWireBase {
           'new_NativeWalletUnlocked');
   late final _new_NativeWalletUnlocked = _new_NativeWalletUnlockedPtr
       .asFunction<wire_NativeWalletUnlocked Function()>();
+
+  ffi.Pointer<wire_Provider> new_box_autoadd_provider_0() {
+    return _new_box_autoadd_provider_0();
+  }
+
+  late final _new_box_autoadd_provider_0Ptr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<wire_Provider> Function()>>(
+          'new_box_autoadd_provider_0');
+  late final _new_box_autoadd_provider_0 = _new_box_autoadd_provider_0Ptr
+      .asFunction<ffi.Pointer<wire_Provider> Function()>();
 
   ffi.Pointer<wire_WalletUnlocked> new_box_autoadd_wallet_unlocked_0() {
     return _new_box_autoadd_wallet_unlocked_0();
@@ -328,6 +458,35 @@ class FuelsWire implements FlutterRustBridgeWireBase {
               ffi.Int32)>>('new_uint_8_list_0');
   late final _new_uint_8_list_0 = _new_uint_8_list_0Ptr
       .asFunction<ffi.Pointer<wire_uint_8_list> Function(int)>();
+
+  void drop_opaque_NativeProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _drop_opaque_NativeProvider(
+      ptr,
+    );
+  }
+
+  late final _drop_opaque_NativeProviderPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'drop_opaque_NativeProvider');
+  late final _drop_opaque_NativeProvider = _drop_opaque_NativeProviderPtr
+      .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  ffi.Pointer<ffi.Void> share_opaque_NativeProvider(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _share_opaque_NativeProvider(
+      ptr,
+    );
+  }
+
+  late final _share_opaque_NativeProviderPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Void> Function(
+              ffi.Pointer<ffi.Void>)>>('share_opaque_NativeProvider');
+  late final _share_opaque_NativeProvider = _share_opaque_NativeProviderPtr
+      .asFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>)>();
 
   void drop_opaque_NativeWalletUnlocked(
     ffi.Pointer<ffi.Void> ptr,
@@ -384,16 +543,22 @@ class wire_uint_8_list extends ffi.Struct {
   external int len;
 }
 
+class wire_NativeProvider extends ffi.Struct {
+  external ffi.Pointer<ffi.Void> ptr;
+}
+
+class wire_Provider extends ffi.Struct {
+  external wire_NativeProvider native_provider;
+}
+
 class wire_NativeWalletUnlocked extends ffi.Struct {
   external ffi.Pointer<ffi.Void> ptr;
 }
 
 class wire_WalletUnlocked extends ffi.Struct {
-  external wire_NativeWalletUnlocked wallet_unlocked;
+  external wire_NativeWalletUnlocked native_wallet_unlocked;
 
   external ffi.Pointer<wire_uint_8_list> private_key;
-
-  external ffi.Pointer<wire_uint_8_list> mnemonic_phrase;
 }
 
 typedef DartPostCObjectFnType = ffi.Pointer<

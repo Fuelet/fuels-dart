@@ -2,17 +2,43 @@ use super::*;
 // Section: wire functions
 
 #[wasm_bindgen]
-pub fn wire_new_random__static_method__WalletUnlocked(port_: MessagePort, api_url: String) {
-    wire_new_random__static_method__WalletUnlocked_impl(port_, api_url)
+pub fn wire_create_provider(port_: MessagePort, url: String) {
+    wire_create_provider_impl(port_, url)
 }
 
 #[wasm_bindgen]
-pub fn wire_from_mnemonic_phrase__static_method__WalletUnlocked(
+pub fn wire_new_random__static_method__WalletUnlocked(port_: MessagePort, provider: JsValue) {
+    wire_new_random__static_method__WalletUnlocked_impl(port_, provider)
+}
+
+#[wasm_bindgen]
+pub fn wire_new_from_private_key__static_method__WalletUnlocked(
+    port_: MessagePort,
+    private_key: String,
+    provider: JsValue,
+) {
+    wire_new_from_private_key__static_method__WalletUnlocked_impl(port_, private_key, provider)
+}
+
+#[wasm_bindgen]
+pub fn wire_new_from_mnemonic_phrase__static_method__WalletUnlocked(
     port_: MessagePort,
     phrase: String,
-    api_url: String,
+    provider: JsValue,
 ) {
-    wire_from_mnemonic_phrase__static_method__WalletUnlocked_impl(port_, phrase, api_url)
+    wire_new_from_mnemonic_phrase__static_method__WalletUnlocked_impl(port_, phrase, provider)
+}
+
+#[wasm_bindgen]
+pub fn wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(
+    port_: MessagePort,
+    phrase: String,
+    provider: JsValue,
+    path: String,
+) {
+    wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked_impl(
+        port_, phrase, provider, path,
+    )
 }
 
 #[wasm_bindgen]
@@ -49,6 +75,21 @@ pub fn wire_get_transactions__method__WalletUnlocked(
 // Section: related functions
 
 #[wasm_bindgen]
+pub fn drop_opaque_NativeProvider(ptr: *const c_void) {
+    unsafe {
+        Arc::<NativeProvider>::decrement_strong_count(ptr as _);
+    }
+}
+
+#[wasm_bindgen]
+pub fn share_opaque_NativeProvider(ptr: *const c_void) -> *const c_void {
+    unsafe {
+        Arc::<NativeProvider>::increment_strong_count(ptr as _);
+        ptr
+    }
+}
+
+#[wasm_bindgen]
 pub fn drop_opaque_NativeWalletUnlocked(ptr: *const c_void) {
     unsafe {
         Arc::<NativeWalletUnlocked>::decrement_strong_count(ptr as _);
@@ -76,6 +117,25 @@ impl Wire2Api<Option<String>> for Option<String> {
         self.map(Wire2Api::wire2api)
     }
 }
+impl Wire2Api<Option<Provider>> for JsValue {
+    fn wire2api(self) -> Option<Provider> {
+        (!self.is_undefined() && !self.is_null()).then(|| self.wire2api())
+    }
+}
+impl Wire2Api<Provider> for JsValue {
+    fn wire2api(self) -> Provider {
+        let self_ = self.dyn_into::<JsArray>().unwrap();
+        assert_eq!(
+            self_.length(),
+            1,
+            "Expected 1 elements, got {}",
+            self_.length()
+        );
+        Provider {
+            native_provider: self_.get(0).wire2api(),
+        }
+    }
+}
 
 impl Wire2Api<Vec<u8>> for Box<[u8]> {
     fn wire2api(self) -> Vec<u8> {
@@ -88,19 +148,28 @@ impl Wire2Api<WalletUnlocked> for JsValue {
         let self_ = self.dyn_into::<JsArray>().unwrap();
         assert_eq!(
             self_.length(),
-            3,
-            "Expected 3 elements, got {}",
+            2,
+            "Expected 2 elements, got {}",
             self_.length()
         );
         WalletUnlocked {
-            wallet_unlocked: self_.get(0).wire2api(),
+            native_wallet_unlocked: self_.get(0).wire2api(),
             private_key: self_.get(1).wire2api(),
-            mnemonic_phrase: self_.get(2).wire2api(),
         }
     }
 }
 // Section: impl Wire2Api for JsValue
 
+impl Wire2Api<RustOpaque<NativeProvider>> for JsValue {
+    fn wire2api(self) -> RustOpaque<NativeProvider> {
+        #[cfg(target_pointer_width = "64")]
+        {
+            compile_error!("64-bit pointers are not supported.");
+        }
+
+        unsafe { support::opaque_from_dart((self.as_f64().unwrap() as usize) as _) }
+    }
+}
 impl Wire2Api<RustOpaque<NativeWalletUnlocked>> for JsValue {
     fn wire2api(self) -> RustOpaque<NativeWalletUnlocked> {
         #[cfg(target_pointer_width = "64")]

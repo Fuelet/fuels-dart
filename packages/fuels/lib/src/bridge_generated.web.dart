@@ -19,6 +19,11 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire>
 // Section: api2wire
 
   @protected
+  Object api2wire_NativeProvider(NativeProvider raw) {
+    return raw.shareOrMove();
+  }
+
+  @protected
   Object api2wire_NativeWalletUnlocked(NativeWalletUnlocked raw) {
     return raw.shareOrMove();
   }
@@ -26,6 +31,11 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire>
   @protected
   String api2wire_String(String raw) {
     return raw;
+  }
+
+  @protected
+  List<dynamic> api2wire_box_autoadd_provider(Provider raw) {
+    return api2wire_provider(raw);
   }
 
   @protected
@@ -39,6 +49,16 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire>
   }
 
   @protected
+  List<dynamic>? api2wire_opt_box_autoadd_provider(Provider? raw) {
+    return raw == null ? null : api2wire_box_autoadd_provider(raw);
+  }
+
+  @protected
+  List<dynamic> api2wire_provider(Provider raw) {
+    return [api2wire_NativeProvider(raw.nativeProvider)];
+  }
+
+  @protected
   Uint8List api2wire_uint_8_list(Uint8List raw) {
     return raw;
   }
@@ -46,13 +66,16 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire>
   @protected
   List<dynamic> api2wire_wallet_unlocked(WalletUnlocked raw) {
     return [
-      api2wire_NativeWalletUnlocked(raw.walletUnlocked),
-      api2wire_String(raw.privateKey),
-      api2wire_String(raw.mnemonicPhrase)
+      api2wire_NativeWalletUnlocked(raw.nativeWalletUnlocked),
+      api2wire_String(raw.privateKey)
     ];
   }
 // Section: finalizer
 
+  late final Finalizer<PlatformPointer> _NativeProviderFinalizer =
+      Finalizer<PlatformPointer>(inner.drop_opaque_NativeProvider);
+  Finalizer<PlatformPointer> get NativeProviderFinalizer =>
+      _NativeProviderFinalizer;
   late final Finalizer<PlatformPointer> _NativeWalletUnlockedFinalizer =
       Finalizer<PlatformPointer>(inner.drop_opaque_NativeWalletUnlocked);
   Finalizer<PlatformPointer> get NativeWalletUnlockedFinalizer =>
@@ -69,11 +92,23 @@ external FuelsWasmModule get wasmModule;
 class FuelsWasmModule implements WasmModule {
   external Object /* Promise */ call([String? moduleName]);
   external FuelsWasmModule bind(dynamic thisArg, String moduleName);
-  external dynamic /* void */ wire_new_random__static_method__WalletUnlocked(
-      NativePortType port_, String api_url);
+  external dynamic /* void */ wire_create_provider(
+      NativePortType port_, String url);
 
-  external dynamic /* void */ wire_from_mnemonic_phrase__static_method__WalletUnlocked(
-      NativePortType port_, String phrase, String api_url);
+  external dynamic /* void */ wire_new_random__static_method__WalletUnlocked(
+      NativePortType port_, List<dynamic>? provider);
+
+  external dynamic /* void */ wire_new_from_private_key__static_method__WalletUnlocked(
+      NativePortType port_, String private_key, List<dynamic>? provider);
+
+  external dynamic /* void */ wire_new_from_mnemonic_phrase__static_method__WalletUnlocked(
+      NativePortType port_, String phrase, List<dynamic>? provider);
+
+  external dynamic /* void */ wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(
+      NativePortType port_,
+      String phrase,
+      List<dynamic>? provider,
+      String path);
 
   external dynamic /* void */ wire_address__method__WalletUnlocked(
       NativePortType port_, List<dynamic> that);
@@ -87,6 +122,10 @@ class FuelsWasmModule implements WasmModule {
   external dynamic /* void */ wire_get_transactions__method__WalletUnlocked(
       NativePortType port_, List<dynamic> that, int page_size, String? cursor);
 
+  external dynamic /*  */ drop_opaque_NativeProvider(ptr);
+
+  external int /* *const c_void */ share_opaque_NativeProvider(ptr);
+
   external dynamic /*  */ drop_opaque_NativeWalletUnlocked(ptr);
 
   external int /* *const c_void */ share_opaque_NativeWalletUnlocked(ptr);
@@ -98,14 +137,32 @@ class FuelsWire extends FlutterRustBridgeWasmWireBase<FuelsWasmModule> {
   FuelsWire(FutureOr<WasmModule> module)
       : super(WasmModule.cast<FuelsWasmModule>(module));
 
-  void wire_new_random__static_method__WalletUnlocked(
-          NativePortType port_, String api_url) =>
-      wasmModule.wire_new_random__static_method__WalletUnlocked(port_, api_url);
+  void wire_create_provider(NativePortType port_, String url) =>
+      wasmModule.wire_create_provider(port_, url);
 
-  void wire_from_mnemonic_phrase__static_method__WalletUnlocked(
-          NativePortType port_, String phrase, String api_url) =>
-      wasmModule.wire_from_mnemonic_phrase__static_method__WalletUnlocked(
-          port_, phrase, api_url);
+  void wire_new_random__static_method__WalletUnlocked(
+          NativePortType port_, List<dynamic>? provider) =>
+      wasmModule.wire_new_random__static_method__WalletUnlocked(
+          port_, provider);
+
+  void wire_new_from_private_key__static_method__WalletUnlocked(
+          NativePortType port_, String private_key, List<dynamic>? provider) =>
+      wasmModule.wire_new_from_private_key__static_method__WalletUnlocked(
+          port_, private_key, provider);
+
+  void wire_new_from_mnemonic_phrase__static_method__WalletUnlocked(
+          NativePortType port_, String phrase, List<dynamic>? provider) =>
+      wasmModule.wire_new_from_mnemonic_phrase__static_method__WalletUnlocked(
+          port_, phrase, provider);
+
+  void wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(
+          NativePortType port_,
+          String phrase,
+          List<dynamic>? provider,
+          String path) =>
+      wasmModule
+          .wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(
+              port_, phrase, provider, path);
 
   void wire_address__method__WalletUnlocked(
           NativePortType port_, List<dynamic> that) =>
@@ -124,6 +181,12 @@ class FuelsWire extends FlutterRustBridgeWasmWireBase<FuelsWasmModule> {
           List<dynamic> that, int page_size, String? cursor) =>
       wasmModule.wire_get_transactions__method__WalletUnlocked(
           port_, that, page_size, cursor);
+
+  dynamic /*  */ drop_opaque_NativeProvider(ptr) =>
+      wasmModule.drop_opaque_NativeProvider(ptr);
+
+  int /* *const c_void */ share_opaque_NativeProvider(ptr) =>
+      wasmModule.share_opaque_NativeProvider(ptr);
 
   dynamic /*  */ drop_opaque_NativeWalletUnlocked(ptr) =>
       wasmModule.drop_opaque_NativeWalletUnlocked(ptr);
