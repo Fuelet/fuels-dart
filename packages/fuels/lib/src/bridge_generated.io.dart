@@ -265,23 +265,6 @@ class FuelsWire implements FlutterRustBridgeWireBase {
   late final _init_frb_dart_api_dl = _init_frb_dart_api_dlPtr
       .asFunction<int Function(ffi.Pointer<ffi.Void>)>();
 
-  void wire_create_provider(
-    int port_,
-    ffi.Pointer<wire_uint_8_list> url,
-  ) {
-    return _wire_create_provider(
-      port_,
-      url,
-    );
-  }
-
-  late final _wire_create_providerPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(ffi.Int64,
-              ffi.Pointer<wire_uint_8_list>)>>('wire_create_provider');
-  late final _wire_create_provider = _wire_create_providerPtr
-      .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
-
   void wire_new_random__static_method__WalletUnlocked(
     int port_,
     ffi.Pointer<wire_Provider> provider,
@@ -492,6 +475,24 @@ class FuelsWire implements FlutterRustBridgeWireBase {
       _wire_to_b256_string__method__Bech32AddressPtr
           .asFunction<void Function(int, ffi.Pointer<wire_Bech32Address>)>();
 
+  void wire_connect__static_method__Provider(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> url,
+  ) {
+    return _wire_connect__static_method__Provider(
+      port_,
+      url,
+    );
+  }
+
+  late final _wire_connect__static_method__ProviderPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>(
+      'wire_connect__static_method__Provider');
+  late final _wire_connect__static_method__Provider =
+      _wire_connect__static_method__ProviderPtr
+          .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+
   wire_NativeBech32Address new_NativeBech32Address() {
     return _new_NativeBech32Address();
   }
@@ -688,19 +689,19 @@ class FuelsWire implements FlutterRustBridgeWireBase {
 
 class _Dart_Handle extends ffi.Opaque {}
 
-class wire_uint_8_list extends ffi.Struct {
-  external ffi.Pointer<ffi.Uint8> ptr;
-
-  @ffi.Int32()
-  external int len;
-}
-
 class wire_NativeProvider extends ffi.Struct {
   external ffi.Pointer<ffi.Void> ptr;
 }
 
 class wire_Provider extends ffi.Struct {
   external wire_NativeProvider native_provider;
+}
+
+class wire_uint_8_list extends ffi.Struct {
+  external ffi.Pointer<ffi.Uint8> ptr;
+
+  @ffi.Int32()
+  external int len;
 }
 
 class wire_NativeWalletUnlocked extends ffi.Struct {

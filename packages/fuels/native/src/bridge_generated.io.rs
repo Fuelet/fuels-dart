@@ -2,11 +2,6 @@ use super::*;
 // Section: wire functions
 
 #[no_mangle]
-pub extern "C" fn wire_create_provider(port_: i64, url: *mut wire_uint_8_list) {
-    wire_create_provider_impl(port_, url)
-}
-
-#[no_mangle]
 pub extern "C" fn wire_new_random__static_method__WalletUnlocked(
     port_: i64,
     provider: *mut wire_Provider,
@@ -89,6 +84,11 @@ pub extern "C" fn wire_to_b256_string__method__Bech32Address(
     that: *mut wire_Bech32Address,
 ) {
     wire_to_b256_string__method__Bech32Address_impl(port_, that)
+}
+
+#[no_mangle]
+pub extern "C" fn wire_connect__static_method__Provider(port_: i64, url: *mut wire_uint_8_list) {
+    wire_connect__static_method__Provider_impl(port_, url)
 }
 
 // Section: allocate functions

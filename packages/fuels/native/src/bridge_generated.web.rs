@@ -2,11 +2,6 @@ use super::*;
 // Section: wire functions
 
 #[wasm_bindgen]
-pub fn wire_create_provider(port_: MessagePort, url: String) {
-    wire_create_provider_impl(port_, url)
-}
-
-#[wasm_bindgen]
 pub fn wire_new_random__static_method__WalletUnlocked(port_: MessagePort, provider: JsValue) {
     wire_new_random__static_method__WalletUnlocked_impl(port_, provider)
 }
@@ -77,6 +72,11 @@ pub fn wire_to_bech32_string__method__Bech32Address(port_: MessagePort, that: Js
 #[wasm_bindgen]
 pub fn wire_to_b256_string__method__Bech32Address(port_: MessagePort, that: JsValue) {
     wire_to_b256_string__method__Bech32Address_impl(port_, that)
+}
+
+#[wasm_bindgen]
+pub fn wire_connect__static_method__Provider(port_: MessagePort, url: String) {
+    wire_connect__static_method__Provider_impl(port_, url)
 }
 
 // Section: allocate functions

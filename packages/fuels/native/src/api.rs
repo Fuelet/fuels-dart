@@ -3,14 +3,13 @@ use std::str::FromStr;
 use flutter_rust_bridge::RustOpaque;
 use fuel_crypto::SecretKey;
 use fuels::prelude::{AssetId, generate_mnemonic_phrase};
-pub use fuels::prelude::{Bech32Address as NativeBech32Address, WalletUnlocked as NativeWalletUnlocked};
+pub use fuels::prelude::{Bech32Address as NativeBech32Address, Provider as NativeProvider, WalletUnlocked as NativeWalletUnlocked};
 use fuels::tx::Address;
 use fuels_signers::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
 use tokio::runtime::Runtime;
 
 use crate::model::balance::{Balance, from_hash_map};
 use crate::model::pagination::{PaginationRequest, TransactionsPaginatedResult};
-pub use crate::model::provider::*;
 use crate::model::transaction;
 
 pub struct WalletUnlocked {
@@ -87,10 +86,6 @@ impl WalletUnlocked {
     }
 }
 
-pub fn create_provider(url: String) -> Provider {
-    Provider::connect(url)
-}
-
 // Cannot move to another file, cause the methods won't be accessible in that case
 pub struct Bech32Address {
     pub native: RustOpaque<NativeBech32Address>,
@@ -112,5 +107,20 @@ impl From<&NativeBech32Address> for Bech32Address {
         Bech32Address {
             native: RustOpaque::new(model.clone())
         }
+    }
+}
+
+// Cannot move to another file, cause the methods won't be accessible in that case
+pub struct Provider {
+    pub native_provider: RustOpaque<NativeProvider>,
+}
+
+impl Provider {
+    pub fn connect(url: String) -> Provider {
+        let rt = Runtime::new().unwrap();
+        let native_provider = rt.block_on(async {
+            NativeProvider::connect(url).await
+        });
+        Provider { native_provider: RustOpaque::new(native_provider.unwrap()) }
     }
 }

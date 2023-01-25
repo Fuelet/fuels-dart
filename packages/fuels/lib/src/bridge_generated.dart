@@ -19,10 +19,6 @@ import 'package:meta/meta.dart';
 part 'bridge_generated.freezed.dart';
 
 abstract class Fuels {
-  Future<Provider> createProvider({required String url, dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta get kCreateProviderConstMeta;
-
   Future<WalletUnlocked> newRandomStaticMethodWalletUnlocked(
       {Provider? provider, dynamic hint});
 
@@ -85,6 +81,11 @@ abstract class Fuels {
       {required Bech32Address that, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kToB256StringMethodBech32AddressConstMeta;
+
+  Future<Provider> connectStaticMethodProvider(
+      {required String url, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kConnectStaticMethodProviderConstMeta;
 
   DropFnType get dropOpaqueNativeBech32Address;
   ShareFnType get shareOpaqueNativeBech32Address;
@@ -316,11 +317,17 @@ class PaginationRequest {
 }
 
 class Provider {
+  final Fuels bridge;
   final NativeProvider nativeProvider;
 
   Provider({
+    required this.bridge,
     required this.nativeProvider,
   });
+
+  static Future<Provider> connect(
+          {required Fuels bridge, required String url, dynamic hint}) =>
+      bridge.connectStaticMethodProvider(url: url, hint: hint);
 }
 
 class Script {
@@ -516,23 +523,6 @@ class FuelsImpl implements Fuels {
   factory FuelsImpl.wasm(FutureOr<WasmModule> module) =>
       FuelsImpl(module as ExternalLibrary);
   FuelsImpl.raw(this._platform);
-  Future<Provider> createProvider({required String url, dynamic hint}) {
-    var arg0 = _platform.api2wire_String(url);
-    return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner.wire_create_provider(port_, arg0),
-      parseSuccessData: _wire2api_provider,
-      constMeta: kCreateProviderConstMeta,
-      argValues: [url],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta get kCreateProviderConstMeta =>
-      const FlutterRustBridgeTaskConstMeta(
-        debugName: "create_provider",
-        argNames: ["url"],
-      );
-
   Future<WalletUnlocked> newRandomStaticMethodWalletUnlocked(
       {Provider? provider, dynamic hint}) {
     var arg0 = _platform.api2wire_opt_box_autoadd_provider(provider);
@@ -749,6 +739,25 @@ class FuelsImpl implements Fuels {
             debugName: "to_b256_string__method__Bech32Address",
             argNames: ["that"],
           );
+
+  Future<Provider> connectStaticMethodProvider(
+      {required String url, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(url);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) =>
+          _platform.inner.wire_connect__static_method__Provider(port_, arg0),
+      parseSuccessData: (d) => _wire2api_provider(d),
+      constMeta: kConnectStaticMethodProviderConstMeta,
+      argValues: [url],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kConnectStaticMethodProviderConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "connect__static_method__Provider",
+        argNames: ["url"],
+      );
 
   DropFnType get dropOpaqueNativeBech32Address =>
       _platform.inner.drop_opaque_NativeBech32Address;
@@ -999,6 +1008,7 @@ class FuelsImpl implements Fuels {
     if (arr.length != 1)
       throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
     return Provider(
+      bridge: this,
       nativeProvider: _wire2api_NativeProvider(arr[0]),
     );
   }

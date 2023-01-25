@@ -125,9 +125,6 @@ external FuelsWasmModule get wasmModule;
 class FuelsWasmModule implements WasmModule {
   external Object /* Promise */ call([String? moduleName]);
   external FuelsWasmModule bind(dynamic thisArg, String moduleName);
-  external dynamic /* void */ wire_create_provider(
-      NativePortType port_, String url);
-
   external dynamic /* void */ wire_new_random__static_method__WalletUnlocked(
       NativePortType port_, List<dynamic>? provider);
 
@@ -161,6 +158,9 @@ class FuelsWasmModule implements WasmModule {
   external dynamic /* void */ wire_to_b256_string__method__Bech32Address(
       NativePortType port_, List<dynamic> that);
 
+  external dynamic /* void */ wire_connect__static_method__Provider(
+      NativePortType port_, String url);
+
   external dynamic /*  */ drop_opaque_NativeBech32Address(ptr);
 
   external int /* *const c_void */ share_opaque_NativeBech32Address(ptr);
@@ -179,9 +179,6 @@ class FuelsWasmModule implements WasmModule {
 class FuelsWire extends FlutterRustBridgeWasmWireBase<FuelsWasmModule> {
   FuelsWire(FutureOr<WasmModule> module)
       : super(WasmModule.cast<FuelsWasmModule>(module));
-
-  void wire_create_provider(NativePortType port_, String url) =>
-      wasmModule.wire_create_provider(port_, url);
 
   void wire_new_random__static_method__WalletUnlocked(
           NativePortType port_, List<dynamic>? provider) =>
@@ -232,6 +229,10 @@ class FuelsWire extends FlutterRustBridgeWasmWireBase<FuelsWasmModule> {
   void wire_to_b256_string__method__Bech32Address(
           NativePortType port_, List<dynamic> that) =>
       wasmModule.wire_to_b256_string__method__Bech32Address(port_, that);
+
+  void wire_connect__static_method__Provider(
+          NativePortType port_, String url) =>
+      wasmModule.wire_connect__static_method__Provider(port_, url);
 
   dynamic /*  */ drop_opaque_NativeBech32Address(ptr) =>
       wasmModule.drop_opaque_NativeBech32Address(ptr);
