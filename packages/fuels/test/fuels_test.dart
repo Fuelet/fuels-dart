@@ -21,20 +21,23 @@ const ethAsset =
     '0x0000000000000000000000000000000000000000000000000000000000000000';
 
 final dynLib = DynamicLibrary.open(dynLibPath);
-var pulseNative = createWrapper(dynLib);
+var rustSdk = createWrapper(dynLib);
 
 Future<WalletUnlocked> createWallet(String? privateKey) {
-  var provider = pulseNative.createProvider(url: betaApiUrl);
+  var provider = rustSdk.createProvider(url: betaApiUrl);
   return provider.then((prov) => privateKey == null
-      ? WalletUnlocked.newRandom(bridge: pulseNative, provider: prov)
+      ? WalletUnlocked.newRandom(bridge: rustSdk, provider: prov)
       : WalletUnlocked.newFromPrivateKey(
-          bridge: pulseNative, privateKey: privateKey, provider: prov));
+          bridge: rustSdk, privateKey: privateKey, provider: prov));
 }
 
 void main() {
   test('test wallet', () async {
     WalletUnlocked wallet = await createWallet(null);
-    await wallet.address().then(print);
+    await wallet.address().then((addr) {
+      addr.toB256String().then((b256) => print('b256: $b256'));
+      addr.toBech32String().then((bech32) => print('bech32: $bech32'));
+    });
   });
 
   test('test recreate wallet', () async {

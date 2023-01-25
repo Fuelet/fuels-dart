@@ -3,7 +3,8 @@ use std::str::FromStr;
 use flutter_rust_bridge::RustOpaque;
 use fuel_crypto::SecretKey;
 use fuels::prelude::{AssetId, generate_mnemonic_phrase};
-pub use fuels::prelude::WalletUnlocked as NativeWalletUnlocked;
+pub use fuels::prelude::{Bech32Address as NativeBech32Address, WalletUnlocked as NativeWalletUnlocked};
+use fuels::tx::Address;
 use fuels_signers::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
 use tokio::runtime::Runtime;
 
@@ -11,11 +12,6 @@ use crate::model::balance::{Balance, from_hash_map};
 use crate::model::pagination::{PaginationRequest, TransactionsPaginatedResult};
 pub use crate::model::provider::*;
 use crate::model::transaction;
-
-pub struct Balances {
-    pub assets: Vec<String>,
-    pub balances: Vec<u64>,
-}
 
 pub struct WalletUnlocked {
     pub native_wallet_unlocked: RustOpaque<NativeWalletUnlocked>,
@@ -61,9 +57,8 @@ impl WalletUnlocked {
         }
     }
 
-    pub fn address(&self) -> String {
-        let bech_address = self.native_wallet_unlocked.address();
-        bech_address.to_string()
+    pub fn address(&self) -> Bech32Address {
+        self.native_wallet_unlocked.address().into()
     }
 
     pub fn get_asset_balance(&self, asset: String) -> u64 {
@@ -94,4 +89,28 @@ impl WalletUnlocked {
 
 pub fn create_provider(url: String) -> Provider {
     Provider::connect(url)
+}
+
+// Cannot move to another file, cause the methods won't be accessible in that case
+pub struct Bech32Address {
+    pub native: RustOpaque<NativeBech32Address>,
+}
+
+impl Bech32Address {
+    pub fn to_bech32_string(&self) -> String {
+        (*self.native).to_string()
+    }
+
+    pub fn to_b256_string(&self) -> String {
+        let address: Address = (&*self.native).into();
+        address.to_string()
+    }
+}
+
+impl From<&NativeBech32Address> for Bech32Address {
+    fn from(model: &NativeBech32Address) -> Self {
+        Bech32Address {
+            native: RustOpaque::new(model.clone())
+        }
+    }
 }

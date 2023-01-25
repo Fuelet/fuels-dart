@@ -75,7 +75,28 @@ pub extern "C" fn wire_get_transactions__method__WalletUnlocked(
     wire_get_transactions__method__WalletUnlocked_impl(port_, that, request)
 }
 
+#[no_mangle]
+pub extern "C" fn wire_to_bech32_string__method__Bech32Address(
+    port_: i64,
+    that: *mut wire_Bech32Address,
+) {
+    wire_to_bech32_string__method__Bech32Address_impl(port_, that)
+}
+
+#[no_mangle]
+pub extern "C" fn wire_to_b256_string__method__Bech32Address(
+    port_: i64,
+    that: *mut wire_Bech32Address,
+) {
+    wire_to_b256_string__method__Bech32Address_impl(port_, that)
+}
+
 // Section: allocate functions
+
+#[no_mangle]
+pub extern "C" fn new_NativeBech32Address() -> wire_NativeBech32Address {
+    wire_NativeBech32Address::new_with_null_ptr()
+}
 
 #[no_mangle]
 pub extern "C" fn new_NativeProvider() -> wire_NativeProvider {
@@ -85,6 +106,11 @@ pub extern "C" fn new_NativeProvider() -> wire_NativeProvider {
 #[no_mangle]
 pub extern "C" fn new_NativeWalletUnlocked() -> wire_NativeWalletUnlocked {
     wire_NativeWalletUnlocked::new_with_null_ptr()
+}
+
+#[no_mangle]
+pub extern "C" fn new_box_autoadd_bech_32_address_0() -> *mut wire_Bech32Address {
+    support::new_leak_box_ptr(wire_Bech32Address::new_with_null_ptr())
 }
 
 #[no_mangle]
@@ -112,6 +138,21 @@ pub extern "C" fn new_uint_8_list_0(len: i32) -> *mut wire_uint_8_list {
 }
 
 // Section: related functions
+
+#[no_mangle]
+pub extern "C" fn drop_opaque_NativeBech32Address(ptr: *const c_void) {
+    unsafe {
+        Arc::<NativeBech32Address>::decrement_strong_count(ptr as _);
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn share_opaque_NativeBech32Address(ptr: *const c_void) -> *const c_void {
+    unsafe {
+        Arc::<NativeBech32Address>::increment_strong_count(ptr as _);
+        ptr
+    }
+}
 
 #[no_mangle]
 pub extern "C" fn drop_opaque_NativeProvider(ptr: *const c_void) {
@@ -145,6 +186,11 @@ pub extern "C" fn share_opaque_NativeWalletUnlocked(ptr: *const c_void) -> *cons
 
 // Section: impl Wire2Api
 
+impl Wire2Api<RustOpaque<NativeBech32Address>> for wire_NativeBech32Address {
+    fn wire2api(self) -> RustOpaque<NativeBech32Address> {
+        unsafe { support::opaque_from_dart(self.ptr as _) }
+    }
+}
 impl Wire2Api<RustOpaque<NativeProvider>> for wire_NativeProvider {
     fn wire2api(self) -> RustOpaque<NativeProvider> {
         unsafe { support::opaque_from_dart(self.ptr as _) }
@@ -159,6 +205,19 @@ impl Wire2Api<String> for *mut wire_uint_8_list {
     fn wire2api(self) -> String {
         let vec: Vec<u8> = self.wire2api();
         String::from_utf8_lossy(&vec).into_owned()
+    }
+}
+impl Wire2Api<Bech32Address> for wire_Bech32Address {
+    fn wire2api(self) -> Bech32Address {
+        Bech32Address {
+            native: self.native.wire2api(),
+        }
+    }
+}
+impl Wire2Api<Bech32Address> for *mut wire_Bech32Address {
+    fn wire2api(self) -> Bech32Address {
+        let wrap = unsafe { support::box_from_leak_ptr(self) };
+        Wire2Api::<Bech32Address>::wire2api(*wrap).into()
     }
 }
 impl Wire2Api<PaginationRequest> for *mut wire_PaginationRequest {
@@ -218,6 +277,12 @@ impl Wire2Api<WalletUnlocked> for wire_WalletUnlocked {
 
 #[repr(C)]
 #[derive(Clone)]
+pub struct wire_NativeBech32Address {
+    ptr: *const core::ffi::c_void,
+}
+
+#[repr(C)]
+#[derive(Clone)]
 pub struct wire_NativeProvider {
     ptr: *const core::ffi::c_void,
 }
@@ -226,6 +291,12 @@ pub struct wire_NativeProvider {
 #[derive(Clone)]
 pub struct wire_NativeWalletUnlocked {
     ptr: *const core::ffi::c_void,
+}
+
+#[repr(C)]
+#[derive(Clone)]
+pub struct wire_Bech32Address {
+    native: wire_NativeBech32Address,
 }
 
 #[repr(C)]
@@ -268,6 +339,13 @@ impl<T> NewWithNullPtr for *mut T {
     }
 }
 
+impl NewWithNullPtr for wire_NativeBech32Address {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            ptr: core::ptr::null(),
+        }
+    }
+}
 impl NewWithNullPtr for wire_NativeProvider {
     fn new_with_null_ptr() -> Self {
         Self {
@@ -279,6 +357,14 @@ impl NewWithNullPtr for wire_NativeWalletUnlocked {
     fn new_with_null_ptr() -> Self {
         Self {
             ptr: core::ptr::null(),
+        }
+    }
+}
+
+impl NewWithNullPtr for wire_Bech32Address {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            native: wire_NativeBech32Address::new_with_null_ptr(),
         }
     }
 }

@@ -208,6 +208,38 @@ fn wire_get_transactions__method__WalletUnlocked_impl(
         },
     )
 }
+fn wire_to_bech32_string__method__Bech32Address_impl(
+    port_: MessagePort,
+    that: impl Wire2Api<Bech32Address> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "to_bech32_string__method__Bech32Address",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.wire2api();
+            move |task_callback| Ok(Bech32Address::to_bech32_string(&api_that))
+        },
+    )
+}
+fn wire_to_b256_string__method__Bech32Address_impl(
+    port_: MessagePort,
+    that: impl Wire2Api<Bech32Address> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "to_b256_string__method__Bech32Address",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.wire2api();
+            move |task_callback| Ok(Bech32Address::to_b256_string(&api_that))
+        },
+    )
+}
 // Section: wrapper structs
 
 // Section: static checks
@@ -267,6 +299,13 @@ impl support::IntoDart for Balance {
     }
 }
 impl support::IntoDartExceptPrimitive for Balance {}
+
+impl support::IntoDart for Bech32Address {
+    fn into_dart(self) -> support::DartAbi {
+        vec![self.native.into_dart()].into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for Bech32Address {}
 
 impl support::IntoDart for Create {
     fn into_dart(self) -> support::DartAbi {

@@ -19,6 +19,11 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire>
 // Section: api2wire
 
   @protected
+  Object api2wire_NativeBech32Address(NativeBech32Address raw) {
+    return raw.shareOrMove();
+  }
+
+  @protected
   Object api2wire_NativeProvider(NativeProvider raw) {
     return raw.shareOrMove();
   }
@@ -31,6 +36,16 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire>
   @protected
   String api2wire_String(String raw) {
     return raw;
+  }
+
+  @protected
+  List<dynamic> api2wire_bech_32_address(Bech32Address raw) {
+    return [api2wire_NativeBech32Address(raw.native)];
+  }
+
+  @protected
+  List<dynamic> api2wire_box_autoadd_bech_32_address(Bech32Address raw) {
+    return api2wire_bech_32_address(raw);
   }
 
   @protected
@@ -86,6 +101,10 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire>
   }
 // Section: finalizer
 
+  late final Finalizer<PlatformPointer> _NativeBech32AddressFinalizer =
+      Finalizer<PlatformPointer>(inner.drop_opaque_NativeBech32Address);
+  Finalizer<PlatformPointer> get NativeBech32AddressFinalizer =>
+      _NativeBech32AddressFinalizer;
   late final Finalizer<PlatformPointer> _NativeProviderFinalizer =
       Finalizer<PlatformPointer>(inner.drop_opaque_NativeProvider);
   Finalizer<PlatformPointer> get NativeProviderFinalizer =>
@@ -135,6 +154,16 @@ class FuelsWasmModule implements WasmModule {
 
   external dynamic /* void */ wire_get_transactions__method__WalletUnlocked(
       NativePortType port_, List<dynamic> that, List<dynamic> request);
+
+  external dynamic /* void */ wire_to_bech32_string__method__Bech32Address(
+      NativePortType port_, List<dynamic> that);
+
+  external dynamic /* void */ wire_to_b256_string__method__Bech32Address(
+      NativePortType port_, List<dynamic> that);
+
+  external dynamic /*  */ drop_opaque_NativeBech32Address(ptr);
+
+  external int /* *const c_void */ share_opaque_NativeBech32Address(ptr);
 
   external dynamic /*  */ drop_opaque_NativeProvider(ptr);
 
@@ -195,6 +224,20 @@ class FuelsWire extends FlutterRustBridgeWasmWireBase<FuelsWasmModule> {
           NativePortType port_, List<dynamic> that, List<dynamic> request) =>
       wasmModule.wire_get_transactions__method__WalletUnlocked(
           port_, that, request);
+
+  void wire_to_bech32_string__method__Bech32Address(
+          NativePortType port_, List<dynamic> that) =>
+      wasmModule.wire_to_bech32_string__method__Bech32Address(port_, that);
+
+  void wire_to_b256_string__method__Bech32Address(
+          NativePortType port_, List<dynamic> that) =>
+      wasmModule.wire_to_b256_string__method__Bech32Address(port_, that);
+
+  dynamic /*  */ drop_opaque_NativeBech32Address(ptr) =>
+      wasmModule.drop_opaque_NativeBech32Address(ptr);
+
+  int /* *const c_void */ share_opaque_NativeBech32Address(ptr) =>
+      wasmModule.share_opaque_NativeBech32Address(ptr);
 
   dynamic /*  */ drop_opaque_NativeProvider(ptr) =>
       wasmModule.drop_opaque_NativeProvider(ptr);
