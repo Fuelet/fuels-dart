@@ -1,3 +1,7 @@
+## 0.0.2
+
+ - **FEAT**: introduce Bech32Address model ([#7](https://github.com/Fuelet/fuels-dart/issues/7)).
+
 ## 0.0.1+4
 
  - Update a dependency to the latest release.

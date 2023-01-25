@@ -1,3 +1,7 @@
+## 1.2.0
+
+ - **FEAT**: introduce Bech32Address model ([#7](https://github.com/Fuelet/fuels-dart/issues/7)).
+
 ## 1.1.0
 
  - **FEAT**: stick to the same interface for the method of getting balances ([#6](https://github.com/Fuelet/fuels-dart/issues/6)).
