@@ -6,11 +6,46 @@ For more information about SDK functionality and abilities, please check out fue
 The project tries to stick to the same interfaces as used in the Rust SDK wherever possible.
 
 ## Documentation
+
 Work on documentation for Dart/Flutter SDK is in progress.
 
 ## Implemented features
+
 - [x] Create wallet
 - [x] Get account balances
 - [x] Get account transactions
 - [ ] Transfer tokens
 - [ ] Sign transactions
+
+## Contributing
+
+[packages/fuels/native](https://github.com/Fuelet/fuels-dart/tree/main/packages/fuels/native) folder contains Rust files. [api.rs](https://github.com/Fuelet/fuels-dart/blob/main/packages/fuels/native/src/api.rs) is the main entrypoint of the Rust methods accessed from Dart.
+
+After changing any of the Rust files, you need to regenerate the wrapper. Just call:
+
+```shell
+just --justfile packages/fuels/justfile
+```
+
+All commits in the main branch must follow the [Conventional Commits](https://cheatography.com/albelop/cheat-sheets/conventional-commits/) format.
+
+## Releasing
+
+To upgrade the library version before releasing, do:
+
+```shell
+melos version
+```
+
+Then push the generated commit with tags:
+
+```shell
+git push --follow-tags
+```
+
+In order to publish a package to https://pub.dev/, call the following command from the corresponding package:
+
+```shell
+cd packages/[needed package]
+flutter pub publish
+```
