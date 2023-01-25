@@ -34,6 +34,11 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire>
   }
 
   @protected
+  List<dynamic> api2wire_box_autoadd_pagination_request(PaginationRequest raw) {
+    return api2wire_pagination_request(raw);
+  }
+
+  @protected
   List<dynamic> api2wire_box_autoadd_provider(Provider raw) {
     return api2wire_provider(raw);
   }
@@ -51,6 +56,15 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire>
   @protected
   List<dynamic>? api2wire_opt_box_autoadd_provider(Provider? raw) {
     return raw == null ? null : api2wire_box_autoadd_provider(raw);
+  }
+
+  @protected
+  List<dynamic> api2wire_pagination_request(PaginationRequest raw) {
+    return [
+      api2wire_opt_String(raw.cursor),
+      api2wire_usize(raw.results),
+      api2wire_page_direction(raw.direction)
+    ];
   }
 
   @protected
@@ -120,7 +134,7 @@ class FuelsWasmModule implements WasmModule {
       NativePortType port_, List<dynamic> that);
 
   external dynamic /* void */ wire_get_transactions__method__WalletUnlocked(
-      NativePortType port_, List<dynamic> that, int page_size, String? cursor);
+      NativePortType port_, List<dynamic> that, List<dynamic> request);
 
   external dynamic /*  */ drop_opaque_NativeProvider(ptr);
 
@@ -177,10 +191,10 @@ class FuelsWire extends FlutterRustBridgeWasmWireBase<FuelsWasmModule> {
           NativePortType port_, List<dynamic> that) =>
       wasmModule.wire_get_balances__method__WalletUnlocked(port_, that);
 
-  void wire_get_transactions__method__WalletUnlocked(NativePortType port_,
-          List<dynamic> that, int page_size, String? cursor) =>
+  void wire_get_transactions__method__WalletUnlocked(
+          NativePortType port_, List<dynamic> that, List<dynamic> request) =>
       wasmModule.wire_get_transactions__method__WalletUnlocked(
-          port_, that, page_size, cursor);
+          port_, that, request);
 
   dynamic /*  */ drop_opaque_NativeProvider(ptr) =>
       wasmModule.drop_opaque_NativeProvider(ptr);

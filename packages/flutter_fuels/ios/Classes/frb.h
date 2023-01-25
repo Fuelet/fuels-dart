@@ -31,6 +31,12 @@ typedef struct wire_WalletUnlocked {
   struct wire_uint_8_list *private_key;
 } wire_WalletUnlocked;
 
+typedef struct wire_PaginationRequest {
+  struct wire_uint_8_list *cursor;
+  uintptr_t results;
+  int32_t direction;
+} wire_PaginationRequest;
+
 typedef struct DartCObject *WireSyncReturn;
 
 void store_dart_post_cobject(DartPostCObjectFnType ptr);
@@ -70,12 +76,13 @@ void wire_get_balances__method__WalletUnlocked(int64_t port_, struct wire_Wallet
 
 void wire_get_transactions__method__WalletUnlocked(int64_t port_,
                                                    struct wire_WalletUnlocked *that,
-                                                   uintptr_t page_size,
-                                                   struct wire_uint_8_list *cursor);
+                                                   struct wire_PaginationRequest *request);
 
 struct wire_NativeProvider new_NativeProvider(void);
 
 struct wire_NativeWalletUnlocked new_NativeWalletUnlocked(void);
+
+struct wire_PaginationRequest *new_box_autoadd_pagination_request_0(void);
 
 struct wire_Provider *new_box_autoadd_provider_0(void);
 
@@ -106,6 +113,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) wire_get_transactions__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) new_NativeProvider);
     dummy_var ^= ((int64_t) (void*) new_NativeWalletUnlocked);
+    dummy_var ^= ((int64_t) (void*) new_box_autoadd_pagination_request_0);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_provider_0);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_wallet_unlocked_0);
     dummy_var ^= ((int64_t) (void*) new_uint_8_list_0);

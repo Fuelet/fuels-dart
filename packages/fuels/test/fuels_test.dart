@@ -5,7 +5,8 @@ import 'dart:ffi';
 import 'package:fuels/fuels.dart';
 import 'package:test/test.dart';
 
-const projectPath = '/Users/ilyavirnik/Documents/Development/pulse-inc';
+const projectPath =
+    '/Users/ilyavirnik/Documents/Development/pulse-inc/projects/fuels-dart';
 const dynLibPath = '$projectPath/target/debug/libfuels.dylib';
 
 const betaApiUrl = 'https://node-beta-2.fuel.network';
@@ -63,14 +64,15 @@ void main() {
 
   test('test get transactions', () async {
     WalletUnlocked wallet = await createWallet(testWalletPrivateKey);
-
-    var txs = await wallet.getTransactions(pageSize: 10);
-    for (var i = 0; i < txs.length; i++) {
-      var tx = txs[i];
-      print(tx.blockId);
-      print(tx.status);
-      print(tx.time);
-      print(tx.transaction);
+    var request =
+        PaginationRequest(results: 10, direction: PageDirection.Forward);
+    var response = await wallet.getTransactions(request: request);
+    print(
+        'cursor: ${response.cursor}, hasNextPage: ${response.hasNextPage}, hasPrevPage: ${response.hasPreviousPage}');
+    for (var i = 0; i < response.results.length; i++) {
+      var tx = response.results[i];
+      print('\nTransaction #$i '
+          '\nblockId: ${tx.blockId}, status: ${tx.status}, time: ${tx.time}, tx: ${tx.transaction}');
     }
   });
 }
