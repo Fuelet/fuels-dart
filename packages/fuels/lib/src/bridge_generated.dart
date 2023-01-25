@@ -62,7 +62,7 @@ abstract class Fuels {
   FlutterRustBridgeTaskConstMeta
       get kGetAssetBalanceMethodWalletUnlockedConstMeta;
 
-  Future<Balances> getBalancesMethodWalletUnlocked(
+  Future<List<Balance>> getBalancesMethodWalletUnlocked(
       {required WalletUnlocked that, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kGetBalancesMethodWalletUnlockedConstMeta;
@@ -115,13 +115,13 @@ class NativeWalletUnlocked extends FrbOpaque {
       bridge.NativeWalletUnlockedFinalizer;
 }
 
-class Balances {
-  final List<String> assets;
-  final Uint64List balances;
+class Balance {
+  final String asset;
+  final int amount;
 
-  Balances({
-    required this.assets,
-    required this.balances,
+  Balance({
+    required this.asset,
+    required this.amount,
   });
 }
 
@@ -434,7 +434,7 @@ class WalletUnlocked {
         asset: asset,
       );
 
-  Future<Balances> getBalances({dynamic hint}) =>
+  Future<List<Balance>> getBalances({dynamic hint}) =>
       bridge.getBalancesMethodWalletUnlocked(
         that: this,
       );
@@ -615,13 +615,13 @@ class FuelsImpl implements Fuels {
             argNames: ["that", "asset"],
           );
 
-  Future<Balances> getBalancesMethodWalletUnlocked(
+  Future<List<Balance>> getBalancesMethodWalletUnlocked(
       {required WalletUnlocked that, dynamic hint}) {
     var arg0 = _platform.api2wire_box_autoadd_wallet_unlocked(that);
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) => _platform.inner
           .wire_get_balances__method__WalletUnlocked(port_, arg0),
-      parseSuccessData: _wire2api_balances,
+      parseSuccessData: _wire2api_list_balance,
       constMeta: kGetBalancesMethodWalletUnlockedConstMeta,
       argValues: [that],
       hint: hint,
@@ -689,17 +689,13 @@ class FuelsImpl implements Fuels {
     return raw as String;
   }
 
-  List<String> _wire2api_StringList(dynamic raw) {
-    return (raw as List<dynamic>).cast<String>();
-  }
-
-  Balances _wire2api_balances(dynamic raw) {
+  Balance _wire2api_balance(dynamic raw) {
     final arr = raw as List<dynamic>;
     if (arr.length != 2)
       throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return Balances(
-      assets: _wire2api_StringList(arr[0]),
-      balances: _wire2api_uint_64_list(arr[1]),
+    return Balance(
+      asset: _wire2api_String(arr[0]),
+      amount: _wire2api_u64(arr[1]),
     );
   }
 
@@ -804,6 +800,10 @@ class FuelsImpl implements Fuels {
       default:
         throw Exception("unreachable");
     }
+  }
+
+  List<Balance> _wire2api_list_balance(dynamic raw) {
+    return (raw as List<dynamic>).map(_wire2api_balance).toList();
   }
 
   List<Input> _wire2api_list_input(dynamic raw) {
@@ -993,10 +993,6 @@ class FuelsImpl implements Fuels {
 
   U8Array32 _wire2api_u8_array_32(dynamic raw) {
     return U8Array32(_wire2api_uint_8_list(raw));
-  }
-
-  Uint64List _wire2api_uint_64_list(dynamic raw) {
-    return Uint64List.from(raw);
   }
 
   Uint8List _wire2api_uint_8_list(dynamic raw) {

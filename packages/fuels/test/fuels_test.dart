@@ -54,11 +54,9 @@ void main() {
   test('test get balances', () async {
     WalletUnlocked wallet = await createWallet(testWalletPrivateKey);
     wallet.address().then((addr) => expect(addr, testWalletAddress));
-    Balances balances = await wallet.getBalances();
-    for (var i = 0; i < balances.assets.length; i++) {
-      var asset = balances.assets[i];
-      var assetBalance = balances.balances[i];
-      print('$asset -> $assetBalance');
+    var balances = await wallet.getBalances();
+    for (var i = 0; i < balances.length; i++) {
+      print('${balances[i].asset} -> ${balances[i].amount}');
     }
   });
 
