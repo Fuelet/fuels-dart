@@ -2,12 +2,12 @@ use std::str::FromStr;
 
 use flutter_rust_bridge::RustOpaque;
 use fuel_crypto::SecretKey;
-use fuels::client::{PageDirection, PaginationRequest};
 use fuels::prelude::{AssetId, generate_mnemonic_phrase};
 pub use fuels::prelude::WalletUnlocked as NativeWalletUnlocked;
 use fuels_signers::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
 use tokio::runtime::Runtime;
 
+use crate::model::pagination::{PaginationRequest, TransactionsPaginatedResult};
 pub use crate::model::provider::*;
 use crate::model::transaction;
 
@@ -91,18 +91,12 @@ impl WalletUnlocked {
         Balances { assets: keys, balances: values }
     }
 
-    pub fn get_transactions(&self, page_size: usize,
-                            cursor: Option<String>) -> Vec<transaction::TransactionResponse> {
+    pub fn get_transactions(&self, request: PaginationRequest) -> TransactionsPaginatedResult {
         let rt = Runtime::new().unwrap();
-        let request = PaginationRequest {
-            cursor,
-            results: page_size,
-            direction: PageDirection::Forward,
-        };
         let result = rt.block_on(async {
-            self.native_wallet_unlocked.get_transactions(request).await
+            self.native_wallet_unlocked.get_transactions(request.into()).await
         });
-        result.unwrap().results.iter().map(Into::into).collect()
+        result.unwrap().into()
     }
 }
 

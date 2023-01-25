@@ -67,10 +67,9 @@ abstract class Fuels {
 
   FlutterRustBridgeTaskConstMeta get kGetBalancesMethodWalletUnlockedConstMeta;
 
-  Future<List<TransactionResponse>> getTransactionsMethodWalletUnlocked(
+  Future<TransactionsPaginatedResult> getTransactionsMethodWalletUnlocked(
       {required WalletUnlocked that,
-      required int pageSize,
-      String? cursor,
+      required PaginationRequest request,
       dynamic hint});
 
   FlutterRustBridgeTaskConstMeta
@@ -243,6 +242,28 @@ class Output with _$Output {
   }) = Output_ContractCreated;
 }
 
+enum PageDirection {
+  Forward,
+  Backward,
+}
+
+class PaginationRequest {
+  /// The cursor returned from a previous query to indicate an offset
+  final String? cursor;
+
+  /// The number of results to take
+  final int results;
+
+  /// The direction of the query (e.g. asc, desc order).
+  final PageDirection direction;
+
+  PaginationRequest({
+    this.cursor,
+    required this.results,
+    required this.direction,
+  });
+}
+
 class Provider {
   final NativeProvider nativeProvider;
 
@@ -317,6 +338,20 @@ enum TransactionStatus {
   Success,
   Failure,
   SqueezedOut,
+}
+
+class TransactionsPaginatedResult {
+  final String? cursor;
+  final List<TransactionResponse> results;
+  final bool hasNextPage;
+  final bool hasPreviousPage;
+
+  TransactionsPaginatedResult({
+    this.cursor,
+    required this.results,
+    required this.hasNextPage,
+    required this.hasPreviousPage,
+  });
 }
 
 class TxPointer {
@@ -404,12 +439,11 @@ class WalletUnlocked {
         that: this,
       );
 
-  Future<List<TransactionResponse>> getTransactions(
-          {required int pageSize, String? cursor, dynamic hint}) =>
+  Future<TransactionsPaginatedResult> getTransactions(
+          {required PaginationRequest request, dynamic hint}) =>
       bridge.getTransactionsMethodWalletUnlocked(
         that: this,
-        pageSize: pageSize,
-        cursor: cursor,
+        request: request,
       );
 }
 
@@ -601,21 +635,18 @@ class FuelsImpl implements Fuels {
             argNames: ["that"],
           );
 
-  Future<List<TransactionResponse>> getTransactionsMethodWalletUnlocked(
+  Future<TransactionsPaginatedResult> getTransactionsMethodWalletUnlocked(
       {required WalletUnlocked that,
-      required int pageSize,
-      String? cursor,
+      required PaginationRequest request,
       dynamic hint}) {
     var arg0 = _platform.api2wire_box_autoadd_wallet_unlocked(that);
-    var arg1 = api2wire_usize(pageSize);
-    var arg2 = _platform.api2wire_opt_String(cursor);
+    var arg1 = _platform.api2wire_box_autoadd_pagination_request(request);
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) => _platform.inner
-          .wire_get_transactions__method__WalletUnlocked(
-              port_, arg0, arg1, arg2),
-      parseSuccessData: _wire2api_list_transaction_response,
+          .wire_get_transactions__method__WalletUnlocked(port_, arg0, arg1),
+      parseSuccessData: _wire2api_transactions_paginated_result,
       constMeta: kGetTransactionsMethodWalletUnlockedConstMeta,
-      argValues: [that, pageSize, cursor],
+      argValues: [that, request],
       hint: hint,
     ));
   }
@@ -624,7 +655,7 @@ class FuelsImpl implements Fuels {
       get kGetTransactionsMethodWalletUnlockedConstMeta =>
           const FlutterRustBridgeTaskConstMeta(
             debugName: "get_transactions__method__WalletUnlocked",
-            argNames: ["that", "pageSize", "cursor"],
+            argNames: ["that", "request"],
           );
 
   DropFnType get dropOpaqueNativeProvider =>
@@ -670,6 +701,10 @@ class FuelsImpl implements Fuels {
       assets: _wire2api_StringList(arr[0]),
       balances: _wire2api_uint_64_list(arr[1]),
     );
+  }
+
+  bool _wire2api_bool(dynamic raw) {
+    return raw as bool;
   }
 
   Create _wire2api_box_autoadd_create(dynamic raw) {
@@ -917,6 +952,19 @@ class FuelsImpl implements Fuels {
     return TransactionStatus.values[raw];
   }
 
+  TransactionsPaginatedResult _wire2api_transactions_paginated_result(
+      dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return TransactionsPaginatedResult(
+      cursor: _wire2api_opt_String(arr[0]),
+      results: _wire2api_list_transaction_response(arr[1]),
+      hasNextPage: _wire2api_bool(arr[2]),
+      hasPreviousPage: _wire2api_bool(arr[3]),
+    );
+  }
+
   TxPointer _wire2api_tx_pointer(dynamic raw) {
     final arr = raw as List<dynamic>;
     if (arr.length != 2)
@@ -987,6 +1035,16 @@ class FuelsImpl implements Fuels {
 }
 
 // Section: api2wire
+
+@protected
+int api2wire_i32(int raw) {
+  return raw;
+}
+
+@protected
+int api2wire_page_direction(PageDirection raw) {
+  return api2wire_i32(raw.index);
+}
 
 @protected
 int api2wire_u8(int raw) {

@@ -70,10 +70,9 @@ pub extern "C" fn wire_get_balances__method__WalletUnlocked(
 pub extern "C" fn wire_get_transactions__method__WalletUnlocked(
     port_: i64,
     that: *mut wire_WalletUnlocked,
-    page_size: usize,
-    cursor: *mut wire_uint_8_list,
+    request: *mut wire_PaginationRequest,
 ) {
-    wire_get_transactions__method__WalletUnlocked_impl(port_, that, page_size, cursor)
+    wire_get_transactions__method__WalletUnlocked_impl(port_, that, request)
 }
 
 // Section: allocate functions
@@ -86,6 +85,11 @@ pub extern "C" fn new_NativeProvider() -> wire_NativeProvider {
 #[no_mangle]
 pub extern "C" fn new_NativeWalletUnlocked() -> wire_NativeWalletUnlocked {
     wire_NativeWalletUnlocked::new_with_null_ptr()
+}
+
+#[no_mangle]
+pub extern "C" fn new_box_autoadd_pagination_request_0() -> *mut wire_PaginationRequest {
+    support::new_leak_box_ptr(wire_PaginationRequest::new_with_null_ptr())
 }
 
 #[no_mangle]
@@ -157,6 +161,12 @@ impl Wire2Api<String> for *mut wire_uint_8_list {
         String::from_utf8_lossy(&vec).into_owned()
     }
 }
+impl Wire2Api<PaginationRequest> for *mut wire_PaginationRequest {
+    fn wire2api(self) -> PaginationRequest {
+        let wrap = unsafe { support::box_from_leak_ptr(self) };
+        Wire2Api::<PaginationRequest>::wire2api(*wrap).into()
+    }
+}
 impl Wire2Api<Provider> for *mut wire_Provider {
     fn wire2api(self) -> Provider {
         let wrap = unsafe { support::box_from_leak_ptr(self) };
@@ -170,6 +180,15 @@ impl Wire2Api<WalletUnlocked> for *mut wire_WalletUnlocked {
     }
 }
 
+impl Wire2Api<PaginationRequest> for wire_PaginationRequest {
+    fn wire2api(self) -> PaginationRequest {
+        PaginationRequest {
+            cursor: self.cursor.wire2api(),
+            results: self.results.wire2api(),
+            direction: self.direction.wire2api(),
+        }
+    }
+}
 impl Wire2Api<Provider> for wire_Provider {
     fn wire2api(self) -> Provider {
         Provider {
@@ -207,6 +226,14 @@ pub struct wire_NativeProvider {
 #[derive(Clone)]
 pub struct wire_NativeWalletUnlocked {
     ptr: *const core::ffi::c_void,
+}
+
+#[repr(C)]
+#[derive(Clone)]
+pub struct wire_PaginationRequest {
+    cursor: *mut wire_uint_8_list,
+    results: usize,
+    direction: i32,
 }
 
 #[repr(C)]
@@ -252,6 +279,16 @@ impl NewWithNullPtr for wire_NativeWalletUnlocked {
     fn new_with_null_ptr() -> Self {
         Self {
             ptr: core::ptr::null(),
+        }
+    }
+}
+
+impl NewWithNullPtr for wire_PaginationRequest {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            cursor: core::ptr::null_mut(),
+            results: Default::default(),
+            direction: Default::default(),
         }
     }
 }

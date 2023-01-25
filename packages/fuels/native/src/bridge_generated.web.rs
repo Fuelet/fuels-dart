@@ -64,10 +64,9 @@ pub fn wire_get_balances__method__WalletUnlocked(port_: MessagePort, that: JsVal
 pub fn wire_get_transactions__method__WalletUnlocked(
     port_: MessagePort,
     that: JsValue,
-    page_size: usize,
-    cursor: Option<String>,
+    request: JsValue,
 ) {
-    wire_get_transactions__method__WalletUnlocked_impl(port_, that, page_size, cursor)
+    wire_get_transactions__method__WalletUnlocked_impl(port_, that, request)
 }
 
 // Section: allocate functions
@@ -120,6 +119,23 @@ impl Wire2Api<Option<String>> for Option<String> {
 impl Wire2Api<Option<Provider>> for JsValue {
     fn wire2api(self) -> Option<Provider> {
         (!self.is_undefined() && !self.is_null()).then(|| self.wire2api())
+    }
+}
+
+impl Wire2Api<PaginationRequest> for JsValue {
+    fn wire2api(self) -> PaginationRequest {
+        let self_ = self.dyn_into::<JsArray>().unwrap();
+        assert_eq!(
+            self_.length(),
+            3,
+            "Expected 3 elements, got {}",
+            self_.length()
+        );
+        PaginationRequest {
+            cursor: self_.get(0).wire2api(),
+            results: self_.get(1).wire2api(),
+            direction: self_.get(2).wire2api(),
+        }
     }
 }
 impl Wire2Api<Provider> for JsValue {
@@ -185,9 +201,19 @@ impl Wire2Api<String> for JsValue {
         self.as_string().expect("non-UTF-8 string, or not a string")
     }
 }
+impl Wire2Api<i32> for JsValue {
+    fn wire2api(self) -> i32 {
+        self.unchecked_into_f64() as _
+    }
+}
 impl Wire2Api<Option<String>> for JsValue {
     fn wire2api(self) -> Option<String> {
         (!self.is_undefined() && !self.is_null()).then(|| self.wire2api())
+    }
+}
+impl Wire2Api<PageDirection> for JsValue {
+    fn wire2api(self) -> PageDirection {
+        (self.unchecked_into_f64() as i32).wire2api()
     }
 }
 impl Wire2Api<u8> for JsValue {

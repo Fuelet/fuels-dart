@@ -19,6 +19,9 @@ use std::sync::Arc;
 
 // Section: imports
 
+use crate::model::pagination::PageDirection;
+use crate::model::pagination::PaginationRequest;
+use crate::model::pagination::TransactionsPaginatedResult;
 use crate::model::provider::Provider;
 use crate::model::transaction::Create;
 use crate::model::transaction::Input;
@@ -189,8 +192,7 @@ fn wire_get_balances__method__WalletUnlocked_impl(
 fn wire_get_transactions__method__WalletUnlocked_impl(
     port_: MessagePort,
     that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
-    page_size: impl Wire2Api<usize> + UnwindSafe,
-    cursor: impl Wire2Api<Option<String>> + UnwindSafe,
+    request: impl Wire2Api<PaginationRequest> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap(
         WrapInfo {
@@ -200,15 +202,8 @@ fn wire_get_transactions__method__WalletUnlocked_impl(
         },
         move || {
             let api_that = that.wire2api();
-            let api_page_size = page_size.wire2api();
-            let api_cursor = cursor.wire2api();
-            move |task_callback| {
-                Ok(WalletUnlocked::get_transactions(
-                    &api_that,
-                    api_page_size,
-                    api_cursor,
-                ))
-            }
+            let api_request = request.wire2api();
+            move |task_callback| Ok(WalletUnlocked::get_transactions(&api_that, api_request))
         },
     )
 }
@@ -232,6 +227,22 @@ where
 {
     fn wire2api(self) -> Option<T> {
         (!self.is_null()).then(|| self.wire2api())
+    }
+}
+
+impl Wire2Api<i32> for i32 {
+    fn wire2api(self) -> i32 {
+        self
+    }
+}
+
+impl Wire2Api<PageDirection> for i32 {
+    fn wire2api(self) -> PageDirection {
+        match self {
+            0 => PageDirection::Forward,
+            1 => PageDirection::Backward,
+            _ => unreachable!("Invalid variant for PageDirection: {}", self),
+        }
     }
 }
 
@@ -507,6 +518,19 @@ impl support::IntoDart for TransactionStatus {
         .into_dart()
     }
 }
+impl support::IntoDart for TransactionsPaginatedResult {
+    fn into_dart(self) -> support::DartAbi {
+        vec![
+            self.cursor.into_dart(),
+            self.results.into_dart(),
+            self.has_next_page.into_dart(),
+            self.has_previous_page.into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for TransactionsPaginatedResult {}
+
 impl support::IntoDart for TxPointer {
     fn into_dart(self) -> support::DartAbi {
         vec![self.block_height.into_dart(), self.tx_index.into_dart()].into_dart()

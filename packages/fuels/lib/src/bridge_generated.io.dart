@@ -36,6 +36,14 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
   }
 
   @protected
+  ffi.Pointer<wire_PaginationRequest> api2wire_box_autoadd_pagination_request(
+      PaginationRequest raw) {
+    final ptr = inner.new_box_autoadd_pagination_request_0();
+    _api_fill_to_wire_pagination_request(raw, ptr.ref);
+    return ptr;
+  }
+
+  @protected
   ffi.Pointer<wire_Provider> api2wire_box_autoadd_provider(Provider raw) {
     final ptr = inner.new_box_autoadd_provider_0();
     _api_fill_to_wire_provider(raw, ptr.ref);
@@ -88,6 +96,11 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
     wireObj.ptr = apiObj.shareOrMove();
   }
 
+  void _api_fill_to_wire_box_autoadd_pagination_request(
+      PaginationRequest apiObj, ffi.Pointer<wire_PaginationRequest> wireObj) {
+    _api_fill_to_wire_pagination_request(apiObj, wireObj.ref);
+  }
+
   void _api_fill_to_wire_box_autoadd_provider(
       Provider apiObj, ffi.Pointer<wire_Provider> wireObj) {
     _api_fill_to_wire_provider(apiObj, wireObj.ref);
@@ -101,6 +114,13 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
   void _api_fill_to_wire_opt_box_autoadd_provider(
       Provider? apiObj, ffi.Pointer<wire_Provider> wireObj) {
     if (apiObj != null) _api_fill_to_wire_box_autoadd_provider(apiObj, wireObj);
+  }
+
+  void _api_fill_to_wire_pagination_request(
+      PaginationRequest apiObj, wire_PaginationRequest wireObj) {
+    wireObj.cursor = api2wire_opt_String(apiObj.cursor);
+    wireObj.results = api2wire_usize(apiObj.results);
+    wireObj.direction = api2wire_page_direction(apiObj.direction);
   }
 
   void _api_fill_to_wire_provider(Provider apiObj, wire_Provider wireObj) {
@@ -382,26 +402,24 @@ class FuelsWire implements FlutterRustBridgeWireBase {
   void wire_get_transactions__method__WalletUnlocked(
     int port_,
     ffi.Pointer<wire_WalletUnlocked> that,
-    int page_size,
-    ffi.Pointer<wire_uint_8_list> cursor,
+    ffi.Pointer<wire_PaginationRequest> request,
   ) {
     return _wire_get_transactions__method__WalletUnlocked(
       port_,
       that,
-      page_size,
-      cursor,
+      request,
     );
   }
 
   late final _wire_get_transactions__method__WalletUnlockedPtr = _lookup<
           ffi.NativeFunction<
               ffi.Void Function(ffi.Int64, ffi.Pointer<wire_WalletUnlocked>,
-                  ffi.UintPtr, ffi.Pointer<wire_uint_8_list>)>>(
+                  ffi.Pointer<wire_PaginationRequest>)>>(
       'wire_get_transactions__method__WalletUnlocked');
   late final _wire_get_transactions__method__WalletUnlocked =
       _wire_get_transactions__method__WalletUnlockedPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_WalletUnlocked>, int,
-              ffi.Pointer<wire_uint_8_list>)>();
+          void Function(int, ffi.Pointer<wire_WalletUnlocked>,
+              ffi.Pointer<wire_PaginationRequest>)>();
 
   wire_NativeProvider new_NativeProvider() {
     return _new_NativeProvider();
@@ -422,6 +440,17 @@ class FuelsWire implements FlutterRustBridgeWireBase {
           'new_NativeWalletUnlocked');
   late final _new_NativeWalletUnlocked = _new_NativeWalletUnlockedPtr
       .asFunction<wire_NativeWalletUnlocked Function()>();
+
+  ffi.Pointer<wire_PaginationRequest> new_box_autoadd_pagination_request_0() {
+    return _new_box_autoadd_pagination_request_0();
+  }
+
+  late final _new_box_autoadd_pagination_request_0Ptr = _lookup<
+          ffi.NativeFunction<ffi.Pointer<wire_PaginationRequest> Function()>>(
+      'new_box_autoadd_pagination_request_0');
+  late final _new_box_autoadd_pagination_request_0 =
+      _new_box_autoadd_pagination_request_0Ptr
+          .asFunction<ffi.Pointer<wire_PaginationRequest> Function()>();
 
   ffi.Pointer<wire_Provider> new_box_autoadd_provider_0() {
     return _new_box_autoadd_provider_0();
@@ -559,6 +588,16 @@ class wire_WalletUnlocked extends ffi.Struct {
   external wire_NativeWalletUnlocked native_wallet_unlocked;
 
   external ffi.Pointer<wire_uint_8_list> private_key;
+}
+
+class wire_PaginationRequest extends ffi.Struct {
+  external ffi.Pointer<wire_uint_8_list> cursor;
+
+  @ffi.UintPtr()
+  external int results;
+
+  @ffi.Int32()
+  external int direction;
 }
 
 typedef DartPostCObjectFnType = ffi.Pointer<
