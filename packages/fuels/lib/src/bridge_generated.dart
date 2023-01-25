@@ -19,10 +19,6 @@ import 'package:meta/meta.dart';
 part 'bridge_generated.freezed.dart';
 
 abstract class Fuels {
-  Future<Provider> createProvider({required String url, dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta get kCreateProviderConstMeta;
-
   Future<WalletUnlocked> newRandomStaticMethodWalletUnlocked(
       {Provider? provider, dynamic hint});
 
@@ -51,7 +47,7 @@ abstract class Fuels {
   FlutterRustBridgeTaskConstMeta
       get kNewFromMnemonicPhraseWithPathStaticMethodWalletUnlockedConstMeta;
 
-  Future<String> addressMethodWalletUnlocked(
+  Future<Bech32Address> addressMethodWalletUnlocked(
       {required WalletUnlocked that, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kAddressMethodWalletUnlockedConstMeta;
@@ -75,6 +71,26 @@ abstract class Fuels {
   FlutterRustBridgeTaskConstMeta
       get kGetTransactionsMethodWalletUnlockedConstMeta;
 
+  Future<String> toBech32StringMethodBech32Address(
+      {required Bech32Address that, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta
+      get kToBech32StringMethodBech32AddressConstMeta;
+
+  Future<String> toB256StringMethodBech32Address(
+      {required Bech32Address that, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kToB256StringMethodBech32AddressConstMeta;
+
+  Future<Provider> connectStaticMethodProvider(
+      {required String url, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kConnectStaticMethodProviderConstMeta;
+
+  DropFnType get dropOpaqueNativeBech32Address;
+  ShareFnType get shareOpaqueNativeBech32Address;
+  OpaqueTypeFinalizer get NativeBech32AddressFinalizer;
+
   DropFnType get dropOpaqueNativeProvider;
   ShareFnType get shareOpaqueNativeProvider;
   OpaqueTypeFinalizer get NativeProviderFinalizer;
@@ -82,6 +98,22 @@ abstract class Fuels {
   DropFnType get dropOpaqueNativeWalletUnlocked;
   ShareFnType get shareOpaqueNativeWalletUnlocked;
   OpaqueTypeFinalizer get NativeWalletUnlockedFinalizer;
+}
+
+@sealed
+class NativeBech32Address extends FrbOpaque {
+  final Fuels bridge;
+  NativeBech32Address.fromRaw(int ptr, int size, this.bridge)
+      : super.unsafe(ptr, size);
+  @override
+  DropFnType get dropFn => bridge.dropOpaqueNativeBech32Address;
+
+  @override
+  ShareFnType get shareFn => bridge.shareOpaqueNativeBech32Address;
+
+  @override
+  OpaqueTypeFinalizer get staticFinalizer =>
+      bridge.NativeBech32AddressFinalizer;
 }
 
 @sealed
@@ -123,6 +155,26 @@ class Balance {
     required this.asset,
     required this.amount,
   });
+}
+
+class Bech32Address {
+  final Fuels bridge;
+  final NativeBech32Address native;
+
+  Bech32Address({
+    required this.bridge,
+    required this.native,
+  });
+
+  Future<String> toBech32String({dynamic hint}) =>
+      bridge.toBech32StringMethodBech32Address(
+        that: this,
+      );
+
+  Future<String> toB256String({dynamic hint}) =>
+      bridge.toB256StringMethodBech32Address(
+        that: this,
+      );
 }
 
 class Create {
@@ -265,11 +317,17 @@ class PaginationRequest {
 }
 
 class Provider {
+  final Fuels bridge;
   final NativeProvider nativeProvider;
 
   Provider({
+    required this.bridge,
     required this.nativeProvider,
   });
+
+  static Future<Provider> connect(
+          {required Fuels bridge, required String url, dynamic hint}) =>
+      bridge.connectStaticMethodProvider(url: url, hint: hint);
 }
 
 class Script {
@@ -424,7 +482,8 @@ class WalletUnlocked {
       bridge.newFromMnemonicPhraseWithPathStaticMethodWalletUnlocked(
           phrase: phrase, provider: provider, path: path, hint: hint);
 
-  Future<String> address({dynamic hint}) => bridge.addressMethodWalletUnlocked(
+  Future<Bech32Address> address({dynamic hint}) =>
+      bridge.addressMethodWalletUnlocked(
         that: this,
       );
 
@@ -464,23 +523,6 @@ class FuelsImpl implements Fuels {
   factory FuelsImpl.wasm(FutureOr<WasmModule> module) =>
       FuelsImpl(module as ExternalLibrary);
   FuelsImpl.raw(this._platform);
-  Future<Provider> createProvider({required String url, dynamic hint}) {
-    var arg0 = _platform.api2wire_String(url);
-    return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner.wire_create_provider(port_, arg0),
-      parseSuccessData: _wire2api_provider,
-      constMeta: kCreateProviderConstMeta,
-      argValues: [url],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta get kCreateProviderConstMeta =>
-      const FlutterRustBridgeTaskConstMeta(
-        debugName: "create_provider",
-        argNames: ["url"],
-      );
-
   Future<WalletUnlocked> newRandomStaticMethodWalletUnlocked(
       {Provider? provider, dynamic hint}) {
     var arg0 = _platform.api2wire_opt_box_autoadd_provider(provider);
@@ -575,13 +617,13 @@ class FuelsImpl implements Fuels {
             argNames: ["phrase", "provider", "path"],
           );
 
-  Future<String> addressMethodWalletUnlocked(
+  Future<Bech32Address> addressMethodWalletUnlocked(
       {required WalletUnlocked that, dynamic hint}) {
     var arg0 = _platform.api2wire_box_autoadd_wallet_unlocked(that);
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) =>
           _platform.inner.wire_address__method__WalletUnlocked(port_, arg0),
-      parseSuccessData: _wire2api_String,
+      parseSuccessData: (d) => _wire2api_bech_32_address(d),
       constMeta: kAddressMethodWalletUnlockedConstMeta,
       argValues: [that],
       hint: hint,
@@ -658,6 +700,72 @@ class FuelsImpl implements Fuels {
             argNames: ["that", "request"],
           );
 
+  Future<String> toBech32StringMethodBech32Address(
+      {required Bech32Address that, dynamic hint}) {
+    var arg0 = _platform.api2wire_box_autoadd_bech_32_address(that);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_to_bech32_string__method__Bech32Address(port_, arg0),
+      parseSuccessData: _wire2api_String,
+      constMeta: kToBech32StringMethodBech32AddressConstMeta,
+      argValues: [that],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta
+      get kToBech32StringMethodBech32AddressConstMeta =>
+          const FlutterRustBridgeTaskConstMeta(
+            debugName: "to_bech32_string__method__Bech32Address",
+            argNames: ["that"],
+          );
+
+  Future<String> toB256StringMethodBech32Address(
+      {required Bech32Address that, dynamic hint}) {
+    var arg0 = _platform.api2wire_box_autoadd_bech_32_address(that);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_to_b256_string__method__Bech32Address(port_, arg0),
+      parseSuccessData: _wire2api_String,
+      constMeta: kToB256StringMethodBech32AddressConstMeta,
+      argValues: [that],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta
+      get kToB256StringMethodBech32AddressConstMeta =>
+          const FlutterRustBridgeTaskConstMeta(
+            debugName: "to_b256_string__method__Bech32Address",
+            argNames: ["that"],
+          );
+
+  Future<Provider> connectStaticMethodProvider(
+      {required String url, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(url);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) =>
+          _platform.inner.wire_connect__static_method__Provider(port_, arg0),
+      parseSuccessData: (d) => _wire2api_provider(d),
+      constMeta: kConnectStaticMethodProviderConstMeta,
+      argValues: [url],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kConnectStaticMethodProviderConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "connect__static_method__Provider",
+        argNames: ["url"],
+      );
+
+  DropFnType get dropOpaqueNativeBech32Address =>
+      _platform.inner.drop_opaque_NativeBech32Address;
+  ShareFnType get shareOpaqueNativeBech32Address =>
+      _platform.inner.share_opaque_NativeBech32Address;
+  OpaqueTypeFinalizer get NativeBech32AddressFinalizer =>
+      _platform.NativeBech32AddressFinalizer;
+
   DropFnType get dropOpaqueNativeProvider =>
       _platform.inner.drop_opaque_NativeProvider;
   ShareFnType get shareOpaqueNativeProvider =>
@@ -676,6 +784,10 @@ class FuelsImpl implements Fuels {
     _platform.dispose();
   }
 // Section: wire2api
+
+  NativeBech32Address _wire2api_NativeBech32Address(dynamic raw) {
+    return NativeBech32Address.fromRaw(raw[0], raw[1], this);
+  }
 
   NativeProvider _wire2api_NativeProvider(dynamic raw) {
     return NativeProvider.fromRaw(raw[0], raw[1], this);
@@ -696,6 +808,16 @@ class FuelsImpl implements Fuels {
     return Balance(
       asset: _wire2api_String(arr[0]),
       amount: _wire2api_u64(arr[1]),
+    );
+  }
+
+  Bech32Address _wire2api_bech_32_address(dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
+    return Bech32Address(
+      bridge: this,
+      native: _wire2api_NativeBech32Address(arr[0]),
     );
   }
 
@@ -886,6 +1008,7 @@ class FuelsImpl implements Fuels {
     if (arr.length != 1)
       throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
     return Provider(
+      bridge: this,
       nativeProvider: _wire2api_NativeProvider(arr[0]),
     );
   }

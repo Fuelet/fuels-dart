@@ -23,7 +23,6 @@ use crate::model::balance::Balance;
 use crate::model::pagination::PageDirection;
 use crate::model::pagination::PaginationRequest;
 use crate::model::pagination::TransactionsPaginatedResult;
-use crate::model::provider::Provider;
 use crate::model::transaction::Create;
 use crate::model::transaction::Input;
 use crate::model::transaction::Mint;
@@ -39,19 +38,6 @@ use crate::model::transaction::Witness;
 
 // Section: wire functions
 
-fn wire_create_provider_impl(port_: MessagePort, url: impl Wire2Api<String> + UnwindSafe) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
-        WrapInfo {
-            debug_name: "create_provider",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || {
-            let api_url = url.wire2api();
-            move |task_callback| Ok(create_provider(api_url))
-        },
-    )
-}
 fn wire_new_random__static_method__WalletUnlocked_impl(
     port_: MessagePort,
     provider: impl Wire2Api<Option<Provider>> + UnwindSafe,
@@ -208,6 +194,54 @@ fn wire_get_transactions__method__WalletUnlocked_impl(
         },
     )
 }
+fn wire_to_bech32_string__method__Bech32Address_impl(
+    port_: MessagePort,
+    that: impl Wire2Api<Bech32Address> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "to_bech32_string__method__Bech32Address",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.wire2api();
+            move |task_callback| Ok(Bech32Address::to_bech32_string(&api_that))
+        },
+    )
+}
+fn wire_to_b256_string__method__Bech32Address_impl(
+    port_: MessagePort,
+    that: impl Wire2Api<Bech32Address> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "to_b256_string__method__Bech32Address",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.wire2api();
+            move |task_callback| Ok(Bech32Address::to_b256_string(&api_that))
+        },
+    )
+}
+fn wire_connect__static_method__Provider_impl(
+    port_: MessagePort,
+    url: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "connect__static_method__Provider",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_url = url.wire2api();
+            move |task_callback| Ok(Provider::connect(api_url))
+        },
+    )
+}
 // Section: wrapper structs
 
 // Section: static checks
@@ -267,6 +301,13 @@ impl support::IntoDart for Balance {
     }
 }
 impl support::IntoDartExceptPrimitive for Balance {}
+
+impl support::IntoDart for Bech32Address {
+    fn into_dart(self) -> support::DartAbi {
+        vec![self.native.into_dart()].into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for Bech32Address {}
 
 impl support::IntoDart for Create {
     fn into_dart(self) -> support::DartAbi {

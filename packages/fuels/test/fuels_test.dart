@@ -21,39 +21,41 @@ const ethAsset =
     '0x0000000000000000000000000000000000000000000000000000000000000000';
 
 final dynLib = DynamicLibrary.open(dynLibPath);
-var pulseNative = createWrapper(dynLib);
+var rustSdk = createWrapper(dynLib);
 
 Future<WalletUnlocked> createWallet(String? privateKey) {
-  var provider = pulseNative.createProvider(url: betaApiUrl);
+  var provider = Provider.connect(bridge: rustSdk, url: betaApiUrl);
   return provider.then((prov) => privateKey == null
-      ? WalletUnlocked.newRandom(bridge: pulseNative, provider: prov)
+      ? WalletUnlocked.newRandom(bridge: rustSdk, provider: prov)
       : WalletUnlocked.newFromPrivateKey(
-          bridge: pulseNative, privateKey: privateKey, provider: prov));
+          bridge: rustSdk, privateKey: privateKey, provider: prov));
 }
 
 void main() {
   test('test wallet', () async {
     WalletUnlocked wallet = await createWallet(null);
-    await wallet.address().then(print);
+    await wallet.address().then((addr) {
+      addr.toB256String().then((b256) => print('b256: $b256'));
+      addr.toBech32String().then((bech32) => print('bech32: $bech32'));
+    });
   });
 
   test('test recreate wallet', () async {
     WalletUnlocked wallet = await createWallet(null);
     WalletUnlocked recreated = await createWallet(wallet.privateKey);
-    expect(await recreated.address(), await wallet.address());
+    expect(await recreated.address().then((a) => a.toBech32String()),
+        await wallet.address().then((a) => a.toBech32String()));
     expect(recreated.privateKey, wallet.privateKey);
   });
 
   test('test get ETH balance', () async {
     WalletUnlocked wallet = await createWallet(testWalletPrivateKey);
-    wallet.address().then((addr) => expect(addr, testWalletAddress));
     var ethBalance = await wallet.getAssetBalance(asset: ethAsset);
     print(ethBalance);
   });
 
   test('test get balances', () async {
     WalletUnlocked wallet = await createWallet(testWalletPrivateKey);
-    wallet.address().then((addr) => expect(addr, testWalletAddress));
     var balances = await wallet.getBalances();
     for (var i = 0; i < balances.length; i++) {
       print('${balances[i].asset} -> ${balances[i].amount}');

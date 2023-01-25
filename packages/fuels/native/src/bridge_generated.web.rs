@@ -2,11 +2,6 @@ use super::*;
 // Section: wire functions
 
 #[wasm_bindgen]
-pub fn wire_create_provider(port_: MessagePort, url: String) {
-    wire_create_provider_impl(port_, url)
-}
-
-#[wasm_bindgen]
 pub fn wire_new_random__static_method__WalletUnlocked(port_: MessagePort, provider: JsValue) {
     wire_new_random__static_method__WalletUnlocked_impl(port_, provider)
 }
@@ -69,9 +64,39 @@ pub fn wire_get_transactions__method__WalletUnlocked(
     wire_get_transactions__method__WalletUnlocked_impl(port_, that, request)
 }
 
+#[wasm_bindgen]
+pub fn wire_to_bech32_string__method__Bech32Address(port_: MessagePort, that: JsValue) {
+    wire_to_bech32_string__method__Bech32Address_impl(port_, that)
+}
+
+#[wasm_bindgen]
+pub fn wire_to_b256_string__method__Bech32Address(port_: MessagePort, that: JsValue) {
+    wire_to_b256_string__method__Bech32Address_impl(port_, that)
+}
+
+#[wasm_bindgen]
+pub fn wire_connect__static_method__Provider(port_: MessagePort, url: String) {
+    wire_connect__static_method__Provider_impl(port_, url)
+}
+
 // Section: allocate functions
 
 // Section: related functions
+
+#[wasm_bindgen]
+pub fn drop_opaque_NativeBech32Address(ptr: *const c_void) {
+    unsafe {
+        Arc::<NativeBech32Address>::decrement_strong_count(ptr as _);
+    }
+}
+
+#[wasm_bindgen]
+pub fn share_opaque_NativeBech32Address(ptr: *const c_void) -> *const c_void {
+    unsafe {
+        Arc::<NativeBech32Address>::increment_strong_count(ptr as _);
+        ptr
+    }
+}
 
 #[wasm_bindgen]
 pub fn drop_opaque_NativeProvider(ptr: *const c_void) {
@@ -108,6 +133,20 @@ pub fn share_opaque_NativeWalletUnlocked(ptr: *const c_void) -> *const c_void {
 impl Wire2Api<String> for String {
     fn wire2api(self) -> String {
         self
+    }
+}
+impl Wire2Api<Bech32Address> for JsValue {
+    fn wire2api(self) -> Bech32Address {
+        let self_ = self.dyn_into::<JsArray>().unwrap();
+        assert_eq!(
+            self_.length(),
+            1,
+            "Expected 1 elements, got {}",
+            self_.length()
+        );
+        Bech32Address {
+            native: self_.get(0).wire2api(),
+        }
     }
 }
 
@@ -176,6 +215,16 @@ impl Wire2Api<WalletUnlocked> for JsValue {
 }
 // Section: impl Wire2Api for JsValue
 
+impl Wire2Api<RustOpaque<NativeBech32Address>> for JsValue {
+    fn wire2api(self) -> RustOpaque<NativeBech32Address> {
+        #[cfg(target_pointer_width = "64")]
+        {
+            compile_error!("64-bit pointers are not supported.");
+        }
+
+        unsafe { support::opaque_from_dart((self.as_f64().unwrap() as usize) as _) }
+    }
+}
 impl Wire2Api<RustOpaque<NativeProvider>> for JsValue {
     fn wire2api(self) -> RustOpaque<NativeProvider> {
         #[cfg(target_pointer_width = "64")]

@@ -16,6 +16,14 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
 // Section: api2wire
 
   @protected
+  wire_NativeBech32Address api2wire_NativeBech32Address(
+      NativeBech32Address raw) {
+    final ptr = inner.new_NativeBech32Address();
+    _api_fill_to_wire_NativeBech32Address(raw, ptr);
+    return ptr;
+  }
+
+  @protected
   wire_NativeProvider api2wire_NativeProvider(NativeProvider raw) {
     final ptr = inner.new_NativeProvider();
     _api_fill_to_wire_NativeProvider(raw, ptr);
@@ -33,6 +41,14 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
   @protected
   ffi.Pointer<wire_uint_8_list> api2wire_String(String raw) {
     return api2wire_uint_8_list(utf8.encoder.convert(raw));
+  }
+
+  @protected
+  ffi.Pointer<wire_Bech32Address> api2wire_box_autoadd_bech_32_address(
+      Bech32Address raw) {
+    final ptr = inner.new_box_autoadd_bech_32_address_0();
+    _api_fill_to_wire_bech_32_address(raw, ptr.ref);
+    return ptr;
   }
 
   @protected
@@ -77,6 +93,10 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
 
 // Section: finalizer
 
+  late final OpaqueTypeFinalizer _NativeBech32AddressFinalizer =
+      OpaqueTypeFinalizer(inner._drop_opaque_NativeBech32AddressPtr);
+  OpaqueTypeFinalizer get NativeBech32AddressFinalizer =>
+      _NativeBech32AddressFinalizer;
   late final OpaqueTypeFinalizer _NativeProviderFinalizer =
       OpaqueTypeFinalizer(inner._drop_opaque_NativeProviderPtr);
   OpaqueTypeFinalizer get NativeProviderFinalizer => _NativeProviderFinalizer;
@@ -86,6 +106,11 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
       _NativeWalletUnlockedFinalizer;
 // Section: api_fill_to_wire
 
+  void _api_fill_to_wire_NativeBech32Address(
+      NativeBech32Address apiObj, wire_NativeBech32Address wireObj) {
+    wireObj.ptr = apiObj.shareOrMove();
+  }
+
   void _api_fill_to_wire_NativeProvider(
       NativeProvider apiObj, wire_NativeProvider wireObj) {
     wireObj.ptr = apiObj.shareOrMove();
@@ -94,6 +119,16 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
   void _api_fill_to_wire_NativeWalletUnlocked(
       NativeWalletUnlocked apiObj, wire_NativeWalletUnlocked wireObj) {
     wireObj.ptr = apiObj.shareOrMove();
+  }
+
+  void _api_fill_to_wire_bech_32_address(
+      Bech32Address apiObj, wire_Bech32Address wireObj) {
+    wireObj.native = api2wire_NativeBech32Address(apiObj.native);
+  }
+
+  void _api_fill_to_wire_box_autoadd_bech_32_address(
+      Bech32Address apiObj, ffi.Pointer<wire_Bech32Address> wireObj) {
+    _api_fill_to_wire_bech_32_address(apiObj, wireObj.ref);
   }
 
   void _api_fill_to_wire_box_autoadd_pagination_request(
@@ -229,23 +264,6 @@ class FuelsWire implements FlutterRustBridgeWireBase {
           'init_frb_dart_api_dl');
   late final _init_frb_dart_api_dl = _init_frb_dart_api_dlPtr
       .asFunction<int Function(ffi.Pointer<ffi.Void>)>();
-
-  void wire_create_provider(
-    int port_,
-    ffi.Pointer<wire_uint_8_list> url,
-  ) {
-    return _wire_create_provider(
-      port_,
-      url,
-    );
-  }
-
-  late final _wire_create_providerPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(ffi.Int64,
-              ffi.Pointer<wire_uint_8_list>)>>('wire_create_provider');
-  late final _wire_create_provider = _wire_create_providerPtr
-      .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
 
   void wire_new_random__static_method__WalletUnlocked(
     int port_,
@@ -421,6 +439,70 @@ class FuelsWire implements FlutterRustBridgeWireBase {
           void Function(int, ffi.Pointer<wire_WalletUnlocked>,
               ffi.Pointer<wire_PaginationRequest>)>();
 
+  void wire_to_bech32_string__method__Bech32Address(
+    int port_,
+    ffi.Pointer<wire_Bech32Address> that,
+  ) {
+    return _wire_to_bech32_string__method__Bech32Address(
+      port_,
+      that,
+    );
+  }
+
+  late final _wire_to_bech32_string__method__Bech32AddressPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_Bech32Address>)>>(
+      'wire_to_bech32_string__method__Bech32Address');
+  late final _wire_to_bech32_string__method__Bech32Address =
+      _wire_to_bech32_string__method__Bech32AddressPtr
+          .asFunction<void Function(int, ffi.Pointer<wire_Bech32Address>)>();
+
+  void wire_to_b256_string__method__Bech32Address(
+    int port_,
+    ffi.Pointer<wire_Bech32Address> that,
+  ) {
+    return _wire_to_b256_string__method__Bech32Address(
+      port_,
+      that,
+    );
+  }
+
+  late final _wire_to_b256_string__method__Bech32AddressPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_Bech32Address>)>>(
+      'wire_to_b256_string__method__Bech32Address');
+  late final _wire_to_b256_string__method__Bech32Address =
+      _wire_to_b256_string__method__Bech32AddressPtr
+          .asFunction<void Function(int, ffi.Pointer<wire_Bech32Address>)>();
+
+  void wire_connect__static_method__Provider(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> url,
+  ) {
+    return _wire_connect__static_method__Provider(
+      port_,
+      url,
+    );
+  }
+
+  late final _wire_connect__static_method__ProviderPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>(
+      'wire_connect__static_method__Provider');
+  late final _wire_connect__static_method__Provider =
+      _wire_connect__static_method__ProviderPtr
+          .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+
+  wire_NativeBech32Address new_NativeBech32Address() {
+    return _new_NativeBech32Address();
+  }
+
+  late final _new_NativeBech32AddressPtr =
+      _lookup<ffi.NativeFunction<wire_NativeBech32Address Function()>>(
+          'new_NativeBech32Address');
+  late final _new_NativeBech32Address = _new_NativeBech32AddressPtr
+      .asFunction<wire_NativeBech32Address Function()>();
+
   wire_NativeProvider new_NativeProvider() {
     return _new_NativeProvider();
   }
@@ -440,6 +522,17 @@ class FuelsWire implements FlutterRustBridgeWireBase {
           'new_NativeWalletUnlocked');
   late final _new_NativeWalletUnlocked = _new_NativeWalletUnlockedPtr
       .asFunction<wire_NativeWalletUnlocked Function()>();
+
+  ffi.Pointer<wire_Bech32Address> new_box_autoadd_bech_32_address_0() {
+    return _new_box_autoadd_bech_32_address_0();
+  }
+
+  late final _new_box_autoadd_bech_32_address_0Ptr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<wire_Bech32Address> Function()>>(
+          'new_box_autoadd_bech_32_address_0');
+  late final _new_box_autoadd_bech_32_address_0 =
+      _new_box_autoadd_bech_32_address_0Ptr
+          .asFunction<ffi.Pointer<wire_Bech32Address> Function()>();
 
   ffi.Pointer<wire_PaginationRequest> new_box_autoadd_pagination_request_0() {
     return _new_box_autoadd_pagination_request_0();
@@ -487,6 +580,37 @@ class FuelsWire implements FlutterRustBridgeWireBase {
               ffi.Int32)>>('new_uint_8_list_0');
   late final _new_uint_8_list_0 = _new_uint_8_list_0Ptr
       .asFunction<ffi.Pointer<wire_uint_8_list> Function(int)>();
+
+  void drop_opaque_NativeBech32Address(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _drop_opaque_NativeBech32Address(
+      ptr,
+    );
+  }
+
+  late final _drop_opaque_NativeBech32AddressPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
+          'drop_opaque_NativeBech32Address');
+  late final _drop_opaque_NativeBech32Address =
+      _drop_opaque_NativeBech32AddressPtr
+          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
+
+  ffi.Pointer<ffi.Void> share_opaque_NativeBech32Address(
+    ffi.Pointer<ffi.Void> ptr,
+  ) {
+    return _share_opaque_NativeBech32Address(
+      ptr,
+    );
+  }
+
+  late final _share_opaque_NativeBech32AddressPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<ffi.Void> Function(
+              ffi.Pointer<ffi.Void>)>>('share_opaque_NativeBech32Address');
+  late final _share_opaque_NativeBech32Address =
+      _share_opaque_NativeBech32AddressPtr
+          .asFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>)>();
 
   void drop_opaque_NativeProvider(
     ffi.Pointer<ffi.Void> ptr,
@@ -565,19 +689,19 @@ class FuelsWire implements FlutterRustBridgeWireBase {
 
 class _Dart_Handle extends ffi.Opaque {}
 
-class wire_uint_8_list extends ffi.Struct {
-  external ffi.Pointer<ffi.Uint8> ptr;
-
-  @ffi.Int32()
-  external int len;
-}
-
 class wire_NativeProvider extends ffi.Struct {
   external ffi.Pointer<ffi.Void> ptr;
 }
 
 class wire_Provider extends ffi.Struct {
   external wire_NativeProvider native_provider;
+}
+
+class wire_uint_8_list extends ffi.Struct {
+  external ffi.Pointer<ffi.Uint8> ptr;
+
+  @ffi.Int32()
+  external int len;
 }
 
 class wire_NativeWalletUnlocked extends ffi.Struct {
@@ -598,6 +722,14 @@ class wire_PaginationRequest extends ffi.Struct {
 
   @ffi.Int32()
   external int direction;
+}
+
+class wire_NativeBech32Address extends ffi.Struct {
+  external ffi.Pointer<ffi.Void> ptr;
+}
+
+class wire_Bech32Address extends ffi.Struct {
+  external wire_NativeBech32Address native;
 }
 
 typedef DartPostCObjectFnType = ffi.Pointer<
