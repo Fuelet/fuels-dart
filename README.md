@@ -8,7 +8,7 @@ Work on documentation for Dart/Flutter SDK is in progress.
 
 ## Implemented features
 - [x] Create wallet
-- [ ] Get account balance
-- [ ] Get account transactions
+- [x] Get account balances
+- [x] Get account transactions
 - [ ] Transfer tokens
 - [ ] Sign transactions
