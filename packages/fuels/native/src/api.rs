@@ -7,6 +7,7 @@ pub use fuels::prelude::WalletUnlocked as NativeWalletUnlocked;
 use fuels_signers::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
 use tokio::runtime::Runtime;
 
+use crate::model::balance::{Balance, from_hash_map};
 use crate::model::pagination::{PaginationRequest, TransactionsPaginatedResult};
 pub use crate::model::provider::*;
 use crate::model::transaction;
@@ -74,21 +75,12 @@ impl WalletUnlocked {
         result.unwrap()
     }
 
-    pub fn get_balances(&self) -> Balances {
+    pub fn get_balances(&self) -> Vec<Balance> {
         let rt = Runtime::new().unwrap();
         let result = rt.block_on(async {
             self.native_wallet_unlocked.get_balances().await
         });
-        let map = result.unwrap();
-        let mut keys = Vec::new();
-        let mut values = Vec::new();
-
-        for (k, v) in map.iter() {
-            keys.push(k.to_string());
-            values.push(*v);
-        }
-
-        Balances { assets: keys, balances: values }
+        from_hash_map(result.unwrap())
     }
 
     pub fn get_transactions(&self, request: PaginationRequest) -> TransactionsPaginatedResult {

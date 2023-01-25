@@ -19,6 +19,7 @@ use std::sync::Arc;
 
 // Section: imports
 
+use crate::model::balance::Balance;
 use crate::model::pagination::PageDirection;
 use crate::model::pagination::PaginationRequest;
 use crate::model::pagination::TransactionsPaginatedResult;
@@ -260,12 +261,12 @@ impl Wire2Api<usize> for usize {
 
 // Section: impl IntoDart
 
-impl support::IntoDart for Balances {
+impl support::IntoDart for Balance {
     fn into_dart(self) -> support::DartAbi {
-        vec![self.assets.into_dart(), self.balances.into_dart()].into_dart()
+        vec![self.asset.into_dart(), self.amount.into_dart()].into_dart()
     }
 }
-impl support::IntoDartExceptPrimitive for Balances {}
+impl support::IntoDartExceptPrimitive for Balance {}
 
 impl support::IntoDart for Create {
     fn into_dart(self) -> support::DartAbi {

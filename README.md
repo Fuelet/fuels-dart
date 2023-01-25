@@ -3,12 +3,14 @@ Dart & Flutter SDK for Fuel Blockchain. Essentially, it's a wrapper over the [of
 
 For more information about SDK functionality and abilities, please check out fuels-rs SDK [documentation](https://fuellabs.github.io/fuels-rs/v0.34.0/index.html).
 
+The project tries to stick to the same interfaces as used in the Rust SDK wherever possible.
+
 ## Documentation
 Work on documentation for Dart/Flutter SDK is in progress.
 
 ## Implemented features
 - [x] Create wallet
-- [ ] Get account balance
-- [ ] Get account transactions
+- [x] Get account balances
+- [x] Get account transactions
 - [ ] Transfer tokens
 - [ ] Sign transactions
