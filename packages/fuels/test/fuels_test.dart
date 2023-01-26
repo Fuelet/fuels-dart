@@ -18,40 +18,70 @@ var txParams = TxParameters(gasPrice: 1, gasLimit: 1000000, maturity: 0);
 
 var rustSdk = createLib();
 
-Future<WalletUnlocked> createWallet(String? privateKey) {
-  var provider = Provider.connect(bridge: rustSdk, url: betaApiUrl);
-  return provider.then((prov) => privateKey == null
-      ? WalletUnlocked.newRandom(bridge: rustSdk, provider: prov)
-      : WalletUnlocked.newFromPrivateKey(
+Future<Provider> createTestnetProvider() {
+  return Provider.connect(bridge: rustSdk, url: betaApiUrl);
+}
+
+Future<WalletUnlocked> createWallet() {
+  return createTestnetProvider().then(
+      (prov) => WalletUnlocked.newRandom(bridge: rustSdk, provider: prov));
+}
+
+Future<WalletUnlocked> importWalletWithPK(String privateKey) {
+  return createTestnetProvider().then((prov) =>
+      WalletUnlocked.newFromPrivateKey(
           bridge: rustSdk, privateKey: privateKey, provider: prov));
 }
 
+Future<WalletUnlocked> importWalletWithMnemonics(String mnemonicPhrase) {
+  return createTestnetProvider().then((prov) =>
+      WalletUnlocked.newFromMnemonicPhrase(
+          bridge: rustSdk, phrase: mnemonicPhrase, provider: prov));
+}
+
 void main() {
-  test('test wallet', () async {
-    WalletUnlocked wallet = await createWallet(null);
-    await wallet.address().then((addr) {
-      addr.toB256String().then((b256) => print('b256: $b256'));
-      addr.toBech32String().then((bech32) => print('bech32: $bech32'));
-    });
-    print('mnemonic: ${wallet.mnemonicPhrase}');
+  test('test create wallet', () async {
+    WalletUnlocked wallet = await createWallet();
+    var balance = await wallet.getAssetBalance(asset: ethAsset);
+    expect(0, balance);
+  });
+
+  test('test import wallet with private key', () async {
+    WalletUnlocked wallet = await importWalletWithPK(testWalletPrivateKey);
+    var address = await wallet.address();
+    var bech32Address = await address.toBech32String();
+    expect(testWalletAddress, bech32Address);
+  });
+
+  test('test import wallet with mnemonics', () async {
+    WalletUnlocked wallet =
+        await importWalletWithMnemonics(testWalletSeedPhrase);
+    var address = await wallet.address();
+    var bech32Address = await address.toBech32String();
+    expect(testWalletAddress, bech32Address);
   });
 
   test('test recreate wallet', () async {
-    WalletUnlocked wallet = await createWallet(null);
-    WalletUnlocked recreated = await createWallet(wallet.privateKey);
-    expect(await recreated.address().then((a) => a.toBech32String()),
-        await wallet.address().then((a) => a.toBech32String()));
+    WalletUnlocked wallet = await createWallet();
+    WalletUnlocked recreated = await importWalletWithPK(wallet.privateKey);
+    var walletAddr =
+        await wallet.address().then((addr) => addr.toBech32String());
+    var recreatedAddr =
+        await recreated.address().then((addr) => addr.toBech32String());
+    expect(recreatedAddr, walletAddr);
     expect(recreated.privateKey, wallet.privateKey);
   });
 
   test('test get ETH balance', () async {
-    WalletUnlocked wallet = await createWallet(testWalletPrivateKey);
+    // TODO: do not depend on external state and add assertions
+    WalletUnlocked wallet = await importWalletWithPK(testWalletPrivateKey);
     var ethBalance = await wallet.getAssetBalance(asset: ethAsset);
     print(ethBalance);
   });
 
   test('test get balances', () async {
-    WalletUnlocked wallet = await createWallet(testWalletPrivateKey);
+    // TODO: do not depend on external state and add assertions
+    WalletUnlocked wallet = await importWalletWithPK(testWalletPrivateKey);
     var balances = await wallet.getBalances();
     for (var i = 0; i < balances.length; i++) {
       print('${balances[i].asset} -> ${balances[i].amount}');
@@ -59,7 +89,8 @@ void main() {
   });
 
   test('test get transactions', () async {
-    WalletUnlocked wallet = await createWallet(testWalletPrivateKey);
+    // TODO: do not depend on external state and add assertions
+    WalletUnlocked wallet = await importWalletWithPK(testWalletPrivateKey);
     var request =
         PaginationRequest(results: 10, direction: PageDirection.Forward);
     var response = await wallet.getTransactions(request: request);
@@ -73,9 +104,10 @@ void main() {
   });
 
   test('test transfer eth', () async {
+    // TODO: do not depend on external state
     int transferAmount = 500;
-    WalletUnlocked newWallet = await createWallet(null);
-    WalletUnlocked testWallet = await createWallet(testWalletPrivateKey);
+    WalletUnlocked newWallet = await createWallet();
+    WalletUnlocked testWallet = await importWalletWithPK(testWalletPrivateKey);
     var newWalletAddr = await newWallet.address();
     await testWallet.transfer(
         to: newWalletAddr,
