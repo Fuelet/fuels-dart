@@ -1,3 +1,7 @@
+## 0.0.3
+
+ - **FEAT**: add optional mnemonics to the wallet unlocked model ([#8](https://github.com/Fuelet/fuels-dart/issues/8)).
+
 ## 0.0.2
 
  - **FEAT**: introduce Bech32Address model ([#7](https://github.com/Fuelet/fuels-dart/issues/7)).
