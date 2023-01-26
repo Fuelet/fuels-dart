@@ -1,3 +1,7 @@
+## 0.0.4
+
+ - **FEAT**: transfer tokens ([#9](https://github.com/Fuelet/fuels-dart/issues/9)).
+
 ## 0.0.3
 
  - **FEAT**: add optional mnemonics to the wallet unlocked model ([#8](https://github.com/Fuelet/fuels-dart/issues/8)).

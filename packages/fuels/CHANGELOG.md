@@ -1,3 +1,9 @@
+## 1.4.0
+
+ - **REFACTOR**: refactor tests.
+ - **REFACTOR**: do not depend on absolute paths.
+ - **FEAT**: transfer tokens ([#9](https://github.com/Fuelet/fuels-dart/issues/9)).
+
 ## 1.3.0
 
  - **FEAT**: add optional mnemonics to the wallet unlocked model ([#8](https://github.com/Fuelet/fuels-dart/issues/8)).
