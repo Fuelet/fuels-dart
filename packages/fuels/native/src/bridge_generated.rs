@@ -592,6 +592,7 @@ impl support::IntoDart for WalletUnlocked {
         vec![
             self.native_wallet_unlocked.into_dart(),
             self.private_key.into_dart(),
+            self.mnemonic_phrase.into_dart(),
         ]
         .into_dart()
     }

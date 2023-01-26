@@ -445,11 +445,13 @@ class WalletUnlocked {
   final Fuels bridge;
   final NativeWalletUnlocked nativeWalletUnlocked;
   final String privateKey;
+  final String? mnemonicPhrase;
 
   WalletUnlocked({
     required this.bridge,
     required this.nativeWalletUnlocked,
     required this.privateKey,
+    this.mnemonicPhrase,
   });
 
   static Future<WalletUnlocked> newRandom(
@@ -1134,12 +1136,13 @@ class FuelsImpl implements Fuels {
 
   WalletUnlocked _wire2api_wallet_unlocked(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    if (arr.length != 3)
+      throw Exception('unexpected arr length: expect 3 but see ${arr.length}');
     return WalletUnlocked(
       bridge: this,
       nativeWalletUnlocked: _wire2api_NativeWalletUnlocked(arr[0]),
       privateKey: _wire2api_String(arr[1]),
+      mnemonicPhrase: _wire2api_opt_String(arr[2]),
     );
   }
 

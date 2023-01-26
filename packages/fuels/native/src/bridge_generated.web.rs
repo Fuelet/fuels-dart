@@ -203,13 +203,14 @@ impl Wire2Api<WalletUnlocked> for JsValue {
         let self_ = self.dyn_into::<JsArray>().unwrap();
         assert_eq!(
             self_.length(),
-            2,
-            "Expected 2 elements, got {}",
+            3,
+            "Expected 3 elements, got {}",
             self_.length()
         );
         WalletUnlocked {
             native_wallet_unlocked: self_.get(0).wire2api(),
             private_key: self_.get(1).wire2api(),
+            mnemonic_phrase: self_.get(2).wire2api(),
         }
     }
 }
