@@ -1,13 +1,7 @@
 // ignore_for_file: avoid_print
 
-import 'dart:ffi';
-
 import 'package:fuels/fuels.dart';
 import 'package:test/test.dart';
-
-const projectPath =
-    '/Users/ilyavirnik/Documents/Development/pulse-inc/projects/fuels-dart';
-const dynLibPath = '$projectPath/target/debug/libfuels.dylib';
 
 const betaApiUrl = 'https://node-beta-2.fuel.network';
 const testWalletAddress =
@@ -22,8 +16,7 @@ const ethAsset =
 
 var txParams = TxParameters(gasPrice: 1, gasLimit: 1000000, maturity: 0);
 
-final dynLib = DynamicLibrary.open(dynLibPath);
-var rustSdk = createWrapper(dynLib);
+var rustSdk = createLib();
 
 Future<WalletUnlocked> createWallet(String? privateKey) {
   var provider = Provider.connect(bridge: rustSdk, url: betaApiUrl);
