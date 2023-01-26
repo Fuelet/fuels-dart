@@ -1,6 +1,15 @@
 use fuel_tx;
 use fuel_tx::field::{BytecodeLength, BytecodeWitnessIndex, GasLimit, GasPrice, Inputs, Maturity, Outputs, ReceiptsRoot, Salt, Script as _, ScriptData, StorageSlots, TxPointer as _, Witnesses};
 use fuels::types::transaction_response;
+use flutter_rust_bridge::frb;
+pub use fuels::prelude::TxParameters;
+
+#[frb(mirror(TxParameters))]
+pub struct _TxParameters {
+    pub gas_price: u64,
+    pub gas_limit: u64,
+    pub maturity: u64,
+}
 
 pub struct TransactionResponse {
     pub transaction: Transaction,

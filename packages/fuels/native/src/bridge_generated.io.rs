@@ -71,6 +71,18 @@ pub extern "C" fn wire_get_transactions__method__WalletUnlocked(
 }
 
 #[no_mangle]
+pub extern "C" fn wire_transfer__method__WalletUnlocked(
+    port_: i64,
+    that: *mut wire_WalletUnlocked,
+    to: *mut wire_Bech32Address,
+    amount: u64,
+    asset: *mut wire_uint_8_list,
+    tx_parameters: *mut wire_TxParameters,
+) {
+    wire_transfer__method__WalletUnlocked_impl(port_, that, to, amount, asset, tx_parameters)
+}
+
+#[no_mangle]
 pub extern "C" fn wire_to_bech32_string__method__Bech32Address(
     port_: i64,
     that: *mut wire_Bech32Address,
@@ -121,6 +133,11 @@ pub extern "C" fn new_box_autoadd_pagination_request_0() -> *mut wire_Pagination
 #[no_mangle]
 pub extern "C" fn new_box_autoadd_provider_0() -> *mut wire_Provider {
     support::new_leak_box_ptr(wire_Provider::new_with_null_ptr())
+}
+
+#[no_mangle]
+pub extern "C" fn new_box_autoadd_tx_parameters_0() -> *mut wire_TxParameters {
+    support::new_leak_box_ptr(wire_TxParameters::new_with_null_ptr())
 }
 
 #[no_mangle]
@@ -232,6 +249,12 @@ impl Wire2Api<Provider> for *mut wire_Provider {
         Wire2Api::<Provider>::wire2api(*wrap).into()
     }
 }
+impl Wire2Api<TxParameters> for *mut wire_TxParameters {
+    fn wire2api(self) -> TxParameters {
+        let wrap = unsafe { support::box_from_leak_ptr(self) };
+        Wire2Api::<TxParameters>::wire2api(*wrap).into()
+    }
+}
 impl Wire2Api<WalletUnlocked> for *mut wire_WalletUnlocked {
     fn wire2api(self) -> WalletUnlocked {
         let wrap = unsafe { support::box_from_leak_ptr(self) };
@@ -252,6 +275,15 @@ impl Wire2Api<Provider> for wire_Provider {
     fn wire2api(self) -> Provider {
         Provider {
             native_provider: self.native_provider.wire2api(),
+        }
+    }
+}
+impl Wire2Api<TxParameters> for wire_TxParameters {
+    fn wire2api(self) -> TxParameters {
+        TxParameters {
+            gas_price: self.gas_price.wire2api(),
+            gas_limit: self.gas_limit.wire2api(),
+            maturity: self.maturity.wire2api(),
         }
     }
 }
@@ -312,6 +344,14 @@ pub struct wire_PaginationRequest {
 #[derive(Clone)]
 pub struct wire_Provider {
     native_provider: wire_NativeProvider,
+}
+
+#[repr(C)]
+#[derive(Clone)]
+pub struct wire_TxParameters {
+    gas_price: u64,
+    gas_limit: u64,
+    maturity: u64,
 }
 
 #[repr(C)]
@@ -385,6 +425,16 @@ impl NewWithNullPtr for wire_Provider {
     fn new_with_null_ptr() -> Self {
         Self {
             native_provider: wire_NativeProvider::new_with_null_ptr(),
+        }
+    }
+}
+
+impl NewWithNullPtr for wire_TxParameters {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            gas_price: Default::default(),
+            gas_limit: Default::default(),
+            maturity: Default::default(),
         }
     }
 }

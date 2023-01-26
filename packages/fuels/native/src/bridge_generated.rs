@@ -23,6 +23,10 @@ use crate::model::balance::Balance;
 use crate::model::pagination::PageDirection;
 use crate::model::pagination::PaginationRequest;
 use crate::model::pagination::TransactionsPaginatedResult;
+use crate::model::receipt::InstructionResult;
+use crate::model::receipt::Receipt;
+use crate::model::receipt::ScriptExecutionResult;
+use crate::model::response::TransferResponse;
 use crate::model::transaction::Create;
 use crate::model::transaction::Input;
 use crate::model::transaction::Mint;
@@ -32,6 +36,7 @@ use crate::model::transaction::StorageSlot;
 use crate::model::transaction::Transaction;
 use crate::model::transaction::TransactionResponse;
 use crate::model::transaction::TransactionStatus;
+use crate::model::transaction::TxParameters;
 use crate::model::transaction::TxPointer;
 use crate::model::transaction::UtxoId;
 use crate::model::transaction::Witness;
@@ -194,6 +199,38 @@ fn wire_get_transactions__method__WalletUnlocked_impl(
         },
     )
 }
+fn wire_transfer__method__WalletUnlocked_impl(
+    port_: MessagePort,
+    that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
+    to: impl Wire2Api<Bech32Address> + UnwindSafe,
+    amount: impl Wire2Api<u64> + UnwindSafe,
+    asset: impl Wire2Api<String> + UnwindSafe,
+    tx_parameters: impl Wire2Api<TxParameters> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "transfer__method__WalletUnlocked",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.wire2api();
+            let api_to = to.wire2api();
+            let api_amount = amount.wire2api();
+            let api_asset = asset.wire2api();
+            let api_tx_parameters = tx_parameters.wire2api();
+            move |task_callback| {
+                Ok(WalletUnlocked::transfer(
+                    &api_that,
+                    api_to,
+                    api_amount,
+                    api_asset,
+                    api_tx_parameters,
+                ))
+            }
+        },
+    )
+}
 fn wire_to_bech32_string__method__Bech32Address_impl(
     port_: MessagePort,
     that: impl Wire2Api<Bech32Address> + UnwindSafe,
@@ -281,6 +318,11 @@ impl Wire2Api<PageDirection> for i32 {
     }
 }
 
+impl Wire2Api<u64> for u64 {
+    fn wire2api(self) -> u64 {
+        self
+    }
+}
 impl Wire2Api<u8> for u8 {
     fn wire2api(self) -> u8 {
         self
@@ -426,6 +468,12 @@ impl support::IntoDart for Input {
     }
 }
 impl support::IntoDartExceptPrimitive for Input {}
+impl support::IntoDart for InstructionResult {
+    fn into_dart(self) -> support::DartAbi {
+        vec![self.reason.into_dart()].into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for InstructionResult {}
 
 impl support::IntoDart for Mint {
     fn into_dart(self) -> support::DartAbi {
@@ -500,6 +548,187 @@ impl support::IntoDart for Provider {
 }
 impl support::IntoDartExceptPrimitive for Provider {}
 
+impl support::IntoDart for Receipt {
+    fn into_dart(self) -> support::DartAbi {
+        match self {
+            Self::Call {
+                id,
+                to,
+                amount,
+                asset_id,
+                gas,
+                param1,
+                param2,
+                pc,
+                is_field,
+            } => vec![
+                0.into_dart(),
+                id.into_dart(),
+                to.into_dart(),
+                amount.into_dart(),
+                asset_id.into_dart(),
+                gas.into_dart(),
+                param1.into_dart(),
+                param2.into_dart(),
+                pc.into_dart(),
+                is_field.into_dart(),
+            ],
+            Self::ReturnReceipt {
+                id,
+                val,
+                pc,
+                is_field,
+            } => vec![
+                1.into_dart(),
+                id.into_dart(),
+                val.into_dart(),
+                pc.into_dart(),
+                is_field.into_dart(),
+            ],
+            Self::ReturnData {
+                id,
+                ptr,
+                len,
+                digest,
+                data,
+                pc,
+                is_field,
+            } => vec![
+                2.into_dart(),
+                id.into_dart(),
+                ptr.into_dart(),
+                len.into_dart(),
+                digest.into_dart(),
+                data.into_dart(),
+                pc.into_dart(),
+                is_field.into_dart(),
+            ],
+            Self::Panic {
+                id,
+                reason,
+                pc,
+                is_field,
+                contract_id,
+            } => vec![
+                3.into_dart(),
+                id.into_dart(),
+                reason.into_dart(),
+                pc.into_dart(),
+                is_field.into_dart(),
+                contract_id.into_dart(),
+            ],
+            Self::Revert {
+                id,
+                ra,
+                pc,
+                is_field,
+            } => vec![
+                4.into_dart(),
+                id.into_dart(),
+                ra.into_dart(),
+                pc.into_dart(),
+                is_field.into_dart(),
+            ],
+            Self::Log {
+                id,
+                ra,
+                rb,
+                rc,
+                rd,
+                pc,
+                is_field,
+            } => vec![
+                5.into_dart(),
+                id.into_dart(),
+                ra.into_dart(),
+                rb.into_dart(),
+                rc.into_dart(),
+                rd.into_dart(),
+                pc.into_dart(),
+                is_field.into_dart(),
+            ],
+            Self::LogData {
+                id,
+                ra,
+                rb,
+                ptr,
+                len,
+                digest,
+                data,
+                pc,
+                is_field,
+            } => vec![
+                6.into_dart(),
+                id.into_dart(),
+                ra.into_dart(),
+                rb.into_dart(),
+                ptr.into_dart(),
+                len.into_dart(),
+                digest.into_dart(),
+                data.into_dart(),
+                pc.into_dart(),
+                is_field.into_dart(),
+            ],
+            Self::Transfer {
+                id,
+                to,
+                amount,
+                asset_id,
+                pc,
+                is_field,
+            } => vec![
+                7.into_dart(),
+                id.into_dart(),
+                to.into_dart(),
+                amount.into_dart(),
+                asset_id.into_dart(),
+                pc.into_dart(),
+                is_field.into_dart(),
+            ],
+            Self::TransferOut {
+                id,
+                to,
+                amount,
+                asset_id,
+                pc,
+                is_field,
+            } => vec![
+                8.into_dart(),
+                id.into_dart(),
+                to.into_dart(),
+                amount.into_dart(),
+                asset_id.into_dart(),
+                pc.into_dart(),
+                is_field.into_dart(),
+            ],
+            Self::ScriptResult { result, gas_used } => {
+                vec![9.into_dart(), result.into_dart(), gas_used.into_dart()]
+            }
+            Self::MessageOut {
+                message_id,
+                sender,
+                recipient,
+                amount,
+                nonce,
+                len,
+                digest,
+                data,
+            } => vec![
+                10.into_dart(),
+                message_id.into_dart(),
+                sender.into_dart(),
+                recipient.into_dart(),
+                amount.into_dart(),
+                nonce.into_dart(),
+                len.into_dart(),
+                digest.into_dart(),
+                data.into_dart(),
+            ],
+        }
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for Receipt {}
 impl support::IntoDart for Script {
     fn into_dart(self) -> support::DartAbi {
         vec![
@@ -518,6 +747,18 @@ impl support::IntoDart for Script {
 }
 impl support::IntoDartExceptPrimitive for Script {}
 
+impl support::IntoDart for ScriptExecutionResult {
+    fn into_dart(self) -> support::DartAbi {
+        match self {
+            Self::Success => vec![0.into_dart()],
+            Self::Revert => vec![1.into_dart()],
+            Self::Panic => vec![2.into_dart()],
+            Self::GenericFailure(field0) => vec![3.into_dart(), field0.into_dart()],
+        }
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for ScriptExecutionResult {}
 impl support::IntoDart for StorageSlot {
     fn into_dart(self) -> support::DartAbi {
         vec![self.key.into_dart(), self.value.into_dart()].into_dart()
@@ -572,6 +813,13 @@ impl support::IntoDart for TransactionsPaginatedResult {
     }
 }
 impl support::IntoDartExceptPrimitive for TransactionsPaginatedResult {}
+
+impl support::IntoDart for TransferResponse {
+    fn into_dart(self) -> support::DartAbi {
+        vec![self.tx_id.into_dart(), self.receipts.into_dart()].into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for TransferResponse {}
 
 impl support::IntoDart for TxPointer {
     fn into_dart(self) -> support::DartAbi {

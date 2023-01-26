@@ -65,6 +65,18 @@ pub fn wire_get_transactions__method__WalletUnlocked(
 }
 
 #[wasm_bindgen]
+pub fn wire_transfer__method__WalletUnlocked(
+    port_: MessagePort,
+    that: JsValue,
+    to: JsValue,
+    amount: u64,
+    asset: String,
+    tx_parameters: JsValue,
+) {
+    wire_transfer__method__WalletUnlocked_impl(port_, that, to, amount, asset, tx_parameters)
+}
+
+#[wasm_bindgen]
 pub fn wire_to_bech32_string__method__Bech32Address(port_: MessagePort, that: JsValue) {
     wire_to_bech32_string__method__Bech32Address_impl(port_, that)
 }
@@ -191,6 +203,22 @@ impl Wire2Api<Provider> for JsValue {
         }
     }
 }
+impl Wire2Api<TxParameters> for JsValue {
+    fn wire2api(self) -> TxParameters {
+        let self_ = self.dyn_into::<JsArray>().unwrap();
+        assert_eq!(
+            self_.length(),
+            3,
+            "Expected 3 elements, got {}",
+            self_.length()
+        );
+        TxParameters {
+            gas_price: self_.get(0).wire2api(),
+            gas_limit: self_.get(1).wire2api(),
+            maturity: self_.get(2).wire2api(),
+        }
+    }
+}
 
 impl Wire2Api<Vec<u8>> for Box<[u8]> {
     fn wire2api(self) -> Vec<u8> {
@@ -264,6 +292,11 @@ impl Wire2Api<Option<String>> for JsValue {
 impl Wire2Api<PageDirection> for JsValue {
     fn wire2api(self) -> PageDirection {
         (self.unchecked_into_f64() as i32).wire2api()
+    }
+}
+impl Wire2Api<u64> for JsValue {
+    fn wire2api(self) -> u64 {
+        ::std::convert::TryInto::try_into(self.dyn_into::<js_sys::BigInt>().unwrap()).unwrap()
     }
 }
 impl Wire2Api<u8> for JsValue {

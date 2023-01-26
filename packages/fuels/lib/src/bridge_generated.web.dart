@@ -59,6 +59,11 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire>
   }
 
   @protected
+  List<dynamic> api2wire_box_autoadd_tx_parameters(TxParameters raw) {
+    return api2wire_tx_parameters(raw);
+  }
+
+  @protected
   List<dynamic> api2wire_box_autoadd_wallet_unlocked(WalletUnlocked raw) {
     return api2wire_wallet_unlocked(raw);
   }
@@ -85,6 +90,20 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire>
   @protected
   List<dynamic> api2wire_provider(Provider raw) {
     return [api2wire_NativeProvider(raw.nativeProvider)];
+  }
+
+  @protected
+  List<dynamic> api2wire_tx_parameters(TxParameters raw) {
+    return [
+      api2wire_u64(raw.gasPrice),
+      api2wire_u64(raw.gasLimit),
+      api2wire_u64(raw.maturity)
+    ];
+  }
+
+  @protected
+  Object api2wire_u64(int raw) {
+    return castNativeBigInt(raw);
   }
 
   @protected
@@ -152,6 +171,14 @@ class FuelsWasmModule implements WasmModule {
 
   external dynamic /* void */ wire_get_transactions__method__WalletUnlocked(
       NativePortType port_, List<dynamic> that, List<dynamic> request);
+
+  external dynamic /* void */ wire_transfer__method__WalletUnlocked(
+      NativePortType port_,
+      List<dynamic> that,
+      List<dynamic> to,
+      Object amount,
+      String asset,
+      List<dynamic> tx_parameters);
 
   external dynamic /* void */ wire_to_bech32_string__method__Bech32Address(
       NativePortType port_, List<dynamic> that);
@@ -222,6 +249,16 @@ class FuelsWire extends FlutterRustBridgeWasmWireBase<FuelsWasmModule> {
           NativePortType port_, List<dynamic> that, List<dynamic> request) =>
       wasmModule.wire_get_transactions__method__WalletUnlocked(
           port_, that, request);
+
+  void wire_transfer__method__WalletUnlocked(
+          NativePortType port_,
+          List<dynamic> that,
+          List<dynamic> to,
+          Object amount,
+          String asset,
+          List<dynamic> tx_parameters) =>
+      wasmModule.wire_transfer__method__WalletUnlocked(
+          port_, that, to, amount, asset, tx_parameters);
 
   void wire_to_bech32_string__method__Bech32Address(
           NativePortType port_, List<dynamic> that) =>
