@@ -14,7 +14,7 @@ Work on documentation for Dart/Flutter SDK is in progress.
 - [x] Create wallet
 - [x] Get account balances
 - [x] Get account transactions
-- [ ] Transfer tokens
+- [x] Transfer tokens
 - [ ] Sign transactions
 
 ## Contributing

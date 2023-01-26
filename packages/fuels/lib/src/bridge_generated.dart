@@ -71,6 +71,16 @@ abstract class Fuels {
   FlutterRustBridgeTaskConstMeta
       get kGetTransactionsMethodWalletUnlockedConstMeta;
 
+  Future<TransferResponse> transferMethodWalletUnlocked(
+      {required WalletUnlocked that,
+      required Bech32Address to,
+      required int amount,
+      required String asset,
+      required TxParameters txParameters,
+      dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kTransferMethodWalletUnlockedConstMeta;
+
   Future<String> toBech32StringMethodBech32Address(
       {required Bech32Address that, dynamic hint});
 
@@ -252,6 +262,14 @@ class Input with _$Input {
   }) = Input_MessagePredicate;
 }
 
+class InstructionResult {
+  final int reason;
+
+  InstructionResult({
+    required this.reason,
+  });
+}
+
 class Mint {
   final TxPointer txPointer;
   final List<Output> outputs;
@@ -330,6 +348,99 @@ class Provider {
       bridge.connectStaticMethodProvider(url: url, hint: hint);
 }
 
+@freezed
+class Receipt with _$Receipt {
+  const factory Receipt.call({
+    required U8Array32 id,
+    required U8Array32 to,
+    required int amount,
+    required U8Array32 assetId,
+    required int gas,
+    required int param1,
+    required int param2,
+    required int pc,
+    required int isField,
+  }) = Receipt_Call;
+  const factory Receipt.returnReceipt({
+    required U8Array32 id,
+    required int val,
+    required int pc,
+    required int isField,
+  }) = Receipt_ReturnReceipt;
+  const factory Receipt.returnData({
+    required U8Array32 id,
+    required int ptr,
+    required int len,
+    required U8Array32 digest,
+    required Uint8List data,
+    required int pc,
+    required int isField,
+  }) = Receipt_ReturnData;
+  const factory Receipt.panic({
+    required U8Array32 id,
+    required InstructionResult reason,
+    required int pc,
+    required int isField,
+    U8Array32? contractId,
+  }) = Receipt_Panic;
+  const factory Receipt.revert({
+    required U8Array32 id,
+    required int ra,
+    required int pc,
+    required int isField,
+  }) = Receipt_Revert;
+  const factory Receipt.log({
+    required U8Array32 id,
+    required int ra,
+    required int rb,
+    required int rc,
+    required int rd,
+    required int pc,
+    required int isField,
+  }) = Receipt_Log;
+  const factory Receipt.logData({
+    required U8Array32 id,
+    required int ra,
+    required int rb,
+    required int ptr,
+    required int len,
+    required U8Array32 digest,
+    required Uint8List data,
+    required int pc,
+    required int isField,
+  }) = Receipt_LogData;
+  const factory Receipt.transfer({
+    required U8Array32 id,
+    required U8Array32 to,
+    required int amount,
+    required U8Array32 assetId,
+    required int pc,
+    required int isField,
+  }) = Receipt_Transfer;
+  const factory Receipt.transferOut({
+    required U8Array32 id,
+    required U8Array32 to,
+    required int amount,
+    required U8Array32 assetId,
+    required int pc,
+    required int isField,
+  }) = Receipt_TransferOut;
+  const factory Receipt.scriptResult({
+    required ScriptExecutionResult result,
+    required int gasUsed,
+  }) = Receipt_ScriptResult;
+  const factory Receipt.messageOut({
+    required U8Array32 messageId,
+    required U8Array32 sender,
+    required U8Array32 recipient,
+    required int amount,
+    required U8Array32 nonce,
+    required int len,
+    required U8Array32 digest,
+    required Uint8List data,
+  }) = Receipt_MessageOut;
+}
+
 class Script {
   final int gasPrice;
   final int gasLimit;
@@ -352,6 +463,16 @@ class Script {
     required this.witnesses,
     required this.receiptsRoot,
   });
+}
+
+@freezed
+class ScriptExecutionResult with _$ScriptExecutionResult {
+  const factory ScriptExecutionResult.success() = ScriptExecutionResult_Success;
+  const factory ScriptExecutionResult.revert() = ScriptExecutionResult_Revert;
+  const factory ScriptExecutionResult.panic() = ScriptExecutionResult_Panic;
+  const factory ScriptExecutionResult.genericFailure(
+    int field0,
+  ) = ScriptExecutionResult_GenericFailure;
 }
 
 class StorageSlot {
@@ -409,6 +530,28 @@ class TransactionsPaginatedResult {
     required this.results,
     required this.hasNextPage,
     required this.hasPreviousPage,
+  });
+}
+
+class TransferResponse {
+  final String txId;
+  final List<Receipt> receipts;
+
+  TransferResponse({
+    required this.txId,
+    required this.receipts,
+  });
+}
+
+class TxParameters {
+  final int gasPrice;
+  final int gasLimit;
+  final int maturity;
+
+  TxParameters({
+    required this.gasPrice,
+    required this.gasLimit,
+    required this.maturity,
   });
 }
 
@@ -505,6 +648,20 @@ class WalletUnlocked {
       bridge.getTransactionsMethodWalletUnlocked(
         that: this,
         request: request,
+      );
+
+  Future<TransferResponse> transfer(
+          {required Bech32Address to,
+          required int amount,
+          required String asset,
+          required TxParameters txParameters,
+          dynamic hint}) =>
+      bridge.transferMethodWalletUnlocked(
+        that: this,
+        to: to,
+        amount: amount,
+        asset: asset,
+        txParameters: txParameters,
       );
 }
 
@@ -702,6 +859,34 @@ class FuelsImpl implements Fuels {
             argNames: ["that", "request"],
           );
 
+  Future<TransferResponse> transferMethodWalletUnlocked(
+      {required WalletUnlocked that,
+      required Bech32Address to,
+      required int amount,
+      required String asset,
+      required TxParameters txParameters,
+      dynamic hint}) {
+    var arg0 = _platform.api2wire_box_autoadd_wallet_unlocked(that);
+    var arg1 = _platform.api2wire_box_autoadd_bech_32_address(to);
+    var arg2 = _platform.api2wire_u64(amount);
+    var arg3 = _platform.api2wire_String(asset);
+    var arg4 = _platform.api2wire_box_autoadd_tx_parameters(txParameters);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner.wire_transfer__method__WalletUnlocked(
+          port_, arg0, arg1, arg2, arg3, arg4),
+      parseSuccessData: _wire2api_transfer_response,
+      constMeta: kTransferMethodWalletUnlockedConstMeta,
+      argValues: [that, to, amount, asset, txParameters],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kTransferMethodWalletUnlockedConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "transfer__method__WalletUnlocked",
+        argNames: ["that", "to", "amount", "asset", "txParameters"],
+      );
+
   Future<String> toBech32StringMethodBech32Address(
       {required Bech32Address that, dynamic hint}) {
     var arg0 = _platform.api2wire_box_autoadd_bech_32_address(that);
@@ -831,12 +1016,21 @@ class FuelsImpl implements Fuels {
     return _wire2api_create(raw);
   }
 
+  InstructionResult _wire2api_box_autoadd_instruction_result(dynamic raw) {
+    return _wire2api_instruction_result(raw);
+  }
+
   Mint _wire2api_box_autoadd_mint(dynamic raw) {
     return _wire2api_mint(raw);
   }
 
   Script _wire2api_box_autoadd_script(dynamic raw) {
     return _wire2api_script(raw);
+  }
+
+  ScriptExecutionResult _wire2api_box_autoadd_script_execution_result(
+      dynamic raw) {
+    return _wire2api_script_execution_result(raw);
   }
 
   TxPointer _wire2api_box_autoadd_tx_pointer(dynamic raw) {
@@ -926,6 +1120,15 @@ class FuelsImpl implements Fuels {
     }
   }
 
+  InstructionResult _wire2api_instruction_result(dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
+    return InstructionResult(
+      reason: _wire2api_u32(arr[0]),
+    );
+  }
+
   List<Balance> _wire2api_list_balance(dynamic raw) {
     return (raw as List<dynamic>).map(_wire2api_balance).toList();
   }
@@ -936,6 +1139,10 @@ class FuelsImpl implements Fuels {
 
   List<Output> _wire2api_list_output(dynamic raw) {
     return (raw as List<dynamic>).map(_wire2api_output).toList();
+  }
+
+  List<Receipt> _wire2api_list_receipt(dynamic raw) {
+    return (raw as List<dynamic>).map(_wire2api_receipt).toList();
   }
 
   List<StorageSlot> _wire2api_list_storage_slot(dynamic raw) {
@@ -962,6 +1169,10 @@ class FuelsImpl implements Fuels {
 
   String? _wire2api_opt_String(dynamic raw) {
     return raw == null ? null : _wire2api_String(raw);
+  }
+
+  U8Array32? _wire2api_opt_u8_array_32(dynamic raw) {
+    return raw == null ? null : _wire2api_u8_array_32(raw);
   }
 
   Output _wire2api_output(dynamic raw) {
@@ -1015,6 +1226,113 @@ class FuelsImpl implements Fuels {
     );
   }
 
+  Receipt _wire2api_receipt(dynamic raw) {
+    switch (raw[0]) {
+      case 0:
+        return Receipt_Call(
+          id: _wire2api_u8_array_32(raw[1]),
+          to: _wire2api_u8_array_32(raw[2]),
+          amount: _wire2api_u64(raw[3]),
+          assetId: _wire2api_u8_array_32(raw[4]),
+          gas: _wire2api_u64(raw[5]),
+          param1: _wire2api_u64(raw[6]),
+          param2: _wire2api_u64(raw[7]),
+          pc: _wire2api_u64(raw[8]),
+          isField: _wire2api_u64(raw[9]),
+        );
+      case 1:
+        return Receipt_ReturnReceipt(
+          id: _wire2api_u8_array_32(raw[1]),
+          val: _wire2api_u64(raw[2]),
+          pc: _wire2api_u64(raw[3]),
+          isField: _wire2api_u64(raw[4]),
+        );
+      case 2:
+        return Receipt_ReturnData(
+          id: _wire2api_u8_array_32(raw[1]),
+          ptr: _wire2api_u64(raw[2]),
+          len: _wire2api_u64(raw[3]),
+          digest: _wire2api_u8_array_32(raw[4]),
+          data: _wire2api_uint_8_list(raw[5]),
+          pc: _wire2api_u64(raw[6]),
+          isField: _wire2api_u64(raw[7]),
+        );
+      case 3:
+        return Receipt_Panic(
+          id: _wire2api_u8_array_32(raw[1]),
+          reason: _wire2api_box_autoadd_instruction_result(raw[2]),
+          pc: _wire2api_u64(raw[3]),
+          isField: _wire2api_u64(raw[4]),
+          contractId: _wire2api_opt_u8_array_32(raw[5]),
+        );
+      case 4:
+        return Receipt_Revert(
+          id: _wire2api_u8_array_32(raw[1]),
+          ra: _wire2api_u64(raw[2]),
+          pc: _wire2api_u64(raw[3]),
+          isField: _wire2api_u64(raw[4]),
+        );
+      case 5:
+        return Receipt_Log(
+          id: _wire2api_u8_array_32(raw[1]),
+          ra: _wire2api_u64(raw[2]),
+          rb: _wire2api_u64(raw[3]),
+          rc: _wire2api_u64(raw[4]),
+          rd: _wire2api_u64(raw[5]),
+          pc: _wire2api_u64(raw[6]),
+          isField: _wire2api_u64(raw[7]),
+        );
+      case 6:
+        return Receipt_LogData(
+          id: _wire2api_u8_array_32(raw[1]),
+          ra: _wire2api_u64(raw[2]),
+          rb: _wire2api_u64(raw[3]),
+          ptr: _wire2api_u64(raw[4]),
+          len: _wire2api_u64(raw[5]),
+          digest: _wire2api_u8_array_32(raw[6]),
+          data: _wire2api_uint_8_list(raw[7]),
+          pc: _wire2api_u64(raw[8]),
+          isField: _wire2api_u64(raw[9]),
+        );
+      case 7:
+        return Receipt_Transfer(
+          id: _wire2api_u8_array_32(raw[1]),
+          to: _wire2api_u8_array_32(raw[2]),
+          amount: _wire2api_u64(raw[3]),
+          assetId: _wire2api_u8_array_32(raw[4]),
+          pc: _wire2api_u64(raw[5]),
+          isField: _wire2api_u64(raw[6]),
+        );
+      case 8:
+        return Receipt_TransferOut(
+          id: _wire2api_u8_array_32(raw[1]),
+          to: _wire2api_u8_array_32(raw[2]),
+          amount: _wire2api_u64(raw[3]),
+          assetId: _wire2api_u8_array_32(raw[4]),
+          pc: _wire2api_u64(raw[5]),
+          isField: _wire2api_u64(raw[6]),
+        );
+      case 9:
+        return Receipt_ScriptResult(
+          result: _wire2api_box_autoadd_script_execution_result(raw[1]),
+          gasUsed: _wire2api_u64(raw[2]),
+        );
+      case 10:
+        return Receipt_MessageOut(
+          messageId: _wire2api_u8_array_32(raw[1]),
+          sender: _wire2api_u8_array_32(raw[2]),
+          recipient: _wire2api_u8_array_32(raw[3]),
+          amount: _wire2api_u64(raw[4]),
+          nonce: _wire2api_u8_array_32(raw[5]),
+          len: _wire2api_u64(raw[6]),
+          digest: _wire2api_u8_array_32(raw[7]),
+          data: _wire2api_uint_8_list(raw[8]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
   Script _wire2api_script(dynamic raw) {
     final arr = raw as List<dynamic>;
     if (arr.length != 9)
@@ -1030,6 +1348,23 @@ class FuelsImpl implements Fuels {
       witnesses: _wire2api_list_witness(arr[7]),
       receiptsRoot: _wire2api_u8_array_32(arr[8]),
     );
+  }
+
+  ScriptExecutionResult _wire2api_script_execution_result(dynamic raw) {
+    switch (raw[0]) {
+      case 0:
+        return ScriptExecutionResult_Success();
+      case 1:
+        return ScriptExecutionResult_Revert();
+      case 2:
+        return ScriptExecutionResult_Panic();
+      case 3:
+        return ScriptExecutionResult_GenericFailure(
+          _wire2api_u64(raw[1]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
   }
 
   StorageSlot _wire2api_storage_slot(dynamic raw) {
@@ -1087,6 +1422,16 @@ class FuelsImpl implements Fuels {
       results: _wire2api_list_transaction_response(arr[1]),
       hasNextPage: _wire2api_bool(arr[2]),
       hasPreviousPage: _wire2api_bool(arr[3]),
+    );
+  }
+
+  TransferResponse _wire2api_transfer_response(dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return TransferResponse(
+      txId: _wire2api_String(arr[0]),
+      receipts: _wire2api_list_receipt(arr[1]),
     );
   }
 

@@ -20,6 +20,8 @@ const testWalletSeedPhrase =
 const ethAsset =
     '0x0000000000000000000000000000000000000000000000000000000000000000';
 
+var txParams = TxParameters(gasPrice: 1, gasLimit: 1000000, maturity: 0);
+
 final dynLib = DynamicLibrary.open(dynLibPath);
 var rustSdk = createWrapper(dynLib);
 
@@ -76,4 +78,18 @@ void main() {
           '\nblockId: ${tx.blockId}, status: ${tx.status}, time: ${tx.time}, tx: ${tx.transaction}');
     }
   });
+
+  test('test transfer eth', () async {
+    int transferAmount = 500;
+    WalletUnlocked newWallet = await createWallet(null);
+    WalletUnlocked testWallet = await createWallet(testWalletPrivateKey);
+    var newWalletAddr = await newWallet.address();
+    await testWallet.transfer(
+        to: newWalletAddr,
+        amount: transferAmount,
+        asset: ethAsset,
+        txParameters: txParams);
+    var newWalletBalance = await newWallet.getAssetBalance(asset: ethAsset);
+    expect(transferAmount, newWalletBalance);
+  }, skip: 'Should be run manually');
 }

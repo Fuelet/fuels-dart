@@ -46,6 +46,12 @@ typedef struct wire_Bech32Address {
   struct wire_NativeBech32Address native;
 } wire_Bech32Address;
 
+typedef struct wire_TxParameters {
+  uint64_t gas_price;
+  uint64_t gas_limit;
+  uint64_t maturity;
+} wire_TxParameters;
+
 typedef struct DartCObject *WireSyncReturn;
 
 void store_dart_post_cobject(DartPostCObjectFnType ptr);
@@ -85,6 +91,13 @@ void wire_get_transactions__method__WalletUnlocked(int64_t port_,
                                                    struct wire_WalletUnlocked *that,
                                                    struct wire_PaginationRequest *request);
 
+void wire_transfer__method__WalletUnlocked(int64_t port_,
+                                           struct wire_WalletUnlocked *that,
+                                           struct wire_Bech32Address *to,
+                                           uint64_t amount,
+                                           struct wire_uint_8_list *asset,
+                                           struct wire_TxParameters *tx_parameters);
+
 void wire_to_bech32_string__method__Bech32Address(int64_t port_, struct wire_Bech32Address *that);
 
 void wire_to_b256_string__method__Bech32Address(int64_t port_, struct wire_Bech32Address *that);
@@ -102,6 +115,8 @@ struct wire_Bech32Address *new_box_autoadd_bech_32_address_0(void);
 struct wire_PaginationRequest *new_box_autoadd_pagination_request_0(void);
 
 struct wire_Provider *new_box_autoadd_provider_0(void);
+
+struct wire_TxParameters *new_box_autoadd_tx_parameters_0(void);
 
 struct wire_WalletUnlocked *new_box_autoadd_wallet_unlocked_0(void);
 
@@ -131,6 +146,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) wire_get_asset_balance__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_get_balances__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_get_transactions__method__WalletUnlocked);
+    dummy_var ^= ((int64_t) (void*) wire_transfer__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_to_bech32_string__method__Bech32Address);
     dummy_var ^= ((int64_t) (void*) wire_to_b256_string__method__Bech32Address);
     dummy_var ^= ((int64_t) (void*) wire_connect__static_method__Provider);
@@ -140,6 +156,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_bech_32_address_0);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_pagination_request_0);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_provider_0);
+    dummy_var ^= ((int64_t) (void*) new_box_autoadd_tx_parameters_0);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_wallet_unlocked_0);
     dummy_var ^= ((int64_t) (void*) new_uint_8_list_0);
     dummy_var ^= ((int64_t) (void*) drop_opaque_NativeBech32Address);

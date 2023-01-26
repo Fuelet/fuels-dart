@@ -2,7 +2,7 @@ use std::str::FromStr;
 
 use flutter_rust_bridge::RustOpaque;
 use fuel_crypto::SecretKey;
-use fuels::prelude::{AssetId, generate_mnemonic_phrase};
+use fuels::prelude::{AssetId, generate_mnemonic_phrase, TxParameters};
 pub use fuels::prelude::{Bech32Address as NativeBech32Address, Provider as NativeProvider, WalletUnlocked as NativeWalletUnlocked};
 use fuels::tx::Address;
 use fuels_signers::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
@@ -10,14 +10,13 @@ use tokio::runtime::Runtime;
 
 use crate::model::balance::{Balance, from_hash_map};
 use crate::model::pagination::{PaginationRequest, TransactionsPaginatedResult};
+use crate::model::response::TransferResponse;
 use crate::model::transaction;
 
 pub struct WalletUnlocked {
     pub native_wallet_unlocked: RustOpaque<NativeWalletUnlocked>,
     pub private_key: String,
-    // Is present only when the wallet was created using a mnemonic phrase.
-    // There is currently no way of retrieving mnemonics from wallets created from private keys.
-    // See https://github.com/FuelLabs/fuels-rs/issues/802
+    // Is present only when the wallet is created using a mnemonic phrase
     pub mnemonic_phrase: Option<String>,
 }
 
@@ -89,6 +88,22 @@ impl WalletUnlocked {
             self.native_wallet_unlocked.get_transactions(request.into()).await
         });
         result.unwrap().into()
+    }
+
+    pub fn transfer(
+        &self,
+        to: Bech32Address,
+        amount: u64,
+        asset: String,
+        tx_parameters: TxParameters,
+    ) -> TransferResponse {
+        let rt = Runtime::new().unwrap();
+        let asset_id = AssetId::from_str(&asset).unwrap();
+        let result = rt.block_on(async {
+            self.native_wallet_unlocked.transfer(&*to.native, amount, asset_id, tx_parameters).await
+        });
+        let (tx_id, receipts) = result.unwrap();
+        TransferResponse { tx_id, receipts: receipts.iter().map(Into::into).collect() }
     }
 }
 
