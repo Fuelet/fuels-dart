@@ -270,6 +270,7 @@ impl Wire2Api<WalletUnlocked> for wire_WalletUnlocked {
         WalletUnlocked {
             native_wallet_unlocked: self.native_wallet_unlocked.wire2api(),
             private_key: self.private_key.wire2api(),
+            mnemonic_phrase: self.mnemonic_phrase.wire2api(),
         }
     }
 }
@@ -325,6 +326,7 @@ pub struct wire_uint_8_list {
 pub struct wire_WalletUnlocked {
     native_wallet_unlocked: wire_NativeWalletUnlocked,
     private_key: *mut wire_uint_8_list,
+    mnemonic_phrase: *mut wire_uint_8_list,
 }
 
 // Section: impl NewWithNullPtr
@@ -392,6 +394,7 @@ impl NewWithNullPtr for wire_WalletUnlocked {
         Self {
             native_wallet_unlocked: wire_NativeWalletUnlocked::new_with_null_ptr(),
             private_key: core::ptr::null_mut(),
+            mnemonic_phrase: core::ptr::null_mut(),
         }
     }
 }

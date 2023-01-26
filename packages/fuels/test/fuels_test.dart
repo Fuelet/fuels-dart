@@ -38,6 +38,7 @@ void main() {
       addr.toB256String().then((b256) => print('b256: $b256'));
       addr.toBech32String().then((bech32) => print('bech32: $bech32'));
     });
+    print('mnemonic: ${wallet.mnemonicPhrase}');
   });
 
   test('test recreate wallet', () async {

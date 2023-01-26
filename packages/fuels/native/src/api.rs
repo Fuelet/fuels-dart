@@ -15,6 +15,10 @@ use crate::model::transaction;
 pub struct WalletUnlocked {
     pub native_wallet_unlocked: RustOpaque<NativeWalletUnlocked>,
     pub private_key: String,
+    // Is present only when the wallet was created using a mnemonic phrase.
+    // There is currently no way of retrieving mnemonics from wallets created from private keys.
+    // See https://github.com/FuelLabs/fuels-rs/issues/802
+    pub mnemonic_phrase: Option<String>,
 }
 
 impl WalletUnlocked {
@@ -37,6 +41,7 @@ impl WalletUnlocked {
         Self {
             native_wallet_unlocked: RustOpaque::new(wallet_unlocked),
             private_key: secret_key.to_string(),
+            mnemonic_phrase: None,
         }
     }
 
@@ -53,6 +58,7 @@ impl WalletUnlocked {
         Self {
             native_wallet_unlocked: RustOpaque::new(wallet_unlocked),
             private_key: secret_key.to_string(),
+            mnemonic_phrase: Some(phrase),
         }
     }
 

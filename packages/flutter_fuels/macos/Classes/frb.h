@@ -29,6 +29,7 @@ typedef struct wire_NativeWalletUnlocked {
 typedef struct wire_WalletUnlocked {
   struct wire_NativeWalletUnlocked native_wallet_unlocked;
   struct wire_uint_8_list *private_key;
+  struct wire_uint_8_list *mnemonic_phrase;
 } wire_WalletUnlocked;
 
 typedef struct wire_PaginationRequest {

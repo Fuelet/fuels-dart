@@ -96,7 +96,8 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire>
   List<dynamic> api2wire_wallet_unlocked(WalletUnlocked raw) {
     return [
       api2wire_NativeWalletUnlocked(raw.nativeWalletUnlocked),
-      api2wire_String(raw.privateKey)
+      api2wire_String(raw.privateKey),
+      api2wire_opt_String(raw.mnemonicPhrase)
     ];
   }
 // Section: finalizer

@@ -167,6 +167,7 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
     wireObj.native_wallet_unlocked =
         api2wire_NativeWalletUnlocked(apiObj.nativeWalletUnlocked);
     wireObj.private_key = api2wire_String(apiObj.privateKey);
+    wireObj.mnemonic_phrase = api2wire_opt_String(apiObj.mnemonicPhrase);
   }
 }
 
@@ -712,6 +713,8 @@ class wire_WalletUnlocked extends ffi.Struct {
   external wire_NativeWalletUnlocked native_wallet_unlocked;
 
   external ffi.Pointer<wire_uint_8_list> private_key;
+
+  external ffi.Pointer<wire_uint_8_list> mnemonic_phrase;
 }
 
 class wire_PaginationRequest extends ffi.Struct {
