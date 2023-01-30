@@ -6,7 +6,6 @@ use fuels::prelude::{AssetId, generate_mnemonic_phrase, TxParameters};
 pub use fuels::prelude::{Bech32Address as NativeBech32Address, Provider as NativeProvider, WalletUnlocked as NativeWalletUnlocked};
 use fuels::tx::Address;
 use fuels_signers::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
-use tokio::runtime::Runtime;
 
 use crate::model::balance::{Balance, from_hash_map};
 use crate::model::pagination::{PaginationRequest, TransactionsPaginatedResult};
@@ -65,43 +64,35 @@ impl WalletUnlocked {
         self.native_wallet_unlocked.address().into()
     }
 
-    pub fn get_asset_balance(&self, asset: String) -> u64 {
+    #[tokio::main]
+    pub async fn get_asset_balance(&self, asset: String) -> u64 {
         let asset_id = AssetId::from_str(&asset).unwrap();
-        let rt = Runtime::new().unwrap();
-        let result = rt.block_on(async {
-            self.native_wallet_unlocked.get_asset_balance(&asset_id).await
-        });
+        let result = self.native_wallet_unlocked.get_asset_balance(&asset_id).await;
         result.unwrap()
     }
 
-    pub fn get_balances(&self) -> Vec<Balance> {
-        let rt = Runtime::new().unwrap();
-        let result = rt.block_on(async {
-            self.native_wallet_unlocked.get_balances().await
-        });
+    #[tokio::main]
+    pub async fn get_balances(&self) -> Vec<Balance> {
+        let result = self.native_wallet_unlocked.get_balances().await;
         from_hash_map(result.unwrap())
     }
 
-    pub fn get_transactions(&self, request: PaginationRequest) -> TransactionsPaginatedResult {
-        let rt = Runtime::new().unwrap();
-        let result = rt.block_on(async {
-            self.native_wallet_unlocked.get_transactions(request.into()).await
-        });
+    #[tokio::main]
+    pub async fn get_transactions(&self, request: PaginationRequest) -> TransactionsPaginatedResult {
+        let result = self.native_wallet_unlocked.get_transactions(request.into()).await;
         result.unwrap().into()
     }
 
-    pub fn transfer(
+    #[tokio::main]
+    pub async fn transfer(
         &self,
         to: Bech32Address,
         amount: u64,
         asset: String,
         tx_parameters: TxParameters,
     ) -> TransferResponse {
-        let rt = Runtime::new().unwrap();
         let asset_id = AssetId::from_str(&asset).unwrap();
-        let result = rt.block_on(async {
-            self.native_wallet_unlocked.transfer(&*to.native, amount, asset_id, tx_parameters).await
-        });
+        let result = self.native_wallet_unlocked.transfer(&*to.native, amount, asset_id, tx_parameters).await;
         let (tx_id, receipts) = result.unwrap();
         TransferResponse { tx_id, receipts: receipts.iter().map(Into::into).collect() }
     }
@@ -137,11 +128,9 @@ pub struct Provider {
 }
 
 impl Provider {
-    pub fn connect(url: String) -> Provider {
-        let rt = Runtime::new().unwrap();
-        let native_provider = rt.block_on(async {
-            NativeProvider::connect(url).await
-        });
+    #[tokio::main]
+    pub async fn connect(url: String) -> Provider {
+        let native_provider = NativeProvider::connect(url).await;
         Provider { native_provider: RustOpaque::new(native_provider.unwrap()) }
     }
 }
