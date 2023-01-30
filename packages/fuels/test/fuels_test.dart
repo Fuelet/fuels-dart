@@ -1,5 +1,8 @@
 // ignore_for_file: avoid_print
 
+import 'dart:ffi';
+import 'dart:io';
+
 import 'package:fuels/fuels.dart';
 import 'package:test/test.dart';
 
@@ -16,7 +19,9 @@ const ethAsset =
 
 var txParams = TxParameters(gasPrice: 1, gasLimit: 1000000, maturity: 0);
 
-var rustSdk = createLib();
+String projectPath = Directory.current.parent.parent.path;
+final dynLib = DynamicLibrary.open('$projectPath/target/debug/libfuels.dylib');
+var rustSdk = createWrapper(dynLib);
 
 Future<Provider> createTestnetProvider() {
   return Provider.connect(bridge: rustSdk, url: betaApiUrl);
