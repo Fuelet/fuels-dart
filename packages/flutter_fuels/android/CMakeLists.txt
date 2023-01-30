@@ -1,4 +1,4 @@
-set(LibraryVersion "fuels-v1.4.0") # generated; do not edit
+set(LibraryVersion "fuels-v1.4.1") # generated; do not edit
 
 # Unlike the Windows & Linux CMakeLists.txt, this Android equivalent is just here
 # to download the Android binaries into src/main/jniLibs/ and does not build anything.

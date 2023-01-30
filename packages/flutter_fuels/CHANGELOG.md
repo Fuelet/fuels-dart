@@ -1,3 +1,7 @@
+## 0.0.4+1
+
+ - Update a dependency to the latest release.
+
 ## 0.0.4
 
  - **FEAT**: transfer tokens ([#9](https://github.com/Fuelet/fuels-dart/issues/9)).

@@ -1,3 +1,7 @@
+## 1.4.1
+
+ - **FIX**: do not depend on debug directories in production code.
+
 ## 1.4.0
 
  - **REFACTOR**: refactor tests.
