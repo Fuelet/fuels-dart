@@ -18,21 +18,23 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-        with:
-          token: ${{ secrets.BOT_ACCESS_TOKEN }}
-          fetch-depth: 0
-      - name: Setup git
-        run: |
-          git config user.name "Ilya Virnik"
-          git config user.email "ilya.virnik@gmail.com"
-      - uses: subosito/flutter-action@v2
-      - uses: bluefireteam/melos-action@v2
-
-      - name: Create the new version(s)
-        run: melos version --yes ${{ inputs.version_parameters }}
-
-      - name: Push created version commit
-        run: git push
-      - name: Push modified tags
-        run: git push --tags
+      - name: Echo
+        run: echo ${{ github.ref }}
+#      - uses: actions/checkout@v3
+#        with:
+#          token: ${{ secrets.BOT_ACCESS_TOKEN }}
+#          fetch-depth: 0
+#      - name: Setup git
+#        run: |
+#          git config user.name "Ilya Virnik"
+#          git config user.email "ilya.virnik@gmail.com"
+#      - uses: subosito/flutter-action@v2
+#      - uses: bluefireteam/melos-action@v2
+#
+#      - name: Create the new version(s)
+#        run: melos version --yes ${{ inputs.version_parameters }}
+#
+#      - name: Push created version commit
+#        run: git push
+#      - name: Push modified tags
+#        run: git push --tags
