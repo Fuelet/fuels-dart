@@ -1,9 +1,7 @@
 name: Publish Release(s)
 
 on:
-  push:
-    tags:
-      - "*"
+  workflow_dispatch
 
 jobs:
   publish_github_release:
@@ -11,6 +9,8 @@ jobs:
     runs-on: macos-latest
 
     steps:
+      - name: Echo
+        run: echo ${{ github.ref }}
       - uses: actions/checkout@v3
       - uses: subosito/flutter-action@v2
       - uses: bluefireteam/melos-action@v2
