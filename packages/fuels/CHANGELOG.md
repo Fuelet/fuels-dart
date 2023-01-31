@@ -1,3 +1,7 @@
+## 1.4.2
+
+ - **REFACTOR**: use macro instead of creating runtimes for async functions.
+
 ## 1.4.1
 
  - **FIX**: do not depend on debug directories in production code.
