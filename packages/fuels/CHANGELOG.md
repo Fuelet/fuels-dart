@@ -1,3 +1,7 @@
+## 1.4.4
+
+ - Bump "fuels" to `1.4.4`.
+
 ## 1.4.3
 
  - **REFACTOR**: remove unused dependency.
