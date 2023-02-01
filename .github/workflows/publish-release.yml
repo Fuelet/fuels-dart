@@ -6,12 +6,18 @@ on:
       - "*"
 
 jobs:
-  publish_github_release:
+  publish_github_release_flutter_fuels:
+    if: ${{ contains(github.event.head_commit.message, '- flutter_fuels@') }}
     # macOS because we can cross-compile to all other platforms from it
     runs-on: macos-latest
 
     steps:
       - uses: actions/checkout@v3
+      - name: Extract flutter_fuels package version
+        run: |
+          echo "FLUTTER_FUELS_VERSION=$(\
+            echo "${{ github.event.head_commit.message }}" | awk '/- flutter_fuels@/ {print ENV_VAR=$2}'\
+          )" >> $GITHUB_ENV
       - uses: subosito/flutter-action@v2
       - uses: bluefireteam/melos-action@v2
       - uses: goto-bus-stop/setup-zig@v2
@@ -31,10 +37,27 @@ jobs:
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
         with:
+          name: $FLUTTER_FUELS_VERSION
           files: platform-build/*
 
+  publish_github_release_fuels:
+    if: ${{ contains(github.event.head_commit.message, '- fuels@') }}
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Extract fuels package version
+        run: |
+          echo "FUELS_VERSION=$(\
+            echo "${{ github.event.head_commit.message }}" | awk '/- fuels@/ {print ENV_VAR=$2}'\
+          )" >> $GITHUB_ENV
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: $FUELS_VERSION
+
   publish_pub_release:
-    needs: publish_github_release
+    needs: [ publish_github_release_flutter_fuels, publish_github_release_fuels ]
     runs-on: ubuntu-latest
 
     steps:
