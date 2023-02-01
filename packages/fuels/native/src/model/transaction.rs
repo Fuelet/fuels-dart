@@ -1,4 +1,3 @@
-use fuel_tx;
 use fuel_tx::field::{BytecodeLength, BytecodeWitnessIndex, GasLimit, GasPrice, Inputs, Maturity, Outputs, ReceiptsRoot, Salt, Script as _, ScriptData, StorageSlots, TxPointer as _, Witnesses};
 use fuels::types::transaction_response;
 use flutter_rust_bridge::frb;
