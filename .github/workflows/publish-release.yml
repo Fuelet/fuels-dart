@@ -14,6 +14,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Extract flutter_fuels package version
+        # Extracts the 'flutter_fuels' package version from the commit message
+        # Stores it into an environment variable
         run: |
           echo "FLUTTER_FUELS_VERSION=$(\
             echo "${{ github.event.head_commit.message }}" | awk '/- flutter_fuels@/ {print ENV_VAR=$2}'\
@@ -47,6 +49,8 @@ jobs:
     steps:
       - uses: actions/checkout@v3
       - name: Extract fuels package version
+        # Extracts the 'fuels' package version from the commit message
+        # Stores it into an environment variable
         run: |
           echo "FUELS_VERSION=$(\
             echo "${{ github.event.head_commit.message }}" | awk '/- fuels@/ {print ENV_VAR=$2}'\
