@@ -7,22 +7,18 @@ on:
 
 jobs:
   publish_github_release:
-    if: ${{ contains(github.event.head_commit.message, '- fuels@') }}
     runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
-      - name: Extract fuels package version
-        # Extracts the 'fuels' package version from the commit message
-        # Stores it into an environment variable
-        run: |
-          echo "FUELS_VERSION=$(\
-            echo "${{ github.event.head_commit.message }}" | awk '/- fuels@/ {print ENV_VAR=$2}'\
-          )" >> $GITHUB_ENV
+      - name: Extract fuels package version from the tag
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Print the extracted version
+        run: echo $RELEASE_VERSION
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
         with:
-          name: ${{env.FUELS_VERSION}}
+          name: ${{env.RELEASE_VERSION}}
 
   publish_pub_dev_release:
     needs: publish_github_release
