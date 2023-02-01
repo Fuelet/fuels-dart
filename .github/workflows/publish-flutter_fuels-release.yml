@@ -3,7 +3,7 @@ name: Publish flutter_fuels package release
 on:
   push:
     tags:
-      - "flutter_fuels@*"
+      - "flutter_fuels-*"
 
 jobs:
   publish_github_release:

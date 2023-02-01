@@ -3,7 +3,7 @@ name: Publish fuels package release
 on:
   push:
     tags:
-      - "fuels@*"
+      - "fuels-*"
 
 jobs:
   publish_github_release:
