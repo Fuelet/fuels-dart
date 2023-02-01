@@ -10,7 +10,6 @@ use fuels_signers::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
 use crate::model::balance::{Balance, from_hash_map};
 use crate::model::pagination::{PaginationRequest, TransactionsPaginatedResult};
 use crate::model::response::TransferResponse;
-use crate::model::transaction;
 
 pub struct WalletUnlocked {
     pub native_wallet_unlocked: RustOpaque<NativeWalletUnlocked>,
