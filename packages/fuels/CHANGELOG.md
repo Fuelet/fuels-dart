@@ -1,3 +1,7 @@
+## 1.4.3
+
+ - **REFACTOR**: remove unused dependency.
+
 ## 1.4.2
 
  - **REFACTOR**: use macro instead of creating runtimes for async functions.
