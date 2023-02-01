@@ -39,7 +39,7 @@ jobs:
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
         with:
-          name: $FLUTTER_FUELS_VERSION
+          name: ${{env.FLUTTER_FUELS_VERSION}}
           files: platform-build/*
 
   publish_github_release_fuels:
@@ -58,7 +58,7 @@ jobs:
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
         with:
-          name: $FUELS_VERSION
+          name: ${{env.FUELS_VERSION}}
 
   publish_pub_release:
     needs: [ publish_github_release_flutter_fuels, publish_github_release_fuels ]
