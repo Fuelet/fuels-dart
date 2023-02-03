@@ -7,36 +7,7 @@ on:
 
 jobs:
   publish_github_release:
-    # macOS because we can cross-compile to all other platforms from it
-    runs-on: macos-latest
-
-    steps:
-      - uses: actions/checkout@v3
-      - name: Extract flutter_fuels package version from the tag
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      - name: Print the extracted version
-        run: echo $RELEASE_VERSION
-      - uses: subosito/flutter-action@v2
-      - uses: bluefireteam/melos-action@v2
-      - uses: goto-bus-stop/setup-zig@v2
-      - uses: KyleMayes/install-llvm-action@v1
-        with:
-          version: "15"
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - uses: nttld/setup-ndk@v1
-        with:
-          ndk-version: r25b
-
-      - name: Build all library binaries
-        run: melos run build
-
-      - name: Create GitHub release
-        uses: softprops/action-gh-release@v1
-        with:
-          name: ${{env.RELEASE_VERSION}}
-          files: platform-build/*
+    uses: ./.github/workflows/publish-github-release.yml
 
   publish_pub_dev_release:
     needs: publish_github_release
