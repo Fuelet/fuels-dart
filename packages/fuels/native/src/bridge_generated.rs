@@ -231,6 +231,38 @@ fn wire_transfer__method__WalletUnlocked_impl(
         },
     )
 }
+fn wire_from_bech32_string__static_method__Bech32Address_impl(
+    port_: MessagePort,
+    s: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "from_bech32_string__static_method__Bech32Address",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_s = s.wire2api();
+            move |task_callback| Ok(Bech32Address::from_bech32_string(api_s))
+        },
+    )
+}
+fn wire_from_b256_string__static_method__Bech32Address_impl(
+    port_: MessagePort,
+    s: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "from_b256_string__static_method__Bech32Address",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_s = s.wire2api();
+            move |task_callback| Ok(Bech32Address::from_b256_string(api_s))
+        },
+    )
+}
 fn wire_to_bech32_string__method__Bech32Address_impl(
     port_: MessagePort,
     that: impl Wire2Api<Bech32Address> + UnwindSafe,

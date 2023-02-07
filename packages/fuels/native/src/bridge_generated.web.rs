@@ -77,6 +77,16 @@ pub fn wire_transfer__method__WalletUnlocked(
 }
 
 #[wasm_bindgen]
+pub fn wire_from_bech32_string__static_method__Bech32Address(port_: MessagePort, s: String) {
+    wire_from_bech32_string__static_method__Bech32Address_impl(port_, s)
+}
+
+#[wasm_bindgen]
+pub fn wire_from_b256_string__static_method__Bech32Address(port_: MessagePort, s: String) {
+    wire_from_b256_string__static_method__Bech32Address_impl(port_, s)
+}
+
+#[wasm_bindgen]
 pub fn wire_to_bech32_string__method__Bech32Address(port_: MessagePort, that: JsValue) {
     wire_to_bech32_string__method__Bech32Address_impl(port_, that)
 }

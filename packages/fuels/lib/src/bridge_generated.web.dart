@@ -180,6 +180,12 @@ class FuelsWasmModule implements WasmModule {
       String asset,
       List<dynamic> tx_parameters);
 
+  external dynamic /* void */ wire_from_bech32_string__static_method__Bech32Address(
+      NativePortType port_, String s);
+
+  external dynamic /* void */ wire_from_b256_string__static_method__Bech32Address(
+      NativePortType port_, String s);
+
   external dynamic /* void */ wire_to_bech32_string__method__Bech32Address(
       NativePortType port_, List<dynamic> that);
 
@@ -259,6 +265,15 @@ class FuelsWire extends FlutterRustBridgeWasmWireBase<FuelsWasmModule> {
           List<dynamic> tx_parameters) =>
       wasmModule.wire_transfer__method__WalletUnlocked(
           port_, that, to, amount, asset, tx_parameters);
+
+  void wire_from_bech32_string__static_method__Bech32Address(
+          NativePortType port_, String s) =>
+      wasmModule.wire_from_bech32_string__static_method__Bech32Address(
+          port_, s);
+
+  void wire_from_b256_string__static_method__Bech32Address(
+          NativePortType port_, String s) =>
+      wasmModule.wire_from_b256_string__static_method__Bech32Address(port_, s);
 
   void wire_to_bech32_string__method__Bech32Address(
           NativePortType port_, List<dynamic> that) =>

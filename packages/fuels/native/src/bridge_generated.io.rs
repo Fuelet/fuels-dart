@@ -83,6 +83,22 @@ pub extern "C" fn wire_transfer__method__WalletUnlocked(
 }
 
 #[no_mangle]
+pub extern "C" fn wire_from_bech32_string__static_method__Bech32Address(
+    port_: i64,
+    s: *mut wire_uint_8_list,
+) {
+    wire_from_bech32_string__static_method__Bech32Address_impl(port_, s)
+}
+
+#[no_mangle]
+pub extern "C" fn wire_from_b256_string__static_method__Bech32Address(
+    port_: i64,
+    s: *mut wire_uint_8_list,
+) {
+    wire_from_b256_string__static_method__Bech32Address_impl(port_, s)
+}
+
+#[no_mangle]
 pub extern "C" fn wire_to_bech32_string__method__Bech32Address(
     port_: i64,
     that: *mut wire_Bech32Address,

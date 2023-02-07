@@ -103,6 +103,17 @@ pub struct Bech32Address {
 }
 
 impl Bech32Address {
+    pub fn from_bech32_string(s: String) -> Bech32Address {
+        let native = NativeBech32Address::from_str(s.as_str()).unwrap();
+        Bech32Address { native: RustOpaque::new(native) }
+    }
+
+    pub fn from_b256_string(s: String) -> Bech32Address {
+        let address: Address = Address::from_str(s.as_str()).unwrap();
+        let native = NativeBech32Address::from(address);
+        Bech32Address { native: RustOpaque::new(native) }
+    }
+
     pub fn to_bech32_string(&self) -> String {
         (*self.native).to_string()
     }

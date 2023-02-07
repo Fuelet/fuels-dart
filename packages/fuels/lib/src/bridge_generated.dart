@@ -81,6 +81,18 @@ abstract class Fuels {
 
   FlutterRustBridgeTaskConstMeta get kTransferMethodWalletUnlockedConstMeta;
 
+  Future<Bech32Address> fromBech32StringStaticMethodBech32Address(
+      {required String s, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta
+      get kFromBech32StringStaticMethodBech32AddressConstMeta;
+
+  Future<Bech32Address> fromB256StringStaticMethodBech32Address(
+      {required String s, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta
+      get kFromB256StringStaticMethodBech32AddressConstMeta;
+
   Future<String> toBech32StringMethodBech32Address(
       {required Bech32Address that, dynamic hint});
 
@@ -175,6 +187,14 @@ class Bech32Address {
     required this.bridge,
     required this.native,
   });
+
+  static Future<Bech32Address> fromBech32String(
+          {required Fuels bridge, required String s, dynamic hint}) =>
+      bridge.fromBech32StringStaticMethodBech32Address(s: s, hint: hint);
+
+  static Future<Bech32Address> fromB256String(
+          {required Fuels bridge, required String s, dynamic hint}) =>
+      bridge.fromB256StringStaticMethodBech32Address(s: s, hint: hint);
 
   Future<String> toBech32String({dynamic hint}) =>
       bridge.toBech32StringMethodBech32Address(
@@ -886,6 +906,46 @@ class FuelsImpl implements Fuels {
         debugName: "transfer__method__WalletUnlocked",
         argNames: ["that", "to", "amount", "asset", "txParameters"],
       );
+
+  Future<Bech32Address> fromBech32StringStaticMethodBech32Address(
+      {required String s, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(s);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_from_bech32_string__static_method__Bech32Address(port_, arg0),
+      parseSuccessData: (d) => _wire2api_bech_32_address(d),
+      constMeta: kFromBech32StringStaticMethodBech32AddressConstMeta,
+      argValues: [s],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta
+      get kFromBech32StringStaticMethodBech32AddressConstMeta =>
+          const FlutterRustBridgeTaskConstMeta(
+            debugName: "from_bech32_string__static_method__Bech32Address",
+            argNames: ["s"],
+          );
+
+  Future<Bech32Address> fromB256StringStaticMethodBech32Address(
+      {required String s, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(s);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_from_b256_string__static_method__Bech32Address(port_, arg0),
+      parseSuccessData: (d) => _wire2api_bech_32_address(d),
+      constMeta: kFromB256StringStaticMethodBech32AddressConstMeta,
+      argValues: [s],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta
+      get kFromB256StringStaticMethodBech32AddressConstMeta =>
+          const FlutterRustBridgeTaskConstMeta(
+            debugName: "from_b256_string__static_method__Bech32Address",
+            argNames: ["s"],
+          );
 
   Future<String> toBech32StringMethodBech32Address(
       {required Bech32Address that, dynamic hint}) {

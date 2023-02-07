@@ -503,6 +503,43 @@ class FuelsWire implements FlutterRustBridgeWireBase {
               ffi.Pointer<wire_uint_8_list>,
               ffi.Pointer<wire_TxParameters>)>();
 
+  void wire_from_bech32_string__static_method__Bech32Address(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> s,
+  ) {
+    return _wire_from_bech32_string__static_method__Bech32Address(
+      port_,
+      s,
+    );
+  }
+
+  late final _wire_from_bech32_string__static_method__Bech32AddressPtr =
+      _lookup<
+              ffi.NativeFunction<
+                  ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>(
+          'wire_from_bech32_string__static_method__Bech32Address');
+  late final _wire_from_bech32_string__static_method__Bech32Address =
+      _wire_from_bech32_string__static_method__Bech32AddressPtr
+          .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_from_b256_string__static_method__Bech32Address(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> s,
+  ) {
+    return _wire_from_b256_string__static_method__Bech32Address(
+      port_,
+      s,
+    );
+  }
+
+  late final _wire_from_b256_string__static_method__Bech32AddressPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>(
+      'wire_from_b256_string__static_method__Bech32Address');
+  late final _wire_from_b256_string__static_method__Bech32Address =
+      _wire_from_b256_string__static_method__Bech32AddressPtr
+          .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+
   void wire_to_bech32_string__method__Bech32Address(
     int port_,
     ffi.Pointer<wire_Bech32Address> that,

@@ -108,6 +108,27 @@ void main() {
     }
   });
 
+  test('test Bech32Address conversion', () async {
+    WalletUnlocked wallet = await createWallet();
+    var addr = await wallet.address();
+    var bech32str = await addr.toBech32String();
+    var b256str = await addr.toB256String();
+
+    var fromBech32Str =
+        await Bech32Address.fromBech32String(bridge: rustSdk, s: bech32str);
+    await fromBech32Str
+        .toBech32String()
+        .then((value) => expect(bech32str, value));
+    await fromBech32Str.toB256String().then((value) => expect(b256str, value));
+
+    var fromB256Str =
+        await Bech32Address.fromB256String(bridge: rustSdk, s: b256str);
+    await fromB256Str
+        .toBech32String()
+        .then((value) => expect(bech32str, value));
+    await fromB256Str.toB256String().then((value) => expect(b256str, value));
+  });
+
   test('test transfer eth', () async {
     // TODO: do not depend on external state
     int transferAmount = 500;
