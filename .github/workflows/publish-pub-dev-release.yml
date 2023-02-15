@@ -1,6 +1,15 @@
 name: Publish pub.dev release
 
-on: workflow_call
+on:
+  workflow_call:
+    inputs:
+      package_name:
+        description: 'Package to publish'
+        required: true
+        type: choice
+        options:
+          - 'fuels'
+          - 'flutter_fuels'
 
 jobs:
   publish_pub_dev_release:
@@ -17,6 +26,6 @@ jobs:
           ${{ secrets.PUB_CRED_JSON }}
           EOF
       - name: Dry-run publish to pub.dev
-        run: melos publish -y --dry-run
+        run: melos publish -y --dry-run --no-published --scope=${{ inputs.package_name }}
       - name: Publish to pub.dev
-        run: melos publish -y --no-dry-run
+        run: melos publish -y --no-dry-run --no-published --scope=${{ inputs.package_name }}

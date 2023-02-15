@@ -12,3 +12,5 @@ jobs:
   publish_pub_dev_release:
     needs: publish_github_release
     uses: ./.github/workflows/publish-pub-dev-release.yml
+    with:
+      package_name: flutter_fuels
