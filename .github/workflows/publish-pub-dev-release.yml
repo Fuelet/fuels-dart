@@ -6,10 +6,7 @@ on:
       package_name:
         description: 'Package to publish'
         required: true
-        type: choice
-        options:
-          - 'fuels'
-          - 'flutter_fuels'
+        type: string
 
 jobs:
   publish_pub_dev_release:
