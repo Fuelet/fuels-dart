@@ -1,3 +1,7 @@
+## 1.5.1
+
+ - Bump "fuels" to `1.5.1`.
+
 ## 1.5.0
 
  - **FEAT**: Bech32Address creation from string.

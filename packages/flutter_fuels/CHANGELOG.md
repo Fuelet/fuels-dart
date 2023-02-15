@@ -1,3 +1,7 @@
+## 0.0.9+1
+
+ - Bump "flutter_fuels" to `0.0.9+1`.
+
 ## 0.0.9
 
  - **FEAT**: Bech32Address creation from string.
