@@ -52,14 +52,10 @@ void main() {
   });
 
   test('test import wallet with private key', () async {
-    // WalletUnlocked wallet = await importWalletWithPK(testWalletPrivateKey);
-    // var address = await wallet.address();
-    // var bech32Address = await address.toB256String();
-
-    var addr = await Bech32Address.fromBech32String(bridge: rustSdk, s: 'fuel1vw3unnr4zl9uhecharalpxs7dk9hmzd3ya0ugzactcc3e7zavm4qtah5fc');
-    var b256 = await addr.toB256String();
-    print(b256);
-    // expect(testWalletAddress, bech32Address);
+    WalletUnlocked wallet = await importWalletWithPK(testWalletPrivateKey);
+    var address = await wallet.address();
+    var bech32Address = await address.toBech32String();
+    expect(testWalletAddress, bech32Address);
   });
 
   test('test import wallet with mnemonics', () async {
@@ -77,19 +73,13 @@ void main() {
         await wallet.address().then((addr) => addr.toBech32String());
     var recreatedAddr =
         await recreated.address().then((addr) => addr.toBech32String());
-    print(walletAddr);
-    var seed = wallet.mnemonicPhrase;
-    print(seed);
     expect(recreatedAddr, walletAddr);
     expect(recreated.privateKey, wallet.privateKey);
   });
 
   test('test get ETH balance', () async {
     // TODO: do not depend on external state and add assertions
-    WalletUnlocked wallet = await importWalletWithMnemonics('grant open detail fitness arm brown shoot science rich crowd oppose token');
-    var addr = await wallet.address();
-    var b256 = await addr.toB256String();
-    print(b256);
+    WalletUnlocked wallet = await importWalletWithPK(testWalletPrivateKey);
     var ethBalance = await wallet.getAssetBalance(asset: ethAsset);
     print(ethBalance);
   });
@@ -141,7 +131,7 @@ void main() {
 
   test('test transfer eth', () async {
     // TODO: do not depend on external state
-    int transferAmount = 4;
+    int transferAmount = 500;
     WalletUnlocked newWallet = await createWallet();
     WalletUnlocked testWallet = await importWalletWithPK(testWalletPrivateKey);
     var newWalletAddr = await newWallet.address();
