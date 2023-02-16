@@ -1,4 +1,5 @@
 name: Publish pub.dev release
+# See https://dart.dev/tools/pub/automated-publishing
 
 on:
   workflow_call:

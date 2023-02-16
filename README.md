@@ -42,8 +42,10 @@ Then push the generated commit with tags:
 ```shell
 git push --follow-tags
 ```
+Ths will start Github actions tasks for creating and publishing a release on Github.
 
-In order to publish a package to https://pub.dev/, call the following command from the corresponding package:
+In order to publish a package to https://pub.dev/, you need to wait for the CI/CD tasks from the previous step to complete. 
+Then call the following command from the corresponding package:
 
 ```shell
 cd packages/[needed package]
