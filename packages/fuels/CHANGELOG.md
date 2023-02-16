@@ -1,3 +1,7 @@
+## 1.5.7
+
+ - **REVERT**: revert test changes.
+
 ## 1.5.6
 
  - Bump "fuels" to `1.5.6`.
