@@ -5,6 +5,8 @@ For more information about SDK functionality and abilities, please check out fue
 
 The project tries to stick to the same interfaces as used in the Rust SDK wherever possible.
 
+The project structure explanation can be found in the [FRB documentation](https://cjycode.com/flutter_rust_bridge/library.html).
+
 ## Documentation
 
 Work on documentation for Dart/Flutter SDK is in progress.

@@ -1,4 +1,3 @@
-use flutter_rust_bridge::frb;
 pub use fuel_tx::{InstructionResult as NativeInstructionResult, Receipt as NativeReceipt, ScriptExecutionResult as NativeScriptExecutionResult};
 
 pub enum Receipt {
