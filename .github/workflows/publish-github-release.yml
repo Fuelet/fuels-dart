@@ -27,7 +27,7 @@ jobs:
           ndk-version: r25b
 
       - name: Build all library binaries
-        run: melos run build
+        run: melos run build # TODO: split ios & android builds into parallel jobs
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
