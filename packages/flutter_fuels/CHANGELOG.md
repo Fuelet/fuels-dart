@@ -1,3 +1,7 @@
+## 0.0.10
+
+ - **FEAT**: flutter web platform support ([#11](https://github.com/Fuelet/fuels-dart/issues/11)).
+
 ## 0.0.9+8
 
  - Bump "flutter_fuels" to `0.0.9+8`.

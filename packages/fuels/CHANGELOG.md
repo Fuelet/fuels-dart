@@ -1,3 +1,8 @@
+## 1.6.0
+
+ - **FEAT**: flutter web platform support ([#11](https://github.com/Fuelet/fuels-dart/issues/11)).
+ - **DOCS**: link to the library setup documentation.
+
 ## 1.5.8
 
  - Bump "fuels" to `1.5.8`.
