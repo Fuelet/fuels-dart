@@ -7,4 +7,4 @@ typedef ExternalLibrary = Object;
 
 Fuels createWrapperImpl(ExternalLibrary lib) => throw UnimplementedError();
 
-Object createLibraryImpl() => throw UnimplementedError();
+ExternalLibrary createLibraryImpl() => throw UnimplementedError();
