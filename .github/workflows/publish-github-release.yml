@@ -3,9 +3,36 @@ name: Publish Github release
 on: workflow_call
 
 jobs:
-  publish_github_release:
-    # macOS because we can cross-compile to all other platforms from it
+  build_apple:
     runs-on: macos-latest
+
+    steps:
+      - uses: actions/checkout@v3
+      - name: Extract package version from the tag
+        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+      - name: Print the extracted version
+        run: echo $RELEASE_VERSION
+      - uses: subosito/flutter-action@v2
+      - uses: bluefireteam/melos-action@v2
+      - uses: goto-bus-stop/setup-zig@v2
+      - uses: KyleMayes/install-llvm-action@v1
+        with:
+          version: "15"
+      - uses: actions-rs/toolchain@v1
+        with:
+          toolchain: stable
+
+      - name: Build apple binary
+        run: melos run build:apple
+
+      - name: Uploading artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: apple_binary
+          path: platform-build/FlutterFuels.xcframework.zip
+
+  build_android:
+    runs-on: ubuntu-latest
 
     steps:
       - uses: actions/checkout@v3
@@ -26,8 +53,32 @@ jobs:
         with:
           ndk-version: r25b
 
-      - name: Build all library binaries
-        run: melos run build # TODO: split ios & android builds into parallel jobs
+      - name: Build android binary
+        run: melos run build:android
+
+      - name: Uploading artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: android_binary
+          path: platform-build/android.tar.gz
+
+  publish_github_release:
+    runs-on: ubuntu-latest
+    needs: [ build_apple, build_android ]
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Download apple binary
+        uses: actions/download-artifact@v3
+        with:
+          name: apple_binary
+          path: platform-build
+
+      - name: Download android binary
+        uses: actions/download-artifact@v3
+        with:
+          name: android_binary
+          path: platform-build
 
       - name: Create GitHub release
         uses: softprops/action-gh-release@v1
