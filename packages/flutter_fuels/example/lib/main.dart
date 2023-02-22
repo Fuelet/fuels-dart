@@ -67,12 +67,14 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _generateWallet() async {
+    final provider = await Provider.connect(bridge: _fuels, url: _betaApiUrl);
     final wallet = await WalletUnlocked.newRandom(
       bridge: _fuels,
-      apiUrl: _betaApiUrl,
+      provider: provider,
     );
 
     final walletAddress = await wallet.address();
-    setState(() => _walletAddress = walletAddress);
+    final walletAddressStr = await walletAddress.toBech32String();
+    setState(() => _walletAddress = walletAddressStr);
   }
 }
