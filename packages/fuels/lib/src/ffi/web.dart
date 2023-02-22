@@ -1,14 +1,18 @@
+import 'dart:async';
 import 'dart:html';
-import 'package:fuels/src/bridge_generated.web.dart';
+
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
+import 'package:fuels/src/bridge_generated.web.dart';
 
-const root = 'pkg/flutter_fuels';
+const root = 'pkg/fuels';
 
-typedef ExternalLibrary = WasmModule;
+typedef ExternalLibrary = FutureOr<WasmModule>;
 
-Fuels createWrapperImpl(ExternalLibrary module) => FuelsImpl.wasm(module);
+Fuels createWrapperImpl(ExternalLibrary lib) {
+  return FuelsImpl.wasm(lib);
+}
 
-Future<WasmModule> createLibraryImpl() {
+ExternalLibrary createLibraryImpl() {
   if (crossOriginIsolated != true) {
     return Future.error(const MissingHeaderException());
   }
