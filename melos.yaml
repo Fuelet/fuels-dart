@@ -38,6 +38,10 @@ scripts:
   #   run: bash scripts/build-other.sh
   #   description: Build the .tar.gz for all other platforms.
 
+  frb-gen:
+    run: just --justfile packages/fuels/justfile
+    description: Generate wrapper over the native Rust code
+
   test:
     run: melos run test:dart --no-select && melos run test:flutter --no-select
     description: Run all Dart & Flutter tests in this project.
