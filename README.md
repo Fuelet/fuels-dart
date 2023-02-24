@@ -26,7 +26,7 @@ Work on documentation for Dart/Flutter SDK is in progress.
 After changing any of the Rust files, you need to regenerate the wrapper. Just call:
 
 ```shell
-just --justfile packages/fuels/justfile
+melos run frb-gen
 ```
 
 All commits in the main branch must follow the [Conventional Commits](https://cheatography.com/albelop/cheat-sheets/conventional-commits/) format.

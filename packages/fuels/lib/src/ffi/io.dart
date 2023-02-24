@@ -9,11 +9,12 @@ Fuels createWrapperImpl(ExternalLibrary dylib) => FuelsImpl(dylib);
 
 DynamicLibrary createLibraryImpl() {
   const base = 'fuels';
-  final path = Platform.isWindows ? '$base.dll' : 'lib$base.so';
 
-  return Platform.isIOS
-      ? DynamicLibrary.process()
-      : Platform.isMacOS
-          ? DynamicLibrary.executable()
-          : DynamicLibrary.open(path);
+  if (Platform.isIOS || Platform.isMacOS) {
+    return DynamicLibrary.executable();
+  } else if (Platform.isWindows) {
+    return DynamicLibrary.open('$base.dll');
+  } else {
+    return DynamicLibrary.open('lib$base.so');
+  }
 }
