@@ -1,3 +1,5 @@
+## 1.6.1
+
 ## 1.6.0
 
  - **FEAT**: flutter web platform support ([#11](https://github.com/Fuelet/fuels-dart/issues/11)).
