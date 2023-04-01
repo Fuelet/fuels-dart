@@ -10,8 +10,11 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_web_plugins:
+    sdk: flutter
   plugin_platform_interface: ^2.0.2
   fuels: ^1.6.1
+  js: ^0.6.5
 dev_dependencies:
   flutter_lints: ^2.0.0
   ffi: ^2.0.1
@@ -34,3 +37,6 @@ flutter:
         ffiPlugin: true
       windows:
         ffiPlugin: true
+      web:
+        pluginClass: FlutterPluginWeb
+        fileName: flutter_plugin_web.dart
