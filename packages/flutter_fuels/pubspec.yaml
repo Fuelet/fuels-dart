@@ -25,6 +25,8 @@ dev_dependencies:
     sdk: flutter
 
 flutter:
+  assets:
+    - web/
   plugin:
     platforms:
       android:
@@ -38,5 +40,7 @@ flutter:
       windows:
         ffiPlugin: true
       web:
-        pluginClass: FlutterPluginWeb
-        fileName: flutter_plugin_web.dart
+        pluginClass: FuelWalletWebSdk
+        fileName: fuel_web_sdk.dart
+        assets:
+          - web/

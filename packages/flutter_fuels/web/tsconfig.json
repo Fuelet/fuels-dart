@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "module": "commonjs",
+    "target": "es2015",
+    "esModuleInterop": true,
+    "sourceMap": true,
+    "rootDir": "src",
+    "outDir": "dist/js",
+    "noEmitOnError": true,
+    "typeRoots": [
+      "node_modules/@types"
+    ]
+  }
+}
