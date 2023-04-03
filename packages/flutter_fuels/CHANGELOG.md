@@ -1,3 +1,7 @@
+## 0.0.13
+
+ - **FEAT**: commit JS binary.
+
 ## 0.0.12
 
  - **FEAT**: move the generated JS asset to the lib folder.
