@@ -6,7 +6,7 @@ module.exports = {
         wallet: path.resolve(__dirname, "..", "src", "fuel_wallet.ts"),
     },
     output: {
-        path: path.join(__dirname, "../../lib/js/dist"),
+        path: path.join(__dirname, "../../lib/js"),
         filename: "[name].js",
     },
     resolve: {
