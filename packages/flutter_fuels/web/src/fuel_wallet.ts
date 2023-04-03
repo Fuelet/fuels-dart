@@ -1,59 +1,46 @@
 import { Mnemonic } from "@fuel-ts/mnemonic";
-import { Address, Wallet } from "fuels";
+import { Address, Wallet, WalletUnlocked } from "fuels";
+
+function walletToJson(wallet: WalletUnlocked, mnemonic?: String) {
+    const data = {
+        address: {
+            bech32Address: wallet.address.toString(),
+            b256Address: wallet.address.toB256(),
+        },
+        privateKey: wallet.privateKey,
+        mnemonicPhrase: mnemonic,
+    };
+
+    return data;
+}
 
 class WalletInterface {
     generateNewWallet() {
         let mnemonic = Mnemonic.generate(16);
-
         return this.newWalletFromMnemonic(mnemonic);
     }
 
     newWalletFromMnemonic(mnemonic: string) {
         let wallet = Wallet.fromMnemonic(mnemonic);
-
-        let bech32 = wallet.address.toString();
-        let b256 = wallet.address.toB256();
-
-        const data = {
-            address: {
-                bech32Address: bech32,
-                b256Address: b256,
-            },
-            privateKey: wallet.privateKey,
-            mnemonicPhrase: mnemonic,
-        };
-
-        return data;
+        return walletToJson(wallet, mnemonic);
     }
 
     newWalletFromPrivateKey(privateKey: string) {
         let wallet = Wallet.fromPrivateKey(privateKey);
-
-        let bech32 = wallet.address.toString();
-        let b256 = wallet.address.toB256();
-
-        const data = {
-            address: {
-                bech32Address: bech32,
-                b256Address: b256,
-            },
-            privateKey: wallet.privateKey,
-        };
-
-        return data;
+        return walletToJson(wallet);
     }
 
     async transfer(
         privateKey: string,
+        networkUrl: string,
         destinationB256Address: string,
         fractionalAmount: number,
         assetId: string,
         gasPrice: number,
         gasLimit: number,
-        maturity: number,
-        networkProvider: string
+        maturity: number
     ) {
-        let wallet = Wallet.fromPrivateKey(privateKey, networkProvider);
+        let wallet = Wallet.fromPrivateKey(privateKey, networkUrl);
         let res = await wallet.transfer(
             Address.fromB256(destinationB256Address),
             fractionalAmount,
@@ -68,37 +55,23 @@ class WalletInterface {
         return res.id;
     }
 
-    async signMessage(
-        privateKey: string,
-        networkProvider: string,
-        message: string
-    ) {
-        let wallet = Wallet.fromPrivateKey(privateKey, networkProvider);
-        let response = await wallet.signMessage(message);
-
-        return response;
+    async signMessage(privateKey: string, networkUrl: string, message: string) {
+        let wallet = Wallet.fromPrivateKey(privateKey, networkUrl);
+        return await wallet.signMessage(message);
     }
 
     async sendTransaction(
         privateKey: string,
-        networkProvider: string,
+        networkUrl: string,
         transactionRequestJson: string
     ) {
-        let wallet = Wallet.fromPrivateKey(privateKey, networkProvider);
+        let wallet = Wallet.fromPrivateKey(privateKey, networkUrl);
         let transactionRequest = JSON.parse(transactionRequestJson);
         let response = await wallet.sendTransaction(transactionRequest);
 
         return response.id;
     }
 }
-
-// window["generateNewWallet"] = generateNewWallet;
-// window["newWalletFromMnemonic"] = newWalletFromMnemonic;
-// window["newWalletFromPrivateKey"] = newWalletFromPrivateKey;
-// window["transfer"] = transfer;
-// window["signMessage"] = signMessage;
-// window["sendTransaction"] = sendTransaction;
-// window["generateMnemonic"] = Mnemonic.generate;
 
 function injectWallet(target: object) {
     const wallet = new WalletInterface();

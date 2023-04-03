@@ -15,25 +15,25 @@ external dynamic newWalletFromPrivateKey(String privateKey);
 @JS('transfer')
 external dynamic transfer(
   String privateKey,
+  String networkUrl,
   String destinationB256Address,
   num fractionanAmount,
   String assetId,
   num gasPrice,
   num gasLimit,
   num maturity,
-  String networkProvider,
 );
 
 @JS('signMessage')
 external dynamic signMessage(
   String privateKey,
-  String networkProvider,
+  String networkUrl,
   String message,
 );
 
 @JS('sendTransaction')
 external dynamic sendTransaction(
   String privateKey,
-  String networkProvider,
-  dynamic transactionRequest,
+  String networkUrl,
+  String transactionRequestJson,
 );

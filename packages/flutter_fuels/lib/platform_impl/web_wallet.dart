@@ -30,7 +30,7 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<String> transfer({
-    required networkProvider,
+    required String networkUrl,
     required String privateKey,
     required String destinationB256Address,
     required int fractionalAmount,
@@ -41,34 +41,34 @@ class FuelWalletImpl extends BaseWallet {
   }) {
     return promiseToFuture(js_wallet.transfer(
       privateKey,
+      _enrichNetworkUrl(networkUrl),
       destinationB256Address,
       fractionalAmount,
       assetId,
       gasPrice,
       gasLimit,
       maturity,
-      _enrichNetworkProviderUrl(networkProvider),
     ));
   }
 
   @override
   Future<String> signMessage({
-    required networkProvider,
+    required String networkUrl,
     required String privateKey,
     required String message,
   }) {
     return promiseToFuture(
-        js_wallet.signMessage(privateKey, networkProvider, message));
+        js_wallet.signMessage(privateKey, networkUrl, message));
   }
 
   @override
   Future<String> sendTransaction({
-    required networkProvider,
+    required String networkUrl,
     required String privateKey,
     required dynamic transactionRequest,
   }) {
-    return promiseToFuture(js_wallet.sendTransaction(privateKey,
-        _enrichNetworkProviderUrl(networkProvider), transactionRequest));
+    return promiseToFuture(js_wallet.sendTransaction(
+        privateKey, _enrichNetworkUrl(networkUrl), transactionRequest));
   }
 
   Map<String, dynamic> _jsObjectToMap(Object o) {
@@ -76,17 +76,17 @@ class FuelWalletImpl extends BaseWallet {
     return dartObject.cast<String, dynamic>();
   }
 
-  String _enrichNetworkProviderUrl(String url) {
-    String networkProviderUrl = url;
+  String _enrichNetworkUrl(String url) {
+    String networkUrl = url;
 
     if (!url.contains('graphql')) {
-      if (networkProviderUrl[networkProviderUrl.length - 1] == '/') {
-        networkProviderUrl += 'graphql';
+      if (networkUrl[networkUrl.length - 1] == '/') {
+        networkUrl += 'graphql';
       } else {
-        networkProviderUrl += '/graphql';
+        networkUrl += '/graphql';
       }
     }
 
-    return networkProviderUrl;
+    return networkUrl;
   }
 }

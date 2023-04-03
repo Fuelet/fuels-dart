@@ -7,20 +7,20 @@ class FuelWallet {
   final String bech32Address;
   final String b256Address;
   final String privateKey;
-  final dynamic networkProvider;
+  final String networkUrl;
 
   const FuelWallet({
     required this.bech32Address,
     required this.b256Address,
     required this.mnemonicPhrase,
     required this.privateKey,
-    required this.networkProvider,
+    required this.networkUrl,
   });
 
   static final _wallet = FuelWalletImpl();
 
   static Future<FuelWallet> generateNewWallet({
-    required dynamic networkProvider,
+    required String networkUrl,
   }) async {
     final data = await _wallet.generateNewWallet();
 
@@ -29,12 +29,12 @@ class FuelWallet {
       b256Address: data['address']['b256Address'],
       mnemonicPhrase: data['mnemonicPhrase'],
       privateKey: data['privateKey'],
-      networkProvider: networkProvider,
+      networkUrl: networkUrl,
     );
   }
 
   static Future<FuelWallet> newFromPrivateKey({
-    required dynamic networkProvider,
+    required String networkUrl,
     required String privateKey,
   }) async {
     final data = await _wallet.newFromPrivateKey(
@@ -46,12 +46,12 @@ class FuelWallet {
       b256Address: data['address']['b256Address'],
       mnemonicPhrase: data['mnemonicPhrase'],
       privateKey: data['privateKey'],
-      networkProvider: networkProvider,
+      networkUrl: networkUrl,
     );
   }
 
   static Future<FuelWallet> newFromMnemonicPhrase({
-    required dynamic networkProvider,
+    required String networkUrl,
     required String mnemonic,
   }) async {
     final data = await _wallet.newFromMnemonic(
@@ -63,7 +63,7 @@ class FuelWallet {
       b256Address: data['address']['b256Address'],
       mnemonicPhrase: data['mnemonicPhrase'],
       privateKey: data['privateKey'],
-      networkProvider: networkProvider,
+      networkUrl: networkUrl,
     );
   }
 
@@ -76,7 +76,7 @@ class FuelWallet {
     required int maturity,
   }) async {
     return _wallet.transfer(
-      networkProvider: networkProvider,
+      networkUrl: networkUrl,
       privateKey: privateKey,
       destinationB256Address: destinationB256Address,
       fractionalAmount: fractionalAmount,
@@ -91,7 +91,7 @@ class FuelWallet {
     required String message,
   }) async {
     return _wallet.signMessage(
-      networkProvider: networkProvider,
+      networkUrl: networkUrl,
       privateKey: privateKey,
       message: message,
     );
@@ -101,7 +101,7 @@ class FuelWallet {
     required dynamic transactionRequest,
   }) async {
     return _wallet.sendTransaction(
-      networkProvider: networkProvider,
+      networkUrl: networkUrl,
       privateKey: privateKey,
       transactionRequest: transactionRequest,
     );

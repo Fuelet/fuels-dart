@@ -12,7 +12,7 @@ abstract class BaseWallet {
   });
 
   Future<String> transfer({
-    required dynamic networkProvider,
+    required String networkUrl,
     required String privateKey,
     required String destinationB256Address,
     required int fractionalAmount,
@@ -23,13 +23,13 @@ abstract class BaseWallet {
   });
 
   Future<String> signMessage({
-    required dynamic networkProvider,
+    required String networkUrl,
     required String privateKey,
     required String message,
   });
 
   Future<String> sendTransaction({
-    required dynamic networkProvider,
+    required String networkUrl,
     required String privateKey,
     required dynamic transactionRequest,
   });

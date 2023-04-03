@@ -22,7 +22,7 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<String> transfer({
-    required networkProvider,
+    required String networkUrl,
     required String privateKey,
     required String destinationB256Address,
     required int fractionalAmount,
@@ -36,7 +36,7 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<String> signMessage({
-    required networkProvider,
+    required String networkUrl,
     required String privateKey,
     required String message,
   }) {
@@ -45,7 +45,7 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<String> sendTransaction({
-    required networkProvider,
+    required String networkUrl,
     required String privateKey,
     required dynamic transactionRequest,
   }) {

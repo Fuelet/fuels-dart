@@ -77,7 +77,7 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<String> transfer({
-    required networkProvider,
+    required String networkUrl,
     required String privateKey,
     required String destinationB256Address,
     required int fractionalAmount,
@@ -86,9 +86,10 @@ class FuelWalletImpl extends BaseWallet {
     required int gasLimit,
     required int maturity,
   }) async {
+    final provider = await Provider.connect(bridge: _bridge, url: networkUrl);
     final w = await WalletUnlocked.newFromPrivateKey(
       bridge: _bridge,
-      provider: networkProvider,
+      provider: provider,
       privateKey: privateKey,
     );
 
@@ -111,7 +112,7 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<String> signMessage({
-    required networkProvider,
+    required String networkUrl,
     required String privateKey,
     required String message,
   }) {
@@ -121,7 +122,7 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<String> sendTransaction({
-    required networkProvider,
+    required String networkUrl,
     required String privateKey,
     required dynamic transactionRequest,
   }) {
