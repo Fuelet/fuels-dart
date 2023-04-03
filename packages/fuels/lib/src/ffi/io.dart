@@ -11,7 +11,7 @@ DynamicLibrary createLibraryImpl() {
   const base = 'fuels';
 
   if (Platform.isIOS || Platform.isMacOS) {
-    return DynamicLibrary.executable();
+    return DynamicLibrary.process();
   } else if (Platform.isWindows) {
     return DynamicLibrary.open('$base.dll');
   } else {

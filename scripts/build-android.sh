@@ -1,5 +1,7 @@
 #!/bin/bash
 
+set -e
+
 # Setup
 BUILD_DIR=platform-build
 mkdir $BUILD_DIR

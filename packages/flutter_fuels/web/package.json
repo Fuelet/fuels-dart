@@ -1,0 +1,16 @@
+{
+  "scripts": {
+    "build": "webpack --config webpack/webpack.config.js"
+  },
+  "devDependencies": {
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.8.4",
+    "webpack": "^5.76.1",
+    "webpack-cli": "^5.0.1"
+  },
+  "dependencies": {
+    "@fuel-ts/mnemonic": "0.21.0",
+    "fuels": "^0.21.0",
+    "node-polyfill-webpack-plugin": "^2.0.1"
+  }
+}
