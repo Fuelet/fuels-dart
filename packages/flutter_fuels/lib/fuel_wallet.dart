@@ -20,12 +20,9 @@ class FuelWallet {
   static final _wallet = FuelWalletImpl();
 
   static Future<FuelWallet> generateNewWallet({
-    required dynamic bridge,
     required dynamic networkProvider,
   }) async {
-    final data = await _wallet.generateNewWallet(
-      networkProvider: networkProvider,
-    );
+    final data = await _wallet.generateNewWallet();
 
     return FuelWallet(
       bech32Address: data['address']['bech32Address'],
@@ -41,7 +38,6 @@ class FuelWallet {
     required String privateKey,
   }) async {
     final data = await _wallet.newFromPrivateKey(
-      networkProvider: networkProvider,
       privateKey: privateKey,
     );
 
@@ -59,7 +55,6 @@ class FuelWallet {
     required String mnemonic,
   }) async {
     final data = await _wallet.newFromMnemonic(
-      networkProvider: networkProvider,
       mnemonic: mnemonic,
     );
 

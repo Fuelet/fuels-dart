@@ -2,15 +2,12 @@ import 'base_wallet.dart';
 
 class FuelWalletImpl extends BaseWallet {
   @override
-  Future<Map> generateNewWallet({
-    required networkProvider,
-  }) {
+  Future<Map> generateNewWallet() {
     throw Exception('Stub implementation');
   }
 
   @override
   Future<Map> newFromMnemonic({
-    required networkProvider,
     required String mnemonic,
   }) {
     throw Exception('Stub implementation');
@@ -18,7 +15,6 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> newFromPrivateKey({
-    required networkProvider,
     required String privateKey,
   }) {
     throw Exception('Stub implementation');

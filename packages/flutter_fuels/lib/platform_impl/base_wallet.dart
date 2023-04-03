@@ -1,17 +1,13 @@
 abstract class BaseWallet {
   const BaseWallet();
 
-  Future<Map> generateNewWallet({
-    required dynamic networkProvider,
-  });
+  Future<Map> generateNewWallet();
 
   Future<Map> newFromMnemonic({
-    required dynamic networkProvider,
     required String mnemonic,
   });
 
   Future<Map> newFromPrivateKey({
-    required dynamic networkProvider,
     required String privateKey,
   });
 

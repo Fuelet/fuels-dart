@@ -6,9 +6,7 @@ class FuelWalletImpl extends BaseWallet {
   final Fuels _bridge = createLib();
 
   @override
-  Future<Map> generateNewWallet({
-    required dynamic networkProvider,
-  }) async {
+  Future<Map> generateNewWallet() async {
     final w = await WalletUnlocked.newRandom(bridge: _bridge);
 
     final address = await w.address();
@@ -29,7 +27,6 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> newFromMnemonic({
-    required networkProvider,
     required String mnemonic,
   }) async {
     final w = await WalletUnlocked.newFromMnemonicPhrase(
@@ -55,7 +52,6 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> newFromPrivateKey({
-    required networkProvider,
     required String privateKey,
   }) async {
     final w = await WalletUnlocked.newFromPrivateKey(

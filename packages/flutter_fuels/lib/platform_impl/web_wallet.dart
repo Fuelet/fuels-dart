@@ -7,16 +7,13 @@ import 'js_interop/js_wallet.dart' as js_wallet;
 
 class FuelWalletImpl extends BaseWallet {
   @override
-  Future<Map<String, dynamic>> generateNewWallet({
-    required dynamic networkProvider,
-  }) {
+  Future<Map<String, dynamic>> generateNewWallet() {
     var newWallet = js_wallet.generateNewWallet();
     return Future.value(_jsObjectToMap(newWallet));
   }
 
   @override
   Future<Map> newFromMnemonic({
-    required networkProvider,
     required String mnemonic,
   }) {
     var newWallet = js_wallet.newWalletFromMnemonic(mnemonic);
@@ -25,7 +22,6 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> newFromPrivateKey({
-    required networkProvider,
     required String privateKey,
   }) {
     var newWallet = js_wallet.newWalletFromPrivateKey(privateKey);
