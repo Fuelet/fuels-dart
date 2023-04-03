@@ -26,7 +26,7 @@ dev_dependencies:
 
 flutter:
   assets:
-    - web/dist/wallet.js
+    - packages/flutter_fuels/js/dist/wallet.js
   plugin:
     platforms:
       android:
