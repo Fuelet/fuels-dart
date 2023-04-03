@@ -1,3 +1,7 @@
+## 1.7.1
+
+ - Bump "fuels" to `1.7.1`.
+
 ## 1.7.0
 
  - **FEAT**: support TypeScript SDK ([#13](https://github.com/Fuelet/fuels-dart/issues/13)).

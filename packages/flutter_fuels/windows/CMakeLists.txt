@@ -1,4 +1,4 @@
-set(LibraryVersion "fuels-v1.7.0") # generated; do not edit
+set(LibraryVersion "fuels-v1.7.1") # generated; do not edit
 # installed that includes CMake 3.14 or later. You should not increase this
 # version, as doing so will cause the plugin to fail to compile for some
 # customers of the plugin.
