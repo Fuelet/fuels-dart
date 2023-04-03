@@ -1,5 +1,5 @@
-@JS('flutter_fuels')
-library js_wallet;
+@JS('flutter_fuels_wallet')
+library js_fuels_wallet;
 
 import 'package:js/js.dart';
 

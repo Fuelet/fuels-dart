@@ -1,7 +1,14 @@
 import { Mnemonic } from "@fuel-ts/mnemonic";
-import { Address, Wallet, WalletUnlocked } from "fuels";
+import {
+    Address,
+    Bech32Address,
+    toB256,
+    toBech32,
+    Wallet,
+    WalletUnlocked,
+} from "fuels";
 
-function walletToJson(wallet: WalletUnlocked, mnemonic?: String) {
+function walletToJson(wallet: WalletUnlocked, mnemonic?: string) {
     const data = {
         address: {
             bech32Address: wallet.address.toString(),
@@ -39,7 +46,7 @@ class WalletInterface {
         gasPrice: number,
         gasLimit: number,
         maturity: number
-    ) {
+    ): Promise<string> {
         let wallet = Wallet.fromPrivateKey(privateKey, networkUrl);
         let res = await wallet.transfer(
             Address.fromB256(destinationB256Address),
@@ -55,7 +62,11 @@ class WalletInterface {
         return res.id;
     }
 
-    async signMessage(privateKey: string, networkUrl: string, message: string) {
+    async signMessage(
+        privateKey: string,
+        networkUrl: string,
+        message: string
+    ): Promise<string> {
         let wallet = Wallet.fromPrivateKey(privateKey, networkUrl);
         return await wallet.signMessage(message);
     }
@@ -64,7 +75,7 @@ class WalletInterface {
         privateKey: string,
         networkUrl: string,
         transactionRequestJson: string
-    ) {
+    ): Promise<string> {
         let wallet = Wallet.fromPrivateKey(privateKey, networkUrl);
         let transactionRequest = JSON.parse(transactionRequestJson);
         let response = await wallet.sendTransaction(transactionRequest);
@@ -73,21 +84,31 @@ class WalletInterface {
     }
 }
 
-function injectWallet(target: object) {
-    const wallet = new WalletInterface();
-    Object.defineProperty(target, "flutter_fuels", {
-        value: wallet,
+class FuelsUtils {
+    bech32FromB256String(b256Address: string): Bech32Address {
+        return toBech32(b256Address);
+    }
+
+    b256FromBech32String(bech32Address: Bech32Address): string {
+        return toB256(bech32Address);
+    }
+}
+
+function injectObject(target: object, obj: object, name: PropertyKey) {
+    Object.defineProperty(target, name, {
+        value: obj,
         writable: false,
         enumerable: true,
         configurable: false,
     });
 
     if (typeof document !== "undefined") {
-        const loadedEvent = new CustomEvent("FlutterFuelsLoaded", {
-            detail: wallet,
+        const loadedEvent = new CustomEvent(`${String(name)} loaded`, {
+            detail: obj,
         });
         document.dispatchEvent(loadedEvent);
     }
 }
 
-injectWallet(window);
+injectObject(window, new WalletInterface(), "flutter_fuels_wallet");
+injectObject(window, new FuelsUtils(), "flutter_fuels_utils");

@@ -3,7 +3,7 @@ import 'dart:js_util';
 import 'package:js/js_util.dart';
 
 import 'base_wallet.dart';
-import 'js_interop/js_wallet.dart' as js_wallet;
+import 'js_interop/js_fuels_wallet.dart' as js_wallet;
 
 class FuelWalletImpl extends BaseWallet {
   @override
