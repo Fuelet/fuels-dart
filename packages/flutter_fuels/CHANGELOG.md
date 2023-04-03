@@ -1,3 +1,7 @@
+## 0.0.12
+
+ - **FEAT**: move the generated JS asset to the lib folder.
+
 ## 0.0.11+2
 
  - Bump "flutter_fuels" to `0.0.11+2`.
