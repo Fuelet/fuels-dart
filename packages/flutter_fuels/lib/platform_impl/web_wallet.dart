@@ -8,7 +8,6 @@ import 'js_interop/js_wallet.dart' as js_wallet;
 class FuelWalletImpl extends BaseWallet {
   @override
   Future<Map<String, dynamic>> generateNewWallet({
-    required dynamic bridge,
     required dynamic networkProvider,
   }) {
     var newWallet = js_wallet.generateNewWallet();
@@ -17,7 +16,6 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> newFromMnemonic({
-    required bridge,
     required networkProvider,
     required String mnemonic,
   }) {
@@ -27,7 +25,6 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> newFromPrivateKey({
-    required bridge,
     required networkProvider,
     required String privateKey,
   }) {
@@ -37,7 +34,6 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<String> transfer({
-    required bridge,
     required networkProvider,
     required String privateKey,
     required String destinationB256Address,
@@ -61,7 +57,6 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<String> signMessage({
-    required bridge,
     required networkProvider,
     required String privateKey,
     required String message,
@@ -72,7 +67,6 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<String> sendTransaction({
-    required bridge,
     required networkProvider,
     required String privateKey,
     required dynamic transactionRequest,

@@ -2,24 +2,20 @@ abstract class BaseWallet {
   const BaseWallet();
 
   Future<Map> generateNewWallet({
-    required dynamic bridge,
     required dynamic networkProvider,
   });
 
   Future<Map> newFromMnemonic({
-    required dynamic bridge,
     required dynamic networkProvider,
     required String mnemonic,
   });
 
   Future<Map> newFromPrivateKey({
-    required dynamic bridge,
     required dynamic networkProvider,
     required String privateKey,
   });
 
   Future<String> transfer({
-    required dynamic bridge,
     required dynamic networkProvider,
     required String privateKey,
     required String destinationB256Address,
@@ -31,14 +27,12 @@ abstract class BaseWallet {
   });
 
   Future<String> signMessage({
-    required dynamic bridge,
     required dynamic networkProvider,
     required String privateKey,
     required String message,
   });
 
   Future<String> sendTransaction({
-    required dynamic bridge,
     required dynamic networkProvider,
     required String privateKey,
     required dynamic transactionRequest,

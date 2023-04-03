@@ -1,13 +1,15 @@
 import 'package:fuels/fuels.dart';
+
 import 'base_wallet.dart';
 
 class FuelWalletImpl extends BaseWallet {
+  final Fuels _bridge = createLib();
+
   @override
   Future<Map> generateNewWallet({
-    required dynamic bridge,
     required dynamic networkProvider,
   }) async {
-    final w = await WalletUnlocked.newRandom(bridge: bridge);
+    final w = await WalletUnlocked.newRandom(bridge: _bridge);
 
     final address = await w.address();
     final bech32Address = await address.toBech32String();
@@ -27,12 +29,11 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> newFromMnemonic({
-    required bridge,
     required networkProvider,
     required String mnemonic,
   }) async {
     final w = await WalletUnlocked.newFromMnemonicPhrase(
-      bridge: bridge,
+      bridge: _bridge,
       phrase: mnemonic,
     );
 
@@ -54,12 +55,11 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> newFromPrivateKey({
-    required bridge,
     required networkProvider,
     required String privateKey,
   }) async {
     final w = await WalletUnlocked.newFromPrivateKey(
-      bridge: bridge,
+      bridge: _bridge,
       privateKey: privateKey,
     );
 
@@ -81,7 +81,6 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<String> transfer({
-    required bridge,
     required networkProvider,
     required String privateKey,
     required String destinationB256Address,
@@ -92,14 +91,14 @@ class FuelWalletImpl extends BaseWallet {
     required int maturity,
   }) async {
     final w = await WalletUnlocked.newFromPrivateKey(
-      bridge: bridge,
+      bridge: _bridge,
       provider: networkProvider,
       privateKey: privateKey,
     );
 
     final response = await w.transfer(
       to: await Bech32Address.fromB256String(
-        bridge: bridge,
+        bridge: _bridge,
         s: destinationB256Address,
       ),
       amount: fractionalAmount,
@@ -116,23 +115,21 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<String> signMessage({
-    required bridge,
     required networkProvider,
     required String privateKey,
     required String message,
   }) {
-    // TODO: implement signMessage
+    // TODO: implement
     throw UnimplementedError();
   }
 
   @override
   Future<String> sendTransaction({
-    required bridge,
     required networkProvider,
     required String privateKey,
     required dynamic transactionRequest,
   }) {
-    // TODO: implement signMessage
+    // TODO: implement
     throw UnimplementedError();
   }
 }

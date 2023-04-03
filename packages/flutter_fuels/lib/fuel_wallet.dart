@@ -7,7 +7,6 @@ class FuelWallet {
   final String bech32Address;
   final String b256Address;
   final String privateKey;
-  final dynamic bridge;
   final dynamic networkProvider;
 
   const FuelWallet({
@@ -15,7 +14,6 @@ class FuelWallet {
     required this.b256Address,
     required this.mnemonicPhrase,
     required this.privateKey,
-    required this.bridge,
     required this.networkProvider,
   });
 
@@ -26,7 +24,6 @@ class FuelWallet {
     required dynamic networkProvider,
   }) async {
     final data = await _wallet.generateNewWallet(
-      bridge: bridge,
       networkProvider: networkProvider,
     );
 
@@ -36,17 +33,14 @@ class FuelWallet {
       mnemonicPhrase: data['mnemonicPhrase'],
       privateKey: data['privateKey'],
       networkProvider: networkProvider,
-      bridge: bridge,
     );
   }
 
   static Future<FuelWallet> newFromPrivateKey({
-    required dynamic bridge,
     required dynamic networkProvider,
     required String privateKey,
   }) async {
     final data = await _wallet.newFromPrivateKey(
-      bridge: bridge,
       networkProvider: networkProvider,
       privateKey: privateKey,
     );
@@ -57,17 +51,14 @@ class FuelWallet {
       mnemonicPhrase: data['mnemonicPhrase'],
       privateKey: data['privateKey'],
       networkProvider: networkProvider,
-      bridge: bridge,
     );
   }
 
   static Future<FuelWallet> newFromMnemonicPhrase({
-    required dynamic bridge,
     required dynamic networkProvider,
     required String mnemonic,
   }) async {
     final data = await _wallet.newFromMnemonic(
-      bridge: bridge,
       networkProvider: networkProvider,
       mnemonic: mnemonic,
     );
@@ -78,7 +69,6 @@ class FuelWallet {
       mnemonicPhrase: data['mnemonicPhrase'],
       privateKey: data['privateKey'],
       networkProvider: networkProvider,
-      bridge: bridge,
     );
   }
 
@@ -91,7 +81,6 @@ class FuelWallet {
     required int maturity,
   }) async {
     return _wallet.transfer(
-      bridge: bridge,
       networkProvider: networkProvider,
       privateKey: privateKey,
       destinationB256Address: destinationB256Address,
@@ -107,7 +96,6 @@ class FuelWallet {
     required String message,
   }) async {
     return _wallet.signMessage(
-      bridge: bridge,
       networkProvider: networkProvider,
       privateKey: privateKey,
       message: message,
@@ -118,7 +106,6 @@ class FuelWallet {
     required dynamic transactionRequest,
   }) async {
     return _wallet.sendTransaction(
-      bridge: bridge,
       networkProvider: networkProvider,
       privateKey: privateKey,
       transactionRequest: transactionRequest,

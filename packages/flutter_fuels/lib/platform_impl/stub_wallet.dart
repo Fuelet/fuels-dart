@@ -3,7 +3,6 @@ import 'base_wallet.dart';
 class FuelWalletImpl extends BaseWallet {
   @override
   Future<Map> generateNewWallet({
-    required bridge,
     required networkProvider,
   }) {
     throw Exception('Stub implementation');
@@ -11,7 +10,6 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> newFromMnemonic({
-    required bridge,
     required networkProvider,
     required String mnemonic,
   }) {
@@ -20,7 +18,6 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> newFromPrivateKey({
-    required bridge,
     required networkProvider,
     required String privateKey,
   }) {
@@ -29,7 +26,6 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<String> transfer({
-    required bridge,
     required networkProvider,
     required String privateKey,
     required String destinationB256Address,
@@ -44,7 +40,6 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<String> signMessage({
-    required bridge,
     required networkProvider,
     required String privateKey,
     required String message,
@@ -54,7 +49,6 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<String> sendTransaction({
-    required bridge,
     required networkProvider,
     required String privateKey,
     required dynamic transactionRequest,
