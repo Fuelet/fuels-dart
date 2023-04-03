@@ -1,3 +1,7 @@
+## 0.0.11
+
+ - **FEAT**: support TypeScript SDK ([#13](https://github.com/Fuelet/fuels-dart/issues/13)).
+
 ## 0.0.10+1
 
 ## 0.0.10
