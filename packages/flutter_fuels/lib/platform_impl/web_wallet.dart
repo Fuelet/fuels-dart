@@ -1,13 +1,18 @@
-import '../fuel_web_sdk.dart';
+import 'dart:js_util';
+
+import 'package:js/js_util.dart';
+
 import 'base_wallet.dart';
+import 'js_interop/js_wallet.dart' as js_wallet;
 
 class FuelWalletImpl extends BaseWallet {
   @override
-  Future<Map> generateNewWallet({
+  Future<Map<String, dynamic>> generateNewWallet({
     required dynamic bridge,
     required dynamic networkProvider,
-  }) async {
-    return FuelWalletWebSdk.generateNewWallet();
+  }) {
+    var newWallet = js_wallet.generateNewWallet();
+    return Future.value(_jsObjectToMap(newWallet));
   }
 
   @override
@@ -15,8 +20,9 @@ class FuelWalletImpl extends BaseWallet {
     required bridge,
     required networkProvider,
     required String mnemonic,
-  }) async {
-    return FuelWalletWebSdk.newWalletFromMnemonic(mnemonic);
+  }) {
+    var newWallet = js_wallet.newWalletFromMnemonic(mnemonic);
+    return Future.value(_jsObjectToMap(newWallet));
   }
 
   @override
@@ -24,8 +30,9 @@ class FuelWalletImpl extends BaseWallet {
     required bridge,
     required networkProvider,
     required String privateKey,
-  }) async {
-    return FuelWalletWebSdk.newWalletFromPrivateKey(privateKey);
+  }) {
+    var newWallet = js_wallet.newWalletFromPrivateKey(privateKey);
+    return Future.value(_jsObjectToMap(newWallet));
   }
 
   @override
@@ -40,16 +47,16 @@ class FuelWalletImpl extends BaseWallet {
     required int gasLimit,
     required int maturity,
   }) {
-    return FuelWalletWebSdk.transfer(
-      privateKey: privateKey,
-      destinationB256Address: destinationB256Address,
-      fractionalAmount: fractionalAmount,
-      assetId: assetId,
-      gasPrice: gasPrice,
-      gasLimit: gasLimit,
-      maturity: maturity,
-      networkProvider: networkProvider,
-    );
+    return promiseToFuture(js_wallet.transfer(
+      privateKey,
+      destinationB256Address,
+      fractionalAmount,
+      assetId,
+      gasPrice,
+      gasLimit,
+      maturity,
+      _enrichNetworkProviderUrl(networkProvider),
+    ));
   }
 
   @override
@@ -59,11 +66,8 @@ class FuelWalletImpl extends BaseWallet {
     required String privateKey,
     required String message,
   }) {
-    return FuelWalletWebSdk.signMessage(
-      // networkProvider: networkProvider,
-      // message: message,
-      // privateKey: privateKey,
-    );
+    return promiseToFuture(
+        js_wallet.signMessage(privateKey, networkProvider, message));
   }
 
   @override
@@ -73,10 +77,26 @@ class FuelWalletImpl extends BaseWallet {
     required String privateKey,
     required dynamic transactionRequest,
   }) {
-    return FuelWalletWebSdk.sendTransaction(
-      networkProvider: networkProvider,
-      privateKey: privateKey,
-      transactionRequest: transactionRequest,
-    );
+    return promiseToFuture(js_wallet.sendTransaction(privateKey,
+        _enrichNetworkProviderUrl(networkProvider), transactionRequest));
+  }
+
+  Map<String, dynamic> _jsObjectToMap(Object o) {
+    final dartObject = dartify(o) as Map;
+    return dartObject.cast<String, dynamic>();
+  }
+
+  String _enrichNetworkProviderUrl(String url) {
+    String networkProviderUrl = url;
+
+    if (!url.contains('graphql')) {
+      if (networkProviderUrl[networkProviderUrl.length - 1] == '/') {
+        networkProviderUrl += 'graphql';
+      } else {
+        networkProviderUrl += '/graphql';
+      }
+    }
+
+    return networkProviderUrl;
   }
 }
