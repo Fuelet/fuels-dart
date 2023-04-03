@@ -14,6 +14,8 @@ jobs:
         run: echo $RELEASE_VERSION
       - uses: subosito/flutter-action@v2
       - uses: bluefireteam/melos-action@v2
+        with:
+          melos-version: '2.9.0'
       - uses: goto-bus-stop/setup-zig@v2
       - uses: KyleMayes/install-llvm-action@v1
         with:
