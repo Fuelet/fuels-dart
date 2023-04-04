@@ -1,3 +1,7 @@
+## 0.0.13+1
+
+ - **FIX**: add assets prefix for web platforms.
+
 ## 0.0.13
 
  - **FEAT**: commit JS binary.
