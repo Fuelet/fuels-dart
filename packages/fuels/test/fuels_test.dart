@@ -17,7 +17,7 @@ const testWalletSeedPhrase =
 const ethAsset =
     '0x0000000000000000000000000000000000000000000000000000000000000000';
 
-var txParams = TxParameters(gasPrice: 1, gasLimit: 1000000, maturity: 0);
+var txParams = const TxParameters(gasPrice: 1, gasLimit: 1000000, maturity: 0);
 
 String projectPath = Directory.current.parent.parent.path;
 final dynLib = DynamicLibrary.open('$projectPath/target/debug/libfuels.dylib');
@@ -97,7 +97,7 @@ void main() {
     // TODO: do not depend on external state and add assertions
     WalletUnlocked wallet = await importWalletWithPK(testWalletPrivateKey);
     var request =
-        PaginationRequest(results: 10, direction: PageDirection.Forward);
+        const PaginationRequest(results: 10, direction: PageDirection.Forward);
     var response = await wallet.getTransactions(request: request);
     print(
         'cursor: ${response.cursor}, hasNextPage: ${response.hasNextPage}, hasPrevPage: ${response.hasPreviousPage}');
