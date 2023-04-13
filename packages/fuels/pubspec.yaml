@@ -9,10 +9,10 @@ environment:
 dependencies:
   ffi: ^2.0.1
   flutter_rust_bridge: ^1.74.0
+  uuid: ^3.0.7 # must be compatible with flutter_rust_bridge version
   freezed_annotation: ^2.2.0
   meta: ^1.8.0
   collection: ^1.16.0
-  uuid: any
 
 dev_dependencies:
   test: ^1.16.0
