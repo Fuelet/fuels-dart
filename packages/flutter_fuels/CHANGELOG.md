@@ -1,3 +1,7 @@
+## 0.0.14+1
+
+ - Update a dependency to the latest release.
+
 ## 0.0.14
 
  - **FEAT**: upgrade fuels-ts to support beta-3.

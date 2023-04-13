@@ -1,3 +1,7 @@
+## 1.8.1
+
+ - **FIX**: remove old generated files.
+
 ## 1.8.0
 
  - **FEAT**: upgrade fuels-rs to support beta-3.
