@@ -12,6 +12,7 @@ dependencies:
   freezed_annotation: ^2.2.0
   meta: ^1.8.0
   collection: ^1.16.0
+  uuid: any
 
 dev_dependencies:
   test: ^1.16.0
