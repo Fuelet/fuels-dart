@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:fuels/fuels.dart';
 import 'package:test/test.dart';
 
-const betaApiUrl = 'https://node-beta-2.fuel.network';
+const betaApiUrl = 'https://beta-3.fuel.network';
 const testWalletAddress =
     'fuel1lcghw4e6gucsw4hj0me9cu3fkhdg65gf5ujck2tlywn8drrcedqq2htmt3';
 const testWalletPrivateKey =

@@ -13,9 +13,8 @@ gen:
         --rust-input native/src/api.rs \
         --dart-output lib/src/bridge_generated.dart \
         --c-output '../flutter_fuels/ios/Classes/frb.h' \
-        --c-output '../flutter_fuels/macos/Classes/frb.h' \
-        --wasm \
-        --llvm-path /opt/homebrew/opt/llvm 
+        --extra-c-output-path '../flutter_fuels/macos/Classes/' \
+        --llvm-path /opt/homebrew/opt/llvm
     flutter format .
     cargo build --manifest-path=native/Cargo.toml
 

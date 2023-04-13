@@ -127,16 +127,6 @@ pub extern "C" fn new_NativeBech32Address() -> wire_NativeBech32Address {
 }
 
 #[no_mangle]
-pub extern "C" fn new_NativeProvider() -> wire_NativeProvider {
-    wire_NativeProvider::new_with_null_ptr()
-}
-
-#[no_mangle]
-pub extern "C" fn new_NativeWalletUnlocked() -> wire_NativeWalletUnlocked {
-    wire_NativeWalletUnlocked::new_with_null_ptr()
-}
-
-#[no_mangle]
 pub extern "C" fn new_box_autoadd_bech_32_address_0() -> *mut wire_Bech32Address {
     support::new_leak_box_ptr(wire_Bech32Address::new_with_null_ptr())
 }
@@ -187,50 +177,10 @@ pub extern "C" fn share_opaque_NativeBech32Address(ptr: *const c_void) -> *const
     }
 }
 
-#[no_mangle]
-pub extern "C" fn drop_opaque_NativeProvider(ptr: *const c_void) {
-    unsafe {
-        Arc::<NativeProvider>::decrement_strong_count(ptr as _);
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn share_opaque_NativeProvider(ptr: *const c_void) -> *const c_void {
-    unsafe {
-        Arc::<NativeProvider>::increment_strong_count(ptr as _);
-        ptr
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn drop_opaque_NativeWalletUnlocked(ptr: *const c_void) {
-    unsafe {
-        Arc::<NativeWalletUnlocked>::decrement_strong_count(ptr as _);
-    }
-}
-
-#[no_mangle]
-pub extern "C" fn share_opaque_NativeWalletUnlocked(ptr: *const c_void) -> *const c_void {
-    unsafe {
-        Arc::<NativeWalletUnlocked>::increment_strong_count(ptr as _);
-        ptr
-    }
-}
-
 // Section: impl Wire2Api
 
 impl Wire2Api<RustOpaque<NativeBech32Address>> for wire_NativeBech32Address {
     fn wire2api(self) -> RustOpaque<NativeBech32Address> {
-        unsafe { support::opaque_from_dart(self.ptr as _) }
-    }
-}
-impl Wire2Api<RustOpaque<NativeProvider>> for wire_NativeProvider {
-    fn wire2api(self) -> RustOpaque<NativeProvider> {
-        unsafe { support::opaque_from_dart(self.ptr as _) }
-    }
-}
-impl Wire2Api<RustOpaque<NativeWalletUnlocked>> for wire_NativeWalletUnlocked {
-    fn wire2api(self) -> RustOpaque<NativeWalletUnlocked> {
         unsafe { support::opaque_from_dart(self.ptr as _) }
     }
 }
@@ -290,7 +240,7 @@ impl Wire2Api<PaginationRequest> for wire_PaginationRequest {
 impl Wire2Api<Provider> for wire_Provider {
     fn wire2api(self) -> Provider {
         Provider {
-            native_provider: self.native_provider.wire2api(),
+            node_url: self.node_url.wire2api(),
         }
     }
 }
@@ -316,9 +266,9 @@ impl Wire2Api<Vec<u8>> for *mut wire_uint_8_list {
 impl Wire2Api<WalletUnlocked> for wire_WalletUnlocked {
     fn wire2api(self) -> WalletUnlocked {
         WalletUnlocked {
-            native_wallet_unlocked: self.native_wallet_unlocked.wire2api(),
             private_key: self.private_key.wire2api(),
             mnemonic_phrase: self.mnemonic_phrase.wire2api(),
+            provider: self.provider.wire2api(),
         }
     }
 }
@@ -327,18 +277,6 @@ impl Wire2Api<WalletUnlocked> for wire_WalletUnlocked {
 #[repr(C)]
 #[derive(Clone)]
 pub struct wire_NativeBech32Address {
-    ptr: *const core::ffi::c_void,
-}
-
-#[repr(C)]
-#[derive(Clone)]
-pub struct wire_NativeProvider {
-    ptr: *const core::ffi::c_void,
-}
-
-#[repr(C)]
-#[derive(Clone)]
-pub struct wire_NativeWalletUnlocked {
     ptr: *const core::ffi::c_void,
 }
 
@@ -359,7 +297,7 @@ pub struct wire_PaginationRequest {
 #[repr(C)]
 #[derive(Clone)]
 pub struct wire_Provider {
-    native_provider: wire_NativeProvider,
+    node_url: *mut wire_uint_8_list,
 }
 
 #[repr(C)]
@@ -380,9 +318,9 @@ pub struct wire_uint_8_list {
 #[repr(C)]
 #[derive(Clone)]
 pub struct wire_WalletUnlocked {
-    native_wallet_unlocked: wire_NativeWalletUnlocked,
     private_key: *mut wire_uint_8_list,
     mnemonic_phrase: *mut wire_uint_8_list,
+    provider: *mut wire_Provider,
 }
 
 // Section: impl NewWithNullPtr
@@ -404,26 +342,18 @@ impl NewWithNullPtr for wire_NativeBech32Address {
         }
     }
 }
-impl NewWithNullPtr for wire_NativeProvider {
-    fn new_with_null_ptr() -> Self {
-        Self {
-            ptr: core::ptr::null(),
-        }
-    }
-}
-impl NewWithNullPtr for wire_NativeWalletUnlocked {
-    fn new_with_null_ptr() -> Self {
-        Self {
-            ptr: core::ptr::null(),
-        }
-    }
-}
 
 impl NewWithNullPtr for wire_Bech32Address {
     fn new_with_null_ptr() -> Self {
         Self {
             native: wire_NativeBech32Address::new_with_null_ptr(),
         }
+    }
+}
+
+impl Default for wire_Bech32Address {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
     }
 }
 
@@ -437,11 +367,23 @@ impl NewWithNullPtr for wire_PaginationRequest {
     }
 }
 
+impl Default for wire_PaginationRequest {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+
 impl NewWithNullPtr for wire_Provider {
     fn new_with_null_ptr() -> Self {
         Self {
-            native_provider: wire_NativeProvider::new_with_null_ptr(),
+            node_url: core::ptr::null_mut(),
         }
+    }
+}
+
+impl Default for wire_Provider {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
     }
 }
 
@@ -455,13 +397,25 @@ impl NewWithNullPtr for wire_TxParameters {
     }
 }
 
+impl Default for wire_TxParameters {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+
 impl NewWithNullPtr for wire_WalletUnlocked {
     fn new_with_null_ptr() -> Self {
         Self {
-            native_wallet_unlocked: wire_NativeWalletUnlocked::new_with_null_ptr(),
             private_key: core::ptr::null_mut(),
             mnemonic_phrase: core::ptr::null_mut(),
+            provider: core::ptr::null_mut(),
         }
+    }
+}
+
+impl Default for wire_WalletUnlocked {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
     }
 }
 

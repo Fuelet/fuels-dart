@@ -9,27 +9,19 @@ typedef int64_t DartPort;
 
 typedef bool (*DartPostCObjectFnType)(DartPort port_id, void *message);
 
-typedef struct wire_NativeProvider {
-  const void *ptr;
-} wire_NativeProvider;
-
-typedef struct wire_Provider {
-  struct wire_NativeProvider native_provider;
-} wire_Provider;
-
 typedef struct wire_uint_8_list {
   uint8_t *ptr;
   int32_t len;
 } wire_uint_8_list;
 
-typedef struct wire_NativeWalletUnlocked {
-  const void *ptr;
-} wire_NativeWalletUnlocked;
+typedef struct wire_Provider {
+  struct wire_uint_8_list *node_url;
+} wire_Provider;
 
 typedef struct wire_WalletUnlocked {
-  struct wire_NativeWalletUnlocked native_wallet_unlocked;
   struct wire_uint_8_list *private_key;
   struct wire_uint_8_list *mnemonic_phrase;
+  struct wire_Provider *provider;
 } wire_WalletUnlocked;
 
 typedef struct wire_PaginationRequest {
@@ -111,10 +103,6 @@ void wire_connect__static_method__Provider(int64_t port_, struct wire_uint_8_lis
 
 struct wire_NativeBech32Address new_NativeBech32Address(void);
 
-struct wire_NativeProvider new_NativeProvider(void);
-
-struct wire_NativeWalletUnlocked new_NativeWalletUnlocked(void);
-
 struct wire_Bech32Address *new_box_autoadd_bech_32_address_0(void);
 
 struct wire_PaginationRequest *new_box_autoadd_pagination_request_0(void);
@@ -130,14 +118,6 @@ struct wire_uint_8_list *new_uint_8_list_0(int32_t len);
 void drop_opaque_NativeBech32Address(const void *ptr);
 
 const void *share_opaque_NativeBech32Address(const void *ptr);
-
-void drop_opaque_NativeProvider(const void *ptr);
-
-const void *share_opaque_NativeProvider(const void *ptr);
-
-void drop_opaque_NativeWalletUnlocked(const void *ptr);
-
-const void *share_opaque_NativeWalletUnlocked(const void *ptr);
 
 void free_WireSyncReturn(WireSyncReturn ptr);
 
@@ -158,8 +138,6 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) wire_to_b256_string__method__Bech32Address);
     dummy_var ^= ((int64_t) (void*) wire_connect__static_method__Provider);
     dummy_var ^= ((int64_t) (void*) new_NativeBech32Address);
-    dummy_var ^= ((int64_t) (void*) new_NativeProvider);
-    dummy_var ^= ((int64_t) (void*) new_NativeWalletUnlocked);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_bech_32_address_0);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_pagination_request_0);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_provider_0);
@@ -168,10 +146,6 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) new_uint_8_list_0);
     dummy_var ^= ((int64_t) (void*) drop_opaque_NativeBech32Address);
     dummy_var ^= ((int64_t) (void*) share_opaque_NativeBech32Address);
-    dummy_var ^= ((int64_t) (void*) drop_opaque_NativeProvider);
-    dummy_var ^= ((int64_t) (void*) share_opaque_NativeProvider);
-    dummy_var ^= ((int64_t) (void*) drop_opaque_NativeWalletUnlocked);
-    dummy_var ^= ((int64_t) (void*) share_opaque_NativeWalletUnlocked);
     dummy_var ^= ((int64_t) (void*) free_WireSyncReturn);
     dummy_var ^= ((int64_t) (void*) store_dart_post_cobject);
     dummy_var ^= ((int64_t) (void*) get_dart_object);

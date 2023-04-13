@@ -1,10 +1,7 @@
 use fuel_tx::field::{BytecodeLength, BytecodeWitnessIndex, GasLimit, GasPrice, Inputs, Maturity, Outputs, ReceiptsRoot, Salt, Script as _, ScriptData, StorageSlots, TxPointer as _, Witnesses};
 use fuels::types::transaction_response;
-use flutter_rust_bridge::frb;
-pub use fuels::prelude::TxParameters;
 
-#[frb(mirror(TxParameters))]
-pub struct _TxParameters {
+pub struct TxParameters {
     pub gas_price: u64,
     pub gas_limit: u64,
     pub maturity: u64,
@@ -165,6 +162,22 @@ pub struct Witness {
 pub struct StorageSlot {
     pub key: [u8; 32],
     pub value: [u8; 32],
+}
+
+impl From<&fuels::prelude::TxParameters> for TxParameters {
+    fn from(model: &fuels::prelude::TxParameters) -> Self {
+        TxParameters {
+            gas_price: model.gas_price(),
+            gas_limit: model.gas_limit(),
+            maturity: model.maturity(),
+        }
+    }
+}
+
+impl From<TxParameters> for fuels::prelude::TxParameters {
+    fn from(model: TxParameters) -> Self {
+        fuels::prelude::TxParameters::new(model.gas_price, model.gas_limit, model.maturity)
+    }
 }
 
 impl From<&transaction_response::TransactionStatus> for TransactionStatus {

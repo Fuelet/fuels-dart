@@ -2,20 +2,21 @@ use std::str::FromStr;
 
 use flutter_rust_bridge::RustOpaque;
 use fuel_crypto::SecretKey;
-use fuels::prelude::{AssetId, generate_mnemonic_phrase, TxParameters};
-pub use fuels::prelude::{Bech32Address as NativeBech32Address, Provider as NativeProvider, WalletUnlocked as NativeWalletUnlocked};
+use fuels::prelude::{AssetId, generate_mnemonic_phrase};
+pub use fuels::prelude::{Account, Bech32Address as NativeBech32Address, Provider as NativeProvider, ViewOnlyAccount, WalletUnlocked as NativeWalletUnlocked};
 use fuels::tx::Address;
-use fuels_signers::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
+use fuels_accounts::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
 
 use crate::model::balance::{Balance, from_hash_map};
 use crate::model::pagination::{PaginationRequest, TransactionsPaginatedResult};
 use crate::model::response::TransferResponse;
+use crate::model::transaction::TxParameters;
 
 pub struct WalletUnlocked {
-    pub native_wallet_unlocked: RustOpaque<NativeWalletUnlocked>,
     pub private_key: String,
     // Is present only when the wallet is created using a mnemonic phrase
     pub mnemonic_phrase: Option<String>,
+    pub provider: Option<Provider>,
 }
 
 impl WalletUnlocked {
@@ -24,6 +25,18 @@ impl WalletUnlocked {
     //     let mut native_wallet = &mut*self.native_wallet_unlocked;
     //     native_wallet.set_provider((&*provider.native_provider).clone())
     // }
+    //
+    async fn get_native_wallet_unlocked(&self) -> NativeWalletUnlocked {
+        let secret_key = SecretKey::from_str(self.private_key.as_str()).unwrap();
+        return match &self.provider {
+            None =>
+                NativeWalletUnlocked::new_from_private_key(secret_key, None),
+            Some(p) => {
+                let native_provider = p.get_native_provider().await;
+                NativeWalletUnlocked::new_from_private_key(secret_key, Some(native_provider))
+            }
+        };
+    }
 
     pub fn new_random(provider: Option<Provider>) -> WalletUnlocked {
         let mut rng = rand::thread_rng();
@@ -33,12 +46,10 @@ impl WalletUnlocked {
 
     pub fn new_from_private_key(private_key: String, provider: Option<Provider>) -> WalletUnlocked {
         let secret_key = SecretKey::from_str(private_key.as_str()).unwrap();
-        let native_provider = provider.map(|p| (&*p.native_provider).clone());
-        let wallet_unlocked = NativeWalletUnlocked::new_from_private_key(secret_key, native_provider);
         Self {
-            native_wallet_unlocked: RustOpaque::new(wallet_unlocked),
             private_key: secret_key.to_string(),
             mnemonic_phrase: None,
+            provider,
         }
     }
 
@@ -50,35 +61,38 @@ impl WalletUnlocked {
     pub fn new_from_mnemonic_phrase_with_path(phrase: String, provider: Option<Provider>,
                                               path: String) -> WalletUnlocked {
         let secret_key = SecretKey::new_from_mnemonic_phrase_with_path(&phrase, &path).unwrap();
-        let native_provider = provider.map(|p| (&*p.native_provider).clone());
-        let wallet_unlocked = NativeWalletUnlocked::new_from_private_key(secret_key, native_provider);
         Self {
-            native_wallet_unlocked: RustOpaque::new(wallet_unlocked),
             private_key: secret_key.to_string(),
             mnemonic_phrase: Some(phrase),
+            provider,
         }
     }
 
-    pub fn address(&self) -> Bech32Address {
-        self.native_wallet_unlocked.address().into()
+    #[tokio::main]
+    pub async fn address(&self) -> Bech32Address {
+        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
+        native_wallet_unlocked.address().into()
     }
 
     #[tokio::main]
     pub async fn get_asset_balance(&self, asset: String) -> u64 {
+        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
         let asset_id = AssetId::from_str(&asset).unwrap();
-        let result = self.native_wallet_unlocked.get_asset_balance(&asset_id).await;
+        let result = native_wallet_unlocked.get_asset_balance(&asset_id).await;
         result.unwrap()
     }
 
     #[tokio::main]
     pub async fn get_balances(&self) -> Vec<Balance> {
-        let result = self.native_wallet_unlocked.get_balances().await;
+        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
+        let result = native_wallet_unlocked.get_balances().await;
         from_hash_map(result.unwrap())
     }
 
     #[tokio::main]
     pub async fn get_transactions(&self, request: PaginationRequest) -> TransactionsPaginatedResult {
-        let result = self.native_wallet_unlocked.get_transactions(request.into()).await;
+        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
+        let result = native_wallet_unlocked.get_transactions(request.into()).await;
         result.unwrap().into()
     }
 
@@ -90,8 +104,9 @@ impl WalletUnlocked {
         asset: String,
         tx_parameters: TxParameters,
     ) -> TransferResponse {
+        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
         let asset_id = AssetId::from_str(&asset).unwrap();
-        let result = self.native_wallet_unlocked.transfer(&*to.native, amount, asset_id, tx_parameters).await;
+        let result = native_wallet_unlocked.transfer(&*to.native, amount, asset_id, tx_parameters.into()).await;
         let (tx_id, receipts) = result.unwrap();
         TransferResponse { tx_id, receipts: receipts.iter().map(Into::into).collect() }
     }
@@ -134,13 +149,15 @@ impl From<&NativeBech32Address> for Bech32Address {
 
 // Cannot move to another file, cause the methods won't be accessible in that case
 pub struct Provider {
-    pub native_provider: RustOpaque<NativeProvider>,
+    pub node_url: String,
 }
 
 impl Provider {
-    #[tokio::main]
-    pub async fn connect(url: String) -> Provider {
-        let native_provider = NativeProvider::connect(url).await;
-        Provider { native_provider: RustOpaque::new(native_provider.unwrap()) }
+    pub fn connect(url: String) -> Provider {
+        Provider { node_url: url }
+    }
+
+    async fn get_native_provider(&self) -> NativeProvider {
+        NativeProvider::connect(&*self.node_url).await.unwrap()
     }
 }
