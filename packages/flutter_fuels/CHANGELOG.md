@@ -1,3 +1,8 @@
+## 0.0.14
+
+ - **FEAT**: upgrade fuels-ts to support beta-3.
+ - **FEAT**: upgrade fuels-rs to support beta-3.
+
 ## 0.0.13+1
 
  - **FIX**: add assets prefix for web platforms.

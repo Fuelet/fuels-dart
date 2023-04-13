@@ -1,3 +1,7 @@
+## 1.8.0
+
+ - **FEAT**: upgrade fuels-rs to support beta-3.
+
 ## 1.7.2
 
  - Bump "fuels" to `1.7.2`.
