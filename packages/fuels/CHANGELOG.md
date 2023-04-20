@@ -1,3 +1,7 @@
+## 1.8.3
+
+ - **FIX**: specify uuid version.
+
 ## 1.8.2
 
  - **FIX**: add uuid dependency.

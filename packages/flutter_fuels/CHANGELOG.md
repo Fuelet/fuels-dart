@@ -1,3 +1,7 @@
+## 0.0.14+3
+
+ - **FIX**: use beta-3 in example project.
+
 ## 0.0.14+2
 
  - Update a dependency to the latest release.
