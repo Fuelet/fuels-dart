@@ -1,3 +1,7 @@
+## 0.0.14+4
+
+ - **FIX**: downgrade frb version back.
+
 ## 0.0.14+3
 
  - **FIX**: use beta-3 in example project.

@@ -1,3 +1,7 @@
+## 1.8.4
+
+ - **FIX**: downgrade frb version back.
+
 ## 1.8.3
 
  - **FIX**: specify uuid version.
