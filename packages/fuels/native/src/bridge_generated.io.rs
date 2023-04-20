@@ -351,12 +351,6 @@ impl NewWithNullPtr for wire_Bech32Address {
     }
 }
 
-impl Default for wire_Bech32Address {
-    fn default() -> Self {
-        Self::new_with_null_ptr()
-    }
-}
-
 impl NewWithNullPtr for wire_PaginationRequest {
     fn new_with_null_ptr() -> Self {
         Self {
@@ -367,23 +361,11 @@ impl NewWithNullPtr for wire_PaginationRequest {
     }
 }
 
-impl Default for wire_PaginationRequest {
-    fn default() -> Self {
-        Self::new_with_null_ptr()
-    }
-}
-
 impl NewWithNullPtr for wire_Provider {
     fn new_with_null_ptr() -> Self {
         Self {
             node_url: core::ptr::null_mut(),
         }
-    }
-}
-
-impl Default for wire_Provider {
-    fn default() -> Self {
-        Self::new_with_null_ptr()
     }
 }
 
@@ -397,12 +379,6 @@ impl NewWithNullPtr for wire_TxParameters {
     }
 }
 
-impl Default for wire_TxParameters {
-    fn default() -> Self {
-        Self::new_with_null_ptr()
-    }
-}
-
 impl NewWithNullPtr for wire_WalletUnlocked {
     fn new_with_null_ptr() -> Self {
         Self {
@@ -410,12 +386,6 @@ impl NewWithNullPtr for wire_WalletUnlocked {
             mnemonic_phrase: core::ptr::null_mut(),
             provider: core::ptr::null_mut(),
         }
-    }
-}
-
-impl Default for wire_WalletUnlocked {
-    fn default() -> Self {
-        Self::new_with_null_ptr()
     }
 }
 
