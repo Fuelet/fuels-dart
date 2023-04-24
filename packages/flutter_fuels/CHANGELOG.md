@@ -1,3 +1,7 @@
+## 0.0.14+5
+
+ - **FIX**: add hex prefix to bech32 address everywhere.
+
 ## 0.0.14+4
 
  - **FIX**: downgrade frb version back.
