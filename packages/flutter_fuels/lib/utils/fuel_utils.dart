@@ -5,16 +5,19 @@ import 'platform_impl/stub_bech_address_utils.dart'
 class FuelUtils {
   static final _utils = BechAddressUtilsImpl();
 
-  static Future<String> bech32FromB256String(String address) {
-    assert(address.length == 64 || address.length == 66);
-
-    // TODO: review in the future
-    String b256Address = address.length == 64 ? '0x$address' : address;
-
-    return _utils.bech32FromB256String(b256Address);
+  static Future<String> bech32FromB256String(String b256Address) {
+    assert(b256Address.length == 64 || b256Address.length == 66);
+    return _utils.bech32FromB256String(addHexPrefix(b256Address));
   }
 
-  static Future<String> b256FromBech32String(String address) {
-    return _utils.b256FromBech32String(address);
+  static Future<String> b256FromBech32String(String bechAddress) {
+    return _utils.b256FromBech32String(bechAddress).then(addHexPrefix);
+  }
+
+  static String addHexPrefix(String address) {
+    if (address.startsWith('0x')) {
+      return address;
+    }
+    return '0x$address';
   }
 }

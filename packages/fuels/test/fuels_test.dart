@@ -7,7 +7,7 @@ import 'package:fuels/fuels.dart';
 import 'package:test/test.dart';
 
 const betaApiUrl = 'https://beta-3.fuel.network';
-const testWalletAddress =
+const testWalletBechAddress =
     'fuel1lcghw4e6gucsw4hj0me9cu3fkhdg65gf5ujck2tlywn8drrcedqq2htmt3';
 const testWalletPrivateKey =
     'e5e05a4ab2919dc01b97c90a48853fd4dfbd204e92e44327375702ab09bb184e';
@@ -17,7 +17,7 @@ const testWalletSeedPhrase =
 const ethAsset =
     '0x0000000000000000000000000000000000000000000000000000000000000000';
 
-var txParams = const TxParameters(gasPrice: 1, gasLimit: 1000000, maturity: 0);
+var txParams = TxParameters(gasPrice: 1, gasLimit: 1000000, maturity: 0);
 
 String projectPath = Directory.current.parent.parent.path;
 final dynLib = DynamicLibrary.open('$projectPath/target/debug/libfuels.dylib');
@@ -55,7 +55,7 @@ void main() {
     WalletUnlocked wallet = await importWalletWithPK(testWalletPrivateKey);
     var address = await wallet.address();
     var bech32Address = await address.toBech32String();
-    expect(testWalletAddress, bech32Address);
+    expect(testWalletBechAddress, bech32Address);
   });
 
   test('test import wallet with mnemonics', () async {
@@ -63,7 +63,7 @@ void main() {
         await importWalletWithMnemonics(testWalletSeedPhrase);
     var address = await wallet.address();
     var bech32Address = await address.toBech32String();
-    expect(testWalletAddress, bech32Address);
+    expect(testWalletBechAddress, bech32Address);
   });
 
   test('test recreate wallet', () async {
@@ -97,7 +97,7 @@ void main() {
     // TODO: do not depend on external state and add assertions
     WalletUnlocked wallet = await importWalletWithPK(testWalletPrivateKey);
     var request =
-        const PaginationRequest(results: 10, direction: PageDirection.Forward);
+        PaginationRequest(results: 10, direction: PageDirection.Forward);
     var response = await wallet.getTransactions(request: request);
     print(
         'cursor: ${response.cursor}, hasNextPage: ${response.hasNextPage}, hasPrevPage: ${response.hasPreviousPage}');
@@ -127,6 +127,15 @@ void main() {
         .toBech32String()
         .then((value) => expect(bech32str, value));
     await fromB256Str.toB256String().then((value) => expect(b256str, value));
+
+    var fromB256StrWithPrefix =
+        await Bech32Address.fromB256String(bridge: rustSdk, s: '0x$b256str');
+    await fromB256StrWithPrefix
+        .toBech32String()
+        .then((value) => expect(bech32str, value));
+    await fromB256StrWithPrefix
+        .toB256String()
+        .then((value) => expect(b256str, value));
   });
 
   test('test transfer eth', () async {

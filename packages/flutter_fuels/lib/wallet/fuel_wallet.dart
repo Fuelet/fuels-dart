@@ -9,13 +9,13 @@ class FuelWallet {
   final String privateKey;
   final String networkUrl;
 
-  const FuelWallet({
+  FuelWallet({
     required this.bech32Address,
-    required this.b256Address,
+    required b256Address,
     required this.mnemonicPhrase,
     required this.privateKey,
     required this.networkUrl,
-  });
+  }) : b256Address = addHexPrefix(b256Address);
 
   static final _wallet = FuelWalletImpl();
 
@@ -78,7 +78,7 @@ class FuelWallet {
     return _wallet.transfer(
       networkUrl: networkUrl,
       privateKey: privateKey,
-      destinationB256Address: destinationB256Address,
+      destinationB256Address: addHexPrefix(destinationB256Address),
       fractionalAmount: fractionalAmount,
       assetId: assetId,
       gasPrice: gasPrice,
@@ -105,5 +105,12 @@ class FuelWallet {
       privateKey: privateKey,
       transactionRequest: transactionRequest,
     );
+  }
+
+  static String addHexPrefix(String address) {
+    if (address.startsWith('0x')) {
+      return address;
+    }
+    return '0x$address';
   }
 }

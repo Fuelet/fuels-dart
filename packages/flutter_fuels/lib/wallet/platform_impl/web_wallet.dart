@@ -71,12 +71,12 @@ class FuelWalletImpl extends BaseWallet {
         privateKey, _enrichNetworkUrl(networkUrl), transactionRequest));
   }
 
-  Map<String, dynamic> _jsObjectToMap(Object o) {
+  static Map<String, dynamic> _jsObjectToMap(Object o) {
     final dartObject = dartify(o) as Map;
     return dartObject.cast<String, dynamic>();
   }
 
-  String _enrichNetworkUrl(String url) {
+  static String _enrichNetworkUrl(String url) {
     String networkUrl = url;
 
     if (!url.contains('graphql')) {
