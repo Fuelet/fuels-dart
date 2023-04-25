@@ -1,3 +1,8 @@
+## 0.0.15
+
+ - **FEAT**: add ability to set apple dyn lib factory.
+ - **FEAT**: bump frb version.
+
 ## 0.0.14+5
 
  - **FIX**: add hex prefix to bech32 address everywhere.
