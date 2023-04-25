@@ -4,7 +4,7 @@ import '../../ffi/mobile_wrapper.dart';
 import 'base_wallet.dart';
 
 class FuelWalletImpl extends BaseWallet {
-  final Fuels _bridge = createLib();
+  static final Fuels _bridge = createLib();
 
   @override
   Future<Map> generateNewWallet() async {
