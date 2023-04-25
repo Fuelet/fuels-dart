@@ -1,3 +1,7 @@
+## 0.0.15+2
+
+ - **FIX**: resolve dependency conflicts.
+
 ## 0.0.15+1
 
  - Update a dependency to the latest release.

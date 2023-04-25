@@ -1,6 +1,6 @@
 name: fuels
 description: Dart FFI bridge to Fuel Rust SDK
-version: 1.9.1
+version: 1.9.2
 homepage: https://github.com/Fuelet/fuels-dart/tree/main/packages/fuels
 
 environment:

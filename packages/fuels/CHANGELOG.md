@@ -1,3 +1,7 @@
+## 1.9.2
+
+ - **FIX**: resolve dependency conflicts.
+
 ## 1.9.1
 
  - **FIX**: use soft dev dependencies versions.
