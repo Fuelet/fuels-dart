@@ -1,3 +1,7 @@
+## 1.9.1
+
+ - **FIX**: use soft dev dependencies versions.
+
 ## 1.9.0
 
  - **FEAT**: add ability to set apple dyn lib factory.
