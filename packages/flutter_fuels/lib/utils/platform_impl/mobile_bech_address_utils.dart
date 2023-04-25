@@ -1,9 +1,10 @@
 import 'package:fuels/fuels.dart' as fuels;
 
+import '../../ffi/mobile_wrapper.dart';
 import 'base_bech_address_utils.dart';
 
 class BechAddressUtilsImpl extends BaseBechAddressUtils {
-  final fuels.Fuels _bridge = fuels.createLib();
+  final fuels.Fuels _bridge = createLib();
 
   @override
   Future<String> bech32FromB256String(String address) async {

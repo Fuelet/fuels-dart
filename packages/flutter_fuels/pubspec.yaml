@@ -17,12 +17,6 @@ dependencies:
   js: ^0.6.5
 dev_dependencies:
   flutter_lints: ^2.0.0
-  ffi: ^2.0.1
-  ffigen: ^7.2.4
-  flutter_test:
-    sdk: flutter
-  integration_test:
-    sdk: flutter
 
 flutter:
   assets:
