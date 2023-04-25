@@ -4,5 +4,3 @@
 library fuels;
 
 export 'src/fuels_base.dart';
-
-export 'src/ffi.dart';

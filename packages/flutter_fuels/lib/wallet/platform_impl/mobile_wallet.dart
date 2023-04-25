@@ -1,5 +1,6 @@
 import 'package:fuels/fuels.dart';
 
+import '../../ffi/mobile_wrapper.dart';
 import 'base_wallet.dart';
 
 class FuelWalletImpl extends BaseWallet {

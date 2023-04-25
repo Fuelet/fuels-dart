@@ -1,6 +1,4 @@
 abstract class BaseWallet {
-  const BaseWallet();
-
   Future<Map> generateNewWallet();
 
   Future<Map> newFromMnemonic({
