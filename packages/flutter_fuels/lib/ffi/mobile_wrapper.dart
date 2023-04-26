@@ -5,24 +5,17 @@ import 'package:fuels/fuels.dart';
 
 typedef ExternalLibrary = DynamicLibrary;
 
-DynamicLibrary Function() _appleDynLibFactory = DynamicLibrary.process;
 Fuels? _wrapper;
-
-/// Might be useful when used in combination with other ffi libraries to create
-/// a singleton of DynamicLibrary for apple devices
-void setAppleDynLibFactory(DynamicLibrary Function() factory) {
-  _appleDynLibFactory = factory;
-}
+const _base = 'fuels';
+const _flutterLibName = 'flutter_$_base';
 
 DynamicLibrary createLibraryImpl() {
-  const base = 'fuels';
-
   if (Platform.isIOS || Platform.isMacOS) {
-    return _appleDynLibFactory();
+    return DynamicLibrary.open('$_flutterLibName.framework/$_flutterLibName');
   } else if (Platform.isWindows) {
-    return DynamicLibrary.open('$base.dll');
+    return DynamicLibrary.open('$_base.dll');
   } else {
-    return DynamicLibrary.open('lib$base.so');
+    return DynamicLibrary.open('lib$_base.so');
   }
 }
 
