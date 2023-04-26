@@ -1,3 +1,7 @@
+## 1.9.3
+
+ - **FIX**: return soft dependency versions.
+
 ## 1.9.2
 
  - **FIX**: resolve dependency conflicts.
