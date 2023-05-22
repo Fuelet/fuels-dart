@@ -1,3 +1,7 @@
+## 0.0.17
+
+ - **FEAT**: add transaction simulation to web wallet.
+
 ## 0.0.16
 
  - **FIX**: make bridge var to be static.
