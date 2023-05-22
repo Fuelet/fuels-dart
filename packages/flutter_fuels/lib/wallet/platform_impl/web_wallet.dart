@@ -221,8 +221,8 @@ class FuelWalletImpl extends BaseWallet {
     }
   }
 
-  static BigInt _parseBigInt(String BN) {
-    String withoutPrefix = BN.startsWith('0x') ? BN.substring(2) : BN;
+  static BigInt _parseBigInt(String bn) {
+    String withoutPrefix = bn.startsWith('0x') ? bn.substring(2) : bn;
     return BigInt.parse(withoutPrefix, radix: 16);
   }
 }
