@@ -13,7 +13,7 @@ external dynamic newWalletFromMnemonic(String mnemonic);
 external dynamic newWalletFromPrivateKey(String privateKey);
 
 @JS('transfer')
-external dynamic transfer(
+external String transfer(
   String privateKey,
   String networkUrl,
   String destinationB256Address,
@@ -25,14 +25,21 @@ external dynamic transfer(
 );
 
 @JS('signMessage')
-external dynamic signMessage(
+external String signMessage(
   String privateKey,
   String networkUrl,
   String message,
 );
 
 @JS('sendTransaction')
-external dynamic sendTransaction(
+external String sendTransaction(
+  String privateKey,
+  String networkUrl,
+  String transactionRequestJson,
+);
+
+@JS('simulateTransaction')
+external String simulateTransaction(
   String privateKey,
   String networkUrl,
   String transactionRequestJson,

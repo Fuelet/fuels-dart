@@ -8,8 +8,19 @@ import {
     WalletUnlocked,
 } from "fuels";
 
-function walletToJson(wallet: WalletUnlocked, mnemonic?: string) {
-    const data = {
+type AddressObject = {
+    bech32Address: string;
+    b256Address: string;
+};
+
+type WalletObject = {
+    address: AddressObject;
+    privateKey: string;
+    mnemonicPhrase?: string;
+};
+
+function walletToJson(wallet: WalletUnlocked, mnemonic?: string): WalletObject {
+    return {
         address: {
             bech32Address: wallet.address.toString(),
             b256Address: wallet.address.toB256(),
@@ -17,22 +28,20 @@ function walletToJson(wallet: WalletUnlocked, mnemonic?: string) {
         privateKey: wallet.privateKey,
         mnemonicPhrase: mnemonic,
     };
-
-    return data;
 }
 
 class WalletInterface {
-    generateNewWallet() {
+    generateNewWallet(): WalletObject {
         let mnemonic = Mnemonic.generate(16);
         return this.newWalletFromMnemonic(mnemonic);
     }
 
-    newWalletFromMnemonic(mnemonic: string) {
+    newWalletFromMnemonic(mnemonic: string): WalletObject {
         let wallet = Wallet.fromMnemonic(mnemonic);
         return walletToJson(wallet, mnemonic);
     }
 
-    newWalletFromPrivateKey(privateKey: string) {
+    newWalletFromPrivateKey(privateKey: string): WalletObject {
         let wallet = Wallet.fromPrivateKey(privateKey);
         return walletToJson(wallet);
     }
@@ -81,6 +90,18 @@ class WalletInterface {
         let response = await wallet.sendTransaction(transactionRequest);
 
         return response.id;
+    }
+
+    async simulateTransaction(
+        privateKey: string,
+        networkUrl: string,
+        transactionRequestJson: string
+    ): Promise<string> {
+        let wallet = Wallet.fromPrivateKey(privateKey, networkUrl);
+        let transactionRequest = JSON.parse(transactionRequestJson);
+        let response = await wallet.simulateTransaction(transactionRequest);
+
+        return JSON.stringify(response);
     }
 }
 

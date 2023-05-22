@@ -1,3 +1,5 @@
+import 'package:flutter_fuels/model/call_result.dart';
+
 abstract class BaseWallet {
   Future<Map> generateNewWallet();
 
@@ -27,6 +29,12 @@ abstract class BaseWallet {
   });
 
   Future<String> sendTransaction({
+    required String networkUrl,
+    required String privateKey,
+    required dynamic transactionRequest,
+  });
+
+  Future<CallResult> simulateTransaction({
     required String networkUrl,
     required String privateKey,
     required dynamic transactionRequest,

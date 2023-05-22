@@ -1,3 +1,5 @@
+import 'package:flutter_fuels/model/call_result.dart';
+
 import 'platform_impl/stub_wallet.dart'
     if (dart.library.io) 'platform_impl/mobile_wallet.dart'
     if (dart.library.html) 'platform_impl/web_wallet.dart';
@@ -74,7 +76,7 @@ class FuelWallet {
     required int gasPrice,
     required int gasLimit,
     required int maturity,
-  }) async {
+  }) {
     return _wallet.transfer(
       networkUrl: networkUrl,
       privateKey: privateKey,
@@ -89,7 +91,7 @@ class FuelWallet {
 
   Future<String> signMessage({
     required String message,
-  }) async {
+  }) {
     return _wallet.signMessage(
       networkUrl: networkUrl,
       privateKey: privateKey,
@@ -99,8 +101,18 @@ class FuelWallet {
 
   Future<String> sendTransaction({
     required dynamic transactionRequest,
-  }) async {
+  }) {
     return _wallet.sendTransaction(
+      networkUrl: networkUrl,
+      privateKey: privateKey,
+      transactionRequest: transactionRequest,
+    );
+  }
+
+  Future<CallResult> simulateTransaction({
+    required dynamic transactionRequest,
+  }) {
+    return _wallet.simulateTransaction(
       networkUrl: networkUrl,
       privateKey: privateKey,
       transactionRequest: transactionRequest,

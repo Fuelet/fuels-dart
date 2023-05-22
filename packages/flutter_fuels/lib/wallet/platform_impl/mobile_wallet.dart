@@ -1,3 +1,4 @@
+import 'package:flutter_fuels/model/call_result.dart';
 import 'package:fuels/fuels.dart';
 
 import '../../ffi/mobile_wrapper.dart';
@@ -127,6 +128,15 @@ class FuelWalletImpl extends BaseWallet {
     required String privateKey,
     required dynamic transactionRequest,
   }) {
+    // TODO: implement
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<CallResult> simulateTransaction(
+      {required String networkUrl,
+      required String privateKey,
+      required transactionRequest}) {
     // TODO: implement
     throw UnimplementedError();
   }
