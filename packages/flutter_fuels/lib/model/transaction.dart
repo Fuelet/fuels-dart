@@ -26,9 +26,6 @@ class TransactionScript extends Transaction {
   final int maturity;
   final int scriptLength;
   final int scriptDataLength;
-  final int inputsCount;
-  final int outputsCount;
-  final int witnessesCount;
   final String receiptsRoot;
   final String script;
   final String scriptData;
@@ -42,9 +39,6 @@ class TransactionScript extends Transaction {
       required this.maturity,
       required this.scriptLength,
       required this.scriptDataLength,
-      required this.inputsCount,
-      required this.outputsCount,
-      required this.witnessesCount,
       required this.receiptsRoot,
       required this.script,
       required this.scriptData,
@@ -59,9 +53,6 @@ class TransactionScript extends Transaction {
         maturity: data['maturity'],
         scriptLength: data['scriptLength'],
         scriptDataLength: data['scriptDataLength'],
-        inputsCount: data['inputsCount'],
-        outputsCount: data['outputsCount'],
-        witnessesCount: data['witnessesCount'],
         receiptsRoot: data['receiptsRoot'],
         script: data['script'],
         scriptData: data['scriptData'],
@@ -77,10 +68,6 @@ class TransactionCreate extends Transaction {
   final int maturity;
   final int bytecodeLength;
   final int bytecodeWitnessIndex;
-  final int storageSlotsCount;
-  final int inputsCount;
-  final int outputsCount;
-  final int witnessesCount;
   final String salt;
 
 // storageSlots: StorageSlot[];
@@ -94,10 +81,6 @@ class TransactionCreate extends Transaction {
       required this.maturity,
       required this.bytecodeLength,
       required this.bytecodeWitnessIndex,
-      required this.storageSlotsCount,
-      required this.inputsCount,
-      required this.outputsCount,
-      required this.witnessesCount,
       required this.salt,
       required this.inputs,
       required this.outputs,
@@ -110,10 +93,6 @@ class TransactionCreate extends Transaction {
         maturity: data['maturity'],
         bytecodeLength: data['bytecodeLength'],
         bytecodeWitnessIndex: data['bytecodeWitnessIndex'],
-        storageSlotsCount: data['storageSlotsCount'],
-        inputsCount: data['inputsCount'],
-        outputsCount: data['outputsCount'],
-        witnessesCount: data['witnessesCount'],
         salt: data['salt'],
         inputs: _parseInputs(data),
         outputs: _parseOutputs(data),
@@ -122,18 +101,13 @@ class TransactionCreate extends Transaction {
 }
 
 class TransactionMint extends Transaction {
-  final int outputsCount;
   final List<Output> outputs;
   final TxPointer txPointer;
 
-  TransactionMint(
-      {required this.outputsCount,
-      required this.outputs,
-      required this.txPointer});
+  TransactionMint({required this.outputs, required this.txPointer});
 
   factory TransactionMint.fromJson(Map<String, dynamic> data) {
     return TransactionMint(
-        outputsCount: data['outputsCount'],
         outputs: _parseOutputs(data),
         txPointer: TxPointer.fromJson(data['txPointer']));
   }
