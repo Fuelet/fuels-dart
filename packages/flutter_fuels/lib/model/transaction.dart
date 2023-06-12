@@ -1,5 +1,6 @@
 import 'package:flutter_fuels/model/input.dart';
 import 'package:flutter_fuels/model/output.dart';
+import 'package:flutter_fuels/model/storage_slot.dart';
 import 'package:flutter_fuels/model/tx_pointer.dart';
 import 'package:flutter_fuels/model/witness.dart';
 import 'package:flutter_fuels/utils/json_utils.dart';
@@ -69,8 +70,7 @@ class TransactionCreate extends Transaction {
   final int bytecodeLength;
   final int bytecodeWitnessIndex;
   final String salt;
-
-// storageSlots: StorageSlot[];
+  final List<StorageSlot> storageSlots;
   final List<Input> inputs;
   final List<Output> outputs;
   final List<Witness> witnesses;
@@ -82,6 +82,7 @@ class TransactionCreate extends Transaction {
       required this.bytecodeLength,
       required this.bytecodeWitnessIndex,
       required this.salt,
+      required this.storageSlots,
       required this.inputs,
       required this.outputs,
       required this.witnesses});
@@ -94,6 +95,7 @@ class TransactionCreate extends Transaction {
         bytecodeLength: data['bytecodeLength'],
         bytecodeWitnessIndex: data['bytecodeWitnessIndex'],
         salt: data['salt'],
+        storageSlots: _parseStorageSlots(data),
         inputs: _parseInputs(data),
         outputs: _parseOutputs(data),
         witnesses: _parseWitnesses(data));
@@ -126,4 +128,9 @@ List<Output> _parseOutputs(Map<String, dynamic> jsonData) {
 List<Witness> _parseWitnesses(Map<String, dynamic> jsonData) {
   List<dynamic> jsonWitnesses = jsonData['witnesses'];
   return jsonWitnesses.map((e) => Witness.fromJson(e)).toList();
+}
+
+List<StorageSlot> _parseStorageSlots(Map<String, dynamic> jsonData) {
+  List<dynamic> jsonSlots = jsonData['storageSlots'];
+  return jsonSlots.map((e) => StorageSlot.fromJson(e)).toList();
 }
