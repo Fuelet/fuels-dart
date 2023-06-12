@@ -8,3 +8,6 @@ external String bech32FromB256String(String b256Address);
 
 @JS('b256FromBech32String')
 external String b256FromBech32String(String bech32Address);
+
+@JS('transformTxRequest')
+external String transformTxRequest(String transactionRequestJson);

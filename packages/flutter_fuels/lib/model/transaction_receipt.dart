@@ -1,6 +1,39 @@
 import 'dart:typed_data';
 
-abstract class TransactionReceipt {}
+import 'package:flutter_fuels/utils/address_utils.dart';
+import 'package:flutter_fuels/utils/json_utils.dart';
+
+abstract class TransactionReceipt {
+  static TransactionReceipt fromJson(Map<String, dynamic> jsonReceipt) {
+    int type = jsonReceipt['type'];
+    switch (type) {
+      case 0:
+        return ReceiptCall.fromJson(jsonReceipt);
+      case 1:
+        return ReceiptReturn.fromJson(jsonReceipt);
+      case 2:
+        return ReceiptReturnData.fromJson(jsonReceipt);
+      case 3:
+        return ReceiptPanic.fromJson(jsonReceipt);
+      case 4:
+        return ReceiptRevert.fromJson(jsonReceipt);
+      case 5:
+        return ReceiptLog.fromJson(jsonReceipt);
+      case 6:
+        return ReceiptLogData.fromJson(jsonReceipt);
+      case 7:
+        return ReceiptTransfer.fromJson(jsonReceipt);
+      case 8:
+        return ReceiptTransferOut.fromJson(jsonReceipt);
+      case 9:
+        return ReceiptScriptResult.fromJson(jsonReceipt);
+      case 10:
+        return ReceiptMessageOut.fromJson(jsonReceipt);
+      default:
+        throw Exception('Cannot parse transaction receipt');
+    }
+  }
+}
 
 class ReceiptCall extends TransactionReceipt {
   final String from;
@@ -24,6 +57,19 @@ class ReceiptCall extends TransactionReceipt {
     required this.pc,
     required this.isField,
   });
+
+  factory ReceiptCall.fromJson(Map<String, dynamic> data) {
+    return ReceiptCall(
+        from: addHexPrefix(data['from']),
+        to: addHexPrefix(data['to']),
+        amount: parseBigInt(data['amount']),
+        assetId: addHexPrefix(data['assetId']),
+        gas: parseBigInt(data['gas']),
+        param1: parseBigInt(data['param1']),
+        param2: parseBigInt(data['param2']),
+        pc: parseBigInt(data['pc']),
+        isField: parseBigInt(data['is']));
+  }
 }
 
 class ReceiptReturn extends TransactionReceipt {
@@ -38,6 +84,14 @@ class ReceiptReturn extends TransactionReceipt {
     required this.pc,
     required this.isField,
   });
+
+  factory ReceiptReturn.fromJson(Map<String, dynamic> data) {
+    return ReceiptReturn(
+        id: addHexPrefix(data['id']),
+        val: parseBigInt(data['val']),
+        pc: parseBigInt(data['pc']),
+        isField: parseBigInt(data['is']));
+  }
 }
 
 class ReceiptReturnData extends TransactionReceipt {
@@ -56,6 +110,16 @@ class ReceiptReturnData extends TransactionReceipt {
     required this.pc,
     required this.isField,
   });
+
+  factory ReceiptReturnData.fromJson(Map<String, dynamic> data) {
+    return ReceiptReturnData(
+        id: addHexPrefix(data['id']),
+        ptr: parseBigInt(data['ptr']),
+        len: parseBigInt(data['len']),
+        digest: data['digest'],
+        pc: parseBigInt(data['pc']),
+        isField: parseBigInt(data['is']));
+  }
 }
 
 class ReceiptPanic extends TransactionReceipt {
@@ -72,6 +136,15 @@ class ReceiptPanic extends TransactionReceipt {
     required this.isField,
     required this.contractId,
   });
+
+  factory ReceiptPanic.fromJson(Map<String, dynamic> data) {
+    return ReceiptPanic(
+        id: addHexPrefix(data['id']),
+        reason: parseBigInt(data['reason']),
+        pc: parseBigInt(data['pc']),
+        isField: parseBigInt(data['is']),
+        contractId: data['contractId']);
+  }
 }
 
 class ReceiptRevert extends TransactionReceipt {
@@ -86,6 +159,14 @@ class ReceiptRevert extends TransactionReceipt {
     required this.pc,
     required this.isField,
   });
+
+  factory ReceiptRevert.fromJson(Map<String, dynamic> data) {
+    return ReceiptRevert(
+        id: addHexPrefix(data['id']),
+        val: parseBigInt(data['val']),
+        pc: parseBigInt(data['pc']),
+        isField: parseBigInt(data['is']));
+  }
 }
 
 class ReceiptLog extends TransactionReceipt {
@@ -106,6 +187,17 @@ class ReceiptLog extends TransactionReceipt {
     required this.pc,
     required this.isField,
   });
+
+  factory ReceiptLog.fromJson(Map<String, dynamic> data) {
+    return ReceiptLog(
+        id: addHexPrefix(data['id']),
+        val0: parseBigInt(data['val0']),
+        val1: parseBigInt(data['val1']),
+        val2: parseBigInt(data['val2']),
+        val3: parseBigInt(data['val3']),
+        pc: parseBigInt(data['pc']),
+        isField: parseBigInt(data['is']));
+  }
 }
 
 class ReceiptLogData extends TransactionReceipt {
@@ -128,6 +220,18 @@ class ReceiptLogData extends TransactionReceipt {
     required this.pc,
     required this.isField,
   });
+
+  factory ReceiptLogData.fromJson(Map<String, dynamic> data) {
+    return ReceiptLogData(
+        id: addHexPrefix(data['id']),
+        val0: parseBigInt(data['val0']),
+        val1: parseBigInt(data['val1']),
+        ptr: parseBigInt(data['ptr']),
+        len: parseBigInt(data['len']),
+        digest: data['digest'],
+        pc: parseBigInt(data['pc']),
+        isField: parseBigInt(data['is']));
+  }
 }
 
 class ReceiptTransfer extends TransactionReceipt {
@@ -145,6 +249,16 @@ class ReceiptTransfer extends TransactionReceipt {
       required this.assetId,
       required this.pc,
       required this.isField});
+
+  factory ReceiptTransfer.fromJson(Map<String, dynamic> data) {
+    return ReceiptTransfer(
+        from: addHexPrefix(data['from']),
+        to: addHexPrefix(data['to']),
+        amount: parseBigInt(data['amount']),
+        assetId: addHexPrefix(data['assetId']),
+        pc: parseBigInt(data['pc']),
+        isField: parseBigInt(data['is']));
+  }
 }
 
 class ReceiptTransferOut extends TransactionReceipt {
@@ -163,6 +277,16 @@ class ReceiptTransferOut extends TransactionReceipt {
     required this.pc,
     required this.isField,
   });
+
+  factory ReceiptTransferOut.fromJson(Map<String, dynamic> data) {
+    return ReceiptTransferOut(
+        from: addHexPrefix(data['from']),
+        to: addHexPrefix(data['to']),
+        amount: parseBigInt(data['amount']),
+        assetId: addHexPrefix(data['assetId']),
+        pc: parseBigInt(data['pc']),
+        isField: parseBigInt(data['is']));
+  }
 }
 
 class ReceiptScriptResult extends TransactionReceipt {
@@ -173,10 +297,15 @@ class ReceiptScriptResult extends TransactionReceipt {
     required this.result,
     required this.gasUsed,
   });
+
+  factory ReceiptScriptResult.fromJson(Map<String, dynamic> data) {
+    return ReceiptScriptResult(
+        result: parseBigInt(data['result']),
+        gasUsed: parseBigInt(data['gasUsed']));
+  }
 }
 
 class ReceiptMessageOut extends TransactionReceipt {
-  final String messageID;
   final String sender;
   final String recipient;
   final BigInt amount;
@@ -185,7 +314,6 @@ class ReceiptMessageOut extends TransactionReceipt {
   final Uint8List data;
 
   ReceiptMessageOut({
-    required this.messageID,
     required this.sender,
     required this.recipient,
     required this.amount,
@@ -193,4 +321,15 @@ class ReceiptMessageOut extends TransactionReceipt {
     required this.digest,
     required this.data,
   });
+
+  factory ReceiptMessageOut.fromJson(Map<String, dynamic> data) {
+    Map<String, int> uint8Arr = data['data'];
+    return ReceiptMessageOut(
+        sender: addHexPrefix(data['sender']),
+        recipient: addHexPrefix(data['recipient']),
+        amount: parseBigInt(data['amount']),
+        nonce: data['nonce'],
+        digest: data['digest'],
+        data: Uint8List.fromList(uint8Arr.values.toList()));
+  }
 }
