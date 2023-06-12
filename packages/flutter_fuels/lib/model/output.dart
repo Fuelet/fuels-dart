@@ -1,3 +1,4 @@
+import 'package:flutter_fuels/utils/address_utils.dart';
 import 'package:flutter_fuels/utils/json_utils.dart';
 
 abstract class Output {
@@ -31,9 +32,9 @@ class OutputCoin extends Output {
 
   factory OutputCoin.fromJson(Map<String, dynamic> data) {
     return OutputCoin(
-      to: data['to'],
+      to: addHexPrefix(data['to']),
       amount: parseBigInt(data['amount']),
-      assetId: data['assetId'],
+      assetId: addHexPrefix(data['assetId']),
     );
   }
 }
@@ -65,7 +66,8 @@ class OutputMessage extends Output {
 
   factory OutputMessage.fromJson(Map<String, dynamic> data) {
     return OutputMessage(
-        recipient: data['recipient'], amount: parseBigInt(data['amount']));
+        recipient: addHexPrefix(data['recipient']),
+        amount: parseBigInt(data['amount']));
   }
 }
 
@@ -78,9 +80,9 @@ class OutputChange extends Output {
 
   factory OutputChange.fromJson(Map<String, dynamic> data) {
     return OutputChange(
-        to: data['to'],
+        to: addHexPrefix(data['to']),
         amount: parseBigInt(data['amount']),
-        assetId: data['assetId']);
+        assetId: addHexPrefix(data['assetId']));
   }
 }
 
@@ -94,9 +96,9 @@ class OutputVariable extends Output {
 
   factory OutputVariable.fromJson(Map<String, dynamic> data) {
     return OutputVariable(
-        to: data['to'],
+        to: addHexPrefix(data['to']),
         amount: parseBigInt(data['amount']),
-        assetId: data['assetId']);
+        assetId: addHexPrefix(data['assetId']));
   }
 }
 
@@ -108,6 +110,7 @@ class OutputContractCreated extends Output {
 
   factory OutputContractCreated.fromJson(Map<String, dynamic> data) {
     return OutputContractCreated(
-        contractId: data['contractId'], stateRoot: data['stateRoot']);
+        contractId: addHexPrefix(data['contractId']),
+        stateRoot: data['stateRoot']);
   }
 }

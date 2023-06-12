@@ -1,4 +1,5 @@
 import 'package:flutter_fuels/model/transaction.dart';
+import 'package:flutter_fuels/utils/address_utils.dart';
 
 import 'platform_impl/stub_fuel_utils.dart'
     if (dart.library.io) 'platform_impl/mobile_fuel_utils.dart'
@@ -19,12 +20,5 @@ class FuelUtils {
   static Future<Transaction> transformTxRequest(
       dynamic transactionRequestLike) {
     return _utils.transformTxRequest(transactionRequestLike);
-  }
-
-  static String addHexPrefix(String address) {
-    if (address.startsWith('0x')) {
-      return address;
-    }
-    return '0x$address';
   }
 }

@@ -1,5 +1,6 @@
 import 'package:flutter_fuels/model/tx_pointer.dart';
 import 'package:flutter_fuels/model/utxo_id.dart';
+import 'package:flutter_fuels/utils/address_utils.dart';
 import 'package:flutter_fuels/utils/json_utils.dart';
 
 abstract class Input {
@@ -47,9 +48,9 @@ class InputCoin extends Input {
   factory InputCoin.fromJson(Map<String, dynamic> data) {
     return InputCoin(
         utxoID: UtxoId.fromJson(data['utxoID']),
-        owner: data['owner'],
+        owner: addHexPrefix(data['owner']),
         amount: parseBigInt(data['amount']),
-        assetId: data['assetId'],
+        assetId: addHexPrefix(data['assetId']),
         txPointer: TxPointer.fromJson(data['txPointer']),
         witnessIndex: data['witnessIndex'],
         maturity: data['maturity'],
@@ -80,7 +81,7 @@ class InputContract extends Input {
         balanceRoot: data['balanceRoot'],
         stateRoot: data['stateRoot'],
         txPointer: TxPointer.fromJson(data['txPointer']),
-        contractID: data['contractID']);
+        contractID: addHexPrefix(data['contractID']));
   }
 }
 
@@ -113,8 +114,8 @@ class InputMessage extends Input {
   factory InputMessage.fromJson(Map<String, dynamic> data) {
     return InputMessage(
         amount: parseBigInt(data['amount']),
-        sender: data['sender'],
-        recipient: data['recipient'],
+        sender: addHexPrefix(data['sender']),
+        recipient: addHexPrefix(data['recipient']),
         data: data['data'],
         nonce: parseBigInt(data['nonce']),
         witnessIndex: data['witnessIndex'],
