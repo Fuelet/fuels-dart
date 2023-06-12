@@ -4,6 +4,7 @@ import 'dart:typed_data';
 
 import 'package:flutter_fuels/model/call_result.dart';
 import 'package:flutter_fuels/model/transaction_receipt.dart';
+import 'package:flutter_fuels/utils/json_utils.dart';
 import 'package:js/js_util.dart';
 
 import 'base_wallet.dart';
@@ -132,97 +133,92 @@ class FuelWalletImpl extends BaseWallet {
           return ReceiptCall(
               from: receiptJson['from'],
               to: receiptJson['to'],
-              amount: _parseBigInt(receiptJson['amount']),
+              amount: parseBigInt(receiptJson['amount']),
               assetId: receiptJson['assetId'],
-              gas: _parseBigInt(receiptJson['gas']),
-              param1: _parseBigInt(receiptJson['param1']),
-              param2: _parseBigInt(receiptJson['param2']),
-              pc: _parseBigInt(receiptJson['pc']),
-              isField: _parseBigInt(receiptJson['is']));
+              gas: parseBigInt(receiptJson['gas']),
+              param1: parseBigInt(receiptJson['param1']),
+              param2: parseBigInt(receiptJson['param2']),
+              pc: parseBigInt(receiptJson['pc']),
+              isField: parseBigInt(receiptJson['is']));
         }
       case 1:
         return ReceiptReturn(
             id: receiptJson['id'],
-            val: _parseBigInt(receiptJson['val']),
-            pc: _parseBigInt(receiptJson['pc']),
-            isField: _parseBigInt(receiptJson['is']));
+            val: parseBigInt(receiptJson['val']),
+            pc: parseBigInt(receiptJson['pc']),
+            isField: parseBigInt(receiptJson['is']));
       case 2:
         return ReceiptReturnData(
             id: receiptJson['id'],
-            ptr: _parseBigInt(receiptJson['ptr']),
-            len: _parseBigInt(receiptJson['len']),
+            ptr: parseBigInt(receiptJson['ptr']),
+            len: parseBigInt(receiptJson['len']),
             digest: receiptJson['digest'],
-            pc: _parseBigInt(receiptJson['pc']),
-            isField: _parseBigInt(receiptJson['is']));
+            pc: parseBigInt(receiptJson['pc']),
+            isField: parseBigInt(receiptJson['is']));
       case 3:
         return ReceiptPanic(
             id: receiptJson['id'],
-            reason: _parseBigInt(receiptJson['reason']),
-            pc: _parseBigInt(receiptJson['pc']),
-            isField: _parseBigInt(receiptJson['is']),
+            reason: parseBigInt(receiptJson['reason']),
+            pc: parseBigInt(receiptJson['pc']),
+            isField: parseBigInt(receiptJson['is']),
             contractId: receiptJson['contractId']);
       case 4:
         return ReceiptRevert(
             id: receiptJson['id'],
-            val: _parseBigInt(receiptJson['val']),
-            pc: _parseBigInt(receiptJson['pc']),
-            isField: _parseBigInt(receiptJson['is']));
+            val: parseBigInt(receiptJson['val']),
+            pc: parseBigInt(receiptJson['pc']),
+            isField: parseBigInt(receiptJson['is']));
       case 5:
         return ReceiptLog(
             id: receiptJson['id'],
-            val0: _parseBigInt(receiptJson['val0']),
-            val1: _parseBigInt(receiptJson['val1']),
-            val2: _parseBigInt(receiptJson['val2']),
-            val3: _parseBigInt(receiptJson['val3']),
-            pc: _parseBigInt(receiptJson['pc']),
-            isField: _parseBigInt(receiptJson['is']));
+            val0: parseBigInt(receiptJson['val0']),
+            val1: parseBigInt(receiptJson['val1']),
+            val2: parseBigInt(receiptJson['val2']),
+            val3: parseBigInt(receiptJson['val3']),
+            pc: parseBigInt(receiptJson['pc']),
+            isField: parseBigInt(receiptJson['is']));
       case 6:
         return ReceiptLogData(
             id: receiptJson['id'],
-            val0: _parseBigInt(receiptJson['val0']),
-            val1: _parseBigInt(receiptJson['val1']),
-            ptr: _parseBigInt(receiptJson['ptr']),
-            len: _parseBigInt(receiptJson['len']),
+            val0: parseBigInt(receiptJson['val0']),
+            val1: parseBigInt(receiptJson['val1']),
+            ptr: parseBigInt(receiptJson['ptr']),
+            len: parseBigInt(receiptJson['len']),
             digest: receiptJson['digest'],
-            pc: _parseBigInt(receiptJson['pc']),
-            isField: _parseBigInt(receiptJson['is']));
+            pc: parseBigInt(receiptJson['pc']),
+            isField: parseBigInt(receiptJson['is']));
       case 7:
         return ReceiptTransfer(
             from: receiptJson['from'],
             to: receiptJson['to'],
-            amount: _parseBigInt(receiptJson['amount']),
+            amount: parseBigInt(receiptJson['amount']),
             assetId: receiptJson['assetId'],
-            pc: _parseBigInt(receiptJson['pc']),
-            isField: _parseBigInt(receiptJson['is']));
+            pc: parseBigInt(receiptJson['pc']),
+            isField: parseBigInt(receiptJson['is']));
       case 8:
         return ReceiptTransferOut(
             from: receiptJson['from'],
             to: receiptJson['to'],
-            amount: _parseBigInt(receiptJson['amount']),
+            amount: parseBigInt(receiptJson['amount']),
             assetId: receiptJson['assetId'],
-            pc: _parseBigInt(receiptJson['pc']),
-            isField: _parseBigInt(receiptJson['is']));
+            pc: parseBigInt(receiptJson['pc']),
+            isField: parseBigInt(receiptJson['is']));
       case 9:
         return ReceiptScriptResult(
-            result: _parseBigInt(receiptJson['result']),
-            gasUsed: _parseBigInt(receiptJson['gasUsed']));
+            result: parseBigInt(receiptJson['result']),
+            gasUsed: parseBigInt(receiptJson['gasUsed']));
       case 10:
         Map<String, int> uint8Arr = receiptJson['data'];
         return ReceiptMessageOut(
             messageID: receiptJson['messageID'],
             sender: receiptJson['sender'],
             recipient: receiptJson['recipient'],
-            amount: _parseBigInt(receiptJson['amount']),
+            amount: parseBigInt(receiptJson['amount']),
             nonce: receiptJson['nonce'],
             digest: receiptJson['digest'],
             data: Uint8List.fromList(uint8Arr.values.toList()));
       default:
         throw Exception('Cannot parse transaction receipt');
     }
-  }
-
-  static BigInt _parseBigInt(String bn) {
-    String withoutPrefix = bn.startsWith('0x') ? bn.substring(2) : bn;
-    return BigInt.parse(withoutPrefix, radix: 16);
   }
 }
