@@ -2,10 +2,10 @@ import 'dart:convert';
 
 import 'package:flutter_fuels/model/transaction.dart';
 
-import 'base_bech_address_utils.dart';
+import 'base_fuel_utils.dart';
 import 'js_interop/js_fuels_utils.dart' as js_utils;
 
-class BechAddressUtilsImpl extends BaseBechAddressUtils {
+class FuelUtilsImpl extends BaseFuelUtils {
   @override
   Future<String> bech32FromB256String(String address) {
     return Future.value(js_utils.bech32FromB256String(address));

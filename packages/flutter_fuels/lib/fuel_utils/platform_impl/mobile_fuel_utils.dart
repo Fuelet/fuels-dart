@@ -2,9 +2,9 @@ import 'package:flutter_fuels/model/transaction.dart';
 import 'package:fuels/fuels.dart' as fuels;
 
 import '../../ffi/mobile_wrapper.dart';
-import 'base_bech_address_utils.dart';
+import 'base_fuel_utils.dart';
 
-class BechAddressUtilsImpl extends BaseBechAddressUtils {
+class FuelUtilsImpl extends BaseFuelUtils {
   static final fuels.Fuels _bridge = createLib();
 
   @override

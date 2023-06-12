@@ -1,8 +1,8 @@
 import 'package:flutter_fuels/model/transaction.dart';
 
-import 'base_bech_address_utils.dart';
+import 'base_fuel_utils.dart';
 
-class BechAddressUtilsImpl extends BaseBechAddressUtils {
+class FuelUtilsImpl extends BaseFuelUtils {
   @override
   Future<String> bech32FromB256String(String address) {
     throw Exception('Stub implementation');
