@@ -1,7 +1,7 @@
 import 'package:flutter_fuels/utils/json_utils.dart';
 
 abstract class Output {
-  static fromJson(Map<String, dynamic> jsonOutput) {
+  static Output fromJson(Map<String, dynamic> jsonOutput) {
     int outputType = jsonOutput['type'];
     switch (outputType) {
       case 0:
