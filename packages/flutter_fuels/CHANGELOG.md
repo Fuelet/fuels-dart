@@ -1,3 +1,8 @@
+## 0.0.18
+
+ - **FIX**: fix compiler warning.
+ - **FEAT**: transaction model ([#14](https://github.com/Fuelet/fuels-dart/issues/14)).
+
 ## 0.0.17
 
  - **FEAT**: add transaction simulation to web wallet.
