@@ -1,3 +1,5 @@
+import 'package:flutter_fuels/model/transaction.dart';
+
 import 'platform_impl/stub_bech_address_utils.dart'
     if (dart.library.io) 'platform_impl/mobile_bech_address_utils.dart'
     if (dart.library.html) 'platform_impl/web_bech_address_utils.dart';
@@ -12,6 +14,11 @@ class FuelUtils {
 
   static Future<String> b256FromBech32String(String bechAddress) {
     return _utils.b256FromBech32String(bechAddress).then(addHexPrefix);
+  }
+
+  static Future<Transaction> transformTxRequest(
+      dynamic transactionRequestLike) {
+    return _utils.transformTxRequest(transactionRequestLike);
   }
 
   static String addHexPrefix(String address) {

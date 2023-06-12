@@ -1,12 +1,16 @@
-import { Mnemonic } from "@fuel-ts/mnemonic";
+import {Mnemonic} from "@fuel-ts/mnemonic";
 import {
     Address,
     Bech32Address,
     toB256,
     toBech32,
+    Transaction,
+    TransactionRequest,
+    TransactionRequestLike,
     Wallet,
     WalletUnlocked,
 } from "fuels";
+import {transactionRequestify} from "@fuel-ts/providers";
 
 type AddressObject = {
     bech32Address: string;
@@ -112,6 +116,12 @@ class FuelsUtils {
 
     b256FromBech32String(bech32Address: Bech32Address): string {
         return toB256(bech32Address);
+    }
+
+    transformTxRequest(transactionRequestJson: string): Transaction {
+        let txRequestLike: TransactionRequestLike = JSON.parse(transactionRequestJson);
+        let txRequest: TransactionRequest = transactionRequestify(txRequestLike);
+        return txRequest.toTransaction();
     }
 }
 

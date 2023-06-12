@@ -1,3 +1,4 @@
+import 'package:flutter_fuels/model/transaction.dart';
 import 'package:fuels/fuels.dart' as fuels;
 
 import '../../ffi/mobile_wrapper.dart';
@@ -22,5 +23,11 @@ class BechAddressUtilsImpl extends BaseBechAddressUtils {
       s: address,
     );
     return addressModel.toB256String();
+  }
+
+  @override
+  Future<Transaction> transformTxRequest(dynamic transactionRequestLike) {
+    // TODO: implement
+    throw UnimplementedError();
   }
 }
