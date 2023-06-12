@@ -1,7 +1,22 @@
 import 'package:flutter_fuels/model/tx_pointer.dart';
 import 'package:flutter_fuels/model/utxo_id.dart';
+import 'package:flutter_fuels/utils/json_utils.dart';
 
-abstract class Input {}
+abstract class Input {
+  static Input fromJson(Map<String, dynamic> jsonInput) {
+    int inputType = jsonInput['type'];
+    switch (inputType) {
+      case 0:
+        return InputCoin.fromJson(jsonInput);
+      case 1:
+        return InputContract.fromJson(jsonInput);
+      case 2:
+        return InputMessage.fromJson(jsonInput);
+      default:
+        throw Exception('Cannot parse transaction input');
+    }
+  }
+}
 
 class InputCoin extends Input {
   final UtxoId utxoID;
@@ -17,17 +32,32 @@ class InputCoin extends Input {
   final String predicateData;
 
   InputCoin(
-      this.utxoID,
-      this.owner,
-      this.amount,
-      this.assetId,
-      this.txPointer,
-      this.witnessIndex,
-      this.maturity,
-      this.predicateLength,
-      this.predicateDataLength,
-      this.predicate,
-      this.predicateData);
+      {required this.utxoID,
+      required this.owner,
+      required this.amount,
+      required this.assetId,
+      required this.txPointer,
+      required this.witnessIndex,
+      required this.maturity,
+      required this.predicateLength,
+      required this.predicateDataLength,
+      required this.predicate,
+      required this.predicateData});
+
+  factory InputCoin.fromJson(Map<String, dynamic> data) {
+    return InputCoin(
+        utxoID: UtxoId.fromJson(data['utxoID']),
+        owner: data['owner'],
+        amount: parseBigInt(data['amount']),
+        assetId: data['assetId'],
+        txPointer: TxPointer.fromJson(data['txPointer']),
+        witnessIndex: data['witnessIndex'],
+        maturity: data['maturity'],
+        predicateLength: data['predicateLength'],
+        predicateDataLength: data['predicateDataLength'],
+        predicate: data['predicate'],
+        predicateData: data['predicateData']);
+  }
 }
 
 class InputContract extends Input {
@@ -37,8 +67,21 @@ class InputContract extends Input {
   final TxPointer txPointer;
   final String contractID;
 
-  InputContract(this.utxoID, this.balanceRoot, this.stateRoot, this.txPointer,
-      this.contractID);
+  InputContract(
+      {required this.utxoID,
+      required this.balanceRoot,
+      required this.stateRoot,
+      required this.txPointer,
+      required this.contractID});
+
+  factory InputContract.fromJson(Map<String, dynamic> data) {
+    return InputContract(
+        utxoID: UtxoId.fromJson(data['utxoID']),
+        balanceRoot: data['balanceRoot'],
+        stateRoot: data['stateRoot'],
+        txPointer: TxPointer.fromJson(data['txPointer']),
+        contractID: data['contractID']);
+  }
 }
 
 class InputMessage extends Input {
@@ -55,15 +98,30 @@ class InputMessage extends Input {
   final String predicateData;
 
   InputMessage(
-      this.amount,
-      this.sender,
-      this.recipient,
-      this.data,
-      this.nonce,
-      this.witnessIndex,
-      this.dataLength,
-      this.predicateLength,
-      this.predicateDataLength,
-      this.predicate,
-      this.predicateData);
+      {required this.amount,
+      required this.sender,
+      required this.recipient,
+      required this.data,
+      required this.nonce,
+      required this.witnessIndex,
+      required this.dataLength,
+      required this.predicateLength,
+      required this.predicateDataLength,
+      required this.predicate,
+      required this.predicateData});
+
+  factory InputMessage.fromJson(Map<String, dynamic> data) {
+    return InputMessage(
+        amount: parseBigInt(data['amount']),
+        sender: data['sender'],
+        recipient: data['recipient'],
+        data: data['data'],
+        nonce: parseBigInt(data['nonce']),
+        witnessIndex: data['witnessIndex'],
+        dataLength: data['dataLength'],
+        predicateLength: data['predicateLength'],
+        predicateDataLength: data['predicateDataLength'],
+        predicate: data['predicate'],
+        predicateData: data['predicateData']);
+  }
 }
