@@ -10,4 +10,4 @@ external String bech32FromB256String(String b256Address);
 external String b256FromBech32String(String bech32Address);
 
 @JS('transformTxRequest')
-external dynamic transformTxRequest(String transactionRequestJson);
+external String transformTxRequest(String transactionRequestJson);

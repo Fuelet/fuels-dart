@@ -5,8 +5,10 @@ import {
     toB256,
     toBech32,
     Transaction,
+    TransactionCreate,
     TransactionRequest,
     TransactionRequestLike,
+    TransactionScript,
     Wallet,
     WalletUnlocked,
 } from "fuels";
@@ -118,10 +120,11 @@ class FuelsUtils {
         return toB256(bech32Address);
     }
 
-    transformTxRequest(transactionRequestJson: string): Transaction {
+    transformTxRequest(transactionRequestJson: string): string {
         let txRequestLike: TransactionRequestLike = JSON.parse(transactionRequestJson);
         let txRequest: TransactionRequest = transactionRequestify(txRequestLike);
-        return txRequest.toTransaction();
+        let tx: TransactionCreate | TransactionScript = txRequest.toTransaction();
+        return JSON.stringify(tx);
     }
 }
 
