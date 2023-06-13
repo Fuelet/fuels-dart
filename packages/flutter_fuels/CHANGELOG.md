@@ -1,3 +1,7 @@
+## 0.0.19
+
+ - **FEAT**: add const modifiers to model constructors.
+
 ## 0.0.18
 
  - **FIX**: fix compiler warning.
