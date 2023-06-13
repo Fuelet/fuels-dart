@@ -4,6 +4,8 @@ import 'package:flutter_fuels/utils/address_utils.dart';
 import 'package:flutter_fuels/utils/json_utils.dart';
 
 abstract class Input {
+  const Input();
+
   static Input fromJson(Map<String, dynamic> jsonInput) {
     int inputType = jsonInput['type'];
     switch (inputType) {
@@ -32,7 +34,7 @@ class InputCoin extends Input {
   final String predicate;
   final String predicateData;
 
-  InputCoin(
+  const InputCoin(
       {required this.utxoID,
       required this.owner,
       required this.amount,
@@ -68,7 +70,7 @@ class InputContract extends Input {
   final TxPointer txPointer;
   final String contractID;
 
-  InputContract(
+  const InputContract(
       {required this.utxoID,
       required this.balanceRoot,
       required this.stateRoot,
@@ -98,7 +100,7 @@ class InputMessage extends Input {
   final String predicate;
   final String predicateData;
 
-  InputMessage(
+  const InputMessage(
       {required this.amount,
       required this.sender,
       required this.recipient,

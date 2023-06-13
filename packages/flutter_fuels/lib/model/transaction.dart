@@ -6,6 +6,8 @@ import 'package:flutter_fuels/model/witness.dart';
 import 'package:flutter_fuels/utils/json_utils.dart';
 
 abstract class Transaction {
+  const Transaction();
+
   static Transaction fromJson(Map<String, dynamic> jsonTransaction) {
     int txType = jsonTransaction['type'];
     switch (txType) {
@@ -34,7 +36,7 @@ class TransactionScript extends Transaction {
   final List<Output> outputs;
   final List<Witness> witnesses;
 
-  TransactionScript(
+  const TransactionScript(
       {required this.gasPrice,
       required this.gasLimit,
       required this.maturity,
@@ -75,7 +77,7 @@ class TransactionCreate extends Transaction {
   final List<Output> outputs;
   final List<Witness> witnesses;
 
-  TransactionCreate(
+  const TransactionCreate(
       {required this.gasPrice,
       required this.gasLimit,
       required this.maturity,
@@ -106,7 +108,7 @@ class TransactionMint extends Transaction {
   final List<Output> outputs;
   final TxPointer txPointer;
 
-  TransactionMint({required this.outputs, required this.txPointer});
+  const TransactionMint({required this.outputs, required this.txPointer});
 
   factory TransactionMint.fromJson(Map<String, dynamic> data) {
     return TransactionMint(

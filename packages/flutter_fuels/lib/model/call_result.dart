@@ -3,7 +3,7 @@ import 'transaction_receipt.dart';
 class CallResult {
   final List<TransactionReceipt> receipts;
 
-  CallResult({required this.receipts});
+  const CallResult({required this.receipts});
 
   factory CallResult.fromJson(Map<String, dynamic> data) {
     List<dynamic> receiptsJsonList = data['receipts'];

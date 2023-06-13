@@ -2,6 +2,8 @@ import 'package:flutter_fuels/utils/address_utils.dart';
 import 'package:flutter_fuels/utils/json_utils.dart';
 
 abstract class Output {
+  const Output();
+
   static Output fromJson(Map<String, dynamic> jsonOutput) {
     int outputType = jsonOutput['type'];
     switch (outputType) {
@@ -28,7 +30,7 @@ class OutputCoin extends Output {
   final BigInt amount;
   final String assetId;
 
-  OutputCoin({required this.to, required this.amount, required this.assetId});
+  const OutputCoin({required this.to, required this.amount, required this.assetId});
 
   factory OutputCoin.fromJson(Map<String, dynamic> data) {
     return OutputCoin(
@@ -44,7 +46,7 @@ class OutputContract extends Output {
   final String balanceRoot;
   final String stateRoot;
 
-  OutputContract(
+  const OutputContract(
       {required this.inputIndex,
       required this.balanceRoot,
       required this.stateRoot});
@@ -62,7 +64,7 @@ class OutputMessage extends Output {
   final String recipient;
   final BigInt amount;
 
-  OutputMessage({required this.recipient, required this.amount});
+  const OutputMessage({required this.recipient, required this.amount});
 
   factory OutputMessage.fromJson(Map<String, dynamic> data) {
     return OutputMessage(
@@ -76,7 +78,7 @@ class OutputChange extends Output {
   final BigInt amount;
   final String assetId;
 
-  OutputChange({required this.to, required this.amount, required this.assetId});
+  const OutputChange({required this.to, required this.amount, required this.assetId});
 
   factory OutputChange.fromJson(Map<String, dynamic> data) {
     return OutputChange(
@@ -91,7 +93,7 @@ class OutputVariable extends Output {
   final BigInt amount;
   final String assetId;
 
-  OutputVariable(
+  const OutputVariable(
       {required this.to, required this.amount, required this.assetId});
 
   factory OutputVariable.fromJson(Map<String, dynamic> data) {
@@ -106,7 +108,7 @@ class OutputContractCreated extends Output {
   final String contractId;
   final String stateRoot;
 
-  OutputContractCreated({required this.contractId, required this.stateRoot});
+  const OutputContractCreated({required this.contractId, required this.stateRoot});
 
   factory OutputContractCreated.fromJson(Map<String, dynamic> data) {
     return OutputContractCreated(

@@ -4,6 +4,8 @@ import 'package:flutter_fuels/utils/address_utils.dart';
 import 'package:flutter_fuels/utils/json_utils.dart';
 
 abstract class TransactionReceipt {
+  const TransactionReceipt();
+
   static TransactionReceipt fromJson(Map<String, dynamic> jsonReceipt) {
     int type = jsonReceipt['type'];
     switch (type) {
@@ -46,7 +48,7 @@ class ReceiptCall extends TransactionReceipt {
   final BigInt pc;
   final BigInt isField;
 
-  ReceiptCall({
+  const ReceiptCall({
     required this.from,
     required this.to,
     required this.amount,
@@ -78,7 +80,7 @@ class ReceiptReturn extends TransactionReceipt {
   final BigInt pc;
   final BigInt isField;
 
-  ReceiptReturn({
+  const ReceiptReturn({
     required this.id,
     required this.val,
     required this.pc,
@@ -102,7 +104,7 @@ class ReceiptReturnData extends TransactionReceipt {
   final BigInt pc;
   final BigInt isField;
 
-  ReceiptReturnData({
+  const ReceiptReturnData({
     required this.id,
     required this.ptr,
     required this.len,
@@ -129,7 +131,7 @@ class ReceiptPanic extends TransactionReceipt {
   final BigInt isField;
   final String contractId;
 
-  ReceiptPanic({
+  const ReceiptPanic({
     required this.id,
     required this.reason,
     required this.pc,
@@ -153,7 +155,7 @@ class ReceiptRevert extends TransactionReceipt {
   final BigInt pc;
   final BigInt isField;
 
-  ReceiptRevert({
+  const ReceiptRevert({
     required this.id,
     required this.val,
     required this.pc,
@@ -178,7 +180,7 @@ class ReceiptLog extends TransactionReceipt {
   final BigInt pc;
   final BigInt isField;
 
-  ReceiptLog({
+  const ReceiptLog({
     required this.id,
     required this.val0,
     required this.val1,
@@ -210,7 +212,7 @@ class ReceiptLogData extends TransactionReceipt {
   final BigInt pc;
   final BigInt isField;
 
-  ReceiptLogData({
+  const ReceiptLogData({
     required this.id,
     required this.val0,
     required this.val1,
@@ -242,7 +244,7 @@ class ReceiptTransfer extends TransactionReceipt {
   final BigInt pc;
   final BigInt isField;
 
-  ReceiptTransfer(
+  const ReceiptTransfer(
       {required this.from,
       required this.to,
       required this.amount,
@@ -269,7 +271,7 @@ class ReceiptTransferOut extends TransactionReceipt {
   final BigInt pc;
   final BigInt isField;
 
-  ReceiptTransferOut({
+  const ReceiptTransferOut({
     required this.from,
     required this.to,
     required this.amount,
@@ -293,7 +295,7 @@ class ReceiptScriptResult extends TransactionReceipt {
   final BigInt result;
   final BigInt gasUsed;
 
-  ReceiptScriptResult({
+  const ReceiptScriptResult({
     required this.result,
     required this.gasUsed,
   });
@@ -313,7 +315,7 @@ class ReceiptMessageOut extends TransactionReceipt {
   final String digest;
   final Uint8List data;
 
-  ReceiptMessageOut({
+  const ReceiptMessageOut({
     required this.sender,
     required this.recipient,
     required this.amount,
