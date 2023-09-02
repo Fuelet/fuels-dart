@@ -2,13 +2,12 @@ use std::str::FromStr;
 
 use flutter_rust_bridge::RustOpaque;
 use fuel_crypto::SecretKey;
+use fuel_tx::Address;
 use fuels::prelude::{AssetId, generate_mnemonic_phrase};
 pub use fuels::prelude::{Account, Bech32Address as NativeBech32Address, Provider as NativeProvider, ViewOnlyAccount, WalletUnlocked as NativeWalletUnlocked};
-use fuels::tx::Address;
 use fuels_accounts::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
 
 use crate::model::balance::{Balance, from_hash_map};
-use crate::model::pagination::{PaginationRequest, TransactionsPaginatedResult};
 use crate::model::response::TransferResponse;
 use crate::model::transaction::TxParameters;
 
@@ -90,13 +89,6 @@ impl WalletUnlocked {
     }
 
     #[tokio::main]
-    pub async fn get_transactions(&self, request: PaginationRequest) -> TransactionsPaginatedResult {
-        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
-        let result = native_wallet_unlocked.get_transactions(request.into()).await;
-        result.unwrap().into()
-    }
-
-    #[tokio::main]
     pub async fn transfer(
         &self,
         to: Bech32Address,
@@ -108,7 +100,7 @@ impl WalletUnlocked {
         let asset_id = AssetId::from_str(&asset).unwrap();
         let result = native_wallet_unlocked.transfer(&*to.native, amount, asset_id, tx_parameters.into()).await;
         let (tx_id, receipts) = result.unwrap();
-        TransferResponse { tx_id, receipts: receipts.iter().map(Into::into).collect() }
+        TransferResponse { tx_id: tx_id.to_string(), receipts: receipts.iter().map(Into::into).collect() }
     }
 }
 

@@ -62,15 +62,6 @@ pub extern "C" fn wire_get_balances__method__WalletUnlocked(
 }
 
 #[no_mangle]
-pub extern "C" fn wire_get_transactions__method__WalletUnlocked(
-    port_: i64,
-    that: *mut wire_WalletUnlocked,
-    request: *mut wire_PaginationRequest,
-) {
-    wire_get_transactions__method__WalletUnlocked_impl(port_, that, request)
-}
-
-#[no_mangle]
 pub extern "C" fn wire_transfer__method__WalletUnlocked(
     port_: i64,
     that: *mut wire_WalletUnlocked,
@@ -129,11 +120,6 @@ pub extern "C" fn new_NativeBech32Address() -> wire_NativeBech32Address {
 #[no_mangle]
 pub extern "C" fn new_box_autoadd_bech_32_address_0() -> *mut wire_Bech32Address {
     support::new_leak_box_ptr(wire_Bech32Address::new_with_null_ptr())
-}
-
-#[no_mangle]
-pub extern "C" fn new_box_autoadd_pagination_request_0() -> *mut wire_PaginationRequest {
-    support::new_leak_box_ptr(wire_PaginationRequest::new_with_null_ptr())
 }
 
 #[no_mangle]
@@ -203,12 +189,6 @@ impl Wire2Api<Bech32Address> for *mut wire_Bech32Address {
         Wire2Api::<Bech32Address>::wire2api(*wrap).into()
     }
 }
-impl Wire2Api<PaginationRequest> for *mut wire_PaginationRequest {
-    fn wire2api(self) -> PaginationRequest {
-        let wrap = unsafe { support::box_from_leak_ptr(self) };
-        Wire2Api::<PaginationRequest>::wire2api(*wrap).into()
-    }
-}
 impl Wire2Api<Provider> for *mut wire_Provider {
     fn wire2api(self) -> Provider {
         let wrap = unsafe { support::box_from_leak_ptr(self) };
@@ -228,15 +208,6 @@ impl Wire2Api<WalletUnlocked> for *mut wire_WalletUnlocked {
     }
 }
 
-impl Wire2Api<PaginationRequest> for wire_PaginationRequest {
-    fn wire2api(self) -> PaginationRequest {
-        PaginationRequest {
-            cursor: self.cursor.wire2api(),
-            results: self.results.wire2api(),
-            direction: self.direction.wire2api(),
-        }
-    }
-}
 impl Wire2Api<Provider> for wire_Provider {
     fn wire2api(self) -> Provider {
         Provider {
@@ -262,7 +233,6 @@ impl Wire2Api<Vec<u8>> for *mut wire_uint_8_list {
         }
     }
 }
-
 impl Wire2Api<WalletUnlocked> for wire_WalletUnlocked {
     fn wire2api(self) -> WalletUnlocked {
         WalletUnlocked {
@@ -288,14 +258,6 @@ pub struct wire_Bech32Address {
 
 #[repr(C)]
 #[derive(Clone)]
-pub struct wire_PaginationRequest {
-    cursor: *mut wire_uint_8_list,
-    results: usize,
-    direction: i32,
-}
-
-#[repr(C)]
-#[derive(Clone)]
 pub struct wire_Provider {
     node_url: *mut wire_uint_8_list,
 }
@@ -305,7 +267,7 @@ pub struct wire_Provider {
 pub struct wire_TxParameters {
     gas_price: u64,
     gas_limit: u64,
-    maturity: u64,
+    maturity: u32,
 }
 
 #[repr(C)]
@@ -352,22 +314,6 @@ impl NewWithNullPtr for wire_Bech32Address {
 }
 
 impl Default for wire_Bech32Address {
-    fn default() -> Self {
-        Self::new_with_null_ptr()
-    }
-}
-
-impl NewWithNullPtr for wire_PaginationRequest {
-    fn new_with_null_ptr() -> Self {
-        Self {
-            cursor: core::ptr::null_mut(),
-            results: Default::default(),
-            direction: Default::default(),
-        }
-    }
-}
-
-impl Default for wire_PaginationRequest {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }

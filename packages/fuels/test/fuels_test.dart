@@ -6,7 +6,7 @@ import 'dart:io';
 import 'package:fuels/fuels.dart';
 import 'package:test/test.dart';
 
-const betaApiUrl = 'https://beta-3.fuel.network';
+const betaApiUrl = 'https://beta-4.fuel.network';
 const testWalletBechAddress =
     'fuel1lcghw4e6gucsw4hj0me9cu3fkhdg65gf5ujck2tlywn8drrcedqq2htmt3';
 const testWalletPrivateKey =
@@ -90,21 +90,6 @@ void main() {
     var balances = await wallet.getBalances();
     for (var i = 0; i < balances.length; i++) {
       print('${balances[i].asset} -> ${balances[i].amount}');
-    }
-  });
-
-  test('test get transactions', () async {
-    // TODO: do not depend on external state and add assertions
-    WalletUnlocked wallet = await importWalletWithPK(testWalletPrivateKey);
-    var request =
-        const PaginationRequest(results: 10, direction: PageDirection.Forward);
-    var response = await wallet.getTransactions(request: request);
-    print(
-        'cursor: ${response.cursor}, hasNextPage: ${response.hasNextPage}, hasPrevPage: ${response.hasPreviousPage}');
-    for (var i = 0; i < response.results.length; i++) {
-      var tx = response.results[i];
-      print('\nTransaction #$i '
-          '\nblockId: ${tx.blockId}, status: ${tx.status}, time: ${tx.time}, tx: ${tx.transaction}');
     }
   });
 

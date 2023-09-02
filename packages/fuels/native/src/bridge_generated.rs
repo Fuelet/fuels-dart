@@ -20,26 +20,11 @@ use std::sync::Arc;
 // Section: imports
 
 use crate::model::balance::Balance;
-use crate::model::pagination::PageDirection;
-use crate::model::pagination::PaginationRequest;
-use crate::model::pagination::TransactionsPaginatedResult;
-use crate::model::receipt::InstructionResult;
+use crate::model::receipt::PanicInstruction;
 use crate::model::receipt::Receipt;
 use crate::model::receipt::ScriptExecutionResult;
 use crate::model::response::TransferResponse;
-use crate::model::transaction::Create;
-use crate::model::transaction::Input;
-use crate::model::transaction::Mint;
-use crate::model::transaction::Output;
-use crate::model::transaction::Script;
-use crate::model::transaction::StorageSlot;
-use crate::model::transaction::Transaction;
-use crate::model::transaction::TransactionResponse;
-use crate::model::transaction::TransactionStatus;
 use crate::model::transaction::TxParameters;
-use crate::model::transaction::TxPointer;
-use crate::model::transaction::UtxoId;
-use crate::model::transaction::Witness;
 
 // Section: wire functions
 
@@ -181,24 +166,6 @@ fn wire_get_balances__method__WalletUnlocked_impl(
         },
     )
 }
-fn wire_get_transactions__method__WalletUnlocked_impl(
-    port_: MessagePort,
-    that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
-    request: impl Wire2Api<PaginationRequest> + UnwindSafe,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
-        WrapInfo {
-            debug_name: "get_transactions__method__WalletUnlocked",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || {
-            let api_that = that.wire2api();
-            let api_request = request.wire2api();
-            move |task_callback| Ok(WalletUnlocked::get_transactions(&api_that, api_request))
-        },
-    )
-}
 fn wire_transfer__method__WalletUnlocked_impl(
     port_: MessagePort,
     that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
@@ -334,22 +301,11 @@ where
     }
 }
 
-impl Wire2Api<i32> for i32 {
-    fn wire2api(self) -> i32 {
+impl Wire2Api<u32> for u32 {
+    fn wire2api(self) -> u32 {
         self
     }
 }
-
-impl Wire2Api<PageDirection> for i32 {
-    fn wire2api(self) -> PageDirection {
-        match self {
-            0 => PageDirection::Forward,
-            1 => PageDirection::Backward,
-            _ => unreachable!("Invalid variant for PageDirection: {}", self),
-        }
-    }
-}
-
 impl Wire2Api<u64> for u64 {
     fn wire2api(self) -> u64 {
         self
@@ -357,12 +313,6 @@ impl Wire2Api<u64> for u64 {
 }
 impl Wire2Api<u8> for u8 {
     fn wire2api(self) -> u8 {
-        self
-    }
-}
-
-impl Wire2Api<usize> for usize {
-    fn wire2api(self) -> usize {
         self
     }
 }
@@ -383,196 +333,13 @@ impl support::IntoDart for Bech32Address {
 }
 impl support::IntoDartExceptPrimitive for Bech32Address {}
 
-impl support::IntoDart for Create {
+impl support::IntoDart for PanicInstruction {
     fn into_dart(self) -> support::DartAbi {
-        vec![
-            self.gas_price.into_dart(),
-            self.gas_limit.into_dart(),
-            self.maturity.into_dart(),
-            self.bytecode_length.into_dart(),
-            self.bytecode_witness_index.into_dart(),
-            self.storage_slots.into_dart(),
-            self.inputs.into_dart(),
-            self.outputs.into_dart(),
-            self.witnesses.into_dart(),
-            self.salt.into_dart(),
-        ]
-        .into_dart()
+        vec![self.reason.into_dart(), self.instruction.into_dart()].into_dart()
     }
 }
-impl support::IntoDartExceptPrimitive for Create {}
+impl support::IntoDartExceptPrimitive for PanicInstruction {}
 
-impl support::IntoDart for Input {
-    fn into_dart(self) -> support::DartAbi {
-        match self {
-            Self::CoinSigned {
-                utxo_id,
-                owner,
-                amount,
-                asset_id,
-                tx_pointer,
-                witness_index,
-                maturity,
-            } => vec![
-                0.into_dart(),
-                utxo_id.into_dart(),
-                owner.into_dart(),
-                amount.into_dart(),
-                asset_id.into_dart(),
-                tx_pointer.into_dart(),
-                witness_index.into_dart(),
-                maturity.into_dart(),
-            ],
-            Self::CoinPredicate {
-                utxo_id,
-                owner,
-                amount,
-                asset_id,
-                tx_pointer,
-                maturity,
-                predicate,
-                predicate_data,
-            } => vec![
-                1.into_dart(),
-                utxo_id.into_dart(),
-                owner.into_dart(),
-                amount.into_dart(),
-                asset_id.into_dart(),
-                tx_pointer.into_dart(),
-                maturity.into_dart(),
-                predicate.into_dart(),
-                predicate_data.into_dart(),
-            ],
-            Self::Contract {
-                utxo_id,
-                balance_root,
-                state_root,
-                tx_pointer,
-                contract_id,
-            } => vec![
-                2.into_dart(),
-                utxo_id.into_dart(),
-                balance_root.into_dart(),
-                state_root.into_dart(),
-                tx_pointer.into_dart(),
-                contract_id.into_dart(),
-            ],
-            Self::MessageSigned {
-                message_id,
-                sender,
-                recipient,
-                amount,
-                nonce,
-                witness_index,
-                data,
-            } => vec![
-                3.into_dart(),
-                message_id.into_dart(),
-                sender.into_dart(),
-                recipient.into_dart(),
-                amount.into_dart(),
-                nonce.into_dart(),
-                witness_index.into_dart(),
-                data.into_dart(),
-            ],
-            Self::MessagePredicate {
-                message_id,
-                sender,
-                recipient,
-                amount,
-                nonce,
-                data,
-                predicate,
-                predicate_data,
-            } => vec![
-                4.into_dart(),
-                message_id.into_dart(),
-                sender.into_dart(),
-                recipient.into_dart(),
-                amount.into_dart(),
-                nonce.into_dart(),
-                data.into_dart(),
-                predicate.into_dart(),
-                predicate_data.into_dart(),
-            ],
-        }
-        .into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for Input {}
-impl support::IntoDart for InstructionResult {
-    fn into_dart(self) -> support::DartAbi {
-        vec![self.reason.into_dart()].into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for InstructionResult {}
-
-impl support::IntoDart for Mint {
-    fn into_dart(self) -> support::DartAbi {
-        vec![self.tx_pointer.into_dart(), self.outputs.into_dart()].into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for Mint {}
-
-impl support::IntoDart for Output {
-    fn into_dart(self) -> support::DartAbi {
-        match self {
-            Self::Coin {
-                to,
-                amount,
-                asset_id,
-            } => vec![
-                0.into_dart(),
-                to.into_dart(),
-                amount.into_dart(),
-                asset_id.into_dart(),
-            ],
-            Self::Contract {
-                input_index,
-                balance_root,
-                state_root,
-            } => vec![
-                1.into_dart(),
-                input_index.into_dart(),
-                balance_root.into_dart(),
-                state_root.into_dart(),
-            ],
-            Self::Message { recipient, amount } => {
-                vec![2.into_dart(), recipient.into_dart(), amount.into_dart()]
-            }
-            Self::Change {
-                to,
-                amount,
-                asset_id,
-            } => vec![
-                3.into_dart(),
-                to.into_dart(),
-                amount.into_dart(),
-                asset_id.into_dart(),
-            ],
-            Self::Variable {
-                to,
-                amount,
-                asset_id,
-            } => vec![
-                4.into_dart(),
-                to.into_dart(),
-                amount.into_dart(),
-                asset_id.into_dart(),
-            ],
-            Self::ContractCreated {
-                contract_id,
-                state_root,
-            } => vec![
-                5.into_dart(),
-                contract_id.into_dart(),
-                state_root.into_dart(),
-            ],
-        }
-        .into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for Output {}
 impl support::IntoDart for Provider {
     fn into_dart(self) -> support::DartAbi {
         vec![self.node_url.into_dart()].into_dart()
@@ -737,7 +504,6 @@ impl support::IntoDart for Receipt {
                 vec![9.into_dart(), result.into_dart(), gas_used.into_dart()]
             }
             Self::MessageOut {
-                message_id,
                 sender,
                 recipient,
                 amount,
@@ -747,7 +513,6 @@ impl support::IntoDart for Receipt {
                 data,
             } => vec![
                 10.into_dart(),
-                message_id.into_dart(),
                 sender.into_dart(),
                 recipient.into_dart(),
                 amount.into_dart(),
@@ -756,29 +521,39 @@ impl support::IntoDart for Receipt {
                 digest.into_dart(),
                 data.into_dart(),
             ],
+            Self::Mint {
+                sub_id,
+                contract_id,
+                val,
+                pc,
+                is_field,
+            } => vec![
+                11.into_dart(),
+                sub_id.into_dart(),
+                contract_id.into_dart(),
+                val.into_dart(),
+                pc.into_dart(),
+                is_field.into_dart(),
+            ],
+            Self::Burn {
+                sub_id,
+                contract_id,
+                val,
+                pc,
+                is_field,
+            } => vec![
+                12.into_dart(),
+                sub_id.into_dart(),
+                contract_id.into_dart(),
+                val.into_dart(),
+                pc.into_dart(),
+                is_field.into_dart(),
+            ],
         }
         .into_dart()
     }
 }
 impl support::IntoDartExceptPrimitive for Receipt {}
-impl support::IntoDart for Script {
-    fn into_dart(self) -> support::DartAbi {
-        vec![
-            self.gas_price.into_dart(),
-            self.gas_limit.into_dart(),
-            self.maturity.into_dart(),
-            self.script.into_dart(),
-            self.script_data.into_dart(),
-            self.inputs.into_dart(),
-            self.outputs.into_dart(),
-            self.witnesses.into_dart(),
-            self.receipts_root.into_dart(),
-        ]
-        .into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for Script {}
-
 impl support::IntoDart for ScriptExecutionResult {
     fn into_dart(self) -> support::DartAbi {
         match self {
@@ -791,82 +566,12 @@ impl support::IntoDart for ScriptExecutionResult {
     }
 }
 impl support::IntoDartExceptPrimitive for ScriptExecutionResult {}
-impl support::IntoDart for StorageSlot {
-    fn into_dart(self) -> support::DartAbi {
-        vec![self.key.into_dart(), self.value.into_dart()].into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for StorageSlot {}
-
-impl support::IntoDart for Transaction {
-    fn into_dart(self) -> support::DartAbi {
-        match self {
-            Self::Script(field0) => vec![0.into_dart(), field0.into_dart()],
-            Self::Create(field0) => vec![1.into_dart(), field0.into_dart()],
-            Self::Mint(field0) => vec![2.into_dart(), field0.into_dart()],
-        }
-        .into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for Transaction {}
-impl support::IntoDart for TransactionResponse {
-    fn into_dart(self) -> support::DartAbi {
-        vec![
-            self.transaction.into_dart(),
-            self.status.into_dart(),
-            self.block_id.into_dart(),
-            self.time.into_dart(),
-        ]
-        .into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for TransactionResponse {}
-
-impl support::IntoDart for TransactionStatus {
-    fn into_dart(self) -> support::DartAbi {
-        match self {
-            Self::Submitted => 0,
-            Self::Success => 1,
-            Self::Failure => 2,
-            Self::SqueezedOut => 3,
-        }
-        .into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for TransactionStatus {}
-impl support::IntoDart for TransactionsPaginatedResult {
-    fn into_dart(self) -> support::DartAbi {
-        vec![
-            self.cursor.into_dart(),
-            self.results.into_dart(),
-            self.has_next_page.into_dart(),
-            self.has_previous_page.into_dart(),
-        ]
-        .into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for TransactionsPaginatedResult {}
-
 impl support::IntoDart for TransferResponse {
     fn into_dart(self) -> support::DartAbi {
         vec![self.tx_id.into_dart(), self.receipts.into_dart()].into_dart()
     }
 }
 impl support::IntoDartExceptPrimitive for TransferResponse {}
-
-impl support::IntoDart for TxPointer {
-    fn into_dart(self) -> support::DartAbi {
-        vec![self.block_height.into_dart(), self.tx_index.into_dart()].into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for TxPointer {}
-
-impl support::IntoDart for UtxoId {
-    fn into_dart(self) -> support::DartAbi {
-        vec![self.tx_id.into_dart(), self.output_index.into_dart()].into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for UtxoId {}
 
 impl support::IntoDart for WalletUnlocked {
     fn into_dart(self) -> support::DartAbi {
@@ -879,13 +584,6 @@ impl support::IntoDart for WalletUnlocked {
     }
 }
 impl support::IntoDartExceptPrimitive for WalletUnlocked {}
-
-impl support::IntoDart for Witness {
-    fn into_dart(self) -> support::DartAbi {
-        vec![self.data.into_dart()].into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for Witness {}
 
 // Section: executor
 

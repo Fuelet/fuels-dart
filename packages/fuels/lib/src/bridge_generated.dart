@@ -59,14 +59,6 @@ abstract class Fuels {
 
   FlutterRustBridgeTaskConstMeta get kGetBalancesMethodWalletUnlockedConstMeta;
 
-  Future<TransactionsPaginatedResult> getTransactionsMethodWalletUnlocked(
-      {required WalletUnlocked that,
-      required PaginationRequest request,
-      dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta
-      get kGetTransactionsMethodWalletUnlockedConstMeta;
-
   Future<TransferResponse> transferMethodWalletUnlocked(
       {required WalletUnlocked that,
       required Bech32Address to,
@@ -164,150 +156,13 @@ class Bech32Address {
       );
 }
 
-class Create {
-  final int gasPrice;
-  final int gasLimit;
-  final int maturity;
-  final int bytecodeLength;
-  final int bytecodeWitnessIndex;
-  final List<StorageSlot> storageSlots;
-  final List<Input> inputs;
-  final List<Output> outputs;
-  final List<Witness> witnesses;
-  final U8Array32 salt;
-
-  const Create({
-    required this.gasPrice,
-    required this.gasLimit,
-    required this.maturity,
-    required this.bytecodeLength,
-    required this.bytecodeWitnessIndex,
-    required this.storageSlots,
-    required this.inputs,
-    required this.outputs,
-    required this.witnesses,
-    required this.salt,
-  });
-}
-
-@freezed
-class Input with _$Input {
-  const factory Input.coinSigned({
-    required UtxoId utxoId,
-    required U8Array32 owner,
-    required int amount,
-    required U8Array32 assetId,
-    required TxPointer txPointer,
-    required int witnessIndex,
-    required int maturity,
-  }) = Input_CoinSigned;
-  const factory Input.coinPredicate({
-    required UtxoId utxoId,
-    required U8Array32 owner,
-    required int amount,
-    required U8Array32 assetId,
-    required TxPointer txPointer,
-    required int maturity,
-    required Uint8List predicate,
-    required Uint8List predicateData,
-  }) = Input_CoinPredicate;
-  const factory Input.contract({
-    required UtxoId utxoId,
-    required U8Array32 balanceRoot,
-    required U8Array32 stateRoot,
-    required TxPointer txPointer,
-    required U8Array32 contractId,
-  }) = Input_Contract;
-  const factory Input.messageSigned({
-    required U8Array32 messageId,
-    required U8Array32 sender,
-    required U8Array32 recipient,
-    required int amount,
-    required int nonce,
-    required int witnessIndex,
-    required Uint8List data,
-  }) = Input_MessageSigned;
-  const factory Input.messagePredicate({
-    required U8Array32 messageId,
-    required U8Array32 sender,
-    required U8Array32 recipient,
-    required int amount,
-    required int nonce,
-    required Uint8List data,
-    required Uint8List predicate,
-    required Uint8List predicateData,
-  }) = Input_MessagePredicate;
-}
-
-class InstructionResult {
+class PanicInstruction {
   final int reason;
+  final int instruction;
 
-  const InstructionResult({
+  const PanicInstruction({
     required this.reason,
-  });
-}
-
-class Mint {
-  final TxPointer txPointer;
-  final List<Output> outputs;
-
-  const Mint({
-    required this.txPointer,
-    required this.outputs,
-  });
-}
-
-@freezed
-class Output with _$Output {
-  const factory Output.coin({
-    required U8Array32 to,
-    required int amount,
-    required U8Array32 assetId,
-  }) = Output_Coin;
-  const factory Output.contract({
-    required int inputIndex,
-    required U8Array32 balanceRoot,
-    required U8Array32 stateRoot,
-  }) = Output_Contract;
-  const factory Output.message({
-    required U8Array32 recipient,
-    required int amount,
-  }) = Output_Message;
-  const factory Output.change({
-    required U8Array32 to,
-    required int amount,
-    required U8Array32 assetId,
-  }) = Output_Change;
-  const factory Output.variable({
-    required U8Array32 to,
-    required int amount,
-    required U8Array32 assetId,
-  }) = Output_Variable;
-  const factory Output.contractCreated({
-    required U8Array32 contractId,
-    required U8Array32 stateRoot,
-  }) = Output_ContractCreated;
-}
-
-enum PageDirection {
-  Forward,
-  Backward,
-}
-
-class PaginationRequest {
-  /// The cursor returned from a previous query to indicate an offset
-  final String? cursor;
-
-  /// The number of results to take
-  final int results;
-
-  /// The direction of the query (e.g. asc, desc order).
-  final PageDirection direction;
-
-  const PaginationRequest({
-    this.cursor,
-    required this.results,
-    required this.direction,
+    required this.instruction,
   });
 }
 
@@ -349,13 +204,13 @@ class Receipt with _$Receipt {
     required int ptr,
     required int len,
     required U8Array32 digest,
-    required Uint8List data,
+    Uint8List? data,
     required int pc,
     required int isField,
   }) = Receipt_ReturnData;
   const factory Receipt.panic({
     required U8Array32 id,
-    required InstructionResult reason,
+    required PanicInstruction reason,
     required int pc,
     required int isField,
     U8Array32? contractId,
@@ -382,7 +237,7 @@ class Receipt with _$Receipt {
     required int ptr,
     required int len,
     required U8Array32 digest,
-    required Uint8List data,
+    Uint8List? data,
     required int pc,
     required int isField,
   }) = Receipt_LogData;
@@ -407,39 +262,28 @@ class Receipt with _$Receipt {
     required int gasUsed,
   }) = Receipt_ScriptResult;
   const factory Receipt.messageOut({
-    required U8Array32 messageId,
     required U8Array32 sender,
     required U8Array32 recipient,
     required int amount,
     required U8Array32 nonce,
     required int len,
     required U8Array32 digest,
-    required Uint8List data,
+    Uint8List? data,
   }) = Receipt_MessageOut;
-}
-
-class Script {
-  final int gasPrice;
-  final int gasLimit;
-  final int maturity;
-  final Uint8List script;
-  final Uint8List scriptData;
-  final List<Input> inputs;
-  final List<Output> outputs;
-  final List<Witness> witnesses;
-  final U8Array32 receiptsRoot;
-
-  const Script({
-    required this.gasPrice,
-    required this.gasLimit,
-    required this.maturity,
-    required this.script,
-    required this.scriptData,
-    required this.inputs,
-    required this.outputs,
-    required this.witnesses,
-    required this.receiptsRoot,
-  });
+  const factory Receipt.mint({
+    required U8Array32 subId,
+    required U8Array32 contractId,
+    required int val,
+    required int pc,
+    required int isField,
+  }) = Receipt_Mint;
+  const factory Receipt.burn({
+    required U8Array32 subId,
+    required U8Array32 contractId,
+    required int val,
+    required int pc,
+    required int isField,
+  }) = Receipt_Burn;
 }
 
 @freezed
@@ -450,64 +294,6 @@ class ScriptExecutionResult with _$ScriptExecutionResult {
   const factory ScriptExecutionResult.genericFailure(
     int field0,
   ) = ScriptExecutionResult_GenericFailure;
-}
-
-class StorageSlot {
-  final U8Array32 key;
-  final U8Array32 value;
-
-  const StorageSlot({
-    required this.key,
-    required this.value,
-  });
-}
-
-@freezed
-class Transaction with _$Transaction {
-  const factory Transaction.script(
-    Script field0,
-  ) = Transaction_Script;
-  const factory Transaction.create(
-    Create field0,
-  ) = Transaction_Create;
-  const factory Transaction.mint(
-    Mint field0,
-  ) = Transaction_Mint;
-}
-
-class TransactionResponse {
-  final Transaction transaction;
-  final TransactionStatus status;
-  final String? blockId;
-  final String? time;
-
-  const TransactionResponse({
-    required this.transaction,
-    required this.status,
-    this.blockId,
-    this.time,
-  });
-}
-
-enum TransactionStatus {
-  Submitted,
-  Success,
-  Failure,
-  SqueezedOut,
-}
-
-class TransactionsPaginatedResult {
-  final String? cursor;
-  final List<TransactionResponse> results;
-  final bool hasNextPage;
-  final bool hasPreviousPage;
-
-  const TransactionsPaginatedResult({
-    this.cursor,
-    required this.results,
-    required this.hasNextPage,
-    required this.hasPreviousPage,
-  });
 }
 
 class TransferResponse {
@@ -532,16 +318,6 @@ class TxParameters {
   });
 }
 
-class TxPointer {
-  final int blockHeight;
-  final int txIndex;
-
-  const TxPointer({
-    required this.blockHeight,
-    required this.txIndex,
-  });
-}
-
 class U8Array32 extends NonGrowableListView<int> {
   static const arraySize = 32;
   U8Array32(Uint8List inner)
@@ -549,16 +325,6 @@ class U8Array32 extends NonGrowableListView<int> {
         super(inner);
   U8Array32.unchecked(Uint8List inner) : super(inner);
   U8Array32.init() : super(Uint8List(arraySize));
-}
-
-class UtxoId {
-  final U8Array32 txId;
-  final int outputIndex;
-
-  const UtxoId({
-    required this.txId,
-    required this.outputIndex,
-  });
 }
 
 class WalletUnlocked {
@@ -620,13 +386,6 @@ class WalletUnlocked {
         that: this,
       );
 
-  Future<TransactionsPaginatedResult> getTransactions(
-          {required PaginationRequest request, dynamic hint}) =>
-      bridge.getTransactionsMethodWalletUnlocked(
-        that: this,
-        request: request,
-      );
-
   Future<TransferResponse> transfer(
           {required Bech32Address to,
           required int amount,
@@ -640,14 +399,6 @@ class WalletUnlocked {
         asset: asset,
         txParameters: txParameters,
       );
-}
-
-class Witness {
-  final Uint8List data;
-
-  const Witness({
-    required this.data,
-  });
 }
 
 class FuelsImpl implements Fuels {
@@ -811,29 +562,6 @@ class FuelsImpl implements Fuels {
           const FlutterRustBridgeTaskConstMeta(
             debugName: "get_balances__method__WalletUnlocked",
             argNames: ["that"],
-          );
-
-  Future<TransactionsPaginatedResult> getTransactionsMethodWalletUnlocked(
-      {required WalletUnlocked that,
-      required PaginationRequest request,
-      dynamic hint}) {
-    var arg0 = _platform.api2wire_box_autoadd_wallet_unlocked(that);
-    var arg1 = _platform.api2wire_box_autoadd_pagination_request(request);
-    return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_get_transactions__method__WalletUnlocked(port_, arg0, arg1),
-      parseSuccessData: _wire2api_transactions_paginated_result,
-      constMeta: kGetTransactionsMethodWalletUnlockedConstMeta,
-      argValues: [that, request],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta
-      get kGetTransactionsMethodWalletUnlockedConstMeta =>
-          const FlutterRustBridgeTaskConstMeta(
-            debugName: "get_transactions__method__WalletUnlocked",
-            argNames: ["that", "request"],
           );
 
   Future<TransferResponse> transferMethodWalletUnlocked(
@@ -1003,28 +731,12 @@ class FuelsImpl implements Fuels {
     );
   }
 
-  bool _wire2api_bool(dynamic raw) {
-    return raw as bool;
-  }
-
-  Create _wire2api_box_autoadd_create(dynamic raw) {
-    return _wire2api_create(raw);
-  }
-
-  InstructionResult _wire2api_box_autoadd_instruction_result(dynamic raw) {
-    return _wire2api_instruction_result(raw);
-  }
-
-  Mint _wire2api_box_autoadd_mint(dynamic raw) {
-    return _wire2api_mint(raw);
+  PanicInstruction _wire2api_box_autoadd_panic_instruction(dynamic raw) {
+    return _wire2api_panic_instruction(raw);
   }
 
   Provider _wire2api_box_autoadd_provider(dynamic raw) {
     return _wire2api_provider(raw);
-  }
-
-  Script _wire2api_box_autoadd_script(dynamic raw) {
-    return _wire2api_script(raw);
   }
 
   ScriptExecutionResult _wire2api_box_autoadd_script_execution_result(
@@ -1032,138 +744,12 @@ class FuelsImpl implements Fuels {
     return _wire2api_script_execution_result(raw);
   }
 
-  TxPointer _wire2api_box_autoadd_tx_pointer(dynamic raw) {
-    return _wire2api_tx_pointer(raw);
-  }
-
-  UtxoId _wire2api_box_autoadd_utxo_id(dynamic raw) {
-    return _wire2api_utxo_id(raw);
-  }
-
-  Create _wire2api_create(dynamic raw) {
-    final arr = raw as List<dynamic>;
-    if (arr.length != 10)
-      throw Exception('unexpected arr length: expect 10 but see ${arr.length}');
-    return Create(
-      gasPrice: _wire2api_u64(arr[0]),
-      gasLimit: _wire2api_u64(arr[1]),
-      maturity: _wire2api_u64(arr[2]),
-      bytecodeLength: _wire2api_u64(arr[3]),
-      bytecodeWitnessIndex: _wire2api_u8(arr[4]),
-      storageSlots: _wire2api_list_storage_slot(arr[5]),
-      inputs: _wire2api_list_input(arr[6]),
-      outputs: _wire2api_list_output(arr[7]),
-      witnesses: _wire2api_list_witness(arr[8]),
-      salt: _wire2api_u8_array_32(arr[9]),
-    );
-  }
-
-  int _wire2api_i32(dynamic raw) {
-    return raw as int;
-  }
-
-  Input _wire2api_input(dynamic raw) {
-    switch (raw[0]) {
-      case 0:
-        return Input_CoinSigned(
-          utxoId: _wire2api_box_autoadd_utxo_id(raw[1]),
-          owner: _wire2api_u8_array_32(raw[2]),
-          amount: _wire2api_u64(raw[3]),
-          assetId: _wire2api_u8_array_32(raw[4]),
-          txPointer: _wire2api_box_autoadd_tx_pointer(raw[5]),
-          witnessIndex: _wire2api_u8(raw[6]),
-          maturity: _wire2api_u64(raw[7]),
-        );
-      case 1:
-        return Input_CoinPredicate(
-          utxoId: _wire2api_box_autoadd_utxo_id(raw[1]),
-          owner: _wire2api_u8_array_32(raw[2]),
-          amount: _wire2api_u64(raw[3]),
-          assetId: _wire2api_u8_array_32(raw[4]),
-          txPointer: _wire2api_box_autoadd_tx_pointer(raw[5]),
-          maturity: _wire2api_u64(raw[6]),
-          predicate: _wire2api_uint_8_list(raw[7]),
-          predicateData: _wire2api_uint_8_list(raw[8]),
-        );
-      case 2:
-        return Input_Contract(
-          utxoId: _wire2api_box_autoadd_utxo_id(raw[1]),
-          balanceRoot: _wire2api_u8_array_32(raw[2]),
-          stateRoot: _wire2api_u8_array_32(raw[3]),
-          txPointer: _wire2api_box_autoadd_tx_pointer(raw[4]),
-          contractId: _wire2api_u8_array_32(raw[5]),
-        );
-      case 3:
-        return Input_MessageSigned(
-          messageId: _wire2api_u8_array_32(raw[1]),
-          sender: _wire2api_u8_array_32(raw[2]),
-          recipient: _wire2api_u8_array_32(raw[3]),
-          amount: _wire2api_u64(raw[4]),
-          nonce: _wire2api_u64(raw[5]),
-          witnessIndex: _wire2api_u8(raw[6]),
-          data: _wire2api_uint_8_list(raw[7]),
-        );
-      case 4:
-        return Input_MessagePredicate(
-          messageId: _wire2api_u8_array_32(raw[1]),
-          sender: _wire2api_u8_array_32(raw[2]),
-          recipient: _wire2api_u8_array_32(raw[3]),
-          amount: _wire2api_u64(raw[4]),
-          nonce: _wire2api_u64(raw[5]),
-          data: _wire2api_uint_8_list(raw[6]),
-          predicate: _wire2api_uint_8_list(raw[7]),
-          predicateData: _wire2api_uint_8_list(raw[8]),
-        );
-      default:
-        throw Exception("unreachable");
-    }
-  }
-
-  InstructionResult _wire2api_instruction_result(dynamic raw) {
-    final arr = raw as List<dynamic>;
-    if (arr.length != 1)
-      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return InstructionResult(
-      reason: _wire2api_u32(arr[0]),
-    );
-  }
-
   List<Balance> _wire2api_list_balance(dynamic raw) {
     return (raw as List<dynamic>).map(_wire2api_balance).toList();
   }
 
-  List<Input> _wire2api_list_input(dynamic raw) {
-    return (raw as List<dynamic>).map(_wire2api_input).toList();
-  }
-
-  List<Output> _wire2api_list_output(dynamic raw) {
-    return (raw as List<dynamic>).map(_wire2api_output).toList();
-  }
-
   List<Receipt> _wire2api_list_receipt(dynamic raw) {
     return (raw as List<dynamic>).map(_wire2api_receipt).toList();
-  }
-
-  List<StorageSlot> _wire2api_list_storage_slot(dynamic raw) {
-    return (raw as List<dynamic>).map(_wire2api_storage_slot).toList();
-  }
-
-  List<TransactionResponse> _wire2api_list_transaction_response(dynamic raw) {
-    return (raw as List<dynamic>).map(_wire2api_transaction_response).toList();
-  }
-
-  List<Witness> _wire2api_list_witness(dynamic raw) {
-    return (raw as List<dynamic>).map(_wire2api_witness).toList();
-  }
-
-  Mint _wire2api_mint(dynamic raw) {
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return Mint(
-      txPointer: _wire2api_tx_pointer(arr[0]),
-      outputs: _wire2api_list_output(arr[1]),
-    );
   }
 
   String? _wire2api_opt_String(dynamic raw) {
@@ -1178,45 +764,18 @@ class FuelsImpl implements Fuels {
     return raw == null ? null : _wire2api_u8_array_32(raw);
   }
 
-  Output _wire2api_output(dynamic raw) {
-    switch (raw[0]) {
-      case 0:
-        return Output_Coin(
-          to: _wire2api_u8_array_32(raw[1]),
-          amount: _wire2api_u64(raw[2]),
-          assetId: _wire2api_u8_array_32(raw[3]),
-        );
-      case 1:
-        return Output_Contract(
-          inputIndex: _wire2api_u8(raw[1]),
-          balanceRoot: _wire2api_u8_array_32(raw[2]),
-          stateRoot: _wire2api_u8_array_32(raw[3]),
-        );
-      case 2:
-        return Output_Message(
-          recipient: _wire2api_u8_array_32(raw[1]),
-          amount: _wire2api_u64(raw[2]),
-        );
-      case 3:
-        return Output_Change(
-          to: _wire2api_u8_array_32(raw[1]),
-          amount: _wire2api_u64(raw[2]),
-          assetId: _wire2api_u8_array_32(raw[3]),
-        );
-      case 4:
-        return Output_Variable(
-          to: _wire2api_u8_array_32(raw[1]),
-          amount: _wire2api_u64(raw[2]),
-          assetId: _wire2api_u8_array_32(raw[3]),
-        );
-      case 5:
-        return Output_ContractCreated(
-          contractId: _wire2api_u8_array_32(raw[1]),
-          stateRoot: _wire2api_u8_array_32(raw[2]),
-        );
-      default:
-        throw Exception("unreachable");
-    }
+  Uint8List? _wire2api_opt_uint_8_list(dynamic raw) {
+    return raw == null ? null : _wire2api_uint_8_list(raw);
+  }
+
+  PanicInstruction _wire2api_panic_instruction(dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2)
+      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
+    return PanicInstruction(
+      reason: _wire2api_u32(arr[0]),
+      instruction: _wire2api_u32(arr[1]),
+    );
   }
 
   Provider _wire2api_provider(dynamic raw) {
@@ -1256,14 +815,14 @@ class FuelsImpl implements Fuels {
           ptr: _wire2api_u64(raw[2]),
           len: _wire2api_u64(raw[3]),
           digest: _wire2api_u8_array_32(raw[4]),
-          data: _wire2api_uint_8_list(raw[5]),
+          data: _wire2api_opt_uint_8_list(raw[5]),
           pc: _wire2api_u64(raw[6]),
           isField: _wire2api_u64(raw[7]),
         );
       case 3:
         return Receipt_Panic(
           id: _wire2api_u8_array_32(raw[1]),
-          reason: _wire2api_box_autoadd_instruction_result(raw[2]),
+          reason: _wire2api_box_autoadd_panic_instruction(raw[2]),
           pc: _wire2api_u64(raw[3]),
           isField: _wire2api_u64(raw[4]),
           contractId: _wire2api_opt_u8_array_32(raw[5]),
@@ -1293,7 +852,7 @@ class FuelsImpl implements Fuels {
           ptr: _wire2api_u64(raw[4]),
           len: _wire2api_u64(raw[5]),
           digest: _wire2api_u8_array_32(raw[6]),
-          data: _wire2api_uint_8_list(raw[7]),
+          data: _wire2api_opt_uint_8_list(raw[7]),
           pc: _wire2api_u64(raw[8]),
           isField: _wire2api_u64(raw[9]),
         );
@@ -1322,35 +881,33 @@ class FuelsImpl implements Fuels {
         );
       case 10:
         return Receipt_MessageOut(
-          messageId: _wire2api_u8_array_32(raw[1]),
-          sender: _wire2api_u8_array_32(raw[2]),
-          recipient: _wire2api_u8_array_32(raw[3]),
-          amount: _wire2api_u64(raw[4]),
-          nonce: _wire2api_u8_array_32(raw[5]),
-          len: _wire2api_u64(raw[6]),
-          digest: _wire2api_u8_array_32(raw[7]),
-          data: _wire2api_uint_8_list(raw[8]),
+          sender: _wire2api_u8_array_32(raw[1]),
+          recipient: _wire2api_u8_array_32(raw[2]),
+          amount: _wire2api_u64(raw[3]),
+          nonce: _wire2api_u8_array_32(raw[4]),
+          len: _wire2api_u64(raw[5]),
+          digest: _wire2api_u8_array_32(raw[6]),
+          data: _wire2api_opt_uint_8_list(raw[7]),
+        );
+      case 11:
+        return Receipt_Mint(
+          subId: _wire2api_u8_array_32(raw[1]),
+          contractId: _wire2api_u8_array_32(raw[2]),
+          val: _wire2api_u64(raw[3]),
+          pc: _wire2api_u64(raw[4]),
+          isField: _wire2api_u64(raw[5]),
+        );
+      case 12:
+        return Receipt_Burn(
+          subId: _wire2api_u8_array_32(raw[1]),
+          contractId: _wire2api_u8_array_32(raw[2]),
+          val: _wire2api_u64(raw[3]),
+          pc: _wire2api_u64(raw[4]),
+          isField: _wire2api_u64(raw[5]),
         );
       default:
         throw Exception("unreachable");
     }
-  }
-
-  Script _wire2api_script(dynamic raw) {
-    final arr = raw as List<dynamic>;
-    if (arr.length != 9)
-      throw Exception('unexpected arr length: expect 9 but see ${arr.length}');
-    return Script(
-      gasPrice: _wire2api_u64(arr[0]),
-      gasLimit: _wire2api_u64(arr[1]),
-      maturity: _wire2api_u64(arr[2]),
-      script: _wire2api_uint_8_list(arr[3]),
-      scriptData: _wire2api_uint_8_list(arr[4]),
-      inputs: _wire2api_list_input(arr[5]),
-      outputs: _wire2api_list_output(arr[6]),
-      witnesses: _wire2api_list_witness(arr[7]),
-      receiptsRoot: _wire2api_u8_array_32(arr[8]),
-    );
   }
 
   ScriptExecutionResult _wire2api_script_execution_result(dynamic raw) {
@@ -1370,64 +927,6 @@ class FuelsImpl implements Fuels {
     }
   }
 
-  StorageSlot _wire2api_storage_slot(dynamic raw) {
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return StorageSlot(
-      key: _wire2api_u8_array_32(arr[0]),
-      value: _wire2api_u8_array_32(arr[1]),
-    );
-  }
-
-  Transaction _wire2api_transaction(dynamic raw) {
-    switch (raw[0]) {
-      case 0:
-        return Transaction_Script(
-          _wire2api_box_autoadd_script(raw[1]),
-        );
-      case 1:
-        return Transaction_Create(
-          _wire2api_box_autoadd_create(raw[1]),
-        );
-      case 2:
-        return Transaction_Mint(
-          _wire2api_box_autoadd_mint(raw[1]),
-        );
-      default:
-        throw Exception("unreachable");
-    }
-  }
-
-  TransactionResponse _wire2api_transaction_response(dynamic raw) {
-    final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
-    return TransactionResponse(
-      transaction: _wire2api_transaction(arr[0]),
-      status: _wire2api_transaction_status(arr[1]),
-      blockId: _wire2api_opt_String(arr[2]),
-      time: _wire2api_opt_String(arr[3]),
-    );
-  }
-
-  TransactionStatus _wire2api_transaction_status(dynamic raw) {
-    return TransactionStatus.values[raw];
-  }
-
-  TransactionsPaginatedResult _wire2api_transactions_paginated_result(
-      dynamic raw) {
-    final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
-    return TransactionsPaginatedResult(
-      cursor: _wire2api_opt_String(arr[0]),
-      results: _wire2api_list_transaction_response(arr[1]),
-      hasNextPage: _wire2api_bool(arr[2]),
-      hasPreviousPage: _wire2api_bool(arr[3]),
-    );
-  }
-
   TransferResponse _wire2api_transfer_response(dynamic raw) {
     final arr = raw as List<dynamic>;
     if (arr.length != 2)
@@ -1436,20 +935,6 @@ class FuelsImpl implements Fuels {
       txId: _wire2api_String(arr[0]),
       receipts: _wire2api_list_receipt(arr[1]),
     );
-  }
-
-  TxPointer _wire2api_tx_pointer(dynamic raw) {
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return TxPointer(
-      blockHeight: _wire2api_u32(arr[0]),
-      txIndex: _wire2api_u16(arr[1]),
-    );
-  }
-
-  int _wire2api_u16(dynamic raw) {
-    return raw as int;
   }
 
   int _wire2api_u32(dynamic raw) {
@@ -1472,16 +957,6 @@ class FuelsImpl implements Fuels {
     return raw as Uint8List;
   }
 
-  UtxoId _wire2api_utxo_id(dynamic raw) {
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return UtxoId(
-      txId: _wire2api_u8_array_32(arr[0]),
-      outputIndex: _wire2api_u8(arr[1]),
-    );
-  }
-
   WalletUnlocked _wire2api_wallet_unlocked(dynamic raw) {
     final arr = raw as List<dynamic>;
     if (arr.length != 3)
@@ -1493,36 +968,17 @@ class FuelsImpl implements Fuels {
       provider: _wire2api_opt_box_autoadd_provider(arr[2]),
     );
   }
-
-  Witness _wire2api_witness(dynamic raw) {
-    final arr = raw as List<dynamic>;
-    if (arr.length != 1)
-      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return Witness(
-      data: _wire2api_uint_8_list(arr[0]),
-    );
-  }
 }
 
 // Section: api2wire
 
 @protected
-int api2wire_i32(int raw) {
+int api2wire_u32(int raw) {
   return raw;
-}
-
-@protected
-int api2wire_page_direction(PageDirection raw) {
-  return api2wire_i32(raw.index);
 }
 
 @protected
 int api2wire_u8(int raw) {
-  return raw;
-}
-
-@protected
-int api2wire_usize(int raw) {
   return raw;
 }
 
@@ -1551,14 +1007,6 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
       Bech32Address raw) {
     final ptr = inner.new_box_autoadd_bech_32_address_0();
     _api_fill_to_wire_bech_32_address(raw, ptr.ref);
-    return ptr;
-  }
-
-  @protected
-  ffi.Pointer<wire_PaginationRequest> api2wire_box_autoadd_pagination_request(
-      PaginationRequest raw) {
-    final ptr = inner.new_box_autoadd_pagination_request_0();
-    _api_fill_to_wire_pagination_request(raw, ptr.ref);
     return ptr;
   }
 
@@ -1630,11 +1078,6 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
     _api_fill_to_wire_bech_32_address(apiObj, wireObj.ref);
   }
 
-  void _api_fill_to_wire_box_autoadd_pagination_request(
-      PaginationRequest apiObj, ffi.Pointer<wire_PaginationRequest> wireObj) {
-    _api_fill_to_wire_pagination_request(apiObj, wireObj.ref);
-  }
-
   void _api_fill_to_wire_box_autoadd_provider(
       Provider apiObj, ffi.Pointer<wire_Provider> wireObj) {
     _api_fill_to_wire_provider(apiObj, wireObj.ref);
@@ -1655,13 +1098,6 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
     if (apiObj != null) _api_fill_to_wire_box_autoadd_provider(apiObj, wireObj);
   }
 
-  void _api_fill_to_wire_pagination_request(
-      PaginationRequest apiObj, wire_PaginationRequest wireObj) {
-    wireObj.cursor = api2wire_opt_String(apiObj.cursor);
-    wireObj.results = api2wire_usize(apiObj.results);
-    wireObj.direction = api2wire_page_direction(apiObj.direction);
-  }
-
   void _api_fill_to_wire_provider(Provider apiObj, wire_Provider wireObj) {
     wireObj.node_url = api2wire_String(apiObj.nodeUrl);
   }
@@ -1670,7 +1106,7 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
       TxParameters apiObj, wire_TxParameters wireObj) {
     wireObj.gas_price = api2wire_u64(apiObj.gasPrice);
     wireObj.gas_limit = api2wire_u64(apiObj.gasLimit);
-    wireObj.maturity = api2wire_u64(apiObj.maturity);
+    wireObj.maturity = api2wire_u32(apiObj.maturity);
   }
 
   void _api_fill_to_wire_wallet_unlocked(
@@ -1928,28 +1364,6 @@ class FuelsWire implements FlutterRustBridgeWireBase {
       _wire_get_balances__method__WalletUnlockedPtr
           .asFunction<void Function(int, ffi.Pointer<wire_WalletUnlocked>)>();
 
-  void wire_get_transactions__method__WalletUnlocked(
-    int port_,
-    ffi.Pointer<wire_WalletUnlocked> that,
-    ffi.Pointer<wire_PaginationRequest> request,
-  ) {
-    return _wire_get_transactions__method__WalletUnlocked(
-      port_,
-      that,
-      request,
-    );
-  }
-
-  late final _wire_get_transactions__method__WalletUnlockedPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_WalletUnlocked>,
-                  ffi.Pointer<wire_PaginationRequest>)>>(
-      'wire_get_transactions__method__WalletUnlocked');
-  late final _wire_get_transactions__method__WalletUnlocked =
-      _wire_get_transactions__method__WalletUnlockedPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_WalletUnlocked>,
-              ffi.Pointer<wire_PaginationRequest>)>();
-
   void wire_transfer__method__WalletUnlocked(
     int port_,
     ffi.Pointer<wire_WalletUnlocked> that,
@@ -2100,17 +1514,6 @@ class FuelsWire implements FlutterRustBridgeWireBase {
       _new_box_autoadd_bech_32_address_0Ptr
           .asFunction<ffi.Pointer<wire_Bech32Address> Function()>();
 
-  ffi.Pointer<wire_PaginationRequest> new_box_autoadd_pagination_request_0() {
-    return _new_box_autoadd_pagination_request_0();
-  }
-
-  late final _new_box_autoadd_pagination_request_0Ptr = _lookup<
-          ffi.NativeFunction<ffi.Pointer<wire_PaginationRequest> Function()>>(
-      'new_box_autoadd_pagination_request_0');
-  late final _new_box_autoadd_pagination_request_0 =
-      _new_box_autoadd_pagination_request_0Ptr
-          .asFunction<ffi.Pointer<wire_PaginationRequest> Function()>();
-
   ffi.Pointer<wire_Provider> new_box_autoadd_provider_0() {
     return _new_box_autoadd_provider_0();
   }
@@ -2225,16 +1628,6 @@ class wire_WalletUnlocked extends ffi.Struct {
   external ffi.Pointer<wire_Provider> provider;
 }
 
-class wire_PaginationRequest extends ffi.Struct {
-  external ffi.Pointer<wire_uint_8_list> cursor;
-
-  @ffi.UintPtr()
-  external int results;
-
-  @ffi.Int32()
-  external int direction;
-}
-
 class wire_NativeBech32Address extends ffi.Struct {
   external ffi.Pointer<ffi.Void> ptr;
 }
@@ -2250,7 +1643,7 @@ class wire_TxParameters extends ffi.Struct {
   @ffi.Uint64()
   external int gas_limit;
 
-  @ffi.Uint64()
+  @ffi.Uint32()
   external int maturity;
 }
 

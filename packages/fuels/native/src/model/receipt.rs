@@ -1,4 +1,4 @@
-pub use fuel_tx::{InstructionResult as NativeInstructionResult, Receipt as NativeReceipt, ScriptExecutionResult as NativeScriptExecutionResult};
+pub use fuel_tx::{PanicInstruction as NativePanicInstruction, Receipt as NativeReceipt, ScriptExecutionResult as NativeScriptExecutionResult};
 
 pub enum Receipt {
     Call {
@@ -25,14 +25,14 @@ pub enum Receipt {
         ptr: u64,
         len: u64,
         digest: [u8; 32],
-        data: Vec<u8>,
+        data: Option<Vec<u8>>,
         pc: u64,
         is_field: u64,
     },
 
     Panic {
         id: [u8; 32],
-        reason: InstructionResult,
+        reason: PanicInstruction,
         pc: u64,
         is_field: u64,
         contract_id: Option<[u8; 32]>,
@@ -62,7 +62,7 @@ pub enum Receipt {
         ptr: u64,
         len: u64,
         digest: [u8; 32],
-        data: Vec<u8>,
+        data: Option<Vec<u8>>,
         pc: u64,
         is_field: u64,
     },
@@ -91,20 +91,35 @@ pub enum Receipt {
     },
 
     MessageOut {
-        message_id: [u8; 32],
         sender: [u8; 32],
         recipient: [u8; 32],
         amount: u64,
         nonce: [u8; 32],
         len: u64,
         digest: [u8; 32],
-        data: Vec<u8>,
+        data: Option<Vec<u8>>,
+    },
+
+    Mint {
+        sub_id: [u8; 32],
+        contract_id: [u8; 32],
+        val: u64,
+        pc: u64,
+        is_field: u64,
+    },
+
+    Burn {
+        sub_id: [u8; 32],
+        contract_id: [u8; 32],
+        val: u64,
+        pc: u64,
+        is_field: u64,
     },
 }
 
-pub struct InstructionResult {
+pub struct PanicInstruction {
     pub reason: u32,
-    // instruction: Instruction,
+    pub instruction: u32,
 }
 
 pub enum ScriptExecutionResult {
@@ -127,15 +142,17 @@ impl From<&NativeReceipt> for Receipt {
             NativeReceipt::Transfer { id, to, amount, asset_id, pc, is } => Receipt::Transfer { id: (*id).into(), to: (*to).into(), amount: (*amount).into(), asset_id: (*asset_id).into(), pc: (*pc).into(), is_field: (*is).into() },
             NativeReceipt::TransferOut { id, to, amount, asset_id, pc, is } => Receipt::TransferOut { id: (*id).into(), to: (*to).into(), amount: (*amount).into(), asset_id: (*asset_id).into(), pc: (*pc).into(), is_field: (*is).into() },
             NativeReceipt::ScriptResult { result, gas_used } => Receipt::ScriptResult { result: result.into(), gas_used: (*gas_used).into() },
-            NativeReceipt::MessageOut { message_id, sender, recipient, amount, nonce, len, digest, data } => Receipt::MessageOut { message_id: (*message_id).into(), sender: (*sender).into(), recipient: (*recipient).into(), amount: (*amount).into(), nonce: (*nonce).into(), len: (*len).into(), digest: (*digest).into(), data: data.clone() }
+            NativeReceipt::MessageOut { sender, recipient, amount, nonce, len, digest, data } => Receipt::MessageOut { sender: (*sender).into(), recipient: (*recipient).into(), amount: (*amount).into(), nonce: (*nonce).into(), len: (*len).into(), digest: (*digest).into(), data: data.clone() },
+            NativeReceipt::Mint { sub_id, contract_id, val, pc, is } => Receipt::Mint { sub_id: (*sub_id).into(), contract_id: (*contract_id).into(), val: (*val).into(), pc: (*pc).into(), is_field: (*is).into() },
+            NativeReceipt::Burn { sub_id, contract_id, val, pc, is } => Receipt::Burn { sub_id: (*sub_id).into(), contract_id: (*contract_id).into(), val: (*val).into(), pc: (*pc).into(), is_field: (*is).into() }
         }
     }
 }
 
 
-impl From<&NativeInstructionResult> for InstructionResult {
-    fn from(model: &NativeInstructionResult) -> InstructionResult {
-        InstructionResult { reason: *model.reason() as u32 }
+impl From<&NativePanicInstruction> for PanicInstruction {
+    fn from(model: &NativePanicInstruction) -> PanicInstruction {
+        PanicInstruction { reason: *model.reason() as u32, instruction: *model.instruction() }
     }
 }
 
