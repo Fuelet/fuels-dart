@@ -1,3 +1,8 @@
+## 0.0.20
+
+ - **FEAT**: regenerate js code.
+ - **FEAT**: upgrade fuels dependencies to beta-4 in ts.
+
 ## 0.0.19
 
  - **FEAT**: add const modifiers to model constructors.

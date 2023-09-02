@@ -1,3 +1,7 @@
+## 1.10.0
+
+ - **FEAT**: upgrade fuels dependencies to beta-4 in rust.
+
 ## 1.9.3
 
  - **FIX**: return soft dependency versions.

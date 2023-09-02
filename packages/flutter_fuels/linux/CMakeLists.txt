@@ -1,4 +1,4 @@
-set(LibraryVersion "fuels-v1.9.3") # generated; do not edit
+set(LibraryVersion "fuels-v1.10.0") # generated; do not edit
 # installed. You should not increase this version, as doing so will cause
 # the plugin to fail to compile for some customers of the plugin.
 cmake_minimum_required(VERSION 3.10)
