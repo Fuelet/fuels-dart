@@ -4,7 +4,6 @@ import {
     Bech32Address,
     toB256,
     toBech32,
-    Transaction,
     TransactionCreate,
     TransactionRequest,
     TransactionRequestLike,
