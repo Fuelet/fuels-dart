@@ -18,7 +18,7 @@ jobs:
       - uses: subosito/flutter-action@v2
       - uses: bluefireteam/melos-action@v2
         with:
-          melos-version: '2.9.0'
+          melos-version: '3.1.0'
       - name: Dry-run publish to pub.dev
         run: melos publish -y --dry-run --no-published --scope=${{ inputs.package_name }}
       - name: Publish to pub.dev
