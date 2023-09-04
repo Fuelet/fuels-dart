@@ -1,3 +1,7 @@
+## 1.10.1
+
+ - **FIX**: specific flutter_rust_bridge rust version.
+
 ## 1.10.0
 
  - **FEAT**: upgrade fuels dependencies to beta-4 in rust.
