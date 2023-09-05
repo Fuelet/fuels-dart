@@ -1,0 +1,13 @@
+name: Extract package version
+description: Extract package version from the git tag
+
+runs:
+  using: composite
+  steps:
+    - name: Extract package version from the tag
+      shell: bash
+      run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
+
+    - name: Print the extracted version
+      shell: bash
+      run: echo $RELEASE_VERSION

@@ -1,3 +1,4 @@
+#![allow(dead_code)]
 use std::str::FromStr;
 
 use flutter_rust_bridge::RustOpaque;

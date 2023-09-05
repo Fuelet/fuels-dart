@@ -7,22 +7,12 @@ jobs:
     runs-on: macos-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Extract package version from the tag
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      - name: Print the extracted version
-        run: echo $RELEASE_VERSION
-      - uses: subosito/flutter-action@v2
-      - uses: bluefireteam/melos-action@v2
-        with:
-          melos-version: '3.1.0'
-      - uses: goto-bus-stop/setup-zig@v2
-      - uses: KyleMayes/install-llvm-action@v1
-        with:
-          version: "15"
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - uses: ./.github/actions/initialize
+
+      - uses: ./.github/actions/extract_package_version
 
       - name: Build apple binary
         run: melos run build:apple
@@ -37,23 +27,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
-      - name: Extract package version from the tag
-        run: echo "RELEASE_VERSION=${GITHUB_REF#refs/*/}" >> $GITHUB_ENV
-      - name: Print the extracted version
-        run: echo $RELEASE_VERSION
-      - uses: subosito/flutter-action@v2
-      - uses: bluefireteam/melos-action@v2
-        with:
-          melos-version: '3.1.0'
-      - uses: goto-bus-stop/setup-zig@v2
-      - uses: KyleMayes/install-llvm-action@v1
-        with:
-          version: "15"
-      - uses: actions-rs/toolchain@v1
-        with:
-          toolchain: stable
-      - uses: nttld/setup-ndk@v1
+      - name: Checkout the repository
+        uses: actions/checkout@v3
+
+      - uses: ./.github/actions/initialize
+
+      - uses: ./.github/actions/extract_package_version
+
+      - name: Setup NDK
+        uses: nttld/setup-ndk@v1
         with:
           ndk-version: r25b
 
