@@ -1,3 +1,7 @@
+## 1.11.0
+
+ - **FEAT**: upgrade frb to 1.81.0 ([#15](https://github.com/Fuelet/fuels-dart/issues/15)).
+
 ## 1.10.1
 
  - **FIX**: specific flutter_rust_bridge rust version.

@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-09-05
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flutter_fuels` - `v0.0.21`](#flutter_fuels---v0021)
+ - [`fuels` - `v1.11.0`](#fuels---v1110)
+
+---
+
+#### `flutter_fuels` - `v0.0.21`
+
+ - **FEAT**: upgrade frb to 1.81.0 ([#15](https://github.com/Fuelet/fuels-dart/issues/15)).
+
+#### `fuels` - `v1.11.0`
+
+ - **FEAT**: upgrade frb to 1.81.0 ([#15](https://github.com/Fuelet/fuels-dart/issues/15)).
+
+
 ## 2023-09-04
 
 ### Changes
