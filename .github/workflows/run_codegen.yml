@@ -15,6 +15,11 @@ jobs:
 
       - uses: ./.github/actions/initialize
 
+      - name: Setup Just
+        uses: extractions/setup-just@v1
+        with:
+          just-version: 1.9.0
+
       - name: FRB codegen
         run: melos run frb-gen
 
