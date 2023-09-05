@@ -4,7 +4,8 @@ clean:
     rm -f native/src/bridge_generated.rs
     rm -f native/src/bridge_generated.io.rs
     rm -f native/src/bridge_generated.web.rs
-    sed -i '' '/mod bridge_generated;/d' native/src/lib.rs
+    sed -i '/mod bridge_generated;/d' native/src/lib.rs
+#    sed -i '' '/mod bridge_generated;/d' native/src/lib.rs # Mac
 
 gen:
     cargo build --manifest-path=native/Cargo.toml

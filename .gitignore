@@ -38,3 +38,4 @@ build/
 /target/
 /Cargo.lock
 /platform-build
+/llvm/
