@@ -1,3 +1,7 @@
+## 1.12.0
+
+ - Bump "fuels" to `1.12.0`.
+
 ## 1.11.0
 
  - **FEAT**: upgrade frb to 1.81.0 ([#15](https://github.com/Fuelet/fuels-dart/issues/15)).

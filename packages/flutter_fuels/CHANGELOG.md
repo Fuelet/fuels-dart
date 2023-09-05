@@ -1,3 +1,7 @@
+## 0.0.21+1
+
+ - Update a dependency to the latest release.
+
 ## 0.0.21
 
  - **FEAT**: upgrade frb to 1.81.0 ([#15](https://github.com/Fuelet/fuels-dart/issues/15)).
