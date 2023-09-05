@@ -5,6 +5,11 @@ repository: https://github.com/Fuelet/fuels-dart
 packages:
   - packages/**
 
+command:
+  version:
+    hooks:
+      preCommit: bash scripts/version.sh
+
 scripts:
   analyze:
     exec: flutter analyze .
@@ -17,10 +22,6 @@ scripts:
   format:
     exec: flutter format .
     description: Format a specific package in this project.
-
-  version:
-    description: Updates version numbers in all build files
-    run: bash scripts/version.sh
 
   build:
     run: melos run build:apple && melos run build:android && melos run build:web # && melos run build:other
