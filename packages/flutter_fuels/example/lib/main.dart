@@ -3,7 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_fuels/flutter_fuels.dart';
 
-const _betaApiUrl = 'https://beta-3.fuel.network';
+const _betaApiUrl = 'https://beta-4.fuel.network';
 
 void main() {
   runApp(const MyApp());
