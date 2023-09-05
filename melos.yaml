@@ -43,7 +43,7 @@ scripts:
   #   description: Build the .tar.gz for all other platforms.
 
   frb-gen:
-    run: just --justfile packages/fuels/justfile gen
+    run: just --justfile packages/fuels/justfile
     description: Generate wrapper over the native Rust code
 
   test:
