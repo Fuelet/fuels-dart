@@ -23,6 +23,9 @@ jobs:
       - name: Install FRB
         run: cargo install --version 1.81.0 flutter_rust_bridge_codegen
 
+      - name: Install cargo-expand
+        run: cargo install cargo-expand
+
       - name: FRB codegen
         run: melos run frb-gen
 
