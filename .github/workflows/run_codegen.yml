@@ -29,6 +29,7 @@ jobs:
       - name: FRB codegen
         uses: nick-fields/retry@v2
         with:
+          timeout_minutes: 10
           max_attempts: 5
           command: melos run frb-gen
 
