@@ -1,3 +1,8 @@
+## 1.13.0
+
+ - **FEAT**: downgrade frb to 1.75.3. ([f053e3d0](https://github.com/Fuelet/fuels-dart/commit/f053e3d0076314ffc58da08aca46de74a82d3b21))
+ - **FEAT**: downgrade frb and dart sdk restrictions. ([a1a1a777](https://github.com/Fuelet/fuels-dart/commit/a1a1a7773ac0d3b58be24c9fe7600a004af14761))
+
 ## 1.12.1
 
 ## 1.12.0
