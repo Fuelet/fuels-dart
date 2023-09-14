@@ -1,3 +1,7 @@
+## 1.14.0
+
+ - **FEAT**: update sdk versions ([#18](https://github.com/Fuelet/fuels-dart/issues/18)). ([3bc9a9d3](https://github.com/Fuelet/fuels-dart/commit/3bc9a9d3c4a1f75124321d86bc37737a43837a3f))
+
 ## 1.13.0
 
  - **FEAT**: downgrade frb to 1.75.3. ([f053e3d0](https://github.com/Fuelet/fuels-dart/commit/f053e3d0076314ffc58da08aca46de74a82d3b21))
