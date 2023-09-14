@@ -10,8 +10,8 @@ crate-type = ["staticlib", "cdylib"]
 flutter_rust_bridge_codegen = "=1.75.3"
 
 [dependencies]
-fuels = "0.46.0"
-fuels-accounts = "0.46.0" # must be compatible with the fuels version
+fuels = "=0.47.0"
+fuels-accounts = "=0.47.0" # must be compatible with the fuels version
 fuel-crypto = { version = "0.35.3", features = ["random"] } # must be compatible with the fuels version
 fuel-tx = "0.35.3" # must be compatible with the fuels version
 futures = "0.3"
