@@ -68,6 +68,21 @@ class FuelWallet {
     return FuelWallet.fromData(data, networkUrl);
   }
 
+  static Future<FuelWallet> newFromMnemonicPhraseAndIndex({
+    required String networkUrl,
+    required String mnemonic,
+    required int index,
+  }) async {
+    if (index < 0) {
+      throw Exception('Index should be positive');
+    }
+    final derivationPath = "m/44'/1179993420'/$index'/0/0";
+    return await FuelWallet.newFromMnemonicPhraseAndPath(
+        networkUrl: networkUrl,
+        mnemonic: mnemonic,
+        derivationPath: derivationPath);
+  }
+
   Future<String> transfer({
     required String destinationB256Address,
     required int fractionalAmount,
