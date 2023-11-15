@@ -16,6 +16,12 @@ class FuelWalletImpl extends BaseWallet {
   }
 
   @override
+  Future<Map> newFromMnemonicAndPath(
+      {required String mnemonic, required String derivationPath}) {
+    throw Exception('Stub implementation');
+  }
+
+  @override
   Future<Map> newFromPrivateKey({
     required String privateKey,
   }) {

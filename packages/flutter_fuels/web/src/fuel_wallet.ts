@@ -46,6 +46,11 @@ class WalletInterface {
         return walletToJson(wallet, mnemonic);
     }
 
+    newWalletFromMnemonicAndPath(mnemonic: string, path: string): WalletObject {
+        let wallet = Wallet.fromMnemonic(mnemonic, path);
+        return walletToJson(wallet, mnemonic);
+    }
+
     newWalletFromPrivateKey(privateKey: string): WalletObject {
         let wallet = Wallet.fromPrivateKey(privateKey);
         return walletToJson(wallet);

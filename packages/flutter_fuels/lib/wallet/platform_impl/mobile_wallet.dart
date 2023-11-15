@@ -10,21 +10,7 @@ class FuelWalletImpl extends BaseWallet {
   @override
   Future<Map> generateNewWallet() async {
     final w = await WalletUnlocked.newRandom(bridge: _bridge);
-
-    final address = await w.address();
-    final bech32Address = await address.toBech32String();
-    final b256Address = await address.toB256String();
-
-    final data = {
-      'address': {
-        'bech32Address': bech32Address,
-        'b256Address': b256Address,
-      },
-      'privateKey': w.privateKey,
-      'mnemonicPhrase': w.mnemonicPhrase,
-    };
-
-    return data;
+    return await _walletToMap(w);
   }
 
   @override
@@ -36,20 +22,16 @@ class FuelWalletImpl extends BaseWallet {
       phrase: mnemonic,
     );
 
-    final address = await w.address();
-    final bech32Address = await address.toBech32String();
-    final b256Address = await address.toB256String();
+    return await _walletToMap(w);
+  }
 
-    final data = {
-      'address': {
-        'bech32Address': bech32Address,
-        'b256Address': b256Address,
-      },
-      'privateKey': w.privateKey,
-      'mnemonicPhrase': w.mnemonicPhrase,
-    };
+  @override
+  Future<Map> newFromMnemonicAndPath(
+      {required String mnemonic, required String derivationPath}) async {
+    final w = await WalletUnlocked.newFromMnemonicPhraseWithPath(
+        bridge: _bridge, phrase: mnemonic, path: derivationPath);
 
-    return data;
+    return await _walletToMap(w);
   }
 
   @override
@@ -61,20 +43,7 @@ class FuelWalletImpl extends BaseWallet {
       privateKey: privateKey,
     );
 
-    final address = await w.address();
-    final bech32Address = await address.toBech32String();
-    final b256Address = await address.toB256String();
-
-    final data = {
-      'address': {
-        'bech32Address': bech32Address,
-        'b256Address': b256Address,
-      },
-      'privateKey': w.privateKey,
-      'mnemonicPhrase': w.mnemonicPhrase,
-    };
-
-    return data;
+    return await _walletToMap(w);
   }
 
   @override
@@ -139,5 +108,22 @@ class FuelWalletImpl extends BaseWallet {
       required transactionRequest}) {
     // TODO: implement
     throw UnimplementedError();
+  }
+
+  Future<Map> _walletToMap(WalletUnlocked wallet) async {
+    final address = await wallet.address();
+    final bech32Address = await address.toBech32String();
+    final b256Address = await address.toB256String();
+
+    final data = {
+      'address': {
+        'bech32Address': bech32Address,
+        'b256Address': b256Address,
+      },
+      'privateKey': wallet.privateKey,
+      'mnemonicPhrase': wallet.mnemonicPhrase,
+    };
+
+    return data;
   }
 }

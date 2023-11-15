@@ -9,6 +9,9 @@ external dynamic generateNewWallet();
 @JS('newWalletFromMnemonic')
 external dynamic newWalletFromMnemonic(String mnemonic);
 
+@JS('newWalletFromMnemonicAndPath')
+external dynamic newWalletFromMnemonicAndPath(String mnemonic, String path);
+
 @JS('newWalletFromPrivateKey')
 external dynamic newWalletFromPrivateKey(String privateKey);
 

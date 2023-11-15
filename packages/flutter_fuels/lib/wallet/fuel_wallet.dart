@@ -19,13 +19,7 @@ class FuelWallet {
     required this.networkUrl,
   }) : b256Address = addHexPrefix(b256Address);
 
-  static final _wallet = FuelWalletImpl();
-
-  static Future<FuelWallet> generateNewWallet({
-    required String networkUrl,
-  }) async {
-    final data = await _wallet.generateNewWallet();
-
+  factory FuelWallet.fromData(Map data, String networkUrl) {
     return FuelWallet(
       bech32Address: data['address']['bech32Address'],
       b256Address: data['address']['b256Address'],
@@ -33,6 +27,15 @@ class FuelWallet {
       privateKey: data['privateKey'],
       networkUrl: networkUrl,
     );
+  }
+
+  static final _wallet = FuelWalletImpl();
+
+  static Future<FuelWallet> generateNewWallet({
+    required String networkUrl,
+  }) async {
+    final data = await _wallet.generateNewWallet();
+    return FuelWallet.fromData(data, networkUrl);
   }
 
   static Future<FuelWallet> newFromPrivateKey({
@@ -42,14 +45,7 @@ class FuelWallet {
     final data = await _wallet.newFromPrivateKey(
       privateKey: privateKey,
     );
-
-    return FuelWallet(
-      bech32Address: data['address']['bech32Address'],
-      b256Address: data['address']['b256Address'],
-      mnemonicPhrase: data['mnemonicPhrase'],
-      privateKey: data['privateKey'],
-      networkUrl: networkUrl,
-    );
+    return FuelWallet.fromData(data, networkUrl);
   }
 
   static Future<FuelWallet> newFromMnemonicPhrase({
@@ -59,14 +55,17 @@ class FuelWallet {
     final data = await _wallet.newFromMnemonic(
       mnemonic: mnemonic,
     );
+    return FuelWallet.fromData(data, networkUrl);
+  }
 
-    return FuelWallet(
-      bech32Address: data['address']['bech32Address'],
-      b256Address: data['address']['b256Address'],
-      mnemonicPhrase: data['mnemonicPhrase'],
-      privateKey: data['privateKey'],
-      networkUrl: networkUrl,
-    );
+  static Future<FuelWallet> newFromMnemonicPhraseAndPath({
+    required String networkUrl,
+    required String mnemonic,
+    required String derivationPath,
+  }) async {
+    final data = await _wallet.newFromMnemonicAndPath(
+        mnemonic: mnemonic, derivationPath: derivationPath);
+    return FuelWallet.fromData(data, networkUrl);
   }
 
   Future<String> transfer({
