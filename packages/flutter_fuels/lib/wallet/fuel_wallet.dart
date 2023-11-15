@@ -31,6 +31,7 @@ class FuelWallet {
 
   static final _wallet = FuelWalletImpl();
 
+  /// Generates a mnemonic phrase and a wallet from it
   static Future<FuelWallet> generateNewWallet({
     required String networkUrl,
   }) async {
@@ -38,6 +39,8 @@ class FuelWallet {
     return FuelWallet.fromData(data, networkUrl);
   }
 
+  /// Imports the wallet from the provided private key. Mnemonic phrase would
+  /// be absent, cause it's impossible to infer from private key
   static Future<FuelWallet> newFromPrivateKey({
     required String networkUrl,
     required String privateKey,
@@ -48,6 +51,7 @@ class FuelWallet {
     return FuelWallet.fromData(data, networkUrl);
   }
 
+  /// Imports the wallet from the provided mnemonic phrase
   static Future<FuelWallet> newFromMnemonicPhrase({
     required String networkUrl,
     required String mnemonic,
@@ -58,6 +62,7 @@ class FuelWallet {
     return FuelWallet.fromData(data, networkUrl);
   }
 
+  /// Imports the wallet from the provided mnemonic phrase and derivation path
   static Future<FuelWallet> newFromMnemonicPhraseAndPath({
     required String networkUrl,
     required String mnemonic,
@@ -68,6 +73,9 @@ class FuelWallet {
     return FuelWallet.fromData(data, networkUrl);
   }
 
+  /// Derives the wallet from the provided mnemonic and index. Constructs the
+  /// derivation path from the provided index and the conformed Fuel's template
+  /// "m/44'/1179993420'/$index'/0/0" and imports the wallet using this path
   static Future<FuelWallet> newFromMnemonicPhraseAndIndex({
     required String networkUrl,
     required String mnemonic,
