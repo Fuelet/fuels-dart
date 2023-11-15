@@ -1,3 +1,4 @@
+import 'package:bip39_mnemonic/bip39_mnemonic.dart';
 import 'package:flutter_fuels/model/call_result.dart';
 
 import 'platform_impl/stub_wallet.dart'
@@ -17,7 +18,7 @@ class FuelWallet {
     required this.mnemonicPhrase,
     required this.privateKey,
     required this.networkUrl,
-  }) : b256Address = addHexPrefix(b256Address);
+  }) : b256Address = _addHexPrefix(b256Address);
 
   factory FuelWallet.fromData(Map data, String networkUrl) {
     return FuelWallet(
@@ -56,6 +57,7 @@ class FuelWallet {
     required String networkUrl,
     required String mnemonic,
   }) async {
+    _validateMnemonicPhrase(mnemonic);
     final data = await _wallet.newFromMnemonic(
       mnemonic: mnemonic,
     );
@@ -68,6 +70,7 @@ class FuelWallet {
     required String mnemonic,
     required String derivationPath,
   }) async {
+    _validateMnemonicPhrase(mnemonic);
     final data = await _wallet.newFromMnemonicAndPath(
         mnemonic: mnemonic, derivationPath: derivationPath);
     return FuelWallet.fromData(data, networkUrl);
@@ -102,7 +105,7 @@ class FuelWallet {
     return _wallet.transfer(
       networkUrl: networkUrl,
       privateKey: privateKey,
-      destinationB256Address: addHexPrefix(destinationB256Address),
+      destinationB256Address: _addHexPrefix(destinationB256Address),
       fractionalAmount: fractionalAmount,
       assetId: assetId,
       gasPrice: gasPrice,
@@ -141,10 +144,16 @@ class FuelWallet {
     );
   }
 
-  static String addHexPrefix(String address) {
+  static String _addHexPrefix(String address) {
     if (address.startsWith('0x')) {
       return address;
     }
     return '0x$address';
+  }
+
+  static void _validateMnemonicPhrase(String mnemonic) {
+    // tries to construct mnemonic from sentence and throws exceptions
+    // in case of any errors
+    Mnemonic.fromSentence(mnemonic, Language.english);
   }
 }
