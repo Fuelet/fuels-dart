@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-11-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flutter_fuels` - `v0.0.23`](#flutter_fuels---v0023)
+ - [`fuels` - `v1.15.0`](#fuels---v1150)
+
+---
+
+#### `flutter_fuels` - `v0.0.23`
+
+ - **FIX**: update vulnerable dependencies. ([2286d017](https://github.com/Fuelet/fuels-dart/commit/2286d0171fde8e68f468430a9b6514c9ded690bb))
+ - **FEAT**: universal mnemonic validation ([#20](https://github.com/Fuelet/fuels-dart/issues/20)). ([9a11c6c1](https://github.com/Fuelet/fuels-dart/commit/9a11c6c1c4d14789b9195fd8af9f36fbc6fa40fb))
+ - **FEAT**: support accounts derivation ([#19](https://github.com/Fuelet/fuels-dart/issues/19)). ([364ab004](https://github.com/Fuelet/fuels-dart/commit/364ab004387948223e0bb95ff59645039cc53137))
+
+#### `fuels` - `v1.15.0`
+
+ - **FEAT**: support accounts derivation ([#19](https://github.com/Fuelet/fuels-dart/issues/19)). ([364ab004](https://github.com/Fuelet/fuels-dart/commit/364ab004387948223e0bb95ff59645039cc53137))
+
+
 ## 2023-09-14
 
 ### Changes

@@ -1,3 +1,7 @@
+## 1.15.0
+
+ - **FEAT**: support accounts derivation ([#19](https://github.com/Fuelet/fuels-dart/issues/19)). ([364ab004](https://github.com/Fuelet/fuels-dart/commit/364ab004387948223e0bb95ff59645039cc53137))
+
 ## 1.14.0
 
  - **FEAT**: update sdk versions ([#18](https://github.com/Fuelet/fuels-dart/issues/18)). ([3bc9a9d3](https://github.com/Fuelet/fuels-dart/commit/3bc9a9d3c4a1f75124321d86bc37737a43837a3f))

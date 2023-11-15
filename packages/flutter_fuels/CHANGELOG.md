@@ -1,3 +1,9 @@
+## 0.0.23
+
+ - **FIX**: update vulnerable dependencies. ([2286d017](https://github.com/Fuelet/fuels-dart/commit/2286d0171fde8e68f468430a9b6514c9ded690bb))
+ - **FEAT**: universal mnemonic validation ([#20](https://github.com/Fuelet/fuels-dart/issues/20)). ([9a11c6c1](https://github.com/Fuelet/fuels-dart/commit/9a11c6c1c4d14789b9195fd8af9f36fbc6fa40fb))
+ - **FEAT**: support accounts derivation ([#19](https://github.com/Fuelet/fuels-dart/issues/19)). ([364ab004](https://github.com/Fuelet/fuels-dart/commit/364ab004387948223e0bb95ff59645039cc53137))
+
 ## 0.0.22
 
  - **FEAT**: update sdk versions ([#18](https://github.com/Fuelet/fuels-dart/issues/18)). ([3bc9a9d3](https://github.com/Fuelet/fuels-dart/commit/3bc9a9d3c4a1f75124321d86bc37737a43837a3f))
