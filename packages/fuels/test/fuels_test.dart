@@ -17,6 +17,10 @@ const testWalletSeedPhrase =
 const ethAsset =
     '0x0000000000000000000000000000000000000000000000000000000000000000';
 
+const firstAccountDerivationPath = "m/44'/1179993420'/0'/0/0";
+const secondAccountDerivationPath = "m/44'/1179993420'/1'/0/0";
+const thirdAccountDerivationPath = "m/44'/1179993420'/2'/0/0";
+
 var txParams = const TxParameters(gasPrice: 1, gasLimit: 1000000, maturity: 0);
 
 String projectPath = Directory.current.parent.parent.path;
@@ -42,6 +46,13 @@ Future<WalletUnlocked> importWalletWithMnemonics(String mnemonicPhrase) {
   return createTestnetProvider().then((prov) =>
       WalletUnlocked.newFromMnemonicPhrase(
           bridge: rustSdk, phrase: mnemonicPhrase, provider: prov));
+}
+
+Future<WalletUnlocked> importWalletWithMnemonicsAndPath(
+    String mnemonicPhrase, String path) {
+  return createTestnetProvider().then((prov) =>
+      WalletUnlocked.newFromMnemonicPhraseWithPath(
+          bridge: rustSdk, phrase: mnemonicPhrase, path: path, provider: prov));
 }
 
 void main() {
@@ -91,6 +102,28 @@ void main() {
     for (var i = 0; i < balances.length; i++) {
       print('${balances[i].asset} -> ${balances[i].amount}');
     }
+  });
+
+  test('test derive wallets from seed phrase', () async {
+    WalletUnlocked first = await importWalletWithMnemonicsAndPath(
+        testWalletSeedPhrase, firstAccountDerivationPath);
+    WalletUnlocked second = await importWalletWithMnemonicsAndPath(
+        testWalletSeedPhrase, secondAccountDerivationPath);
+    WalletUnlocked third = await importWalletWithMnemonicsAndPath(
+        testWalletSeedPhrase, thirdAccountDerivationPath);
+
+    await first
+        .address()
+        .then((addr) => addr.toBech32String())
+        .then((bech) => expect(bech, testWalletBechAddress));
+
+    await second.address().then((addr) => addr.toBech32String()).then((bech) =>
+        expect(bech,
+            'fuel1pvazxjtdrnfvt0s4pj90zftxktwfpslqltwcfhuptqr37ha0slxsepphq6'));
+
+    await third.address().then((addr) => addr.toBech32String()).then((bech) =>
+        expect(bech,
+            'fuel184jsv6n79z6mlhtzj80tehx3826huumehmlenrcsa89dsy6jz4yq9gs55j'));
   });
 
   test('test Bech32Address conversion', () async {

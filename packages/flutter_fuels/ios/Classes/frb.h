@@ -62,8 +62,8 @@ void wire_new_from_mnemonic_phrase__static_method__WalletUnlocked(int64_t port_,
 
 void wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(int64_t port_,
                                                                             struct wire_uint_8_list *phrase,
-                                                                            struct wire_Provider *provider,
-                                                                            struct wire_uint_8_list *path);
+                                                                            struct wire_uint_8_list *path,
+                                                                            struct wire_Provider *provider);
 
 void wire_address__method__WalletUnlocked(int64_t port_, struct wire_WalletUnlocked *that);
 

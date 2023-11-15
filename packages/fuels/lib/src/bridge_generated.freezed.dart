@@ -211,10 +211,10 @@ class _$ReceiptCopyWithImpl<$Res, $Val extends Receipt>
 }
 
 /// @nodoc
-abstract class _$$Receipt_CallCopyWith<$Res> {
-  factory _$$Receipt_CallCopyWith(
-          _$Receipt_Call value, $Res Function(_$Receipt_Call) then) =
-      __$$Receipt_CallCopyWithImpl<$Res>;
+abstract class _$$Receipt_CallImplCopyWith<$Res> {
+  factory _$$Receipt_CallImplCopyWith(
+          _$Receipt_CallImpl value, $Res Function(_$Receipt_CallImpl) then) =
+      __$$Receipt_CallImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {U8Array32 id,
@@ -229,11 +229,11 @@ abstract class _$$Receipt_CallCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$Receipt_CallCopyWithImpl<$Res>
-    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_Call>
-    implements _$$Receipt_CallCopyWith<$Res> {
-  __$$Receipt_CallCopyWithImpl(
-      _$Receipt_Call _value, $Res Function(_$Receipt_Call) _then)
+class __$$Receipt_CallImplCopyWithImpl<$Res>
+    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_CallImpl>
+    implements _$$Receipt_CallImplCopyWith<$Res> {
+  __$$Receipt_CallImplCopyWithImpl(
+      _$Receipt_CallImpl _value, $Res Function(_$Receipt_CallImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -249,7 +249,7 @@ class __$$Receipt_CallCopyWithImpl<$Res>
     Object? pc = null,
     Object? isField = null,
   }) {
-    return _then(_$Receipt_Call(
+    return _then(_$Receipt_CallImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -292,8 +292,8 @@ class __$$Receipt_CallCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Receipt_Call implements Receipt_Call {
-  const _$Receipt_Call(
+class _$Receipt_CallImpl implements Receipt_Call {
+  const _$Receipt_CallImpl(
       {required this.id,
       required this.to,
       required this.amount,
@@ -332,7 +332,7 @@ class _$Receipt_Call implements Receipt_Call {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Receipt_Call &&
+            other is _$Receipt_CallImpl &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.to, to) &&
             (identical(other.amount, amount) || other.amount == amount) &&
@@ -360,8 +360,8 @@ class _$Receipt_Call implements Receipt_Call {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$Receipt_CallCopyWith<_$Receipt_Call> get copyWith =>
-      __$$Receipt_CallCopyWithImpl<_$Receipt_Call>(this, _$identity);
+  _$$Receipt_CallImplCopyWith<_$Receipt_CallImpl> get copyWith =>
+      __$$Receipt_CallImplCopyWithImpl<_$Receipt_CallImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -574,7 +574,7 @@ abstract class Receipt_Call implements Receipt {
       required final int param1,
       required final int param2,
       required final int pc,
-      required final int isField}) = _$Receipt_Call;
+      required final int isField}) = _$Receipt_CallImpl;
 
   U8Array32 get id;
   U8Array32 get to;
@@ -586,25 +586,26 @@ abstract class Receipt_Call implements Receipt {
   int get pc;
   int get isField;
   @JsonKey(ignore: true)
-  _$$Receipt_CallCopyWith<_$Receipt_Call> get copyWith =>
+  _$$Receipt_CallImplCopyWith<_$Receipt_CallImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$Receipt_ReturnReceiptCopyWith<$Res> {
-  factory _$$Receipt_ReturnReceiptCopyWith(_$Receipt_ReturnReceipt value,
-          $Res Function(_$Receipt_ReturnReceipt) then) =
-      __$$Receipt_ReturnReceiptCopyWithImpl<$Res>;
+abstract class _$$Receipt_ReturnReceiptImplCopyWith<$Res> {
+  factory _$$Receipt_ReturnReceiptImplCopyWith(
+          _$Receipt_ReturnReceiptImpl value,
+          $Res Function(_$Receipt_ReturnReceiptImpl) then) =
+      __$$Receipt_ReturnReceiptImplCopyWithImpl<$Res>;
   @useResult
   $Res call({U8Array32 id, int val, int pc, int isField});
 }
 
 /// @nodoc
-class __$$Receipt_ReturnReceiptCopyWithImpl<$Res>
-    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_ReturnReceipt>
-    implements _$$Receipt_ReturnReceiptCopyWith<$Res> {
-  __$$Receipt_ReturnReceiptCopyWithImpl(_$Receipt_ReturnReceipt _value,
-      $Res Function(_$Receipt_ReturnReceipt) _then)
+class __$$Receipt_ReturnReceiptImplCopyWithImpl<$Res>
+    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_ReturnReceiptImpl>
+    implements _$$Receipt_ReturnReceiptImplCopyWith<$Res> {
+  __$$Receipt_ReturnReceiptImplCopyWithImpl(_$Receipt_ReturnReceiptImpl _value,
+      $Res Function(_$Receipt_ReturnReceiptImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -615,7 +616,7 @@ class __$$Receipt_ReturnReceiptCopyWithImpl<$Res>
     Object? pc = null,
     Object? isField = null,
   }) {
-    return _then(_$Receipt_ReturnReceipt(
+    return _then(_$Receipt_ReturnReceiptImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -638,8 +639,8 @@ class __$$Receipt_ReturnReceiptCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Receipt_ReturnReceipt implements Receipt_ReturnReceipt {
-  const _$Receipt_ReturnReceipt(
+class _$Receipt_ReturnReceiptImpl implements Receipt_ReturnReceipt {
+  const _$Receipt_ReturnReceiptImpl(
       {required this.id,
       required this.val,
       required this.pc,
@@ -663,7 +664,7 @@ class _$Receipt_ReturnReceipt implements Receipt_ReturnReceipt {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Receipt_ReturnReceipt &&
+            other is _$Receipt_ReturnReceiptImpl &&
             const DeepCollectionEquality().equals(other.id, id) &&
             (identical(other.val, val) || other.val == val) &&
             (identical(other.pc, pc) || other.pc == pc) &&
@@ -677,9 +678,9 @@ class _$Receipt_ReturnReceipt implements Receipt_ReturnReceipt {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$Receipt_ReturnReceiptCopyWith<_$Receipt_ReturnReceipt> get copyWith =>
-      __$$Receipt_ReturnReceiptCopyWithImpl<_$Receipt_ReturnReceipt>(
-          this, _$identity);
+  _$$Receipt_ReturnReceiptImplCopyWith<_$Receipt_ReturnReceiptImpl>
+      get copyWith => __$$Receipt_ReturnReceiptImplCopyWithImpl<
+          _$Receipt_ReturnReceiptImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -886,22 +887,22 @@ abstract class Receipt_ReturnReceipt implements Receipt {
       {required final U8Array32 id,
       required final int val,
       required final int pc,
-      required final int isField}) = _$Receipt_ReturnReceipt;
+      required final int isField}) = _$Receipt_ReturnReceiptImpl;
 
   U8Array32 get id;
   int get val;
   int get pc;
   int get isField;
   @JsonKey(ignore: true)
-  _$$Receipt_ReturnReceiptCopyWith<_$Receipt_ReturnReceipt> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$Receipt_ReturnReceiptImplCopyWith<_$Receipt_ReturnReceiptImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$Receipt_ReturnDataCopyWith<$Res> {
-  factory _$$Receipt_ReturnDataCopyWith(_$Receipt_ReturnData value,
-          $Res Function(_$Receipt_ReturnData) then) =
-      __$$Receipt_ReturnDataCopyWithImpl<$Res>;
+abstract class _$$Receipt_ReturnDataImplCopyWith<$Res> {
+  factory _$$Receipt_ReturnDataImplCopyWith(_$Receipt_ReturnDataImpl value,
+          $Res Function(_$Receipt_ReturnDataImpl) then) =
+      __$$Receipt_ReturnDataImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {U8Array32 id,
@@ -914,11 +915,11 @@ abstract class _$$Receipt_ReturnDataCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$Receipt_ReturnDataCopyWithImpl<$Res>
-    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_ReturnData>
-    implements _$$Receipt_ReturnDataCopyWith<$Res> {
-  __$$Receipt_ReturnDataCopyWithImpl(
-      _$Receipt_ReturnData _value, $Res Function(_$Receipt_ReturnData) _then)
+class __$$Receipt_ReturnDataImplCopyWithImpl<$Res>
+    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_ReturnDataImpl>
+    implements _$$Receipt_ReturnDataImplCopyWith<$Res> {
+  __$$Receipt_ReturnDataImplCopyWithImpl(_$Receipt_ReturnDataImpl _value,
+      $Res Function(_$Receipt_ReturnDataImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -932,7 +933,7 @@ class __$$Receipt_ReturnDataCopyWithImpl<$Res>
     Object? pc = null,
     Object? isField = null,
   }) {
-    return _then(_$Receipt_ReturnData(
+    return _then(_$Receipt_ReturnDataImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -967,8 +968,8 @@ class __$$Receipt_ReturnDataCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Receipt_ReturnData implements Receipt_ReturnData {
-  const _$Receipt_ReturnData(
+class _$Receipt_ReturnDataImpl implements Receipt_ReturnData {
+  const _$Receipt_ReturnDataImpl(
       {required this.id,
       required this.ptr,
       required this.len,
@@ -1001,7 +1002,7 @@ class _$Receipt_ReturnData implements Receipt_ReturnData {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Receipt_ReturnData &&
+            other is _$Receipt_ReturnDataImpl &&
             const DeepCollectionEquality().equals(other.id, id) &&
             (identical(other.ptr, ptr) || other.ptr == ptr) &&
             (identical(other.len, len) || other.len == len) &&
@@ -1025,8 +1026,8 @@ class _$Receipt_ReturnData implements Receipt_ReturnData {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$Receipt_ReturnDataCopyWith<_$Receipt_ReturnData> get copyWith =>
-      __$$Receipt_ReturnDataCopyWithImpl<_$Receipt_ReturnData>(
+  _$$Receipt_ReturnDataImplCopyWith<_$Receipt_ReturnDataImpl> get copyWith =>
+      __$$Receipt_ReturnDataImplCopyWithImpl<_$Receipt_ReturnDataImpl>(
           this, _$identity);
 
   @override
@@ -1237,7 +1238,7 @@ abstract class Receipt_ReturnData implements Receipt {
       required final U8Array32 digest,
       final Uint8List? data,
       required final int pc,
-      required final int isField}) = _$Receipt_ReturnData;
+      required final int isField}) = _$Receipt_ReturnDataImpl;
 
   U8Array32 get id;
   int get ptr;
@@ -1247,15 +1248,15 @@ abstract class Receipt_ReturnData implements Receipt {
   int get pc;
   int get isField;
   @JsonKey(ignore: true)
-  _$$Receipt_ReturnDataCopyWith<_$Receipt_ReturnData> get copyWith =>
+  _$$Receipt_ReturnDataImplCopyWith<_$Receipt_ReturnDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$Receipt_PanicCopyWith<$Res> {
-  factory _$$Receipt_PanicCopyWith(
-          _$Receipt_Panic value, $Res Function(_$Receipt_Panic) then) =
-      __$$Receipt_PanicCopyWithImpl<$Res>;
+abstract class _$$Receipt_PanicImplCopyWith<$Res> {
+  factory _$$Receipt_PanicImplCopyWith(
+          _$Receipt_PanicImpl value, $Res Function(_$Receipt_PanicImpl) then) =
+      __$$Receipt_PanicImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {U8Array32 id,
@@ -1266,11 +1267,11 @@ abstract class _$$Receipt_PanicCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$Receipt_PanicCopyWithImpl<$Res>
-    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_Panic>
-    implements _$$Receipt_PanicCopyWith<$Res> {
-  __$$Receipt_PanicCopyWithImpl(
-      _$Receipt_Panic _value, $Res Function(_$Receipt_Panic) _then)
+class __$$Receipt_PanicImplCopyWithImpl<$Res>
+    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_PanicImpl>
+    implements _$$Receipt_PanicImplCopyWith<$Res> {
+  __$$Receipt_PanicImplCopyWithImpl(
+      _$Receipt_PanicImpl _value, $Res Function(_$Receipt_PanicImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1282,7 +1283,7 @@ class __$$Receipt_PanicCopyWithImpl<$Res>
     Object? isField = null,
     Object? contractId = freezed,
   }) {
-    return _then(_$Receipt_Panic(
+    return _then(_$Receipt_PanicImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -1309,8 +1310,8 @@ class __$$Receipt_PanicCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Receipt_Panic implements Receipt_Panic {
-  const _$Receipt_Panic(
+class _$Receipt_PanicImpl implements Receipt_Panic {
+  const _$Receipt_PanicImpl(
       {required this.id,
       required this.reason,
       required this.pc,
@@ -1337,7 +1338,7 @@ class _$Receipt_Panic implements Receipt_Panic {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Receipt_Panic &&
+            other is _$Receipt_PanicImpl &&
             const DeepCollectionEquality().equals(other.id, id) &&
             (identical(other.reason, reason) || other.reason == reason) &&
             (identical(other.pc, pc) || other.pc == pc) &&
@@ -1358,8 +1359,8 @@ class _$Receipt_Panic implements Receipt_Panic {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$Receipt_PanicCopyWith<_$Receipt_Panic> get copyWith =>
-      __$$Receipt_PanicCopyWithImpl<_$Receipt_Panic>(this, _$identity);
+  _$$Receipt_PanicImplCopyWith<_$Receipt_PanicImpl> get copyWith =>
+      __$$Receipt_PanicImplCopyWithImpl<_$Receipt_PanicImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1567,7 +1568,7 @@ abstract class Receipt_Panic implements Receipt {
       required final PanicInstruction reason,
       required final int pc,
       required final int isField,
-      final U8Array32? contractId}) = _$Receipt_Panic;
+      final U8Array32? contractId}) = _$Receipt_PanicImpl;
 
   U8Array32 get id;
   PanicInstruction get reason;
@@ -1575,25 +1576,25 @@ abstract class Receipt_Panic implements Receipt {
   int get isField;
   U8Array32? get contractId;
   @JsonKey(ignore: true)
-  _$$Receipt_PanicCopyWith<_$Receipt_Panic> get copyWith =>
+  _$$Receipt_PanicImplCopyWith<_$Receipt_PanicImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$Receipt_RevertCopyWith<$Res> {
-  factory _$$Receipt_RevertCopyWith(
-          _$Receipt_Revert value, $Res Function(_$Receipt_Revert) then) =
-      __$$Receipt_RevertCopyWithImpl<$Res>;
+abstract class _$$Receipt_RevertImplCopyWith<$Res> {
+  factory _$$Receipt_RevertImplCopyWith(_$Receipt_RevertImpl value,
+          $Res Function(_$Receipt_RevertImpl) then) =
+      __$$Receipt_RevertImplCopyWithImpl<$Res>;
   @useResult
   $Res call({U8Array32 id, int ra, int pc, int isField});
 }
 
 /// @nodoc
-class __$$Receipt_RevertCopyWithImpl<$Res>
-    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_Revert>
-    implements _$$Receipt_RevertCopyWith<$Res> {
-  __$$Receipt_RevertCopyWithImpl(
-      _$Receipt_Revert _value, $Res Function(_$Receipt_Revert) _then)
+class __$$Receipt_RevertImplCopyWithImpl<$Res>
+    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_RevertImpl>
+    implements _$$Receipt_RevertImplCopyWith<$Res> {
+  __$$Receipt_RevertImplCopyWithImpl(
+      _$Receipt_RevertImpl _value, $Res Function(_$Receipt_RevertImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1604,7 +1605,7 @@ class __$$Receipt_RevertCopyWithImpl<$Res>
     Object? pc = null,
     Object? isField = null,
   }) {
-    return _then(_$Receipt_Revert(
+    return _then(_$Receipt_RevertImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -1627,8 +1628,8 @@ class __$$Receipt_RevertCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Receipt_Revert implements Receipt_Revert {
-  const _$Receipt_Revert(
+class _$Receipt_RevertImpl implements Receipt_Revert {
+  const _$Receipt_RevertImpl(
       {required this.id,
       required this.ra,
       required this.pc,
@@ -1652,7 +1653,7 @@ class _$Receipt_Revert implements Receipt_Revert {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Receipt_Revert &&
+            other is _$Receipt_RevertImpl &&
             const DeepCollectionEquality().equals(other.id, id) &&
             (identical(other.ra, ra) || other.ra == ra) &&
             (identical(other.pc, pc) || other.pc == pc) &&
@@ -1666,8 +1667,9 @@ class _$Receipt_Revert implements Receipt_Revert {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$Receipt_RevertCopyWith<_$Receipt_Revert> get copyWith =>
-      __$$Receipt_RevertCopyWithImpl<_$Receipt_Revert>(this, _$identity);
+  _$$Receipt_RevertImplCopyWith<_$Receipt_RevertImpl> get copyWith =>
+      __$$Receipt_RevertImplCopyWithImpl<_$Receipt_RevertImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -1874,33 +1876,33 @@ abstract class Receipt_Revert implements Receipt {
       {required final U8Array32 id,
       required final int ra,
       required final int pc,
-      required final int isField}) = _$Receipt_Revert;
+      required final int isField}) = _$Receipt_RevertImpl;
 
   U8Array32 get id;
   int get ra;
   int get pc;
   int get isField;
   @JsonKey(ignore: true)
-  _$$Receipt_RevertCopyWith<_$Receipt_Revert> get copyWith =>
+  _$$Receipt_RevertImplCopyWith<_$Receipt_RevertImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$Receipt_LogCopyWith<$Res> {
-  factory _$$Receipt_LogCopyWith(
-          _$Receipt_Log value, $Res Function(_$Receipt_Log) then) =
-      __$$Receipt_LogCopyWithImpl<$Res>;
+abstract class _$$Receipt_LogImplCopyWith<$Res> {
+  factory _$$Receipt_LogImplCopyWith(
+          _$Receipt_LogImpl value, $Res Function(_$Receipt_LogImpl) then) =
+      __$$Receipt_LogImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {U8Array32 id, int ra, int rb, int rc, int rd, int pc, int isField});
 }
 
 /// @nodoc
-class __$$Receipt_LogCopyWithImpl<$Res>
-    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_Log>
-    implements _$$Receipt_LogCopyWith<$Res> {
-  __$$Receipt_LogCopyWithImpl(
-      _$Receipt_Log _value, $Res Function(_$Receipt_Log) _then)
+class __$$Receipt_LogImplCopyWithImpl<$Res>
+    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_LogImpl>
+    implements _$$Receipt_LogImplCopyWith<$Res> {
+  __$$Receipt_LogImplCopyWithImpl(
+      _$Receipt_LogImpl _value, $Res Function(_$Receipt_LogImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -1914,7 +1916,7 @@ class __$$Receipt_LogCopyWithImpl<$Res>
     Object? pc = null,
     Object? isField = null,
   }) {
-    return _then(_$Receipt_Log(
+    return _then(_$Receipt_LogImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -1949,8 +1951,8 @@ class __$$Receipt_LogCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Receipt_Log implements Receipt_Log {
-  const _$Receipt_Log(
+class _$Receipt_LogImpl implements Receipt_Log {
+  const _$Receipt_LogImpl(
       {required this.id,
       required this.ra,
       required this.rb,
@@ -1983,7 +1985,7 @@ class _$Receipt_Log implements Receipt_Log {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Receipt_Log &&
+            other is _$Receipt_LogImpl &&
             const DeepCollectionEquality().equals(other.id, id) &&
             (identical(other.ra, ra) || other.ra == ra) &&
             (identical(other.rb, rb) || other.rb == rb) &&
@@ -2000,8 +2002,8 @@ class _$Receipt_Log implements Receipt_Log {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$Receipt_LogCopyWith<_$Receipt_Log> get copyWith =>
-      __$$Receipt_LogCopyWithImpl<_$Receipt_Log>(this, _$identity);
+  _$$Receipt_LogImplCopyWith<_$Receipt_LogImpl> get copyWith =>
+      __$$Receipt_LogImplCopyWithImpl<_$Receipt_LogImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -2211,7 +2213,7 @@ abstract class Receipt_Log implements Receipt {
       required final int rc,
       required final int rd,
       required final int pc,
-      required final int isField}) = _$Receipt_Log;
+      required final int isField}) = _$Receipt_LogImpl;
 
   U8Array32 get id;
   int get ra;
@@ -2221,15 +2223,15 @@ abstract class Receipt_Log implements Receipt {
   int get pc;
   int get isField;
   @JsonKey(ignore: true)
-  _$$Receipt_LogCopyWith<_$Receipt_Log> get copyWith =>
+  _$$Receipt_LogImplCopyWith<_$Receipt_LogImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$Receipt_LogDataCopyWith<$Res> {
-  factory _$$Receipt_LogDataCopyWith(
-          _$Receipt_LogData value, $Res Function(_$Receipt_LogData) then) =
-      __$$Receipt_LogDataCopyWithImpl<$Res>;
+abstract class _$$Receipt_LogDataImplCopyWith<$Res> {
+  factory _$$Receipt_LogDataImplCopyWith(_$Receipt_LogDataImpl value,
+          $Res Function(_$Receipt_LogDataImpl) then) =
+      __$$Receipt_LogDataImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {U8Array32 id,
@@ -2244,11 +2246,11 @@ abstract class _$$Receipt_LogDataCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$Receipt_LogDataCopyWithImpl<$Res>
-    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_LogData>
-    implements _$$Receipt_LogDataCopyWith<$Res> {
-  __$$Receipt_LogDataCopyWithImpl(
-      _$Receipt_LogData _value, $Res Function(_$Receipt_LogData) _then)
+class __$$Receipt_LogDataImplCopyWithImpl<$Res>
+    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_LogDataImpl>
+    implements _$$Receipt_LogDataImplCopyWith<$Res> {
+  __$$Receipt_LogDataImplCopyWithImpl(
+      _$Receipt_LogDataImpl _value, $Res Function(_$Receipt_LogDataImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -2264,7 +2266,7 @@ class __$$Receipt_LogDataCopyWithImpl<$Res>
     Object? pc = null,
     Object? isField = null,
   }) {
-    return _then(_$Receipt_LogData(
+    return _then(_$Receipt_LogDataImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -2307,8 +2309,8 @@ class __$$Receipt_LogDataCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Receipt_LogData implements Receipt_LogData {
-  const _$Receipt_LogData(
+class _$Receipt_LogDataImpl implements Receipt_LogData {
+  const _$Receipt_LogDataImpl(
       {required this.id,
       required this.ra,
       required this.rb,
@@ -2347,7 +2349,7 @@ class _$Receipt_LogData implements Receipt_LogData {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Receipt_LogData &&
+            other is _$Receipt_LogDataImpl &&
             const DeepCollectionEquality().equals(other.id, id) &&
             (identical(other.ra, ra) || other.ra == ra) &&
             (identical(other.rb, rb) || other.rb == rb) &&
@@ -2375,8 +2377,9 @@ class _$Receipt_LogData implements Receipt_LogData {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$Receipt_LogDataCopyWith<_$Receipt_LogData> get copyWith =>
-      __$$Receipt_LogDataCopyWithImpl<_$Receipt_LogData>(this, _$identity);
+  _$$Receipt_LogDataImplCopyWith<_$Receipt_LogDataImpl> get copyWith =>
+      __$$Receipt_LogDataImplCopyWithImpl<_$Receipt_LogDataImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -2588,7 +2591,7 @@ abstract class Receipt_LogData implements Receipt {
       required final U8Array32 digest,
       final Uint8List? data,
       required final int pc,
-      required final int isField}) = _$Receipt_LogData;
+      required final int isField}) = _$Receipt_LogDataImpl;
 
   U8Array32 get id;
   int get ra;
@@ -2600,15 +2603,15 @@ abstract class Receipt_LogData implements Receipt {
   int get pc;
   int get isField;
   @JsonKey(ignore: true)
-  _$$Receipt_LogDataCopyWith<_$Receipt_LogData> get copyWith =>
+  _$$Receipt_LogDataImplCopyWith<_$Receipt_LogDataImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$Receipt_TransferCopyWith<$Res> {
-  factory _$$Receipt_TransferCopyWith(
-          _$Receipt_Transfer value, $Res Function(_$Receipt_Transfer) then) =
-      __$$Receipt_TransferCopyWithImpl<$Res>;
+abstract class _$$Receipt_TransferImplCopyWith<$Res> {
+  factory _$$Receipt_TransferImplCopyWith(_$Receipt_TransferImpl value,
+          $Res Function(_$Receipt_TransferImpl) then) =
+      __$$Receipt_TransferImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {U8Array32 id,
@@ -2620,11 +2623,11 @@ abstract class _$$Receipt_TransferCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$Receipt_TransferCopyWithImpl<$Res>
-    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_Transfer>
-    implements _$$Receipt_TransferCopyWith<$Res> {
-  __$$Receipt_TransferCopyWithImpl(
-      _$Receipt_Transfer _value, $Res Function(_$Receipt_Transfer) _then)
+class __$$Receipt_TransferImplCopyWithImpl<$Res>
+    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_TransferImpl>
+    implements _$$Receipt_TransferImplCopyWith<$Res> {
+  __$$Receipt_TransferImplCopyWithImpl(_$Receipt_TransferImpl _value,
+      $Res Function(_$Receipt_TransferImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -2637,7 +2640,7 @@ class __$$Receipt_TransferCopyWithImpl<$Res>
     Object? pc = null,
     Object? isField = null,
   }) {
-    return _then(_$Receipt_Transfer(
+    return _then(_$Receipt_TransferImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -2668,8 +2671,8 @@ class __$$Receipt_TransferCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Receipt_Transfer implements Receipt_Transfer {
-  const _$Receipt_Transfer(
+class _$Receipt_TransferImpl implements Receipt_Transfer {
+  const _$Receipt_TransferImpl(
       {required this.id,
       required this.to,
       required this.amount,
@@ -2699,7 +2702,7 @@ class _$Receipt_Transfer implements Receipt_Transfer {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Receipt_Transfer &&
+            other is _$Receipt_TransferImpl &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.to, to) &&
             (identical(other.amount, amount) || other.amount == amount) &&
@@ -2721,8 +2724,9 @@ class _$Receipt_Transfer implements Receipt_Transfer {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$Receipt_TransferCopyWith<_$Receipt_Transfer> get copyWith =>
-      __$$Receipt_TransferCopyWithImpl<_$Receipt_Transfer>(this, _$identity);
+  _$$Receipt_TransferImplCopyWith<_$Receipt_TransferImpl> get copyWith =>
+      __$$Receipt_TransferImplCopyWithImpl<_$Receipt_TransferImpl>(
+          this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -2931,7 +2935,7 @@ abstract class Receipt_Transfer implements Receipt {
       required final int amount,
       required final U8Array32 assetId,
       required final int pc,
-      required final int isField}) = _$Receipt_Transfer;
+      required final int isField}) = _$Receipt_TransferImpl;
 
   U8Array32 get id;
   U8Array32 get to;
@@ -2940,15 +2944,15 @@ abstract class Receipt_Transfer implements Receipt {
   int get pc;
   int get isField;
   @JsonKey(ignore: true)
-  _$$Receipt_TransferCopyWith<_$Receipt_Transfer> get copyWith =>
+  _$$Receipt_TransferImplCopyWith<_$Receipt_TransferImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$Receipt_TransferOutCopyWith<$Res> {
-  factory _$$Receipt_TransferOutCopyWith(_$Receipt_TransferOut value,
-          $Res Function(_$Receipt_TransferOut) then) =
-      __$$Receipt_TransferOutCopyWithImpl<$Res>;
+abstract class _$$Receipt_TransferOutImplCopyWith<$Res> {
+  factory _$$Receipt_TransferOutImplCopyWith(_$Receipt_TransferOutImpl value,
+          $Res Function(_$Receipt_TransferOutImpl) then) =
+      __$$Receipt_TransferOutImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {U8Array32 id,
@@ -2960,11 +2964,11 @@ abstract class _$$Receipt_TransferOutCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$Receipt_TransferOutCopyWithImpl<$Res>
-    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_TransferOut>
-    implements _$$Receipt_TransferOutCopyWith<$Res> {
-  __$$Receipt_TransferOutCopyWithImpl(
-      _$Receipt_TransferOut _value, $Res Function(_$Receipt_TransferOut) _then)
+class __$$Receipt_TransferOutImplCopyWithImpl<$Res>
+    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_TransferOutImpl>
+    implements _$$Receipt_TransferOutImplCopyWith<$Res> {
+  __$$Receipt_TransferOutImplCopyWithImpl(_$Receipt_TransferOutImpl _value,
+      $Res Function(_$Receipt_TransferOutImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -2977,7 +2981,7 @@ class __$$Receipt_TransferOutCopyWithImpl<$Res>
     Object? pc = null,
     Object? isField = null,
   }) {
-    return _then(_$Receipt_TransferOut(
+    return _then(_$Receipt_TransferOutImpl(
       id: null == id
           ? _value.id
           : id // ignore: cast_nullable_to_non_nullable
@@ -3008,8 +3012,8 @@ class __$$Receipt_TransferOutCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Receipt_TransferOut implements Receipt_TransferOut {
-  const _$Receipt_TransferOut(
+class _$Receipt_TransferOutImpl implements Receipt_TransferOut {
+  const _$Receipt_TransferOutImpl(
       {required this.id,
       required this.to,
       required this.amount,
@@ -3039,7 +3043,7 @@ class _$Receipt_TransferOut implements Receipt_TransferOut {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Receipt_TransferOut &&
+            other is _$Receipt_TransferOutImpl &&
             const DeepCollectionEquality().equals(other.id, id) &&
             const DeepCollectionEquality().equals(other.to, to) &&
             (identical(other.amount, amount) || other.amount == amount) &&
@@ -3061,8 +3065,8 @@ class _$Receipt_TransferOut implements Receipt_TransferOut {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$Receipt_TransferOutCopyWith<_$Receipt_TransferOut> get copyWith =>
-      __$$Receipt_TransferOutCopyWithImpl<_$Receipt_TransferOut>(
+  _$$Receipt_TransferOutImplCopyWith<_$Receipt_TransferOutImpl> get copyWith =>
+      __$$Receipt_TransferOutImplCopyWithImpl<_$Receipt_TransferOutImpl>(
           this, _$identity);
 
   @override
@@ -3272,7 +3276,7 @@ abstract class Receipt_TransferOut implements Receipt {
       required final int amount,
       required final U8Array32 assetId,
       required final int pc,
-      required final int isField}) = _$Receipt_TransferOut;
+      required final int isField}) = _$Receipt_TransferOutImpl;
 
   U8Array32 get id;
   U8Array32 get to;
@@ -3281,15 +3285,15 @@ abstract class Receipt_TransferOut implements Receipt {
   int get pc;
   int get isField;
   @JsonKey(ignore: true)
-  _$$Receipt_TransferOutCopyWith<_$Receipt_TransferOut> get copyWith =>
+  _$$Receipt_TransferOutImplCopyWith<_$Receipt_TransferOutImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$Receipt_ScriptResultCopyWith<$Res> {
-  factory _$$Receipt_ScriptResultCopyWith(_$Receipt_ScriptResult value,
-          $Res Function(_$Receipt_ScriptResult) then) =
-      __$$Receipt_ScriptResultCopyWithImpl<$Res>;
+abstract class _$$Receipt_ScriptResultImplCopyWith<$Res> {
+  factory _$$Receipt_ScriptResultImplCopyWith(_$Receipt_ScriptResultImpl value,
+          $Res Function(_$Receipt_ScriptResultImpl) then) =
+      __$$Receipt_ScriptResultImplCopyWithImpl<$Res>;
   @useResult
   $Res call({ScriptExecutionResult result, int gasUsed});
 
@@ -3297,11 +3301,11 @@ abstract class _$$Receipt_ScriptResultCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$Receipt_ScriptResultCopyWithImpl<$Res>
-    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_ScriptResult>
-    implements _$$Receipt_ScriptResultCopyWith<$Res> {
-  __$$Receipt_ScriptResultCopyWithImpl(_$Receipt_ScriptResult _value,
-      $Res Function(_$Receipt_ScriptResult) _then)
+class __$$Receipt_ScriptResultImplCopyWithImpl<$Res>
+    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_ScriptResultImpl>
+    implements _$$Receipt_ScriptResultImplCopyWith<$Res> {
+  __$$Receipt_ScriptResultImplCopyWithImpl(_$Receipt_ScriptResultImpl _value,
+      $Res Function(_$Receipt_ScriptResultImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -3310,7 +3314,7 @@ class __$$Receipt_ScriptResultCopyWithImpl<$Res>
     Object? result = null,
     Object? gasUsed = null,
   }) {
-    return _then(_$Receipt_ScriptResult(
+    return _then(_$Receipt_ScriptResultImpl(
       result: null == result
           ? _value.result
           : result // ignore: cast_nullable_to_non_nullable
@@ -3333,8 +3337,9 @@ class __$$Receipt_ScriptResultCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Receipt_ScriptResult implements Receipt_ScriptResult {
-  const _$Receipt_ScriptResult({required this.result, required this.gasUsed});
+class _$Receipt_ScriptResultImpl implements Receipt_ScriptResult {
+  const _$Receipt_ScriptResultImpl(
+      {required this.result, required this.gasUsed});
 
   @override
   final ScriptExecutionResult result;
@@ -3350,7 +3355,7 @@ class _$Receipt_ScriptResult implements Receipt_ScriptResult {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Receipt_ScriptResult &&
+            other is _$Receipt_ScriptResultImpl &&
             (identical(other.result, result) || other.result == result) &&
             (identical(other.gasUsed, gasUsed) || other.gasUsed == gasUsed));
   }
@@ -3361,9 +3366,10 @@ class _$Receipt_ScriptResult implements Receipt_ScriptResult {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$Receipt_ScriptResultCopyWith<_$Receipt_ScriptResult> get copyWith =>
-      __$$Receipt_ScriptResultCopyWithImpl<_$Receipt_ScriptResult>(
-          this, _$identity);
+  _$$Receipt_ScriptResultImplCopyWith<_$Receipt_ScriptResultImpl>
+      get copyWith =>
+          __$$Receipt_ScriptResultImplCopyWithImpl<_$Receipt_ScriptResultImpl>(
+              this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -3568,20 +3574,20 @@ class _$Receipt_ScriptResult implements Receipt_ScriptResult {
 abstract class Receipt_ScriptResult implements Receipt {
   const factory Receipt_ScriptResult(
       {required final ScriptExecutionResult result,
-      required final int gasUsed}) = _$Receipt_ScriptResult;
+      required final int gasUsed}) = _$Receipt_ScriptResultImpl;
 
   ScriptExecutionResult get result;
   int get gasUsed;
   @JsonKey(ignore: true)
-  _$$Receipt_ScriptResultCopyWith<_$Receipt_ScriptResult> get copyWith =>
-      throw _privateConstructorUsedError;
+  _$$Receipt_ScriptResultImplCopyWith<_$Receipt_ScriptResultImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$Receipt_MessageOutCopyWith<$Res> {
-  factory _$$Receipt_MessageOutCopyWith(_$Receipt_MessageOut value,
-          $Res Function(_$Receipt_MessageOut) then) =
-      __$$Receipt_MessageOutCopyWithImpl<$Res>;
+abstract class _$$Receipt_MessageOutImplCopyWith<$Res> {
+  factory _$$Receipt_MessageOutImplCopyWith(_$Receipt_MessageOutImpl value,
+          $Res Function(_$Receipt_MessageOutImpl) then) =
+      __$$Receipt_MessageOutImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {U8Array32 sender,
@@ -3594,11 +3600,11 @@ abstract class _$$Receipt_MessageOutCopyWith<$Res> {
 }
 
 /// @nodoc
-class __$$Receipt_MessageOutCopyWithImpl<$Res>
-    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_MessageOut>
-    implements _$$Receipt_MessageOutCopyWith<$Res> {
-  __$$Receipt_MessageOutCopyWithImpl(
-      _$Receipt_MessageOut _value, $Res Function(_$Receipt_MessageOut) _then)
+class __$$Receipt_MessageOutImplCopyWithImpl<$Res>
+    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_MessageOutImpl>
+    implements _$$Receipt_MessageOutImplCopyWith<$Res> {
+  __$$Receipt_MessageOutImplCopyWithImpl(_$Receipt_MessageOutImpl _value,
+      $Res Function(_$Receipt_MessageOutImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -3612,7 +3618,7 @@ class __$$Receipt_MessageOutCopyWithImpl<$Res>
     Object? digest = null,
     Object? data = freezed,
   }) {
-    return _then(_$Receipt_MessageOut(
+    return _then(_$Receipt_MessageOutImpl(
       sender: null == sender
           ? _value.sender
           : sender // ignore: cast_nullable_to_non_nullable
@@ -3647,8 +3653,8 @@ class __$$Receipt_MessageOutCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Receipt_MessageOut implements Receipt_MessageOut {
-  const _$Receipt_MessageOut(
+class _$Receipt_MessageOutImpl implements Receipt_MessageOut {
+  const _$Receipt_MessageOutImpl(
       {required this.sender,
       required this.recipient,
       required this.amount,
@@ -3681,7 +3687,7 @@ class _$Receipt_MessageOut implements Receipt_MessageOut {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Receipt_MessageOut &&
+            other is _$Receipt_MessageOutImpl &&
             const DeepCollectionEquality().equals(other.sender, sender) &&
             const DeepCollectionEquality().equals(other.recipient, recipient) &&
             (identical(other.amount, amount) || other.amount == amount) &&
@@ -3705,8 +3711,8 @@ class _$Receipt_MessageOut implements Receipt_MessageOut {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$Receipt_MessageOutCopyWith<_$Receipt_MessageOut> get copyWith =>
-      __$$Receipt_MessageOutCopyWithImpl<_$Receipt_MessageOut>(
+  _$$Receipt_MessageOutImplCopyWith<_$Receipt_MessageOutImpl> get copyWith =>
+      __$$Receipt_MessageOutImplCopyWithImpl<_$Receipt_MessageOutImpl>(
           this, _$identity);
 
   @override
@@ -3918,7 +3924,7 @@ abstract class Receipt_MessageOut implements Receipt {
       required final U8Array32 nonce,
       required final int len,
       required final U8Array32 digest,
-      final Uint8List? data}) = _$Receipt_MessageOut;
+      final Uint8List? data}) = _$Receipt_MessageOutImpl;
 
   U8Array32 get sender;
   U8Array32 get recipient;
@@ -3928,26 +3934,26 @@ abstract class Receipt_MessageOut implements Receipt {
   U8Array32 get digest;
   Uint8List? get data;
   @JsonKey(ignore: true)
-  _$$Receipt_MessageOutCopyWith<_$Receipt_MessageOut> get copyWith =>
+  _$$Receipt_MessageOutImplCopyWith<_$Receipt_MessageOutImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$Receipt_MintCopyWith<$Res> {
-  factory _$$Receipt_MintCopyWith(
-          _$Receipt_Mint value, $Res Function(_$Receipt_Mint) then) =
-      __$$Receipt_MintCopyWithImpl<$Res>;
+abstract class _$$Receipt_MintImplCopyWith<$Res> {
+  factory _$$Receipt_MintImplCopyWith(
+          _$Receipt_MintImpl value, $Res Function(_$Receipt_MintImpl) then) =
+      __$$Receipt_MintImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {U8Array32 subId, U8Array32 contractId, int val, int pc, int isField});
 }
 
 /// @nodoc
-class __$$Receipt_MintCopyWithImpl<$Res>
-    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_Mint>
-    implements _$$Receipt_MintCopyWith<$Res> {
-  __$$Receipt_MintCopyWithImpl(
-      _$Receipt_Mint _value, $Res Function(_$Receipt_Mint) _then)
+class __$$Receipt_MintImplCopyWithImpl<$Res>
+    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_MintImpl>
+    implements _$$Receipt_MintImplCopyWith<$Res> {
+  __$$Receipt_MintImplCopyWithImpl(
+      _$Receipt_MintImpl _value, $Res Function(_$Receipt_MintImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -3959,7 +3965,7 @@ class __$$Receipt_MintCopyWithImpl<$Res>
     Object? pc = null,
     Object? isField = null,
   }) {
-    return _then(_$Receipt_Mint(
+    return _then(_$Receipt_MintImpl(
       subId: null == subId
           ? _value.subId
           : subId // ignore: cast_nullable_to_non_nullable
@@ -3986,8 +3992,8 @@ class __$$Receipt_MintCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Receipt_Mint implements Receipt_Mint {
-  const _$Receipt_Mint(
+class _$Receipt_MintImpl implements Receipt_Mint {
+  const _$Receipt_MintImpl(
       {required this.subId,
       required this.contractId,
       required this.val,
@@ -4014,7 +4020,7 @@ class _$Receipt_Mint implements Receipt_Mint {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Receipt_Mint &&
+            other is _$Receipt_MintImpl &&
             const DeepCollectionEquality().equals(other.subId, subId) &&
             const DeepCollectionEquality()
                 .equals(other.contractId, contractId) &&
@@ -4035,8 +4041,8 @@ class _$Receipt_Mint implements Receipt_Mint {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$Receipt_MintCopyWith<_$Receipt_Mint> get copyWith =>
-      __$$Receipt_MintCopyWithImpl<_$Receipt_Mint>(this, _$identity);
+  _$$Receipt_MintImplCopyWith<_$Receipt_MintImpl> get copyWith =>
+      __$$Receipt_MintImplCopyWithImpl<_$Receipt_MintImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -4244,7 +4250,7 @@ abstract class Receipt_Mint implements Receipt {
       required final U8Array32 contractId,
       required final int val,
       required final int pc,
-      required final int isField}) = _$Receipt_Mint;
+      required final int isField}) = _$Receipt_MintImpl;
 
   U8Array32 get subId;
   U8Array32 get contractId;
@@ -4252,26 +4258,26 @@ abstract class Receipt_Mint implements Receipt {
   int get pc;
   int get isField;
   @JsonKey(ignore: true)
-  _$$Receipt_MintCopyWith<_$Receipt_Mint> get copyWith =>
+  _$$Receipt_MintImplCopyWith<_$Receipt_MintImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
 /// @nodoc
-abstract class _$$Receipt_BurnCopyWith<$Res> {
-  factory _$$Receipt_BurnCopyWith(
-          _$Receipt_Burn value, $Res Function(_$Receipt_Burn) then) =
-      __$$Receipt_BurnCopyWithImpl<$Res>;
+abstract class _$$Receipt_BurnImplCopyWith<$Res> {
+  factory _$$Receipt_BurnImplCopyWith(
+          _$Receipt_BurnImpl value, $Res Function(_$Receipt_BurnImpl) then) =
+      __$$Receipt_BurnImplCopyWithImpl<$Res>;
   @useResult
   $Res call(
       {U8Array32 subId, U8Array32 contractId, int val, int pc, int isField});
 }
 
 /// @nodoc
-class __$$Receipt_BurnCopyWithImpl<$Res>
-    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_Burn>
-    implements _$$Receipt_BurnCopyWith<$Res> {
-  __$$Receipt_BurnCopyWithImpl(
-      _$Receipt_Burn _value, $Res Function(_$Receipt_Burn) _then)
+class __$$Receipt_BurnImplCopyWithImpl<$Res>
+    extends _$ReceiptCopyWithImpl<$Res, _$Receipt_BurnImpl>
+    implements _$$Receipt_BurnImplCopyWith<$Res> {
+  __$$Receipt_BurnImplCopyWithImpl(
+      _$Receipt_BurnImpl _value, $Res Function(_$Receipt_BurnImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -4283,7 +4289,7 @@ class __$$Receipt_BurnCopyWithImpl<$Res>
     Object? pc = null,
     Object? isField = null,
   }) {
-    return _then(_$Receipt_Burn(
+    return _then(_$Receipt_BurnImpl(
       subId: null == subId
           ? _value.subId
           : subId // ignore: cast_nullable_to_non_nullable
@@ -4310,8 +4316,8 @@ class __$$Receipt_BurnCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$Receipt_Burn implements Receipt_Burn {
-  const _$Receipt_Burn(
+class _$Receipt_BurnImpl implements Receipt_Burn {
+  const _$Receipt_BurnImpl(
       {required this.subId,
       required this.contractId,
       required this.val,
@@ -4338,7 +4344,7 @@ class _$Receipt_Burn implements Receipt_Burn {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$Receipt_Burn &&
+            other is _$Receipt_BurnImpl &&
             const DeepCollectionEquality().equals(other.subId, subId) &&
             const DeepCollectionEquality()
                 .equals(other.contractId, contractId) &&
@@ -4359,8 +4365,8 @@ class _$Receipt_Burn implements Receipt_Burn {
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$Receipt_BurnCopyWith<_$Receipt_Burn> get copyWith =>
-      __$$Receipt_BurnCopyWithImpl<_$Receipt_Burn>(this, _$identity);
+  _$$Receipt_BurnImplCopyWith<_$Receipt_BurnImpl> get copyWith =>
+      __$$Receipt_BurnImplCopyWithImpl<_$Receipt_BurnImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -4568,7 +4574,7 @@ abstract class Receipt_Burn implements Receipt {
       required final U8Array32 contractId,
       required final int val,
       required final int pc,
-      required final int isField}) = _$Receipt_Burn;
+      required final int isField}) = _$Receipt_BurnImpl;
 
   U8Array32 get subId;
   U8Array32 get contractId;
@@ -4576,7 +4582,7 @@ abstract class Receipt_Burn implements Receipt {
   int get pc;
   int get isField;
   @JsonKey(ignore: true)
-  _$$Receipt_BurnCopyWith<_$Receipt_Burn> get copyWith =>
+  _$$Receipt_BurnImplCopyWith<_$Receipt_BurnImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
 
@@ -4657,28 +4663,29 @@ class _$ScriptExecutionResultCopyWithImpl<$Res,
 }
 
 /// @nodoc
-abstract class _$$ScriptExecutionResult_SuccessCopyWith<$Res> {
-  factory _$$ScriptExecutionResult_SuccessCopyWith(
-          _$ScriptExecutionResult_Success value,
-          $Res Function(_$ScriptExecutionResult_Success) then) =
-      __$$ScriptExecutionResult_SuccessCopyWithImpl<$Res>;
+abstract class _$$ScriptExecutionResult_SuccessImplCopyWith<$Res> {
+  factory _$$ScriptExecutionResult_SuccessImplCopyWith(
+          _$ScriptExecutionResult_SuccessImpl value,
+          $Res Function(_$ScriptExecutionResult_SuccessImpl) then) =
+      __$$ScriptExecutionResult_SuccessImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ScriptExecutionResult_SuccessCopyWithImpl<$Res>
+class __$$ScriptExecutionResult_SuccessImplCopyWithImpl<$Res>
     extends _$ScriptExecutionResultCopyWithImpl<$Res,
-        _$ScriptExecutionResult_Success>
-    implements _$$ScriptExecutionResult_SuccessCopyWith<$Res> {
-  __$$ScriptExecutionResult_SuccessCopyWithImpl(
-      _$ScriptExecutionResult_Success _value,
-      $Res Function(_$ScriptExecutionResult_Success) _then)
+        _$ScriptExecutionResult_SuccessImpl>
+    implements _$$ScriptExecutionResult_SuccessImplCopyWith<$Res> {
+  __$$ScriptExecutionResult_SuccessImplCopyWithImpl(
+      _$ScriptExecutionResult_SuccessImpl _value,
+      $Res Function(_$ScriptExecutionResult_SuccessImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ScriptExecutionResult_Success implements ScriptExecutionResult_Success {
-  const _$ScriptExecutionResult_Success();
+class _$ScriptExecutionResult_SuccessImpl
+    implements ScriptExecutionResult_Success {
+  const _$ScriptExecutionResult_SuccessImpl();
 
   @override
   String toString() {
@@ -4689,7 +4696,7 @@ class _$ScriptExecutionResult_Success implements ScriptExecutionResult_Success {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ScriptExecutionResult_Success);
+            other is _$ScriptExecutionResult_SuccessImpl);
   }
 
   @override
@@ -4775,32 +4782,33 @@ class _$ScriptExecutionResult_Success implements ScriptExecutionResult_Success {
 
 abstract class ScriptExecutionResult_Success implements ScriptExecutionResult {
   const factory ScriptExecutionResult_Success() =
-      _$ScriptExecutionResult_Success;
+      _$ScriptExecutionResult_SuccessImpl;
 }
 
 /// @nodoc
-abstract class _$$ScriptExecutionResult_RevertCopyWith<$Res> {
-  factory _$$ScriptExecutionResult_RevertCopyWith(
-          _$ScriptExecutionResult_Revert value,
-          $Res Function(_$ScriptExecutionResult_Revert) then) =
-      __$$ScriptExecutionResult_RevertCopyWithImpl<$Res>;
+abstract class _$$ScriptExecutionResult_RevertImplCopyWith<$Res> {
+  factory _$$ScriptExecutionResult_RevertImplCopyWith(
+          _$ScriptExecutionResult_RevertImpl value,
+          $Res Function(_$ScriptExecutionResult_RevertImpl) then) =
+      __$$ScriptExecutionResult_RevertImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ScriptExecutionResult_RevertCopyWithImpl<$Res>
+class __$$ScriptExecutionResult_RevertImplCopyWithImpl<$Res>
     extends _$ScriptExecutionResultCopyWithImpl<$Res,
-        _$ScriptExecutionResult_Revert>
-    implements _$$ScriptExecutionResult_RevertCopyWith<$Res> {
-  __$$ScriptExecutionResult_RevertCopyWithImpl(
-      _$ScriptExecutionResult_Revert _value,
-      $Res Function(_$ScriptExecutionResult_Revert) _then)
+        _$ScriptExecutionResult_RevertImpl>
+    implements _$$ScriptExecutionResult_RevertImplCopyWith<$Res> {
+  __$$ScriptExecutionResult_RevertImplCopyWithImpl(
+      _$ScriptExecutionResult_RevertImpl _value,
+      $Res Function(_$ScriptExecutionResult_RevertImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ScriptExecutionResult_Revert implements ScriptExecutionResult_Revert {
-  const _$ScriptExecutionResult_Revert();
+class _$ScriptExecutionResult_RevertImpl
+    implements ScriptExecutionResult_Revert {
+  const _$ScriptExecutionResult_RevertImpl();
 
   @override
   String toString() {
@@ -4811,7 +4819,7 @@ class _$ScriptExecutionResult_Revert implements ScriptExecutionResult_Revert {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ScriptExecutionResult_Revert);
+            other is _$ScriptExecutionResult_RevertImpl);
   }
 
   @override
@@ -4896,32 +4904,33 @@ class _$ScriptExecutionResult_Revert implements ScriptExecutionResult_Revert {
 }
 
 abstract class ScriptExecutionResult_Revert implements ScriptExecutionResult {
-  const factory ScriptExecutionResult_Revert() = _$ScriptExecutionResult_Revert;
+  const factory ScriptExecutionResult_Revert() =
+      _$ScriptExecutionResult_RevertImpl;
 }
 
 /// @nodoc
-abstract class _$$ScriptExecutionResult_PanicCopyWith<$Res> {
-  factory _$$ScriptExecutionResult_PanicCopyWith(
-          _$ScriptExecutionResult_Panic value,
-          $Res Function(_$ScriptExecutionResult_Panic) then) =
-      __$$ScriptExecutionResult_PanicCopyWithImpl<$Res>;
+abstract class _$$ScriptExecutionResult_PanicImplCopyWith<$Res> {
+  factory _$$ScriptExecutionResult_PanicImplCopyWith(
+          _$ScriptExecutionResult_PanicImpl value,
+          $Res Function(_$ScriptExecutionResult_PanicImpl) then) =
+      __$$ScriptExecutionResult_PanicImplCopyWithImpl<$Res>;
 }
 
 /// @nodoc
-class __$$ScriptExecutionResult_PanicCopyWithImpl<$Res>
+class __$$ScriptExecutionResult_PanicImplCopyWithImpl<$Res>
     extends _$ScriptExecutionResultCopyWithImpl<$Res,
-        _$ScriptExecutionResult_Panic>
-    implements _$$ScriptExecutionResult_PanicCopyWith<$Res> {
-  __$$ScriptExecutionResult_PanicCopyWithImpl(
-      _$ScriptExecutionResult_Panic _value,
-      $Res Function(_$ScriptExecutionResult_Panic) _then)
+        _$ScriptExecutionResult_PanicImpl>
+    implements _$$ScriptExecutionResult_PanicImplCopyWith<$Res> {
+  __$$ScriptExecutionResult_PanicImplCopyWithImpl(
+      _$ScriptExecutionResult_PanicImpl _value,
+      $Res Function(_$ScriptExecutionResult_PanicImpl) _then)
       : super(_value, _then);
 }
 
 /// @nodoc
 
-class _$ScriptExecutionResult_Panic implements ScriptExecutionResult_Panic {
-  const _$ScriptExecutionResult_Panic();
+class _$ScriptExecutionResult_PanicImpl implements ScriptExecutionResult_Panic {
+  const _$ScriptExecutionResult_PanicImpl();
 
   @override
   String toString() {
@@ -4932,7 +4941,7 @@ class _$ScriptExecutionResult_Panic implements ScriptExecutionResult_Panic {
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ScriptExecutionResult_Panic);
+            other is _$ScriptExecutionResult_PanicImpl);
   }
 
   @override
@@ -5017,27 +5026,28 @@ class _$ScriptExecutionResult_Panic implements ScriptExecutionResult_Panic {
 }
 
 abstract class ScriptExecutionResult_Panic implements ScriptExecutionResult {
-  const factory ScriptExecutionResult_Panic() = _$ScriptExecutionResult_Panic;
+  const factory ScriptExecutionResult_Panic() =
+      _$ScriptExecutionResult_PanicImpl;
 }
 
 /// @nodoc
-abstract class _$$ScriptExecutionResult_GenericFailureCopyWith<$Res> {
-  factory _$$ScriptExecutionResult_GenericFailureCopyWith(
-          _$ScriptExecutionResult_GenericFailure value,
-          $Res Function(_$ScriptExecutionResult_GenericFailure) then) =
-      __$$ScriptExecutionResult_GenericFailureCopyWithImpl<$Res>;
+abstract class _$$ScriptExecutionResult_GenericFailureImplCopyWith<$Res> {
+  factory _$$ScriptExecutionResult_GenericFailureImplCopyWith(
+          _$ScriptExecutionResult_GenericFailureImpl value,
+          $Res Function(_$ScriptExecutionResult_GenericFailureImpl) then) =
+      __$$ScriptExecutionResult_GenericFailureImplCopyWithImpl<$Res>;
   @useResult
   $Res call({int field0});
 }
 
 /// @nodoc
-class __$$ScriptExecutionResult_GenericFailureCopyWithImpl<$Res>
+class __$$ScriptExecutionResult_GenericFailureImplCopyWithImpl<$Res>
     extends _$ScriptExecutionResultCopyWithImpl<$Res,
-        _$ScriptExecutionResult_GenericFailure>
-    implements _$$ScriptExecutionResult_GenericFailureCopyWith<$Res> {
-  __$$ScriptExecutionResult_GenericFailureCopyWithImpl(
-      _$ScriptExecutionResult_GenericFailure _value,
-      $Res Function(_$ScriptExecutionResult_GenericFailure) _then)
+        _$ScriptExecutionResult_GenericFailureImpl>
+    implements _$$ScriptExecutionResult_GenericFailureImplCopyWith<$Res> {
+  __$$ScriptExecutionResult_GenericFailureImplCopyWithImpl(
+      _$ScriptExecutionResult_GenericFailureImpl _value,
+      $Res Function(_$ScriptExecutionResult_GenericFailureImpl) _then)
       : super(_value, _then);
 
   @pragma('vm:prefer-inline')
@@ -5045,7 +5055,7 @@ class __$$ScriptExecutionResult_GenericFailureCopyWithImpl<$Res>
   $Res call({
     Object? field0 = null,
   }) {
-    return _then(_$ScriptExecutionResult_GenericFailure(
+    return _then(_$ScriptExecutionResult_GenericFailureImpl(
       null == field0
           ? _value.field0
           : field0 // ignore: cast_nullable_to_non_nullable
@@ -5056,9 +5066,9 @@ class __$$ScriptExecutionResult_GenericFailureCopyWithImpl<$Res>
 
 /// @nodoc
 
-class _$ScriptExecutionResult_GenericFailure
+class _$ScriptExecutionResult_GenericFailureImpl
     implements ScriptExecutionResult_GenericFailure {
-  const _$ScriptExecutionResult_GenericFailure(this.field0);
+  const _$ScriptExecutionResult_GenericFailureImpl(this.field0);
 
   @override
   final int field0;
@@ -5072,7 +5082,7 @@ class _$ScriptExecutionResult_GenericFailure
   bool operator ==(dynamic other) {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
-            other is _$ScriptExecutionResult_GenericFailure &&
+            other is _$ScriptExecutionResult_GenericFailureImpl &&
             (identical(other.field0, field0) || other.field0 == field0));
   }
 
@@ -5082,10 +5092,10 @@ class _$ScriptExecutionResult_GenericFailure
   @JsonKey(ignore: true)
   @override
   @pragma('vm:prefer-inline')
-  _$$ScriptExecutionResult_GenericFailureCopyWith<
-          _$ScriptExecutionResult_GenericFailure>
-      get copyWith => __$$ScriptExecutionResult_GenericFailureCopyWithImpl<
-          _$ScriptExecutionResult_GenericFailure>(this, _$identity);
+  _$$ScriptExecutionResult_GenericFailureImplCopyWith<
+          _$ScriptExecutionResult_GenericFailureImpl>
+      get copyWith => __$$ScriptExecutionResult_GenericFailureImplCopyWithImpl<
+          _$ScriptExecutionResult_GenericFailureImpl>(this, _$identity);
 
   @override
   @optionalTypeArgs
@@ -5168,11 +5178,11 @@ class _$ScriptExecutionResult_GenericFailure
 abstract class ScriptExecutionResult_GenericFailure
     implements ScriptExecutionResult {
   const factory ScriptExecutionResult_GenericFailure(final int field0) =
-      _$ScriptExecutionResult_GenericFailure;
+      _$ScriptExecutionResult_GenericFailureImpl;
 
   int get field0;
   @JsonKey(ignore: true)
-  _$$ScriptExecutionResult_GenericFailureCopyWith<
-          _$ScriptExecutionResult_GenericFailure>
+  _$$ScriptExecutionResult_GenericFailureImplCopyWith<
+          _$ScriptExecutionResult_GenericFailureImpl>
       get copyWith => throw _privateConstructorUsedError;
 }

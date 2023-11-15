@@ -1,4 +1,5 @@
 #![allow(dead_code)]
+
 use std::str::FromStr;
 
 use flutter_rust_bridge::RustOpaque;
@@ -55,11 +56,10 @@ impl WalletUnlocked {
 
     pub fn new_from_mnemonic_phrase(phrase: String, provider: Option<Provider>) -> WalletUnlocked {
         let path = format!("{}/0'/0/0", DEFAULT_DERIVATION_PATH_PREFIX);
-        WalletUnlocked::new_from_mnemonic_phrase_with_path(phrase, provider, path)
+        WalletUnlocked::new_from_mnemonic_phrase_with_path(phrase, path, provider)
     }
 
-    pub fn new_from_mnemonic_phrase_with_path(phrase: String, provider: Option<Provider>,
-                                              path: String) -> WalletUnlocked {
+    pub fn new_from_mnemonic_phrase_with_path(phrase: String, path: String, provider: Option<Provider>) -> WalletUnlocked {
         let secret_key = SecretKey::new_from_mnemonic_phrase_with_path(&phrase, &path).unwrap();
         Self {
             private_key: secret_key.to_string(),

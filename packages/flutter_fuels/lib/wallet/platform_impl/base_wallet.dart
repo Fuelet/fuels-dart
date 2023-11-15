@@ -7,6 +7,9 @@ abstract class BaseWallet {
     required String mnemonic,
   });
 
+  Future<Map> newFromMnemonicAndPath(
+      {required String mnemonic, required String derivationPath});
+
   Future<Map> newFromPrivateKey({
     required String privateKey,
   });

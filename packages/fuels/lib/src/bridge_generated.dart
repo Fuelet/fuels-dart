@@ -36,8 +36,8 @@ abstract class Fuels {
   Future<WalletUnlocked>
       newFromMnemonicPhraseWithPathStaticMethodWalletUnlocked(
           {required String phrase,
-          Provider? provider,
           required String path,
+          Provider? provider,
           dynamic hint});
 
   FlutterRustBridgeTaskConstMeta
@@ -364,11 +364,11 @@ class WalletUnlocked {
   static Future<WalletUnlocked> newFromMnemonicPhraseWithPath(
           {required Fuels bridge,
           required String phrase,
-          Provider? provider,
           required String path,
+          Provider? provider,
           dynamic hint}) =>
       bridge.newFromMnemonicPhraseWithPathStaticMethodWalletUnlocked(
-          phrase: phrase, provider: provider, path: path, hint: hint);
+          phrase: phrase, path: path, provider: provider, hint: hint);
 
   Future<Bech32Address> address({dynamic hint}) =>
       bridge.addressMethodWalletUnlocked(
@@ -478,12 +478,12 @@ class FuelsImpl implements Fuels {
   Future<WalletUnlocked>
       newFromMnemonicPhraseWithPathStaticMethodWalletUnlocked(
           {required String phrase,
-          Provider? provider,
           required String path,
+          Provider? provider,
           dynamic hint}) {
     var arg0 = _platform.api2wire_String(phrase);
-    var arg1 = _platform.api2wire_opt_box_autoadd_provider(provider);
-    var arg2 = _platform.api2wire_String(path);
+    var arg1 = _platform.api2wire_String(path);
+    var arg2 = _platform.api2wire_opt_box_autoadd_provider(provider);
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) => _platform.inner
           .wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(
@@ -491,7 +491,7 @@ class FuelsImpl implements Fuels {
       parseSuccessData: (d) => _wire2api_wallet_unlocked(d),
       constMeta:
           kNewFromMnemonicPhraseWithPathStaticMethodWalletUnlockedConstMeta,
-      argValues: [phrase, provider, path],
+      argValues: [phrase, path, provider],
       hint: hint,
     ));
   }
@@ -501,7 +501,7 @@ class FuelsImpl implements Fuels {
           const FlutterRustBridgeTaskConstMeta(
             debugName:
                 "new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked",
-            argNames: ["phrase", "provider", "path"],
+            argNames: ["phrase", "path", "provider"],
           );
 
   Future<Bech32Address> addressMethodWalletUnlocked(
@@ -1282,14 +1282,14 @@ class FuelsWire implements FlutterRustBridgeWireBase {
   void wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(
     int port_,
     ffi.Pointer<wire_uint_8_list> phrase,
-    ffi.Pointer<wire_Provider> provider,
     ffi.Pointer<wire_uint_8_list> path,
+    ffi.Pointer<wire_Provider> provider,
   ) {
     return _wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(
       port_,
       phrase,
-      provider,
       path,
+      provider,
     );
   }
 
@@ -1299,14 +1299,14 @@ class FuelsWire implements FlutterRustBridgeWireBase {
                   ffi.Void Function(
                       ffi.Int64,
                       ffi.Pointer<wire_uint_8_list>,
-                      ffi.Pointer<wire_Provider>,
-                      ffi.Pointer<wire_uint_8_list>)>>(
+                      ffi.Pointer<wire_uint_8_list>,
+                      ffi.Pointer<wire_Provider>)>>(
           'wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked');
   late final _wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked =
       _wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlockedPtr
           .asFunction<
               void Function(int, ffi.Pointer<wire_uint_8_list>,
-                  ffi.Pointer<wire_Provider>, ffi.Pointer<wire_uint_8_list>)>();
+                  ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_Provider>)>();
 
   void wire_address__method__WalletUnlocked(
     int port_,

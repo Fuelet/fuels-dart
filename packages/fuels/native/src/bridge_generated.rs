@@ -93,8 +93,8 @@ fn wire_new_from_mnemonic_phrase__static_method__WalletUnlocked_impl(
 fn wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked_impl(
     port_: MessagePort,
     phrase: impl Wire2Api<String> + UnwindSafe,
-    provider: impl Wire2Api<Option<Provider>> + UnwindSafe,
     path: impl Wire2Api<String> + UnwindSafe,
+    provider: impl Wire2Api<Option<Provider>> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap(
         WrapInfo {
@@ -104,13 +104,13 @@ fn wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked_impl(
         },
         move || {
             let api_phrase = phrase.wire2api();
-            let api_provider = provider.wire2api();
             let api_path = path.wire2api();
+            let api_provider = provider.wire2api();
             move |task_callback| {
                 Ok(WalletUnlocked::new_from_mnemonic_phrase_with_path(
                     api_phrase,
-                    api_provider,
                     api_path,
+                    api_provider,
                 ))
             }
         },

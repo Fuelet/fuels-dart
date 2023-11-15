@@ -23,6 +23,12 @@ class FuelWalletImpl extends BaseWallet {
   }
 
   @override
+  Future<Map> newFromMnemonicAndPath({required String mnemonic, required String derivationPath}) {
+    var newWallet = js_wallet.newWalletFromMnemonicAndPath(mnemonic, derivationPath);
+    return Future.value(_jsObjectToMap(newWallet));
+  }
+
+  @override
   Future<Map> newFromPrivateKey({
     required String privateKey,
   }) {

@@ -31,11 +31,11 @@ pub extern "C" fn wire_new_from_mnemonic_phrase__static_method__WalletUnlocked(
 pub extern "C" fn wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(
     port_: i64,
     phrase: *mut wire_uint_8_list,
-    provider: *mut wire_Provider,
     path: *mut wire_uint_8_list,
+    provider: *mut wire_Provider,
 ) {
     wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked_impl(
-        port_, phrase, provider, path,
+        port_, phrase, path, provider,
     )
 }
 
