@@ -7,36 +7,40 @@ abstract class TransactionReceipt {
   const TransactionReceipt();
 
   static TransactionReceipt fromJson(Map<String, dynamic> jsonReceipt) {
-    int type = jsonReceipt['type'];
-    switch (type) {
-      case 0:
-        return ReceiptCall.fromJson(jsonReceipt);
-      case 1:
-        return ReceiptReturn.fromJson(jsonReceipt);
-      case 2:
-        return ReceiptReturnData.fromJson(jsonReceipt);
-      case 3:
-        return ReceiptPanic.fromJson(jsonReceipt);
-      case 4:
-        return ReceiptRevert.fromJson(jsonReceipt);
-      case 5:
-        return ReceiptLog.fromJson(jsonReceipt);
-      case 6:
-        return ReceiptLogData.fromJson(jsonReceipt);
-      case 7:
-        return ReceiptTransfer.fromJson(jsonReceipt);
-      case 8:
-        return ReceiptTransferOut.fromJson(jsonReceipt);
-      case 9:
-        return ReceiptScriptResult.fromJson(jsonReceipt);
-      case 10:
-        return ReceiptMessageOut.fromJson(jsonReceipt);
-      case 11:
-        return ReceiptMint.fromJson(jsonReceipt);
-      case 12:
-        return ReceiptBurn.fromJson(jsonReceipt);
-      default:
-        return UnknownReceipt(raw: jsonReceipt);
+    try {
+      int type = jsonReceipt['type'];
+      switch (type) {
+        case 0:
+          return ReceiptCall.fromJson(jsonReceipt);
+        case 1:
+          return ReceiptReturn.fromJson(jsonReceipt);
+        case 2:
+          return ReceiptReturnData.fromJson(jsonReceipt);
+        case 3:
+          return ReceiptPanic.fromJson(jsonReceipt);
+        case 4:
+          return ReceiptRevert.fromJson(jsonReceipt);
+        case 5:
+          return ReceiptLog.fromJson(jsonReceipt);
+        case 6:
+          return ReceiptLogData.fromJson(jsonReceipt);
+        case 7:
+          return ReceiptTransfer.fromJson(jsonReceipt);
+        case 8:
+          return ReceiptTransferOut.fromJson(jsonReceipt);
+        case 9:
+          return ReceiptScriptResult.fromJson(jsonReceipt);
+        case 10:
+          return ReceiptMessageOut.fromJson(jsonReceipt);
+        case 11:
+          return ReceiptMint.fromJson(jsonReceipt);
+        case 12:
+          return ReceiptBurn.fromJson(jsonReceipt);
+        default:
+          return UnknownReceipt(raw: jsonReceipt);
+      }
+    } catch (e) {
+      return UnparsedReceipt(raw: jsonReceipt, err: e);
     }
   }
 }
@@ -45,6 +49,13 @@ class UnknownReceipt extends TransactionReceipt {
   final Map<String, dynamic> raw;
 
   const UnknownReceipt({required this.raw});
+}
+
+class UnparsedReceipt extends TransactionReceipt {
+  final Map<String, dynamic> raw;
+  final dynamic err;
+
+  const UnparsedReceipt({required this.raw, required this.err});
 }
 
 class ReceiptCall extends TransactionReceipt {

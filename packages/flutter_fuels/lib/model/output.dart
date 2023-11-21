@@ -5,22 +5,26 @@ abstract class Output {
   const Output();
 
   static Output fromJson(Map<String, dynamic> jsonOutput) {
-    int outputType = jsonOutput['type'];
-    switch (outputType) {
-      case 0:
-        return OutputCoin.fromJson(jsonOutput);
-      case 1:
-        return OutputContract.fromJson(jsonOutput);
-      case 2:
-        return OutputMessage.fromJson(jsonOutput);
-      case 3:
-        return OutputChange.fromJson(jsonOutput);
-      case 4:
-        return OutputVariable.fromJson(jsonOutput);
-      case 5:
-        return OutputContractCreated.fromJson(jsonOutput);
-      default:
-        return UnknownOutput(raw: jsonOutput);
+    try {
+      int outputType = jsonOutput['type'];
+      switch (outputType) {
+        case 0:
+          return OutputCoin.fromJson(jsonOutput);
+        case 1:
+          return OutputContract.fromJson(jsonOutput);
+        case 2:
+          return OutputMessage.fromJson(jsonOutput);
+        case 3:
+          return OutputChange.fromJson(jsonOutput);
+        case 4:
+          return OutputVariable.fromJson(jsonOutput);
+        case 5:
+          return OutputContractCreated.fromJson(jsonOutput);
+        default:
+          return UnknownOutput(raw: jsonOutput);
+      }
+    } catch (e) {
+      return UnparsedOutput(raw: jsonOutput, err: e);
     }
   }
 }
@@ -29,6 +33,13 @@ class UnknownOutput extends Output {
   final Map<String, dynamic> raw;
 
   const UnknownOutput({required this.raw});
+}
+
+class UnparsedOutput extends Output {
+  final Map<String, dynamic> raw;
+  final dynamic err;
+
+  const UnparsedOutput({required this.raw, required this.err});
 }
 
 class OutputCoin extends Output {

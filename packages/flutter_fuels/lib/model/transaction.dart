@@ -9,16 +9,20 @@ abstract class Transaction {
   const Transaction();
 
   static Transaction fromJson(Map<String, dynamic> jsonTransaction) {
-    int txType = jsonTransaction['type'];
-    switch (txType) {
-      case 0:
-        return TransactionScript.fromJson(jsonTransaction);
-      case 1:
-        return TransactionCreate.fromJson(jsonTransaction);
-      case 2:
-        return TransactionMint.fromJson(jsonTransaction);
-      default:
-        return UnknownTransaction(raw: jsonTransaction);
+    try {
+      int txType = jsonTransaction['type'];
+      switch (txType) {
+        case 0:
+          return TransactionScript.fromJson(jsonTransaction);
+        case 1:
+          return TransactionCreate.fromJson(jsonTransaction);
+        case 2:
+          return TransactionMint.fromJson(jsonTransaction);
+        default:
+          return UnknownTransaction(raw: jsonTransaction);
+      }
+    } catch (e) {
+      return UnparsedTransaction(raw: jsonTransaction, err: e);
     }
   }
 }
@@ -27,6 +31,13 @@ class UnknownTransaction extends Transaction {
   final Map<String, dynamic> raw;
 
   const UnknownTransaction({required this.raw});
+}
+
+class UnparsedTransaction extends Transaction {
+  final Map<String, dynamic> raw;
+  final dynamic err;
+
+  const UnparsedTransaction({required this.raw, required this.err});
 }
 
 class TransactionScript extends Transaction {
