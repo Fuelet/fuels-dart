@@ -7,18 +7,35 @@ abstract class Input {
   const Input();
 
   static Input fromJson(Map<String, dynamic> jsonInput) {
-    int inputType = jsonInput['type'];
-    switch (inputType) {
-      case 0:
-        return InputCoin.fromJson(jsonInput);
-      case 1:
-        return InputContract.fromJson(jsonInput);
-      case 2:
-        return InputMessage.fromJson(jsonInput);
-      default:
-        throw Exception('Cannot parse transaction input');
+    try {
+      int inputType = jsonInput['type'];
+      switch (inputType) {
+        case 0:
+          return InputCoin.fromJson(jsonInput);
+        case 1:
+          return InputContract.fromJson(jsonInput);
+        case 2:
+          return InputMessage.fromJson(jsonInput);
+        default:
+          return UnknownInput(raw: jsonInput);
+      }
+    } catch (e) {
+      return UnparsedInput(raw: jsonInput, err: e);
     }
   }
+}
+
+class UnknownInput extends Input {
+  final Map<String, dynamic> raw;
+
+  const UnknownInput({required this.raw});
+}
+
+class UnparsedInput extends Input {
+  final Map<String, dynamic> raw;
+  final dynamic err;
+
+  const UnparsedInput({required this.raw, required this.err});
 }
 
 class InputCoin extends Input {

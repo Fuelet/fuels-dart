@@ -7,34 +7,55 @@ abstract class TransactionReceipt {
   const TransactionReceipt();
 
   static TransactionReceipt fromJson(Map<String, dynamic> jsonReceipt) {
-    int type = jsonReceipt['type'];
-    switch (type) {
-      case 0:
-        return ReceiptCall.fromJson(jsonReceipt);
-      case 1:
-        return ReceiptReturn.fromJson(jsonReceipt);
-      case 2:
-        return ReceiptReturnData.fromJson(jsonReceipt);
-      case 3:
-        return ReceiptPanic.fromJson(jsonReceipt);
-      case 4:
-        return ReceiptRevert.fromJson(jsonReceipt);
-      case 5:
-        return ReceiptLog.fromJson(jsonReceipt);
-      case 6:
-        return ReceiptLogData.fromJson(jsonReceipt);
-      case 7:
-        return ReceiptTransfer.fromJson(jsonReceipt);
-      case 8:
-        return ReceiptTransferOut.fromJson(jsonReceipt);
-      case 9:
-        return ReceiptScriptResult.fromJson(jsonReceipt);
-      case 10:
-        return ReceiptMessageOut.fromJson(jsonReceipt);
-      default:
-        throw Exception('Cannot parse transaction receipt');
+    try {
+      int type = jsonReceipt['type'];
+      switch (type) {
+        case 0:
+          return ReceiptCall.fromJson(jsonReceipt);
+        case 1:
+          return ReceiptReturn.fromJson(jsonReceipt);
+        case 2:
+          return ReceiptReturnData.fromJson(jsonReceipt);
+        case 3:
+          return ReceiptPanic.fromJson(jsonReceipt);
+        case 4:
+          return ReceiptRevert.fromJson(jsonReceipt);
+        case 5:
+          return ReceiptLog.fromJson(jsonReceipt);
+        case 6:
+          return ReceiptLogData.fromJson(jsonReceipt);
+        case 7:
+          return ReceiptTransfer.fromJson(jsonReceipt);
+        case 8:
+          return ReceiptTransferOut.fromJson(jsonReceipt);
+        case 9:
+          return ReceiptScriptResult.fromJson(jsonReceipt);
+        case 10:
+          return ReceiptMessageOut.fromJson(jsonReceipt);
+        case 11:
+          return ReceiptMint.fromJson(jsonReceipt);
+        case 12:
+          return ReceiptBurn.fromJson(jsonReceipt);
+        default:
+          return UnknownReceipt(raw: jsonReceipt);
+      }
+    } catch (e) {
+      return UnparsedReceipt(raw: jsonReceipt, err: e);
     }
   }
+}
+
+class UnknownReceipt extends TransactionReceipt {
+  final Map<String, dynamic> raw;
+
+  const UnknownReceipt({required this.raw});
+}
+
+class UnparsedReceipt extends TransactionReceipt {
+  final Map<String, dynamic> raw;
+  final dynamic err;
+
+  const UnparsedReceipt({required this.raw, required this.err});
 }
 
 class ReceiptCall extends TransactionReceipt {
@@ -333,5 +354,61 @@ class ReceiptMessageOut extends TransactionReceipt {
         nonce: data['nonce'],
         digest: data['digest'],
         data: Uint8List.fromList(uint8Arr.values.toList()));
+  }
+}
+
+class ReceiptMint extends TransactionReceipt {
+  final String subId;
+  final String contractId;
+  final String assetId;
+  final BigInt val;
+  final BigInt pc;
+  final BigInt isField;
+
+  const ReceiptMint({
+    required this.subId,
+    required this.contractId,
+    required this.assetId,
+    required this.val,
+    required this.pc,
+    required this.isField,
+  });
+
+  factory ReceiptMint.fromJson(Map<String, dynamic> data) {
+    return ReceiptMint(
+        subId: addHexPrefix(data['subId']),
+        contractId: addHexPrefix(data['contractId']),
+        assetId: addHexPrefix(data['assetId']),
+        val: parseBigInt(data['val']),
+        pc: parseBigInt(data['pc']),
+        isField: parseBigInt(data['is']));
+  }
+}
+
+class ReceiptBurn extends TransactionReceipt {
+  final String subId;
+  final String contractId;
+  final String assetId;
+  final BigInt val;
+  final BigInt pc;
+  final BigInt isField;
+
+  const ReceiptBurn({
+    required this.subId,
+    required this.contractId,
+    required this.assetId,
+    required this.val,
+    required this.pc,
+    required this.isField,
+  });
+
+  factory ReceiptBurn.fromJson(Map<String, dynamic> data) {
+    return ReceiptBurn(
+        subId: addHexPrefix(data['subId']),
+        contractId: addHexPrefix(data['contractId']),
+        assetId: addHexPrefix(data['assetId']),
+        val: parseBigInt(data['val']),
+        pc: parseBigInt(data['pc']),
+        isField: parseBigInt(data['is']));
   }
 }

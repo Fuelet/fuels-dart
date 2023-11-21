@@ -5,24 +5,41 @@ abstract class Output {
   const Output();
 
   static Output fromJson(Map<String, dynamic> jsonOutput) {
-    int outputType = jsonOutput['type'];
-    switch (outputType) {
-      case 0:
-        return OutputCoin.fromJson(jsonOutput);
-      case 1:
-        return OutputContract.fromJson(jsonOutput);
-      case 2:
-        return OutputMessage.fromJson(jsonOutput);
-      case 3:
-        return OutputChange.fromJson(jsonOutput);
-      case 4:
-        return OutputVariable.fromJson(jsonOutput);
-      case 5:
-        return OutputContractCreated.fromJson(jsonOutput);
-      default:
-        throw Exception('Cannot parse transaction output');
+    try {
+      int outputType = jsonOutput['type'];
+      switch (outputType) {
+        case 0:
+          return OutputCoin.fromJson(jsonOutput);
+        case 1:
+          return OutputContract.fromJson(jsonOutput);
+        case 2:
+          return OutputMessage.fromJson(jsonOutput);
+        case 3:
+          return OutputChange.fromJson(jsonOutput);
+        case 4:
+          return OutputVariable.fromJson(jsonOutput);
+        case 5:
+          return OutputContractCreated.fromJson(jsonOutput);
+        default:
+          return UnknownOutput(raw: jsonOutput);
+      }
+    } catch (e) {
+      return UnparsedOutput(raw: jsonOutput, err: e);
     }
   }
+}
+
+class UnknownOutput extends Output {
+  final Map<String, dynamic> raw;
+
+  const UnknownOutput({required this.raw});
+}
+
+class UnparsedOutput extends Output {
+  final Map<String, dynamic> raw;
+  final dynamic err;
+
+  const UnparsedOutput({required this.raw, required this.err});
 }
 
 class OutputCoin extends Output {
@@ -30,7 +47,8 @@ class OutputCoin extends Output {
   final BigInt amount;
   final String assetId;
 
-  const OutputCoin({required this.to, required this.amount, required this.assetId});
+  const OutputCoin(
+      {required this.to, required this.amount, required this.assetId});
 
   factory OutputCoin.fromJson(Map<String, dynamic> data) {
     return OutputCoin(
@@ -78,7 +96,8 @@ class OutputChange extends Output {
   final BigInt amount;
   final String assetId;
 
-  const OutputChange({required this.to, required this.amount, required this.assetId});
+  const OutputChange(
+      {required this.to, required this.amount, required this.assetId});
 
   factory OutputChange.fromJson(Map<String, dynamic> data) {
     return OutputChange(
@@ -108,7 +127,8 @@ class OutputContractCreated extends Output {
   final String contractId;
   final String stateRoot;
 
-  const OutputContractCreated({required this.contractId, required this.stateRoot});
+  const OutputContractCreated(
+      {required this.contractId, required this.stateRoot});
 
   factory OutputContractCreated.fromJson(Map<String, dynamic> data) {
     return OutputContractCreated(
