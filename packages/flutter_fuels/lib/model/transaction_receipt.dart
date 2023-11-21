@@ -31,11 +31,17 @@ abstract class TransactionReceipt {
         return ReceiptScriptResult.fromJson(jsonReceipt);
       case 10:
         return ReceiptMessageOut.fromJson(jsonReceipt);
+      case 11:
+        return ReceiptMint.fromJson(jsonReceipt);
+      case 12:
+        return ReceiptBurn.fromJson(jsonReceipt);
       default:
-        throw Exception('Cannot parse transaction receipt');
+        return UnknownReceipt();
     }
   }
 }
+
+class UnknownReceipt extends TransactionReceipt {}
 
 class ReceiptCall extends TransactionReceipt {
   final String from;
@@ -333,5 +339,61 @@ class ReceiptMessageOut extends TransactionReceipt {
         nonce: data['nonce'],
         digest: data['digest'],
         data: Uint8List.fromList(uint8Arr.values.toList()));
+  }
+}
+
+class ReceiptMint extends TransactionReceipt {
+  final String subId;
+  final String contractId;
+  final String assetId;
+  final BigInt val;
+  final BigInt pc;
+  final BigInt isField;
+
+  const ReceiptMint({
+    required this.subId,
+    required this.contractId,
+    required this.assetId,
+    required this.val,
+    required this.pc,
+    required this.isField,
+  });
+
+  factory ReceiptMint.fromJson(Map<String, dynamic> data) {
+    return ReceiptMint(
+        subId: addHexPrefix(data['subId']),
+        contractId: addHexPrefix(data['contractId']),
+        assetId: addHexPrefix(data['assetId']),
+        val: parseBigInt(data['val']),
+        pc: parseBigInt(data['pc']),
+        isField: parseBigInt(data['is']));
+  }
+}
+
+class ReceiptBurn extends TransactionReceipt {
+  final String subId;
+  final String contractId;
+  final String assetId;
+  final BigInt val;
+  final BigInt pc;
+  final BigInt isField;
+
+  const ReceiptBurn({
+    required this.subId,
+    required this.contractId,
+    required this.assetId,
+    required this.val,
+    required this.pc,
+    required this.isField,
+  });
+
+  factory ReceiptBurn.fromJson(Map<String, dynamic> data) {
+    return ReceiptBurn(
+        subId: addHexPrefix(data['subId']),
+        contractId: addHexPrefix(data['contractId']),
+        assetId: addHexPrefix(data['assetId']),
+        val: parseBigInt(data['val']),
+        pc: parseBigInt(data['pc']),
+        isField: parseBigInt(data['is']));
   }
 }
