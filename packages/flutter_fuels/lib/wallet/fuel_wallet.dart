@@ -36,7 +36,7 @@ class FuelWallet {
   static Future<FuelWallet> generateNewWallet({
     required String networkUrl,
   }) async {
-    final data = await _wallet.generateNewWallet();
+    final data = await _wallet.generateNewWallet(networkUrl: networkUrl);
     return FuelWallet.fromData(data, networkUrl);
   }
 
@@ -47,6 +47,7 @@ class FuelWallet {
     required String privateKey,
   }) async {
     final data = await _wallet.newFromPrivateKey(
+      networkUrl: networkUrl,
       privateKey: privateKey,
     );
     return FuelWallet.fromData(data, networkUrl);
@@ -59,6 +60,7 @@ class FuelWallet {
   }) async {
     _validateMnemonicPhrase(mnemonic);
     final data = await _wallet.newFromMnemonic(
+      networkUrl: networkUrl,
       mnemonic: mnemonic,
     );
     return FuelWallet.fromData(data, networkUrl);
@@ -72,7 +74,9 @@ class FuelWallet {
   }) async {
     _validateMnemonicPhrase(mnemonic);
     final data = await _wallet.newFromMnemonicAndPath(
-        mnemonic: mnemonic, derivationPath: derivationPath);
+        networkUrl: networkUrl,
+        mnemonic: mnemonic,
+        derivationPath: derivationPath);
     return FuelWallet.fromData(data, networkUrl);
   }
 

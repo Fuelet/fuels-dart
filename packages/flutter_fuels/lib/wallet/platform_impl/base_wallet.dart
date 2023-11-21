@@ -1,16 +1,20 @@
 import 'package:flutter_fuels/model/call_result.dart';
 
 abstract class BaseWallet {
-  Future<Map> generateNewWallet();
+  Future<Map> generateNewWallet({required String networkUrl});
 
   Future<Map> newFromMnemonic({
+    required String networkUrl,
     required String mnemonic,
   });
 
   Future<Map> newFromMnemonicAndPath(
-      {required String mnemonic, required String derivationPath});
+      {required String networkUrl,
+      required String mnemonic,
+      required String derivationPath});
 
   Future<Map> newFromPrivateKey({
+    required String networkUrl,
     required String privateKey,
   });
 

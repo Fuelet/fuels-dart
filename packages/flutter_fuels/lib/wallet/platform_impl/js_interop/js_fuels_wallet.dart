@@ -4,16 +4,17 @@ library js_fuels_wallet;
 import 'package:js/js.dart';
 
 @JS('generateNewWallet')
-external dynamic generateNewWallet();
+external dynamic generateNewWallet(String networkUrl);
 
 @JS('newWalletFromMnemonic')
-external dynamic newWalletFromMnemonic(String mnemonic);
+external dynamic newWalletFromMnemonic(String networkUrl, String mnemonic);
 
 @JS('newWalletFromMnemonicAndPath')
-external dynamic newWalletFromMnemonicAndPath(String mnemonic, String path);
+external dynamic newWalletFromMnemonicAndPath(
+    String networkUrl, String mnemonic, String path);
 
 @JS('newWalletFromPrivateKey')
-external dynamic newWalletFromPrivateKey(String privateKey);
+external dynamic newWalletFromPrivateKey(String networkUrl, String privateKey);
 
 @JS('transfer')
 external String transfer(
@@ -44,6 +45,12 @@ external String sendTransaction(
 @JS('simulateTransaction')
 external String simulateTransaction(
   String privateKey,
+  String networkUrl,
+  String transactionRequestJson,
+);
+
+@JS('getTransactionCost')
+external String getTransactionCost(
   String networkUrl,
   String transactionRequestJson,
 );

@@ -8,13 +8,14 @@ class FuelWalletImpl extends BaseWallet {
   static final Fuels _bridge = createLib();
 
   @override
-  Future<Map> generateNewWallet() async {
+  Future<Map> generateNewWallet({required String networkUrl}) async {
     final w = await WalletUnlocked.newRandom(bridge: _bridge);
     return await _walletToMap(w);
   }
 
   @override
   Future<Map> newFromMnemonic({
+    required String networkUrl,
     required String mnemonic,
   }) async {
     final w = await WalletUnlocked.newFromMnemonicPhrase(
@@ -27,7 +28,9 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> newFromMnemonicAndPath(
-      {required String mnemonic, required String derivationPath}) async {
+      {required String networkUrl,
+      required String mnemonic,
+      required String derivationPath}) async {
     final w = await WalletUnlocked.newFromMnemonicPhraseWithPath(
         bridge: _bridge, phrase: mnemonic, path: derivationPath);
 
@@ -36,6 +39,7 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> newFromPrivateKey({
+    required String networkUrl,
     required String privateKey,
   }) async {
     final w = await WalletUnlocked.newFromPrivateKey(

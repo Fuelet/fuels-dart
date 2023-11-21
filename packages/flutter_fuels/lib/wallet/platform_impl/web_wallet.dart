@@ -9,31 +9,37 @@ import 'js_interop/js_fuels_wallet.dart' as js_wallet;
 
 class FuelWalletImpl extends BaseWallet {
   @override
-  Future<Map<String, dynamic>> generateNewWallet() {
-    var newWallet = js_wallet.generateNewWallet();
-    return Future.value(_jsObjectToMap(newWallet));
+  Future<Map<String, dynamic>> generateNewWallet({required String networkUrl}) {
+    var newWallet = js_wallet.generateNewWallet(networkUrl);
+    return promiseToFuture(_jsObjectToMap(newWallet));
   }
 
   @override
   Future<Map> newFromMnemonic({
+    required String networkUrl,
     required String mnemonic,
   }) {
-    var newWallet = js_wallet.newWalletFromMnemonic(mnemonic);
-    return Future.value(_jsObjectToMap(newWallet));
+    var newWallet = js_wallet.newWalletFromMnemonic(networkUrl, mnemonic);
+    return promiseToFuture(_jsObjectToMap(newWallet));
   }
 
   @override
-  Future<Map> newFromMnemonicAndPath({required String mnemonic, required String derivationPath}) {
-    var newWallet = js_wallet.newWalletFromMnemonicAndPath(mnemonic, derivationPath);
-    return Future.value(_jsObjectToMap(newWallet));
+  Future<Map> newFromMnemonicAndPath(
+      {required String networkUrl,
+      required String mnemonic,
+      required String derivationPath}) {
+    var newWallet = js_wallet.newWalletFromMnemonicAndPath(
+        networkUrl, mnemonic, derivationPath);
+    return promiseToFuture(_jsObjectToMap(newWallet));
   }
 
   @override
   Future<Map> newFromPrivateKey({
+    required String networkUrl,
     required String privateKey,
   }) {
-    var newWallet = js_wallet.newWalletFromPrivateKey(privateKey);
-    return Future.value(_jsObjectToMap(newWallet));
+    var newWallet = js_wallet.newWalletFromPrivateKey(networkUrl, privateKey);
+    return promiseToFuture(_jsObjectToMap(newWallet));
   }
 
   @override
