@@ -1,3 +1,7 @@
+## 0.0.24
+
+ - **FEAT**: support new receipts ([#21](https://github.com/Fuelet/fuels-dart/issues/21)). ([c9bde9e8](https://github.com/Fuelet/fuels-dart/commit/c9bde9e8f92018f2e362abbe720733140207a830))
+
 ## 0.0.23
 
  - **FIX**: update vulnerable dependencies. ([2286d017](https://github.com/Fuelet/fuels-dart/commit/2286d0171fde8e68f468430a9b6514c9ded690bb))
