@@ -18,9 +18,15 @@ abstract class Transaction {
       case 2:
         return TransactionMint.fromJson(jsonTransaction);
       default:
-        throw Exception('Cannot parse transaction');
+        return UnknownTransaction(raw: jsonTransaction);
     }
   }
+}
+
+class UnknownTransaction extends Transaction {
+  final Map<String, dynamic> raw;
+
+  const UnknownTransaction({required this.raw});
 }
 
 class TransactionScript extends Transaction {

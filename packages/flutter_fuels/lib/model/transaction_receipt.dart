@@ -36,12 +36,16 @@ abstract class TransactionReceipt {
       case 12:
         return ReceiptBurn.fromJson(jsonReceipt);
       default:
-        return UnknownReceipt();
+        return UnknownReceipt(raw: jsonReceipt);
     }
   }
 }
 
-class UnknownReceipt extends TransactionReceipt {}
+class UnknownReceipt extends TransactionReceipt {
+  final Map<String, dynamic> raw;
+
+  const UnknownReceipt({required this.raw});
+}
 
 class ReceiptCall extends TransactionReceipt {
   final String from;

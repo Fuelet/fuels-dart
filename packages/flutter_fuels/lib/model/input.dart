@@ -16,9 +16,15 @@ abstract class Input {
       case 2:
         return InputMessage.fromJson(jsonInput);
       default:
-        throw Exception('Cannot parse transaction input');
+        return UnknownInput(raw: jsonInput);
     }
   }
+}
+
+class UnknownInput extends Input {
+  final Map<String, dynamic> raw;
+
+  const UnknownInput({required this.raw});
 }
 
 class InputCoin extends Input {

@@ -20,9 +20,15 @@ abstract class Output {
       case 5:
         return OutputContractCreated.fromJson(jsonOutput);
       default:
-        throw Exception('Cannot parse transaction output');
+        return UnknownOutput(raw: jsonOutput);
     }
   }
+}
+
+class UnknownOutput extends Output {
+  final Map<String, dynamic> raw;
+
+  const UnknownOutput({required this.raw});
 }
 
 class OutputCoin extends Output {
@@ -30,7 +36,8 @@ class OutputCoin extends Output {
   final BigInt amount;
   final String assetId;
 
-  const OutputCoin({required this.to, required this.amount, required this.assetId});
+  const OutputCoin(
+      {required this.to, required this.amount, required this.assetId});
 
   factory OutputCoin.fromJson(Map<String, dynamic> data) {
     return OutputCoin(
@@ -78,7 +85,8 @@ class OutputChange extends Output {
   final BigInt amount;
   final String assetId;
 
-  const OutputChange({required this.to, required this.amount, required this.assetId});
+  const OutputChange(
+      {required this.to, required this.amount, required this.assetId});
 
   factory OutputChange.fromJson(Map<String, dynamic> data) {
     return OutputChange(
@@ -108,7 +116,8 @@ class OutputContractCreated extends Output {
   final String contractId;
   final String stateRoot;
 
-  const OutputContractCreated({required this.contractId, required this.stateRoot});
+  const OutputContractCreated(
+      {required this.contractId, required this.stateRoot});
 
   factory OutputContractCreated.fromJson(Map<String, dynamic> data) {
     return OutputContractCreated(
