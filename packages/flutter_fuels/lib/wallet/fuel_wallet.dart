@@ -1,5 +1,6 @@
 import 'package:bip39_mnemonic/bip39_mnemonic.dart';
 import 'package:flutter_fuels/model/call_result.dart';
+import 'package:flutter_fuels/model/transaction_cost.dart';
 
 import 'platform_impl/stub_wallet.dart'
     if (dart.library.io) 'platform_impl/mobile_wallet.dart'
@@ -144,6 +145,15 @@ class FuelWallet {
     return _wallet.simulateTransaction(
       networkUrl: networkUrl,
       privateKey: privateKey,
+      transactionRequest: transactionRequest,
+    );
+  }
+
+  Future<TransactionCost> getTransactionCost({
+    required dynamic transactionRequest,
+  }) async {
+    return _wallet.getTransactionCost(
+      networkUrl: networkUrl,
       transactionRequest: transactionRequest,
     );
   }

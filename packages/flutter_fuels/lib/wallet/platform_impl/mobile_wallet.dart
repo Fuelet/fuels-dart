@@ -1,4 +1,5 @@
 import 'package:flutter_fuels/model/call_result.dart';
+import 'package:flutter_fuels/model/transaction_cost.dart';
 import 'package:fuels/fuels.dart';
 
 import '../../ffi/mobile_wrapper.dart';
@@ -110,6 +111,13 @@ class FuelWalletImpl extends BaseWallet {
       {required String networkUrl,
       required String privateKey,
       required transactionRequest}) {
+    // TODO: implement
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<TransactionCost> getTransactionCost(
+      {required String networkUrl, required transactionRequest}) {
     // TODO: implement
     throw UnimplementedError();
   }

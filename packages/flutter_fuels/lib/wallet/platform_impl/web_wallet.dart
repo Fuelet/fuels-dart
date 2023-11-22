@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:js_util';
 
 import 'package:flutter_fuels/model/call_result.dart';
+import 'package:flutter_fuels/model/transaction_cost.dart';
 import 'package:js/js_util.dart';
 
 import 'base_wallet.dart';
@@ -10,7 +11,7 @@ import 'js_interop/js_fuels_wallet.dart' as js_wallet;
 class FuelWalletImpl extends BaseWallet {
   @override
   Future<Map<String, dynamic>> generateNewWallet({required String networkUrl}) {
-    var newWallet = js_wallet.generateNewWallet(networkUrl);
+    var newWallet = js_wallet.generateNewWallet(_enrichNetworkUrl(networkUrl));
     return promiseToFuture(_jsObjectToMap(newWallet));
   }
 
@@ -19,7 +20,8 @@ class FuelWalletImpl extends BaseWallet {
     required String networkUrl,
     required String mnemonic,
   }) {
-    var newWallet = js_wallet.newWalletFromMnemonic(networkUrl, mnemonic);
+    var newWallet = js_wallet.newWalletFromMnemonic(
+        _enrichNetworkUrl(networkUrl), mnemonic);
     return promiseToFuture(_jsObjectToMap(newWallet));
   }
 
@@ -29,7 +31,7 @@ class FuelWalletImpl extends BaseWallet {
       required String mnemonic,
       required String derivationPath}) {
     var newWallet = js_wallet.newWalletFromMnemonicAndPath(
-        networkUrl, mnemonic, derivationPath);
+        _enrichNetworkUrl(networkUrl), mnemonic, derivationPath);
     return promiseToFuture(_jsObjectToMap(newWallet));
   }
 
@@ -38,7 +40,8 @@ class FuelWalletImpl extends BaseWallet {
     required String networkUrl,
     required String privateKey,
   }) {
-    var newWallet = js_wallet.newWalletFromPrivateKey(networkUrl, privateKey);
+    var newWallet = js_wallet.newWalletFromPrivateKey(
+        _enrichNetworkUrl(networkUrl), privateKey);
     return promiseToFuture(_jsObjectToMap(newWallet));
   }
 
@@ -71,8 +74,8 @@ class FuelWalletImpl extends BaseWallet {
     required String privateKey,
     required String message,
   }) {
-    return promiseToFuture(
-        js_wallet.signMessage(privateKey, networkUrl, message));
+    return promiseToFuture(js_wallet.signMessage(
+        privateKey, _enrichNetworkUrl(networkUrl), message));
   }
 
   @override
@@ -95,6 +98,18 @@ class FuelWalletImpl extends BaseWallet {
     var callResultJson = jsonDecode(callResultStr);
     try {
       return CallResult.fromJson(callResultJson);
+    } catch (err) {
+      return Future.error(err);
+    }
+  }
+
+  @override
+  Future<TransactionCost> getTransactionCost(
+      {required String networkUrl, required transactionRequest}) async {
+    var txCost = await promiseToFuture(js_wallet.getTransactionCost(
+        _enrichNetworkUrl(networkUrl), transactionRequest));
+    try {
+      return TransactionCost.fromJson(txCost);
     } catch (err) {
       return Future.error(err);
     }

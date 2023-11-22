@@ -1,4 +1,5 @@
 import 'package:flutter_fuels/model/call_result.dart';
+import 'package:flutter_fuels/model/transaction_cost.dart';
 
 import 'base_wallet.dart';
 
@@ -69,6 +70,12 @@ class FuelWalletImpl extends BaseWallet {
       {required String networkUrl,
       required String privateKey,
       required transactionRequest}) {
+    throw Exception('Stub implementation');
+  }
+
+  @override
+  Future<TransactionCost> getTransactionCost(
+      {required String networkUrl, required transactionRequest}) {
     throw Exception('Stub implementation');
   }
 }

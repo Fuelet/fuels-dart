@@ -1,4 +1,5 @@
 import 'package:flutter_fuels/model/call_result.dart';
+import 'package:flutter_fuels/model/transaction_cost.dart';
 
 abstract class BaseWallet {
   Future<Map> generateNewWallet({required String networkUrl});
@@ -44,6 +45,11 @@ abstract class BaseWallet {
   Future<CallResult> simulateTransaction({
     required String networkUrl,
     required String privateKey,
+    required dynamic transactionRequest,
+  });
+
+  Future<TransactionCost> getTransactionCost({
+    required String networkUrl,
     required dynamic transactionRequest,
   });
 }
