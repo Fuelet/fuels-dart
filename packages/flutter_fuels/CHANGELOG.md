@@ -1,3 +1,7 @@
+## 0.0.25
+
+ - **FEAT**: fee calculation ([#22](https://github.com/Fuelet/fuels-dart/issues/22)). ([89ec736f](https://github.com/Fuelet/fuels-dart/commit/89ec736f7b7c9781e5670839debbee998121f388))
+
 ## 0.0.24
 
  - **FEAT**: support new receipts ([#21](https://github.com/Fuelet/fuels-dart/issues/21)). ([c9bde9e8](https://github.com/Fuelet/fuels-dart/commit/c9bde9e8f92018f2e362abbe720733140207a830))
