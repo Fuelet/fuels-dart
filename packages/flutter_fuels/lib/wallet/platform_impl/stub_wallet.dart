@@ -1,15 +1,17 @@
 import 'package:flutter_fuels/model/call_result.dart';
+import 'package:flutter_fuels/model/transaction_cost.dart';
 
 import 'base_wallet.dart';
 
 class FuelWalletImpl extends BaseWallet {
   @override
-  Future<Map> generateNewWallet() {
+  Future<Map> generateNewWallet({required String networkUrl}) {
     throw Exception('Stub implementation');
   }
 
   @override
   Future<Map> newFromMnemonic({
+    required String networkUrl,
     required String mnemonic,
   }) {
     throw Exception('Stub implementation');
@@ -17,12 +19,15 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> newFromMnemonicAndPath(
-      {required String mnemonic, required String derivationPath}) {
+      {required String networkUrl,
+      required String mnemonic,
+      required String derivationPath}) {
     throw Exception('Stub implementation');
   }
 
   @override
   Future<Map> newFromPrivateKey({
+    required String networkUrl,
     required String privateKey,
   }) {
     throw Exception('Stub implementation');
@@ -65,6 +70,22 @@ class FuelWalletImpl extends BaseWallet {
       {required String networkUrl,
       required String privateKey,
       required transactionRequest}) {
+    throw Exception('Stub implementation');
+  }
+
+  @override
+  Future<TransactionCost> getTransactionCost(
+      {required String networkUrl, required transactionRequest}) {
+    throw Exception('Stub implementation');
+  }
+
+  @override
+  Future<String> genTransferTransactionRequest(
+      {required String networkUrl,
+      required String privateKey,
+      required String destinationB256Address,
+      required num fractionalAmount,
+      required String assetId}) {
     throw Exception('Stub implementation');
   }
 }

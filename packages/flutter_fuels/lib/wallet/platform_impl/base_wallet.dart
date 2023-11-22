@@ -1,16 +1,21 @@
 import 'package:flutter_fuels/model/call_result.dart';
+import 'package:flutter_fuels/model/transaction_cost.dart';
 
 abstract class BaseWallet {
-  Future<Map> generateNewWallet();
+  Future<Map> generateNewWallet({required String networkUrl});
 
   Future<Map> newFromMnemonic({
+    required String networkUrl,
     required String mnemonic,
   });
 
   Future<Map> newFromMnemonicAndPath(
-      {required String mnemonic, required String derivationPath});
+      {required String networkUrl,
+      required String mnemonic,
+      required String derivationPath});
 
   Future<Map> newFromPrivateKey({
+    required String networkUrl,
     required String privateKey,
   });
 
@@ -41,5 +46,18 @@ abstract class BaseWallet {
     required String networkUrl,
     required String privateKey,
     required dynamic transactionRequest,
+  });
+
+  Future<TransactionCost> getTransactionCost({
+    required String networkUrl,
+    required dynamic transactionRequest,
+  });
+
+  Future<String> genTransferTransactionRequest({
+    required String networkUrl,
+    required String privateKey,
+    required String destinationB256Address,
+    required num fractionalAmount,
+    required String assetId,
   });
 }

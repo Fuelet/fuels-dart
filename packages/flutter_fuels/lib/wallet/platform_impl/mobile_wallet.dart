@@ -1,4 +1,5 @@
 import 'package:flutter_fuels/model/call_result.dart';
+import 'package:flutter_fuels/model/transaction_cost.dart';
 import 'package:fuels/fuels.dart';
 
 import '../../ffi/mobile_wrapper.dart';
@@ -8,13 +9,14 @@ class FuelWalletImpl extends BaseWallet {
   static final Fuels _bridge = createLib();
 
   @override
-  Future<Map> generateNewWallet() async {
+  Future<Map> generateNewWallet({required String networkUrl}) async {
     final w = await WalletUnlocked.newRandom(bridge: _bridge);
     return await _walletToMap(w);
   }
 
   @override
   Future<Map> newFromMnemonic({
+    required String networkUrl,
     required String mnemonic,
   }) async {
     final w = await WalletUnlocked.newFromMnemonicPhrase(
@@ -27,7 +29,9 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> newFromMnemonicAndPath(
-      {required String mnemonic, required String derivationPath}) async {
+      {required String networkUrl,
+      required String mnemonic,
+      required String derivationPath}) async {
     final w = await WalletUnlocked.newFromMnemonicPhraseWithPath(
         bridge: _bridge, phrase: mnemonic, path: derivationPath);
 
@@ -36,6 +40,7 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> newFromPrivateKey({
+    required String networkUrl,
     required String privateKey,
   }) async {
     final w = await WalletUnlocked.newFromPrivateKey(
@@ -106,6 +111,24 @@ class FuelWalletImpl extends BaseWallet {
       {required String networkUrl,
       required String privateKey,
       required transactionRequest}) {
+    // TODO: implement
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<TransactionCost> getTransactionCost(
+      {required String networkUrl, required transactionRequest}) {
+    // TODO: implement
+    throw UnimplementedError();
+  }
+
+  @override
+  Future<String> genTransferTransactionRequest(
+      {required String networkUrl,
+      required String privateKey,
+      required String destinationB256Address,
+      required num fractionalAmount,
+      required String assetId}) {
     // TODO: implement
     throw UnimplementedError();
   }

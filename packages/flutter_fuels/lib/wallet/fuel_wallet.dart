@@ -1,5 +1,6 @@
 import 'package:bip39_mnemonic/bip39_mnemonic.dart';
 import 'package:flutter_fuels/model/call_result.dart';
+import 'package:flutter_fuels/model/transaction_cost.dart';
 
 import 'platform_impl/stub_wallet.dart'
     if (dart.library.io) 'platform_impl/mobile_wallet.dart'
@@ -36,7 +37,7 @@ class FuelWallet {
   static Future<FuelWallet> generateNewWallet({
     required String networkUrl,
   }) async {
-    final data = await _wallet.generateNewWallet();
+    final data = await _wallet.generateNewWallet(networkUrl: networkUrl);
     return FuelWallet.fromData(data, networkUrl);
   }
 
@@ -47,6 +48,7 @@ class FuelWallet {
     required String privateKey,
   }) async {
     final data = await _wallet.newFromPrivateKey(
+      networkUrl: networkUrl,
       privateKey: privateKey,
     );
     return FuelWallet.fromData(data, networkUrl);
@@ -59,6 +61,7 @@ class FuelWallet {
   }) async {
     _validateMnemonicPhrase(mnemonic);
     final data = await _wallet.newFromMnemonic(
+      networkUrl: networkUrl,
       mnemonic: mnemonic,
     );
     return FuelWallet.fromData(data, networkUrl);
@@ -72,7 +75,9 @@ class FuelWallet {
   }) async {
     _validateMnemonicPhrase(mnemonic);
     final data = await _wallet.newFromMnemonicAndPath(
-        mnemonic: mnemonic, derivationPath: derivationPath);
+        networkUrl: networkUrl,
+        mnemonic: mnemonic,
+        derivationPath: derivationPath);
     return FuelWallet.fromData(data, networkUrl);
   }
 
@@ -141,6 +146,28 @@ class FuelWallet {
       networkUrl: networkUrl,
       privateKey: privateKey,
       transactionRequest: transactionRequest,
+    );
+  }
+
+  Future<TransactionCost> getTransactionCost({
+    required dynamic transactionRequest,
+  }) async {
+    return _wallet.getTransactionCost(
+      networkUrl: networkUrl,
+      transactionRequest: transactionRequest,
+    );
+  }
+
+  Future<String> genTransferTransactionRequest(
+      {required String destinationB256Address,
+      required num fractionalAmount,
+      required String assetId}) {
+    return _wallet.genTransferTransactionRequest(
+      networkUrl: networkUrl,
+      privateKey: privateKey,
+      destinationB256Address: destinationB256Address,
+      fractionalAmount: fractionalAmount,
+      assetId: assetId,
     );
   }
 
