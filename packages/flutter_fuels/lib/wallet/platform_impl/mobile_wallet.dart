@@ -126,8 +126,8 @@ class FuelWalletImpl extends BaseWallet {
   Future<String> genTransferTransactionRequest(
       {required String networkUrl,
       required String privateKey,
-      required String to,
-      required num amount,
+      required String destinationB256Address,
+      required num fractionalAmount,
       required String assetId}) {
     // TODO: implement
     throw UnimplementedError();

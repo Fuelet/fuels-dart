@@ -159,12 +159,14 @@ class FuelWallet {
   }
 
   Future<String> genTransferTransactionRequest(
-      {required String to, required num amount, required String assetId}) {
+      {required String destinationB256Address,
+      required num fractionalAmount,
+      required String assetId}) {
     return _wallet.genTransferTransactionRequest(
       networkUrl: networkUrl,
       privateKey: privateKey,
-      to: to,
-      amount: amount,
+      destinationB256Address: destinationB256Address,
+      fractionalAmount: fractionalAmount,
       assetId: assetId,
     );
   }

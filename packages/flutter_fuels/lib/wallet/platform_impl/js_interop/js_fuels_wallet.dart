@@ -59,7 +59,7 @@ external Object getTransactionCost(
 external Object genTransferTransactionRequest(
   String privateKey,
   String networkUrl,
-  String to,
-  num amount,
+  String destinationB256Address,
+  num fractionalAmount,
   String assetId,
 );

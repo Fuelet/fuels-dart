@@ -123,11 +123,15 @@ class FuelWalletImpl extends BaseWallet {
   Future<String> genTransferTransactionRequest(
       {required String networkUrl,
       required String privateKey,
-      required String to,
-      required num amount,
+      required String destinationB256Address,
+      required num fractionalAmount,
       required String assetId}) async {
     return await promiseToFuture(js_wallet.genTransferTransactionRequest(
-        privateKey, _enrichNetworkUrl(networkUrl), to, amount, assetId));
+        privateKey,
+        _enrichNetworkUrl(networkUrl),
+        destinationB256Address,
+        fractionalAmount,
+        assetId));
   }
 
   static Map<String, dynamic> _jsObjectToMap(Object o) {

@@ -143,17 +143,17 @@ class WalletInterface {
   async genTransferTransactionRequest(
     privateKey: string,
     networkUrl: string,
-    to: string,
-    amount: number,
+    destinationB256Address: string,
+    fractionalAmount: number,
     assetId: string,
   ): Promise<string> {
     let provider = await Provider.create(networkUrl);
     let wallet = Wallet.fromPrivateKey(privateKey, provider);
 
-    const destination = Address.fromString(to);
+    const destination = Address.fromB256(destinationB256Address);
     const {minGasPrice, maxGasPerTx} = provider.getGasConfig();
     const request = new ScriptTransactionRequest({gasLimit: maxGasPerTx, gasPrice: minGasPrice});
-    request.addCoinOutput(destination, amount, assetId);
+    request.addCoinOutput(destination, fractionalAmount, assetId);
 
     const {maxFee, requiredQuantities} = await provider.getTransactionCost(request);
 

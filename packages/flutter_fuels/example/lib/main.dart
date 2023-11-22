@@ -183,7 +183,9 @@ class _MyAppState extends State<MyApp> {
     TransactionCost? estimatedTxCost;
     try {
       txRequest = await wallet.genTransferTransactionRequest(
-          to: derivedWallet1.bech32Address, amount: 1, assetId: _ethAssetId);
+          destinationB256Address: derivedWallet1.b256Address,
+          fractionalAmount: 1,
+          assetId: _ethAssetId);
       estimatedTxCost =
           await wallet.getTransactionCost(transactionRequest: txRequest);
     } catch (e) {

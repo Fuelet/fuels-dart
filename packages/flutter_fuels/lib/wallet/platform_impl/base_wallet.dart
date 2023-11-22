@@ -56,8 +56,8 @@ abstract class BaseWallet {
   Future<String> genTransferTransactionRequest({
     required String networkUrl,
     required String privateKey,
-    required String to,
-    required num amount,
+    required String destinationB256Address,
+    required num fractionalAmount,
     required String assetId,
   });
 }
