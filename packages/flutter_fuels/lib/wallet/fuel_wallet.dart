@@ -158,6 +158,17 @@ class FuelWallet {
     );
   }
 
+  Future<String> genTransferTransactionRequest(
+      {required String to, required num amount, required String assetId}) {
+    return _wallet.genTransferTransactionRequest(
+      networkUrl: networkUrl,
+      privateKey: privateKey,
+      to: to,
+      amount: amount,
+      assetId: assetId,
+    );
+  }
+
   static String _addHexPrefix(String address) {
     if (address.startsWith('0x')) {
       return address;

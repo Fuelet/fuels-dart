@@ -52,4 +52,12 @@ abstract class BaseWallet {
     required String networkUrl,
     required dynamic transactionRequest,
   });
+
+  Future<String> genTransferTransactionRequest({
+    required String networkUrl,
+    required String privateKey,
+    required String to,
+    required num amount,
+    required String assetId,
+  });
 }

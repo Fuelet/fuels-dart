@@ -10,39 +10,42 @@ import 'js_interop/js_fuels_wallet.dart' as js_wallet;
 
 class FuelWalletImpl extends BaseWallet {
   @override
-  Future<Map<String, dynamic>> generateNewWallet({required String networkUrl}) {
-    var newWallet = js_wallet.generateNewWallet(_enrichNetworkUrl(networkUrl));
-    return promiseToFuture(_jsObjectToMap(newWallet));
+  Future<Map<String, dynamic>> generateNewWallet(
+      {required String networkUrl}) async {
+    var newWallet = await promiseToFuture(
+        js_wallet.generateNewWallet(_enrichNetworkUrl(networkUrl)));
+    return _jsObjectToMap(newWallet);
   }
 
   @override
   Future<Map> newFromMnemonic({
     required String networkUrl,
     required String mnemonic,
-  }) {
-    var newWallet = js_wallet.newWalletFromMnemonic(
-        _enrichNetworkUrl(networkUrl), mnemonic);
-    return promiseToFuture(_jsObjectToMap(newWallet));
+  }) async {
+    var newWallet = await promiseToFuture(js_wallet.newWalletFromMnemonic(
+        _enrichNetworkUrl(networkUrl), mnemonic));
+    return _jsObjectToMap(newWallet);
   }
 
   @override
   Future<Map> newFromMnemonicAndPath(
       {required String networkUrl,
       required String mnemonic,
-      required String derivationPath}) {
-    var newWallet = js_wallet.newWalletFromMnemonicAndPath(
-        _enrichNetworkUrl(networkUrl), mnemonic, derivationPath);
-    return promiseToFuture(_jsObjectToMap(newWallet));
+      required String derivationPath}) async {
+    var newWallet = await promiseToFuture(
+        js_wallet.newWalletFromMnemonicAndPath(
+            _enrichNetworkUrl(networkUrl), mnemonic, derivationPath));
+    return _jsObjectToMap(newWallet);
   }
 
   @override
   Future<Map> newFromPrivateKey({
     required String networkUrl,
     required String privateKey,
-  }) {
-    var newWallet = js_wallet.newWalletFromPrivateKey(
-        _enrichNetworkUrl(networkUrl), privateKey);
-    return promiseToFuture(_jsObjectToMap(newWallet));
+  }) async {
+    var newWallet = await promiseToFuture(js_wallet.newWalletFromPrivateKey(
+        _enrichNetworkUrl(networkUrl), privateKey));
+    return _jsObjectToMap(newWallet);
   }
 
   @override
@@ -93,9 +96,9 @@ class FuelWalletImpl extends BaseWallet {
       {required String networkUrl,
       required String privateKey,
       required transactionRequest}) async {
-    var callResultStr = await promiseToFuture(js_wallet.simulateTransaction(
+    final callResultStr = await promiseToFuture(js_wallet.simulateTransaction(
         privateKey, _enrichNetworkUrl(networkUrl), transactionRequest));
-    var callResultJson = jsonDecode(callResultStr);
+    final callResultJson = jsonDecode(callResultStr);
     try {
       return CallResult.fromJson(callResultJson);
     } catch (err) {
@@ -106,13 +109,25 @@ class FuelWalletImpl extends BaseWallet {
   @override
   Future<TransactionCost> getTransactionCost(
       {required String networkUrl, required transactionRequest}) async {
-    var txCost = await promiseToFuture(js_wallet.getTransactionCost(
+    final txCostStr = await promiseToFuture(js_wallet.getTransactionCost(
         _enrichNetworkUrl(networkUrl), transactionRequest));
+    final txCostJson = jsonDecode(txCostStr);
     try {
-      return TransactionCost.fromJson(txCost);
+      return TransactionCost.fromJson(txCostJson);
     } catch (err) {
       return Future.error(err);
     }
+  }
+
+  @override
+  Future<String> genTransferTransactionRequest(
+      {required String networkUrl,
+      required String privateKey,
+      required String to,
+      required num amount,
+      required String assetId}) async {
+    return await promiseToFuture(js_wallet.genTransferTransactionRequest(
+        privateKey, _enrichNetworkUrl(networkUrl), to, amount, assetId));
   }
 
   static Map<String, dynamic> _jsObjectToMap(Object o) {

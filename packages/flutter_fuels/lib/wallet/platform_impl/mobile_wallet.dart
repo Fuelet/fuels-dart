@@ -122,6 +122,17 @@ class FuelWalletImpl extends BaseWallet {
     throw UnimplementedError();
   }
 
+  @override
+  Future<String> genTransferTransactionRequest(
+      {required String networkUrl,
+      required String privateKey,
+      required String to,
+      required num amount,
+      required String assetId}) {
+    // TODO: implement
+    throw UnimplementedError();
+  }
+
   Future<Map> _walletToMap(WalletUnlocked wallet) async {
     final address = await wallet.address();
     final bech32Address = await address.toBech32String();

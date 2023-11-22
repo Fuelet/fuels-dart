@@ -3,6 +3,7 @@ import {
   Address,
   Bech32Address,
   Provider,
+  ScriptTransactionRequest,
   toB256,
   toBech32,
   TransactionCreate,
@@ -125,17 +126,40 @@ class WalletInterface {
   async getTransactionCost(
     networkUrl: string,
     transactionRequestJson: string
-  ): Promise<object> {
+  ): Promise<string> {
     let provider = await Provider.create(networkUrl);
     let transactionRequest = JSON.parse(transactionRequestJson);
     const {minGasPrice, gasPrice, gasUsed, minFee, maxFee} = await provider.getTransactionCost(transactionRequest)
-    return {
+    const responseObject = {
       minGasPrice: minGasPrice.toNumber(),
       gasPrice: gasPrice.toNumber(),
       gasUsed: gasUsed.toNumber(),
       minFee: minFee.toNumber(),
       maxFee: maxFee.toNumber(),
     }
+    return JSON.stringify(responseObject);
+  }
+
+  async genTransferTransactionRequest(
+    privateKey: string,
+    networkUrl: string,
+    to: string,
+    amount: number,
+    assetId: string,
+  ): Promise<string> {
+    let provider = await Provider.create(networkUrl);
+    let wallet = Wallet.fromPrivateKey(privateKey, provider);
+
+    const destination = Address.fromString(to);
+    const {minGasPrice, maxGasPerTx} = provider.getGasConfig();
+    const request = new ScriptTransactionRequest({gasLimit: maxGasPerTx, gasPrice: minGasPrice});
+    request.addCoinOutput(destination, amount, assetId);
+
+    const {maxFee, requiredQuantities} = await provider.getTransactionCost(request);
+
+    await wallet.fund(request, requiredQuantities, maxFee);
+
+    return JSON.stringify(request);
   }
 }
 

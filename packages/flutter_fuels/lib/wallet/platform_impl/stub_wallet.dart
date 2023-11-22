@@ -78,4 +78,14 @@ class FuelWalletImpl extends BaseWallet {
       {required String networkUrl, required transactionRequest}) {
     throw Exception('Stub implementation');
   }
+
+  @override
+  Future<String> genTransferTransactionRequest(
+      {required String networkUrl,
+      required String privateKey,
+      required String to,
+      required num amount,
+      required String assetId}) {
+    throw Exception('Stub implementation');
+  }
 }

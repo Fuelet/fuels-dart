@@ -4,20 +4,20 @@ library js_fuels_wallet;
 import 'package:js/js.dart';
 
 @JS('generateNewWallet')
-external dynamic generateNewWallet(String networkUrl);
+external Object generateNewWallet(String networkUrl);
 
 @JS('newWalletFromMnemonic')
-external dynamic newWalletFromMnemonic(String networkUrl, String mnemonic);
+external Object newWalletFromMnemonic(String networkUrl, String mnemonic);
 
 @JS('newWalletFromMnemonicAndPath')
-external dynamic newWalletFromMnemonicAndPath(
+external Object newWalletFromMnemonicAndPath(
     String networkUrl, String mnemonic, String path);
 
 @JS('newWalletFromPrivateKey')
-external dynamic newWalletFromPrivateKey(String networkUrl, String privateKey);
+external Object newWalletFromPrivateKey(String networkUrl, String privateKey);
 
 @JS('transfer')
-external String transfer(
+external Object transfer(
   String privateKey,
   String networkUrl,
   String destinationB256Address,
@@ -29,28 +29,37 @@ external String transfer(
 );
 
 @JS('signMessage')
-external String signMessage(
+external Object signMessage(
   String privateKey,
   String networkUrl,
   String message,
 );
 
 @JS('sendTransaction')
-external String sendTransaction(
+external Object sendTransaction(
   String privateKey,
   String networkUrl,
   String transactionRequestJson,
 );
 
 @JS('simulateTransaction')
-external String simulateTransaction(
+external Object simulateTransaction(
   String privateKey,
   String networkUrl,
   String transactionRequestJson,
 );
 
 @JS('getTransactionCost')
-external String getTransactionCost(
+external Object getTransactionCost(
   String networkUrl,
   String transactionRequestJson,
+);
+
+@JS('genTransferTransactionRequest')
+external Object genTransferTransactionRequest(
+  String privateKey,
+  String networkUrl,
+  String to,
+  num amount,
+  String assetId,
 );
