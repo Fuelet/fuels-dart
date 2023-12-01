@@ -90,6 +90,10 @@ void wire_send_transaction__method__WalletUnlocked(int64_t port_,
                                                    struct wire_WalletUnlocked *that,
                                                    struct wire_uint_8_list *encoded_tx);
 
+void wire_sign_message__method__WalletUnlocked(int64_t port_,
+                                               struct wire_WalletUnlocked *that,
+                                               struct wire_uint_8_list *message);
+
 void wire_from_bech32_string__static_method__Bech32Address(int64_t port_,
                                                            struct wire_uint_8_list *s);
 
@@ -131,6 +135,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) wire_transfer__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_gen_transfer_tx_request__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_send_transaction__method__WalletUnlocked);
+    dummy_var ^= ((int64_t) (void*) wire_sign_message__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_from_bech32_string__static_method__Bech32Address);
     dummy_var ^= ((int64_t) (void*) wire_from_b256_string__static_method__Bech32Address);
     dummy_var ^= ((int64_t) (void*) wire_to_bech32_string__method__Bech32Address);

@@ -242,6 +242,24 @@ fn wire_send_transaction__method__WalletUnlocked_impl(
         },
     )
 }
+fn wire_sign_message__method__WalletUnlocked_impl(
+    port_: MessagePort,
+    that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
+    message: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "sign_message__method__WalletUnlocked",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.wire2api();
+            let api_message = message.wire2api();
+            move |task_callback| Ok(WalletUnlocked::sign_message(&api_that, api_message))
+        },
+    )
+}
 fn wire_from_bech32_string__static_method__Bech32Address_impl(
     port_: MessagePort,
     s: impl Wire2Api<String> + UnwindSafe,

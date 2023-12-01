@@ -8,6 +8,7 @@ use fuel_crypto::SecretKey;
 use fuel_tx::{Address, Transaction as FuelTransaction};
 use fuels::prelude::{AssetId, generate_mnemonic_phrase};
 pub use fuels::prelude::{Account, Bech32Address as NativeBech32Address, Provider as NativeProvider, ViewOnlyAccount, WalletUnlocked as NativeWalletUnlocked};
+use fuels_accounts::Signer;
 use fuels_accounts::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
 
 use crate::model::balance::{Balance, from_hash_map};
@@ -139,6 +140,16 @@ impl WalletUnlocked {
         let native_provider = native_wallet_unlocked.provider().unwrap();
         let tx_id = native_provider.send_transaction(tx).await.unwrap();
         tx_id.to_string()
+    }
+
+    #[tokio::main]
+    pub async fn sign_message(
+        &self,
+        message: String,
+    ) -> String {
+        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
+        let signature = native_wallet_unlocked.sign_message(message).await.unwrap();
+        signature.to_string()
     }
 }
 

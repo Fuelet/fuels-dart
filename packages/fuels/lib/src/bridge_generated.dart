@@ -89,6 +89,11 @@ abstract class Fuels {
   FlutterRustBridgeTaskConstMeta
       get kSendTransactionMethodWalletUnlockedConstMeta;
 
+  Future<String> signMessageMethodWalletUnlocked(
+      {required WalletUnlocked that, required String message, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kSignMessageMethodWalletUnlockedConstMeta;
+
   Future<Bech32Address> fromBech32StringStaticMethodBech32Address(
       {required String s, dynamic hint});
 
@@ -440,6 +445,12 @@ class WalletUnlocked {
         that: this,
         encodedTx: encodedTx,
       );
+
+  Future<String> signMessage({required String message, dynamic hint}) =>
+      bridge.signMessageMethodWalletUnlocked(
+        that: this,
+        message: message,
+      );
 }
 
 class FuelsImpl implements Fuels {
@@ -682,6 +693,27 @@ class FuelsImpl implements Fuels {
           const FlutterRustBridgeTaskConstMeta(
             debugName: "send_transaction__method__WalletUnlocked",
             argNames: ["that", "encodedTx"],
+          );
+
+  Future<String> signMessageMethodWalletUnlocked(
+      {required WalletUnlocked that, required String message, dynamic hint}) {
+    var arg0 = _platform.api2wire_box_autoadd_wallet_unlocked(that);
+    var arg1 = _platform.api2wire_String(message);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_sign_message__method__WalletUnlocked(port_, arg0, arg1),
+      parseSuccessData: _wire2api_String,
+      constMeta: kSignMessageMethodWalletUnlockedConstMeta,
+      argValues: [that, message],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta
+      get kSignMessageMethodWalletUnlockedConstMeta =>
+          const FlutterRustBridgeTaskConstMeta(
+            debugName: "sign_message__method__WalletUnlocked",
+            argNames: ["that", "message"],
           );
 
   Future<Bech32Address> fromBech32StringStaticMethodBech32Address(
@@ -1549,6 +1581,28 @@ class FuelsWire implements FlutterRustBridgeWireBase {
       'wire_send_transaction__method__WalletUnlocked');
   late final _wire_send_transaction__method__WalletUnlocked =
       _wire_send_transaction__method__WalletUnlockedPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_WalletUnlocked>,
+              ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_sign_message__method__WalletUnlocked(
+    int port_,
+    ffi.Pointer<wire_WalletUnlocked> that,
+    ffi.Pointer<wire_uint_8_list> message,
+  ) {
+    return _wire_sign_message__method__WalletUnlocked(
+      port_,
+      that,
+      message,
+    );
+  }
+
+  late final _wire_sign_message__method__WalletUnlockedPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_WalletUnlocked>,
+                  ffi.Pointer<wire_uint_8_list>)>>(
+      'wire_sign_message__method__WalletUnlocked');
+  late final _wire_sign_message__method__WalletUnlocked =
+      _wire_sign_message__method__WalletUnlockedPtr.asFunction<
           void Function(int, ffi.Pointer<wire_WalletUnlocked>,
               ffi.Pointer<wire_uint_8_list>)>();
 

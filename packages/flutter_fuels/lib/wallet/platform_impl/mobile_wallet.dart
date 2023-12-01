@@ -91,9 +91,15 @@ class FuelWalletImpl extends BaseWallet {
     required String networkUrl,
     required String privateKey,
     required String message,
-  }) {
-    // TODO: implement
-    throw UnimplementedError();
+  }) async {
+    final provider = await Provider.connect(bridge: _bridge, url: networkUrl);
+    final w = await WalletUnlocked.newFromPrivateKey(
+      bridge: _bridge,
+      provider: provider,
+      privateKey: privateKey,
+    );
+
+    return await w.signMessage(message: message);
   }
 
   @override
