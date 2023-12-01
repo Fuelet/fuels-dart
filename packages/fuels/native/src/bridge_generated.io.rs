@@ -74,6 +74,26 @@ pub extern "C" fn wire_transfer__method__WalletUnlocked(
 }
 
 #[no_mangle]
+pub extern "C" fn wire_gen_transfer_tx_request__method__WalletUnlocked(
+    port_: i64,
+    that: *mut wire_WalletUnlocked,
+    to: *mut wire_Bech32Address,
+    amount: u64,
+    asset: *mut wire_uint_8_list,
+) {
+    wire_gen_transfer_tx_request__method__WalletUnlocked_impl(port_, that, to, amount, asset)
+}
+
+#[no_mangle]
+pub extern "C" fn wire_send_transaction__method__WalletUnlocked(
+    port_: i64,
+    that: *mut wire_WalletUnlocked,
+    encoded_tx: *mut wire_uint_8_list,
+) {
+    wire_send_transaction__method__WalletUnlocked_impl(port_, that, encoded_tx)
+}
+
+#[no_mangle]
 pub extern "C" fn wire_from_bech32_string__static_method__Bech32Address(
     port_: i64,
     s: *mut wire_uint_8_list,

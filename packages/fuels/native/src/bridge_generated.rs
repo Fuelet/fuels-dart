@@ -198,6 +198,50 @@ fn wire_transfer__method__WalletUnlocked_impl(
         },
     )
 }
+fn wire_gen_transfer_tx_request__method__WalletUnlocked_impl(
+    port_: MessagePort,
+    that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
+    to: impl Wire2Api<Bech32Address> + UnwindSafe,
+    amount: impl Wire2Api<u64> + UnwindSafe,
+    asset: impl Wire2Api<String> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "gen_transfer_tx_request__method__WalletUnlocked",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.wire2api();
+            let api_to = to.wire2api();
+            let api_amount = amount.wire2api();
+            let api_asset = asset.wire2api();
+            move |task_callback| {
+                Ok(WalletUnlocked::gen_transfer_tx_request(
+                    &api_that, api_to, api_amount, api_asset,
+                ))
+            }
+        },
+    )
+}
+fn wire_send_transaction__method__WalletUnlocked_impl(
+    port_: MessagePort,
+    that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
+    encoded_tx: impl Wire2Api<Vec<u8>> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
+        WrapInfo {
+            debug_name: "send_transaction__method__WalletUnlocked",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.wire2api();
+            let api_encoded_tx = encoded_tx.wire2api();
+            move |task_callback| Ok(WalletUnlocked::send_transaction(&api_that, api_encoded_tx))
+        },
+    )
+}
 fn wire_from_bech32_string__static_method__Bech32Address_impl(
     port_: MessagePort,
     s: impl Wire2Api<String> + UnwindSafe,
