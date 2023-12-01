@@ -17,35 +17,27 @@ pub struct WalletUnlocked {
     pub private_key: String,
     // Is present only when the wallet is created using a mnemonic phrase
     pub mnemonic_phrase: Option<String>,
-    pub provider: Option<Provider>,
+    pub provider: Provider,
 }
 
 impl WalletUnlocked {
-    // TODO: fix cannot borrow as mutable
-    // pub fn set_provider(&mut self, provider: Provider) {
-    //     let mut native_wallet = &mut*self.native_wallet_unlocked;
-    //     native_wallet.set_provider((&*provider.native_provider).clone())
-    // }
-    //
-    async fn get_native_wallet_unlocked(&self) -> NativeWalletUnlocked {
-        let secret_key = SecretKey::from_str(self.private_key.as_str()).unwrap();
-        return match &self.provider {
-            None =>
-                NativeWalletUnlocked::new_from_private_key(secret_key, None),
-            Some(p) => {
-                let native_provider = p.get_native_provider().await;
-                NativeWalletUnlocked::new_from_private_key(secret_key, Some(native_provider))
-            }
-        };
+    async fn get_native_provider(&self) -> NativeProvider {
+        self.provider.get_native_provider().await
     }
 
-    pub fn new_random(provider: Option<Provider>) -> WalletUnlocked {
+    async fn get_native_wallet_unlocked(&self) -> NativeWalletUnlocked {
+        let secret_key = SecretKey::from_str(self.private_key.as_str()).unwrap();
+        let native_provider = self.get_native_provider().await;
+        NativeWalletUnlocked::new_from_private_key(secret_key, Some(native_provider))
+    }
+
+    pub fn new_random(provider: Provider) -> WalletUnlocked {
         let mut rng = rand::thread_rng();
         let mnemonic_phrase = generate_mnemonic_phrase(&mut rng, 12).unwrap();
         WalletUnlocked::new_from_mnemonic_phrase(mnemonic_phrase, provider)
     }
 
-    pub fn new_from_private_key(private_key: String, provider: Option<Provider>) -> WalletUnlocked {
+    pub fn new_from_private_key(private_key: String, provider: Provider) -> WalletUnlocked {
         let secret_key = SecretKey::from_str(private_key.as_str()).unwrap();
         Self {
             private_key: secret_key.to_string(),
@@ -54,12 +46,12 @@ impl WalletUnlocked {
         }
     }
 
-    pub fn new_from_mnemonic_phrase(phrase: String, provider: Option<Provider>) -> WalletUnlocked {
+    pub fn new_from_mnemonic_phrase(phrase: String, provider: Provider) -> WalletUnlocked {
         let path = format!("{}/0'/0/0", DEFAULT_DERIVATION_PATH_PREFIX);
         WalletUnlocked::new_from_mnemonic_phrase_with_path(phrase, path, provider)
     }
 
-    pub fn new_from_mnemonic_phrase_with_path(phrase: String, path: String, provider: Option<Provider>) -> WalletUnlocked {
+    pub fn new_from_mnemonic_phrase_with_path(phrase: String, path: String, provider: Provider) -> WalletUnlocked {
         let secret_key = SecretKey::new_from_mnemonic_phrase_with_path(&phrase, &path).unwrap();
         Self {
             private_key: secret_key.to_string(),
@@ -85,7 +77,7 @@ impl WalletUnlocked {
         let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
         let asset_id = AssetId::from_str(&asset).unwrap();
         let result = native_wallet_unlocked.transfer(&*to.native, amount, asset_id, tx_parameters.into()).await;
-        let (tx_id, receipts) = result.unwrap();
+        let (tx_id, _) = result.unwrap();
         tx_id.to_string()
     }
 
@@ -98,11 +90,11 @@ impl WalletUnlocked {
         amount: u64,
         asset: String,
     ) -> Vec<u8> {
+        let native_provider = self.get_native_provider().await;
         let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
-        let native_provider = native_wallet_unlocked.provider().unwrap();
 
         let tx_without_tx_params = build_transfer_transaction(&native_wallet_unlocked, &native_provider, &to, amount, &asset, None).await.unwrap();
-        let min_tx_params = get_min_tx_params(native_provider, &tx_without_tx_params).await.unwrap();
+        let min_tx_params = get_min_tx_params(&native_provider, &tx_without_tx_params).await.unwrap();
         let tx_with_min_tx_params = build_transfer_transaction(&native_wallet_unlocked, &native_provider, &to, amount, &asset, Some(min_tx_params)).await.unwrap();
 
         let fuel_tx: FuelTransaction = tx_with_min_tx_params.into();
@@ -118,8 +110,7 @@ impl WalletUnlocked {
         let decoded_tx: FuelTransaction = FuelTransaction::from_bytes(&encoded_tx).unwrap();
         let tx = wrap_fuel_transaction(decoded_tx).unwrap();
 
-        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
-        let native_provider = native_wallet_unlocked.provider().unwrap();
+        let native_provider = self.get_native_provider().await;
         let tx_id = native_provider.send_transaction(tx).await.unwrap();
         tx_id.to_string()
     }

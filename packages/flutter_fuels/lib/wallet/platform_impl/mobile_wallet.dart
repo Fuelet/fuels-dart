@@ -10,7 +10,9 @@ class FuelWalletImpl extends BaseWallet {
 
   @override
   Future<Map> generateNewWallet({required String networkUrl}) async {
-    final w = await WalletUnlocked.newRandom(bridge: _bridge);
+    final provider = await Provider.connect(bridge: _bridge, url: networkUrl);
+    final w =
+        await WalletUnlocked.newRandom(bridge: _bridge, provider: provider);
     return await _walletToMap(w);
   }
 
@@ -19,8 +21,10 @@ class FuelWalletImpl extends BaseWallet {
     required String networkUrl,
     required String mnemonic,
   }) async {
+    final provider = await Provider.connect(bridge: _bridge, url: networkUrl);
     final w = await WalletUnlocked.newFromMnemonicPhrase(
       bridge: _bridge,
+      provider: provider,
       phrase: mnemonic,
     );
 
@@ -32,8 +36,12 @@ class FuelWalletImpl extends BaseWallet {
       {required String networkUrl,
       required String mnemonic,
       required String derivationPath}) async {
+    final provider = await Provider.connect(bridge: _bridge, url: networkUrl);
     final w = await WalletUnlocked.newFromMnemonicPhraseWithPath(
-        bridge: _bridge, phrase: mnemonic, path: derivationPath);
+        bridge: _bridge,
+        provider: provider,
+        phrase: mnemonic,
+        path: derivationPath);
 
     return await _walletToMap(w);
   }
@@ -43,8 +51,10 @@ class FuelWalletImpl extends BaseWallet {
     required String networkUrl,
     required String privateKey,
   }) async {
+    final provider = await Provider.connect(bridge: _bridge, url: networkUrl);
     final w = await WalletUnlocked.newFromPrivateKey(
       bridge: _bridge,
+      provider: provider,
       privateKey: privateKey,
     );
 

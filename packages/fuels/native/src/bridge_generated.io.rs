@@ -294,7 +294,7 @@ pub struct wire_uint_8_list {
 pub struct wire_WalletUnlocked {
     private_key: *mut wire_uint_8_list,
     mnemonic_phrase: *mut wire_uint_8_list,
-    provider: *mut wire_Provider,
+    provider: wire_Provider,
 }
 
 // Section: impl NewWithNullPtr
@@ -366,7 +366,7 @@ impl NewWithNullPtr for wire_WalletUnlocked {
         Self {
             private_key: core::ptr::null_mut(),
             mnemonic_phrase: core::ptr::null_mut(),
-            provider: core::ptr::null_mut(),
+            provider: Default::default(),
         }
     }
 }

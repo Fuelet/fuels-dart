@@ -25,7 +25,7 @@ use crate::model::transaction::TxParameters;
 
 fn wire_new_random__static_method__WalletUnlocked_impl(
     port_: MessagePort,
-    provider: impl Wire2Api<Option<Provider>> + UnwindSafe,
+    provider: impl Wire2Api<Provider> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap(
         WrapInfo {
@@ -42,7 +42,7 @@ fn wire_new_random__static_method__WalletUnlocked_impl(
 fn wire_new_from_private_key__static_method__WalletUnlocked_impl(
     port_: MessagePort,
     private_key: impl Wire2Api<String> + UnwindSafe,
-    provider: impl Wire2Api<Option<Provider>> + UnwindSafe,
+    provider: impl Wire2Api<Provider> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap(
         WrapInfo {
@@ -65,7 +65,7 @@ fn wire_new_from_private_key__static_method__WalletUnlocked_impl(
 fn wire_new_from_mnemonic_phrase__static_method__WalletUnlocked_impl(
     port_: MessagePort,
     phrase: impl Wire2Api<String> + UnwindSafe,
-    provider: impl Wire2Api<Option<Provider>> + UnwindSafe,
+    provider: impl Wire2Api<Provider> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap(
         WrapInfo {
@@ -89,7 +89,7 @@ fn wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked_impl(
     port_: MessagePort,
     phrase: impl Wire2Api<String> + UnwindSafe,
     path: impl Wire2Api<String> + UnwindSafe,
-    provider: impl Wire2Api<Option<Provider>> + UnwindSafe,
+    provider: impl Wire2Api<Provider> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap(
         WrapInfo {

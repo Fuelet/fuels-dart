@@ -21,7 +21,7 @@ typedef struct wire_Provider {
 typedef struct wire_WalletUnlocked {
   struct wire_uint_8_list *private_key;
   struct wire_uint_8_list *mnemonic_phrase;
-  struct wire_Provider *provider;
+  struct wire_Provider provider;
 } wire_WalletUnlocked;
 
 typedef struct wire_NativeBech32Address {
