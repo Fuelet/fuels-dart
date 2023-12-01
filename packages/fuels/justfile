@@ -10,12 +10,15 @@ clean:
 gen:
     cargo build --manifest-path=native/Cargo.toml
     flutter pub get
-    flutter_rust_bridge_codegen \
-        --rust-input native/src/api.rs \
-        --dart-output lib/src/bridge_generated.dart \
-        --c-output '../flutter_fuels/ios/Classes/frb.h' \
-        --extra-c-output-path '../flutter_fuels/macos/Classes/' \
-        --llvm-path /opt/homebrew/opt/llvm
+    MAX_RETRIES=3; ATTEMPT=1; while [ $ATTEMPT -le $MAX_RETRIES ]; do \
+        flutter_rust_bridge_codegen \
+            --rust-input native/src/api.rs \
+            --dart-output lib/src/bridge_generated.dart \
+            --c-output '../flutter_fuels/ios/Classes/frb.h' \
+            --extra-c-output-path '../flutter_fuels/macos/Classes/' \
+            --llvm-path /opt/homebrew/opt/llvm \
+        && break || ((ATTEMPT++)); echo 'Retrying...';\
+    done
     dart format .
     cargo build --manifest-path=native/Cargo.toml
 
