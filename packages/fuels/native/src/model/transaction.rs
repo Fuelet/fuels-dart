@@ -11,6 +11,7 @@ use fuels_accounts::provider::TransactionCost;
 use fuels_accounts::Signer;
 
 use crate::api::Bech32Address;
+use crate::model::error::CustomResult;
 
 pub struct TxParameters {
     pub gas_price: u64,
@@ -34,30 +35,29 @@ impl From<TxParameters> for fuels::prelude::TxParameters {
     }
 }
 
-pub fn wrap_fuel_transaction(value: FuelTransaction) -> io::Result<TransactionType> {
+pub fn wrap_fuel_transaction(value: FuelTransaction) -> CustomResult<TransactionType> {
     match value {
         FuelTransaction::Script(script) => Ok(TransactionType::Script(script.into())),
         FuelTransaction::Create(create) => Ok(TransactionType::Create(create.into())),
         FuelTransaction::Mint(_) => Err(io::Error::new(
             io::ErrorKind::InvalidData,
             "Cannot convert Mint transaction",
-        ))
+        ).into())
     }
 }
 
-pub async fn get_min_tx_params<T: Transaction>(native_provider: &NativeProvider, tx: &T) -> fuels::prelude::TxParameters {
+pub async fn get_min_tx_params<T: Transaction>(native_provider: &NativeProvider, tx: &T) -> CustomResult<fuels::prelude::TxParameters> {
     let TransactionCost {
         gas_used,
         min_gas_price,
         ..
     } = native_provider
         .estimate_transaction_cost(tx.clone(), None)
-        .await
-        .unwrap();
+        .await?;
 
-    fuels::prelude::TxParameters::default()
+    Ok(fuels::prelude::TxParameters::default()
         .with_gas_limit(gas_used)
-        .with_gas_price(min_gas_price)
+        .with_gas_price(min_gas_price))
 }
 
 pub async fn build_transfer_transaction(native_wallet_unlocked: &NativeWalletUnlocked,
@@ -65,9 +65,9 @@ pub async fn build_transfer_transaction(native_wallet_unlocked: &NativeWalletUnl
                                         to: &Bech32Address,
                                         amount: u64,
                                         asset: &String,
-                                        tx_params_opt: Option<fuels::prelude::TxParameters>) -> ScriptTransaction {
-    let asset_id = AssetId::from_str(asset).unwrap();
-    let inputs = native_wallet_unlocked.get_asset_inputs_for_amount(asset_id, amount).await.unwrap();
+                                        tx_params_opt: Option<fuels::prelude::TxParameters>) -> CustomResult<ScriptTransaction> {
+    let asset_id = AssetId::from_str(asset)?;
+    let inputs = native_wallet_unlocked.get_asset_inputs_for_amount(asset_id, amount).await?;
     let outputs = native_wallet_unlocked.get_asset_outputs_for_amount(to.native.deref(), asset_id, amount);
     let consensus_parameters = native_provider.consensus_parameters();
     let tx_params = tx_params_opt.unwrap_or_else(fuels::prelude::TxParameters::default);
@@ -82,8 +82,8 @@ pub async fn build_transfer_transaction(native_wallet_unlocked: &NativeWalletUnl
         0
     };
 
-    native_wallet_unlocked
+    let tx = native_wallet_unlocked
         .add_fee_resources(tx_builder, previous_base_amount)
-        .await
-        .unwrap()
+        .await?; // different error type
+    Ok(tx)
 }

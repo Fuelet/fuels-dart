@@ -118,9 +118,9 @@ impl WalletUnlocked {
         let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
         let native_provider = native_wallet_unlocked.provider().unwrap();
 
-        let tx_without_tx_params = build_transfer_transaction(&native_wallet_unlocked, &native_provider, &to, amount, &asset, None).await;
-        let min_tx_params = get_min_tx_params(native_provider, &tx_without_tx_params).await;
-        let tx_with_min_tx_params = build_transfer_transaction(&native_wallet_unlocked, &native_provider, &to, amount, &asset, Some(min_tx_params)).await;
+        let tx_without_tx_params = build_transfer_transaction(&native_wallet_unlocked, &native_provider, &to, amount, &asset, None).await.unwrap();
+        let min_tx_params = get_min_tx_params(native_provider, &tx_without_tx_params).await.unwrap();
+        let tx_with_min_tx_params = build_transfer_transaction(&native_wallet_unlocked, &native_provider, &to, amount, &asset, Some(min_tx_params)).await.unwrap();
 
         let fuel_tx: FuelTransaction = tx_with_min_tx_params.into();
         fuel_tx.clone().to_bytes()
