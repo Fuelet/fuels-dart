@@ -3,6 +3,36 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-12-01
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flutter_fuels` - `v0.0.26`](#flutter_fuels---v0026)
+ - [`fuels` - `v1.16.0`](#fuels---v1160)
+
+---
+
+#### `flutter_fuels` - `v0.0.26`
+
+ - **FEAT**: remove not needed functions from rust. ([36088788](https://github.com/Fuelet/fuels-dart/commit/360887888b4798c1fe74b86ea26e03f8a31b5243))
+ - **FEAT**: sign message in rust. ([cf993a84](https://github.com/Fuelet/fuels-dart/commit/cf993a84cdc5edf53a9431b46339b79603fdbe18))
+ - **FEAT**: transfer tx request in rust ([#23](https://github.com/Fuelet/fuels-dart/issues/23)). ([933ee2a7](https://github.com/Fuelet/fuels-dart/commit/933ee2a78db4072dba2fac46905ace245e6aad55))
+
+#### `fuels` - `v1.16.0`
+
+ - **FEAT**: remove not needed functions from rust. ([36088788](https://github.com/Fuelet/fuels-dart/commit/360887888b4798c1fe74b86ea26e03f8a31b5243))
+ - **FEAT**: sign message in rust. ([cf993a84](https://github.com/Fuelet/fuels-dart/commit/cf993a84cdc5edf53a9431b46339b79603fdbe18))
+ - **FEAT**: transfer tx request in rust ([#23](https://github.com/Fuelet/fuels-dart/issues/23)). ([933ee2a7](https://github.com/Fuelet/fuels-dart/commit/933ee2a78db4072dba2fac46905ace245e6aad55))
+
+
 ## 2023-11-22
 
 ### Changes

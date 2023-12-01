@@ -1,3 +1,9 @@
+## 1.16.0
+
+ - **FEAT**: remove not needed functions from rust. ([36088788](https://github.com/Fuelet/fuels-dart/commit/360887888b4798c1fe74b86ea26e03f8a31b5243))
+ - **FEAT**: sign message in rust. ([cf993a84](https://github.com/Fuelet/fuels-dart/commit/cf993a84cdc5edf53a9431b46339b79603fdbe18))
+ - **FEAT**: transfer tx request in rust ([#23](https://github.com/Fuelet/fuels-dart/issues/23)). ([933ee2a7](https://github.com/Fuelet/fuels-dart/commit/933ee2a78db4072dba2fac46905ace245e6aad55))
+
 ## 1.15.0
 
  - **FEAT**: support accounts derivation ([#19](https://github.com/Fuelet/fuels-dart/issues/19)). ([364ab004](https://github.com/Fuelet/fuels-dart/commit/364ab004387948223e0bb95ff59645039cc53137))
