@@ -148,9 +148,8 @@ class FuelWalletImpl extends BaseWallet {
   }
 
   Future<Map> _walletToMap(WalletUnlocked wallet) async {
-    final address = await wallet.address();
-    final bech32Address = await address.toBech32String();
-    final b256Address = await address.toB256String();
+    final bech32Address = await wallet.address.toBech32String();
+    final b256Address = await wallet.address.toB256String();
 
     final data = {
       'address': {

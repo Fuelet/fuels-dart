@@ -40,11 +40,6 @@ pub extern "C" fn wire_new_from_mnemonic_phrase_with_path__static_method__Wallet
 }
 
 #[no_mangle]
-pub extern "C" fn wire_address__method__WalletUnlocked(port_: i64, that: *mut wire_WalletUnlocked) {
-    wire_address__method__WalletUnlocked_impl(port_, that)
-}
-
-#[no_mangle]
 pub extern "C" fn wire_transfer__method__WalletUnlocked(
     port_: i64,
     that: *mut wire_WalletUnlocked,
@@ -251,6 +246,7 @@ impl Wire2Api<WalletUnlocked> for wire_WalletUnlocked {
             private_key: self.private_key.wire2api(),
             mnemonic_phrase: self.mnemonic_phrase.wire2api(),
             provider: self.provider.wire2api(),
+            address: self.address.wire2api(),
         }
     }
 }
@@ -295,6 +291,7 @@ pub struct wire_WalletUnlocked {
     private_key: *mut wire_uint_8_list,
     mnemonic_phrase: *mut wire_uint_8_list,
     provider: wire_Provider,
+    address: wire_Bech32Address,
 }
 
 // Section: impl NewWithNullPtr
@@ -367,6 +364,7 @@ impl NewWithNullPtr for wire_WalletUnlocked {
             private_key: core::ptr::null_mut(),
             mnemonic_phrase: core::ptr::null_mut(),
             provider: Default::default(),
+            address: Default::default(),
         }
     }
 }

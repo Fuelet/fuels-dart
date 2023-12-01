@@ -111,22 +111,6 @@ fn wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked_impl(
         },
     )
 }
-fn wire_address__method__WalletUnlocked_impl(
-    port_: MessagePort,
-    that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap(
-        WrapInfo {
-            debug_name: "address__method__WalletUnlocked",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || {
-            let api_that = that.wire2api();
-            move |task_callback| Ok(WalletUnlocked::address(&api_that))
-        },
-    )
-}
 fn wire_transfer__method__WalletUnlocked_impl(
     port_: MessagePort,
     that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
@@ -362,6 +346,7 @@ impl support::IntoDart for WalletUnlocked {
             self.private_key.into_dart(),
             self.mnemonic_phrase.into_dart(),
             self.provider.into_dart(),
+            self.address.into_dart(),
         ]
         .into_dart()
     }

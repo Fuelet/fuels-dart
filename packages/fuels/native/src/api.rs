@@ -6,11 +6,11 @@ use flutter_rust_bridge::RustOpaque;
 use fuel_crypto::fuel_types::bytes::{Deserializable, SerializableVec};
 use fuel_crypto::SecretKey;
 use fuel_tx::{Address, Transaction as FuelTransaction};
-use fuels::prelude::{AssetId, generate_mnemonic_phrase};
 pub use fuels::prelude::{Account, Bech32Address as NativeBech32Address, Provider as NativeProvider, ViewOnlyAccount, WalletUnlocked as NativeWalletUnlocked};
+use fuels::prelude::AssetId;
 use fuels_accounts::Signer;
-use fuels_accounts::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
 
+use crate::features::wallet_creation;
 use crate::model::transaction::{build_transfer_transaction, get_min_tx_params, TxParameters, wrap_fuel_transaction};
 
 pub struct WalletUnlocked {
@@ -18,6 +18,7 @@ pub struct WalletUnlocked {
     // Is present only when the wallet is created using a mnemonic phrase
     pub mnemonic_phrase: Option<String>,
     pub provider: Provider,
+    pub address: Bech32Address,
 }
 
 impl WalletUnlocked {
@@ -32,38 +33,19 @@ impl WalletUnlocked {
     }
 
     pub fn new_random(provider: Provider) -> WalletUnlocked {
-        let mut rng = rand::thread_rng();
-        let mnemonic_phrase = generate_mnemonic_phrase(&mut rng, 12).unwrap();
-        WalletUnlocked::new_from_mnemonic_phrase(mnemonic_phrase, provider)
+        wallet_creation::new_random(provider)
     }
 
     pub fn new_from_private_key(private_key: String, provider: Provider) -> WalletUnlocked {
-        let secret_key = SecretKey::from_str(private_key.as_str()).unwrap();
-        Self {
-            private_key: secret_key.to_string(),
-            mnemonic_phrase: None,
-            provider,
-        }
+        wallet_creation::new_from_private_key(private_key, provider)
     }
 
     pub fn new_from_mnemonic_phrase(phrase: String, provider: Provider) -> WalletUnlocked {
-        let path = format!("{}/0'/0/0", DEFAULT_DERIVATION_PATH_PREFIX);
-        WalletUnlocked::new_from_mnemonic_phrase_with_path(phrase, path, provider)
+        wallet_creation::new_from_mnemonic_phrase(phrase, provider)
     }
 
     pub fn new_from_mnemonic_phrase_with_path(phrase: String, path: String, provider: Provider) -> WalletUnlocked {
-        let secret_key = SecretKey::new_from_mnemonic_phrase_with_path(&phrase, &path).unwrap();
-        Self {
-            private_key: secret_key.to_string(),
-            mnemonic_phrase: Some(phrase),
-            provider,
-        }
-    }
-
-    #[tokio::main]
-    pub async fn address(&self) -> Bech32Address {
-        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
-        native_wallet_unlocked.address().into()
+        wallet_creation::new_from_mnemonic_phrase_with_path(phrase, path, provider)
     }
 
     #[tokio::main]
@@ -153,10 +135,10 @@ impl Bech32Address {
     }
 }
 
-impl From<&NativeBech32Address> for Bech32Address {
-    fn from(model: &NativeBech32Address) -> Self {
+impl From<NativeBech32Address> for Bech32Address {
+    fn from(model: NativeBech32Address) -> Self {
         Bech32Address {
-            native: RustOpaque::new(model.clone())
+            native: RustOpaque::new(model)
         }
     }
 }

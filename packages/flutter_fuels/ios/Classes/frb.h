@@ -18,12 +18,6 @@ typedef struct wire_Provider {
   struct wire_uint_8_list *node_url;
 } wire_Provider;
 
-typedef struct wire_WalletUnlocked {
-  struct wire_uint_8_list *private_key;
-  struct wire_uint_8_list *mnemonic_phrase;
-  struct wire_Provider provider;
-} wire_WalletUnlocked;
-
 typedef struct wire_NativeBech32Address {
   const void *ptr;
 } wire_NativeBech32Address;
@@ -31,6 +25,13 @@ typedef struct wire_NativeBech32Address {
 typedef struct wire_Bech32Address {
   struct wire_NativeBech32Address native;
 } wire_Bech32Address;
+
+typedef struct wire_WalletUnlocked {
+  struct wire_uint_8_list *private_key;
+  struct wire_uint_8_list *mnemonic_phrase;
+  struct wire_Provider provider;
+  struct wire_Bech32Address address;
+} wire_WalletUnlocked;
 
 typedef struct wire_TxParameters {
   uint64_t gas_price;
@@ -64,8 +65,6 @@ void wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(int6
                                                                             struct wire_uint_8_list *phrase,
                                                                             struct wire_uint_8_list *path,
                                                                             struct wire_Provider *provider);
-
-void wire_address__method__WalletUnlocked(int64_t port_, struct wire_WalletUnlocked *that);
 
 void wire_transfer__method__WalletUnlocked(int64_t port_,
                                            struct wire_WalletUnlocked *that,
@@ -123,7 +122,6 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) wire_new_from_private_key__static_method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_new_from_mnemonic_phrase__static_method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked);
-    dummy_var ^= ((int64_t) (void*) wire_address__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_transfer__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_gen_transfer_tx_request__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_send_transaction__method__WalletUnlocked);
