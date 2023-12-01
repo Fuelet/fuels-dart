@@ -69,6 +69,26 @@ abstract class Fuels {
 
   FlutterRustBridgeTaskConstMeta get kTransferMethodWalletUnlockedConstMeta;
 
+  /// Clones the transfer function but doesn't submit the transaction
+  /// TODO: do not sign the tx?
+  Future<Uint8List> genTransferTxRequestMethodWalletUnlocked(
+      {required WalletUnlocked that,
+      required Bech32Address to,
+      required int amount,
+      required String asset,
+      dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta
+      get kGenTransferTxRequestMethodWalletUnlockedConstMeta;
+
+  Future<String> sendTransactionMethodWalletUnlocked(
+      {required WalletUnlocked that,
+      required Uint8List encodedTx,
+      dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta
+      get kSendTransactionMethodWalletUnlockedConstMeta;
+
   Future<Bech32Address> fromBech32StringStaticMethodBech32Address(
       {required String s, dynamic hint});
 
@@ -399,6 +419,27 @@ class WalletUnlocked {
         asset: asset,
         txParameters: txParameters,
       );
+
+  /// Clones the transfer function but doesn't submit the transaction
+  /// TODO: do not sign the tx?
+  Future<Uint8List> genTransferTxRequest(
+          {required Bech32Address to,
+          required int amount,
+          required String asset,
+          dynamic hint}) =>
+      bridge.genTransferTxRequestMethodWalletUnlocked(
+        that: this,
+        to: to,
+        amount: amount,
+        asset: asset,
+      );
+
+  Future<String> sendTransaction(
+          {required Uint8List encodedTx, dynamic hint}) =>
+      bridge.sendTransactionMethodWalletUnlocked(
+        that: this,
+        encodedTx: encodedTx,
+      );
 }
 
 class FuelsImpl implements Fuels {
@@ -591,6 +632,57 @@ class FuelsImpl implements Fuels {
         debugName: "transfer__method__WalletUnlocked",
         argNames: ["that", "to", "amount", "asset", "txParameters"],
       );
+
+  Future<Uint8List> genTransferTxRequestMethodWalletUnlocked(
+      {required WalletUnlocked that,
+      required Bech32Address to,
+      required int amount,
+      required String asset,
+      dynamic hint}) {
+    var arg0 = _platform.api2wire_box_autoadd_wallet_unlocked(that);
+    var arg1 = _platform.api2wire_box_autoadd_bech_32_address(to);
+    var arg2 = _platform.api2wire_u64(amount);
+    var arg3 = _platform.api2wire_String(asset);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_gen_transfer_tx_request__method__WalletUnlocked(
+              port_, arg0, arg1, arg2, arg3),
+      parseSuccessData: _wire2api_uint_8_list,
+      constMeta: kGenTransferTxRequestMethodWalletUnlockedConstMeta,
+      argValues: [that, to, amount, asset],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta
+      get kGenTransferTxRequestMethodWalletUnlockedConstMeta =>
+          const FlutterRustBridgeTaskConstMeta(
+            debugName: "gen_transfer_tx_request__method__WalletUnlocked",
+            argNames: ["that", "to", "amount", "asset"],
+          );
+
+  Future<String> sendTransactionMethodWalletUnlocked(
+      {required WalletUnlocked that,
+      required Uint8List encodedTx,
+      dynamic hint}) {
+    var arg0 = _platform.api2wire_box_autoadd_wallet_unlocked(that);
+    var arg1 = _platform.api2wire_uint_8_list(encodedTx);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_send_transaction__method__WalletUnlocked(port_, arg0, arg1),
+      parseSuccessData: _wire2api_String,
+      constMeta: kSendTransactionMethodWalletUnlockedConstMeta,
+      argValues: [that, encodedTx],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta
+      get kSendTransactionMethodWalletUnlockedConstMeta =>
+          const FlutterRustBridgeTaskConstMeta(
+            debugName: "send_transaction__method__WalletUnlocked",
+            argNames: ["that", "encodedTx"],
+          );
 
   Future<Bech32Address> fromBech32StringStaticMethodBech32Address(
       {required String s, dynamic hint}) {
@@ -1403,6 +1495,62 @@ class FuelsWire implements FlutterRustBridgeWireBase {
               int,
               ffi.Pointer<wire_uint_8_list>,
               ffi.Pointer<wire_TxParameters>)>();
+
+  void wire_gen_transfer_tx_request__method__WalletUnlocked(
+    int port_,
+    ffi.Pointer<wire_WalletUnlocked> that,
+    ffi.Pointer<wire_Bech32Address> to,
+    int amount,
+    ffi.Pointer<wire_uint_8_list> asset,
+  ) {
+    return _wire_gen_transfer_tx_request__method__WalletUnlocked(
+      port_,
+      that,
+      to,
+      amount,
+      asset,
+    );
+  }
+
+  late final _wire_gen_transfer_tx_request__method__WalletUnlockedPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Int64,
+                  ffi.Pointer<wire_WalletUnlocked>,
+                  ffi.Pointer<wire_Bech32Address>,
+                  ffi.Uint64,
+                  ffi.Pointer<wire_uint_8_list>)>>(
+      'wire_gen_transfer_tx_request__method__WalletUnlocked');
+  late final _wire_gen_transfer_tx_request__method__WalletUnlocked =
+      _wire_gen_transfer_tx_request__method__WalletUnlockedPtr.asFunction<
+          void Function(
+              int,
+              ffi.Pointer<wire_WalletUnlocked>,
+              ffi.Pointer<wire_Bech32Address>,
+              int,
+              ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_send_transaction__method__WalletUnlocked(
+    int port_,
+    ffi.Pointer<wire_WalletUnlocked> that,
+    ffi.Pointer<wire_uint_8_list> encoded_tx,
+  ) {
+    return _wire_send_transaction__method__WalletUnlocked(
+      port_,
+      that,
+      encoded_tx,
+    );
+  }
+
+  late final _wire_send_transaction__method__WalletUnlockedPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_WalletUnlocked>,
+                  ffi.Pointer<wire_uint_8_list>)>>(
+      'wire_send_transaction__method__WalletUnlocked');
+  late final _wire_send_transaction__method__WalletUnlocked =
+      _wire_send_transaction__method__WalletUnlockedPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_WalletUnlocked>,
+              ffi.Pointer<wire_uint_8_list>)>();
 
   void wire_from_bech32_string__static_method__Bech32Address(
     int port_,

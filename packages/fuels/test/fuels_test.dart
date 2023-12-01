@@ -170,4 +170,19 @@ void main() {
     var newWalletBalance = await newWallet.getAssetBalance(asset: ethAsset);
     expect(transferAmount, newWalletBalance);
   }, skip: 'Should be run manually');
+
+  test('test transfer eth request creation', () async {
+    // TODO: do not depend on external state
+    int transferAmount = 500;
+    WalletUnlocked newWallet = await createWallet();
+    WalletUnlocked testWallet = await importWalletWithPK(testWalletPrivateKey);
+    final newWalletAddr = await newWallet.address();
+    final requestBytes = await testWallet.genTransferTxRequest(
+        to: newWalletAddr, amount: transferAmount, asset: ethAsset);
+
+    await testWallet.sendTransaction(encodedTx: requestBytes);
+
+    var newWalletBalance = await newWallet.getAssetBalance(asset: ethAsset);
+    expect(transferAmount, newWalletBalance);
+  }, skip: 'Should be run manually');
 }
