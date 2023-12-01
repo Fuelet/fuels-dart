@@ -1,21 +1,18 @@
 #![allow(dead_code)]
 
-use std::ops::Deref;
 use std::str::FromStr;
 
 use flutter_rust_bridge::RustOpaque;
 use fuel_crypto::fuel_types::bytes::{Deserializable, SerializableVec};
 use fuel_crypto::SecretKey;
 use fuel_tx::{Address, Transaction as FuelTransaction};
-use fuels::prelude::{AssetId, generate_mnemonic_phrase, ScriptTransaction, Transaction};
+use fuels::prelude::{AssetId, generate_mnemonic_phrase};
 pub use fuels::prelude::{Account, Bech32Address as NativeBech32Address, Provider as NativeProvider, ViewOnlyAccount, WalletUnlocked as NativeWalletUnlocked};
-use fuels::types::transaction_builders::{ScriptTransactionBuilder, TransactionBuilder};
-use fuels_accounts::provider::TransactionCost;
 use fuels_accounts::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
 
 use crate::model::balance::{Balance, from_hash_map};
 use crate::model::response::TransferResponse;
-use crate::model::transaction::TxParameters;
+use crate::model::transaction::{build_transfer_transaction, get_min_tx_params, TxParameters, wrap_fuel_transaction};
 
 pub struct WalletUnlocked {
     pub private_key: String,
@@ -109,6 +106,7 @@ impl WalletUnlocked {
     }
 
     /// Clones the transfer function but doesn't submit the transaction
+    /// TODO: do not sign the tx?
     #[tokio::main]
     pub async fn gen_transfer_tx_request(
         &self,
@@ -133,12 +131,11 @@ impl WalletUnlocked {
         encoded_tx: Vec<u8>,
     ) -> String {
         let decoded_tx: FuelTransaction = FuelTransaction::from_bytes(&encoded_tx).unwrap();
+        let tx = wrap_fuel_transaction(decoded_tx).unwrap();
 
         let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
         let native_provider = native_wallet_unlocked.provider().unwrap();
-
-        let tx_id = native_provider.client.submit(&decoded_tx).await.unwrap();
-        native_provider.client.await_transaction_commit(&tx_id).await.unwrap();
+        let tx_id = native_provider.send_transaction(tx).await.unwrap();
         tx_id.to_string()
     }
 }
@@ -191,48 +188,4 @@ impl Provider {
     async fn get_native_provider(&self) -> NativeProvider {
         NativeProvider::connect(&*self.node_url).await.unwrap()
     }
-}
-
-
-async fn get_min_tx_params<T: Transaction>(native_provider: &NativeProvider, tx: &T) -> fuels::prelude::TxParameters {
-    let TransactionCost {
-        gas_used,
-        min_gas_price,
-        ..
-    } = native_provider
-        .estimate_transaction_cost(tx.clone(), None)
-        .await
-        .unwrap();
-
-    fuels::prelude::TxParameters::default()
-        .with_gas_limit(gas_used)
-        .with_gas_price(min_gas_price)
-}
-
-async fn build_transfer_transaction(native_wallet_unlocked: &NativeWalletUnlocked,
-                                    native_provider: &NativeProvider,
-                                    to: &Bech32Address,
-                                    amount: u64,
-                                    asset: &String,
-                                    tx_params_opt: Option<fuels::prelude::TxParameters>) -> ScriptTransaction {
-    let asset_id = AssetId::from_str(asset).unwrap();
-    let inputs = native_wallet_unlocked.get_asset_inputs_for_amount(asset_id, amount).await.unwrap();
-    let outputs = native_wallet_unlocked.get_asset_outputs_for_amount(to.native.deref(), asset_id, amount);
-    let consensus_parameters = native_provider.consensus_parameters();
-    let tx_params = tx_params_opt.unwrap_or_else(fuels::prelude::TxParameters::default);
-
-    let tx_builder = ScriptTransactionBuilder::prepare_transfer(inputs, outputs, tx_params)
-        .with_consensus_parameters(consensus_parameters);
-
-    // if we are not transferring the base asset, previous base amount is 0
-    let previous_base_amount = if asset_id == AssetId::default() {
-        amount
-    } else {
-        0
-    };
-
-    native_wallet_unlocked
-        .add_fee_resources(tx_builder, previous_base_amount)
-        .await
-        .unwrap()
 }

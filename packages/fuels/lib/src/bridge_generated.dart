@@ -70,6 +70,7 @@ abstract class Fuels {
   FlutterRustBridgeTaskConstMeta get kTransferMethodWalletUnlockedConstMeta;
 
   /// Clones the transfer function but doesn't submit the transaction
+  /// TODO: do not sign the tx?
   Future<Uint8List> genTransferTxRequestMethodWalletUnlocked(
       {required WalletUnlocked that,
       required Bech32Address to,
@@ -420,6 +421,7 @@ class WalletUnlocked {
       );
 
   /// Clones the transfer function but doesn't submit the transaction
+  /// TODO: do not sign the tx?
   Future<Uint8List> genTransferTxRequest(
           {required Bech32Address to,
           required int amount,
