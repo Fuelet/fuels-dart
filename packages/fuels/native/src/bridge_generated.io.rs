@@ -72,6 +72,15 @@ pub extern "C" fn wire_send_transaction__method__WalletUnlocked(
 }
 
 #[no_mangle]
+pub extern "C" fn wire_estimate_transaction_cost__method__WalletUnlocked(
+    port_: i64,
+    that: *mut wire_WalletUnlocked,
+    encoded_tx: *mut wire_uint_8_list,
+) {
+    wire_estimate_transaction_cost__method__WalletUnlocked_impl(port_, that, encoded_tx)
+}
+
+#[no_mangle]
 pub extern "C" fn wire_sign_message__method__WalletUnlocked(
     port_: i64,
     that: *mut wire_WalletUnlocked,

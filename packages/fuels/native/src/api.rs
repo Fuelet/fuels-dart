@@ -8,7 +8,7 @@ use fuel_tx::Address;
 pub use fuels::prelude::{Bech32Address as NativeBech32Address, Provider as NativeProvider, WalletUnlocked as NativeWalletUnlocked};
 
 use crate::features::{crypto, transaction, wallet};
-use crate::model::transaction::TxParameters;
+use crate::model::transaction::{TransactionCost, TxParameters};
 
 pub struct WalletUnlocked {
     pub private_key: String,
@@ -75,6 +75,15 @@ impl WalletUnlocked {
     ) -> String {
         let native_provider = self.get_native_provider().await;
         transaction::send_transaction(&native_provider, encoded_tx).await.unwrap()
+    }
+
+    #[tokio::main]
+    pub async fn estimate_transaction_cost(
+        &self,
+        encoded_tx: Vec<u8>,
+    ) -> TransactionCost {
+        let native_provider = self.get_native_provider().await;
+        transaction::estimate_transaction_cost(&native_provider, encoded_tx).await.unwrap().into()
     }
 
     #[tokio::main]
