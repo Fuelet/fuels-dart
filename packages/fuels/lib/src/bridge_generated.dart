@@ -7,12 +7,8 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:uuid/uuid.dart';
-import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
-import 'package:collection/collection.dart';
 
 import 'dart:ffi' as ffi;
-
-part 'bridge_generated.freezed.dart';
 
 abstract class Fuels {
   Future<WalletUnlocked> newRandomStaticMethodWalletUnlocked(
@@ -48,18 +44,7 @@ abstract class Fuels {
 
   FlutterRustBridgeTaskConstMeta get kAddressMethodWalletUnlockedConstMeta;
 
-  Future<int> getAssetBalanceMethodWalletUnlocked(
-      {required WalletUnlocked that, required String asset, dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta
-      get kGetAssetBalanceMethodWalletUnlockedConstMeta;
-
-  Future<List<Balance>> getBalancesMethodWalletUnlocked(
-      {required WalletUnlocked that, dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta get kGetBalancesMethodWalletUnlockedConstMeta;
-
-  Future<TransferResponse> transferMethodWalletUnlocked(
+  Future<String> transferMethodWalletUnlocked(
       {required WalletUnlocked that,
       required Bech32Address to,
       required int amount,
@@ -143,16 +128,6 @@ class NativeBech32Address extends FrbOpaque {
       bridge.NativeBech32AddressFinalizer;
 }
 
-class Balance {
-  final String asset;
-  final int amount;
-
-  const Balance({
-    required this.asset,
-    required this.amount,
-  });
-}
-
 class Bech32Address {
   final Fuels bridge;
   final NativeBech32Address native;
@@ -181,16 +156,6 @@ class Bech32Address {
       );
 }
 
-class PanicInstruction {
-  final int reason;
-  final int instruction;
-
-  const PanicInstruction({
-    required this.reason,
-    required this.instruction,
-  });
-}
-
 class Provider {
   final Fuels bridge;
   final String nodeUrl;
@@ -205,132 +170,6 @@ class Provider {
       bridge.connectStaticMethodProvider(url: url, hint: hint);
 }
 
-@freezed
-class Receipt with _$Receipt {
-  const factory Receipt.call({
-    required U8Array32 id,
-    required U8Array32 to,
-    required int amount,
-    required U8Array32 assetId,
-    required int gas,
-    required int param1,
-    required int param2,
-    required int pc,
-    required int isField,
-  }) = Receipt_Call;
-  const factory Receipt.returnReceipt({
-    required U8Array32 id,
-    required int val,
-    required int pc,
-    required int isField,
-  }) = Receipt_ReturnReceipt;
-  const factory Receipt.returnData({
-    required U8Array32 id,
-    required int ptr,
-    required int len,
-    required U8Array32 digest,
-    Uint8List? data,
-    required int pc,
-    required int isField,
-  }) = Receipt_ReturnData;
-  const factory Receipt.panic({
-    required U8Array32 id,
-    required PanicInstruction reason,
-    required int pc,
-    required int isField,
-    U8Array32? contractId,
-  }) = Receipt_Panic;
-  const factory Receipt.revert({
-    required U8Array32 id,
-    required int ra,
-    required int pc,
-    required int isField,
-  }) = Receipt_Revert;
-  const factory Receipt.log({
-    required U8Array32 id,
-    required int ra,
-    required int rb,
-    required int rc,
-    required int rd,
-    required int pc,
-    required int isField,
-  }) = Receipt_Log;
-  const factory Receipt.logData({
-    required U8Array32 id,
-    required int ra,
-    required int rb,
-    required int ptr,
-    required int len,
-    required U8Array32 digest,
-    Uint8List? data,
-    required int pc,
-    required int isField,
-  }) = Receipt_LogData;
-  const factory Receipt.transfer({
-    required U8Array32 id,
-    required U8Array32 to,
-    required int amount,
-    required U8Array32 assetId,
-    required int pc,
-    required int isField,
-  }) = Receipt_Transfer;
-  const factory Receipt.transferOut({
-    required U8Array32 id,
-    required U8Array32 to,
-    required int amount,
-    required U8Array32 assetId,
-    required int pc,
-    required int isField,
-  }) = Receipt_TransferOut;
-  const factory Receipt.scriptResult({
-    required ScriptExecutionResult result,
-    required int gasUsed,
-  }) = Receipt_ScriptResult;
-  const factory Receipt.messageOut({
-    required U8Array32 sender,
-    required U8Array32 recipient,
-    required int amount,
-    required U8Array32 nonce,
-    required int len,
-    required U8Array32 digest,
-    Uint8List? data,
-  }) = Receipt_MessageOut;
-  const factory Receipt.mint({
-    required U8Array32 subId,
-    required U8Array32 contractId,
-    required int val,
-    required int pc,
-    required int isField,
-  }) = Receipt_Mint;
-  const factory Receipt.burn({
-    required U8Array32 subId,
-    required U8Array32 contractId,
-    required int val,
-    required int pc,
-    required int isField,
-  }) = Receipt_Burn;
-}
-
-@freezed
-class ScriptExecutionResult with _$ScriptExecutionResult {
-  const factory ScriptExecutionResult.success() = ScriptExecutionResult_Success;
-  const factory ScriptExecutionResult.revert() = ScriptExecutionResult_Revert;
-  const factory ScriptExecutionResult.panic() = ScriptExecutionResult_Panic;
-  const factory ScriptExecutionResult.genericFailure(
-    int field0,
-  ) = ScriptExecutionResult_GenericFailure;
-}
-
-class TransferResponse {
-  final String txId;
-  final List<Receipt> receipts;
-
-  const TransferResponse({
-    required this.txId,
-    required this.receipts,
-  });
-}
-
 class TxParameters {
   final int gasPrice;
   final int gasLimit;
@@ -341,15 +180,6 @@ class TxParameters {
     required this.gasLimit,
     required this.maturity,
   });
-}
-
-class U8Array32 extends NonGrowableListView<int> {
-  static const arraySize = 32;
-  U8Array32(Uint8List inner)
-      : assert(inner.length == arraySize),
-        super(inner);
-  U8Array32.unchecked(Uint8List inner) : super(inner);
-  U8Array32.init() : super(Uint8List(arraySize));
 }
 
 class WalletUnlocked {
@@ -400,18 +230,7 @@ class WalletUnlocked {
         that: this,
       );
 
-  Future<int> getAssetBalance({required String asset, dynamic hint}) =>
-      bridge.getAssetBalanceMethodWalletUnlocked(
-        that: this,
-        asset: asset,
-      );
-
-  Future<List<Balance>> getBalances({dynamic hint}) =>
-      bridge.getBalancesMethodWalletUnlocked(
-        that: this,
-      );
-
-  Future<TransferResponse> transfer(
+  Future<String> transfer(
           {required Bech32Address to,
           required int amount,
           required String asset,
@@ -575,48 +394,7 @@ class FuelsImpl implements Fuels {
         argNames: ["that"],
       );
 
-  Future<int> getAssetBalanceMethodWalletUnlocked(
-      {required WalletUnlocked that, required String asset, dynamic hint}) {
-    var arg0 = _platform.api2wire_box_autoadd_wallet_unlocked(that);
-    var arg1 = _platform.api2wire_String(asset);
-    return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_get_asset_balance__method__WalletUnlocked(port_, arg0, arg1),
-      parseSuccessData: _wire2api_u64,
-      constMeta: kGetAssetBalanceMethodWalletUnlockedConstMeta,
-      argValues: [that, asset],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta
-      get kGetAssetBalanceMethodWalletUnlockedConstMeta =>
-          const FlutterRustBridgeTaskConstMeta(
-            debugName: "get_asset_balance__method__WalletUnlocked",
-            argNames: ["that", "asset"],
-          );
-
-  Future<List<Balance>> getBalancesMethodWalletUnlocked(
-      {required WalletUnlocked that, dynamic hint}) {
-    var arg0 = _platform.api2wire_box_autoadd_wallet_unlocked(that);
-    return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_get_balances__method__WalletUnlocked(port_, arg0),
-      parseSuccessData: _wire2api_list_balance,
-      constMeta: kGetBalancesMethodWalletUnlockedConstMeta,
-      argValues: [that],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta
-      get kGetBalancesMethodWalletUnlockedConstMeta =>
-          const FlutterRustBridgeTaskConstMeta(
-            debugName: "get_balances__method__WalletUnlocked",
-            argNames: ["that"],
-          );
-
-  Future<TransferResponse> transferMethodWalletUnlocked(
+  Future<String> transferMethodWalletUnlocked(
       {required WalletUnlocked that,
       required Bech32Address to,
       required int amount,
@@ -631,7 +409,7 @@ class FuelsImpl implements Fuels {
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) => _platform.inner.wire_transfer__method__WalletUnlocked(
           port_, arg0, arg1, arg2, arg3, arg4),
-      parseSuccessData: _wire2api_transfer_response,
+      parseSuccessData: _wire2api_String,
       constMeta: kTransferMethodWalletUnlockedConstMeta,
       argValues: [that, to, amount, asset, txParameters],
       hint: hint,
@@ -835,16 +613,6 @@ class FuelsImpl implements Fuels {
     return raw as String;
   }
 
-  Balance _wire2api_balance(dynamic raw) {
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return Balance(
-      asset: _wire2api_String(arr[0]),
-      amount: _wire2api_u64(arr[1]),
-    );
-  }
-
   Bech32Address _wire2api_bech_32_address(dynamic raw) {
     final arr = raw as List<dynamic>;
     if (arr.length != 1)
@@ -855,25 +623,8 @@ class FuelsImpl implements Fuels {
     );
   }
 
-  PanicInstruction _wire2api_box_autoadd_panic_instruction(dynamic raw) {
-    return _wire2api_panic_instruction(raw);
-  }
-
   Provider _wire2api_box_autoadd_provider(dynamic raw) {
     return _wire2api_provider(raw);
-  }
-
-  ScriptExecutionResult _wire2api_box_autoadd_script_execution_result(
-      dynamic raw) {
-    return _wire2api_script_execution_result(raw);
-  }
-
-  List<Balance> _wire2api_list_balance(dynamic raw) {
-    return (raw as List<dynamic>).map(_wire2api_balance).toList();
-  }
-
-  List<Receipt> _wire2api_list_receipt(dynamic raw) {
-    return (raw as List<dynamic>).map(_wire2api_receipt).toList();
   }
 
   String? _wire2api_opt_String(dynamic raw) {
@@ -882,24 +633,6 @@ class FuelsImpl implements Fuels {
 
   Provider? _wire2api_opt_box_autoadd_provider(dynamic raw) {
     return raw == null ? null : _wire2api_box_autoadd_provider(raw);
-  }
-
-  U8Array32? _wire2api_opt_u8_array_32(dynamic raw) {
-    return raw == null ? null : _wire2api_u8_array_32(raw);
-  }
-
-  Uint8List? _wire2api_opt_uint_8_list(dynamic raw) {
-    return raw == null ? null : _wire2api_uint_8_list(raw);
-  }
-
-  PanicInstruction _wire2api_panic_instruction(dynamic raw) {
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return PanicInstruction(
-      reason: _wire2api_u32(arr[0]),
-      instruction: _wire2api_u32(arr[1]),
-    );
   }
 
   Provider _wire2api_provider(dynamic raw) {
@@ -912,169 +645,8 @@ class FuelsImpl implements Fuels {
     );
   }
 
-  Receipt _wire2api_receipt(dynamic raw) {
-    switch (raw[0]) {
-      case 0:
-        return Receipt_Call(
-          id: _wire2api_u8_array_32(raw[1]),
-          to: _wire2api_u8_array_32(raw[2]),
-          amount: _wire2api_u64(raw[3]),
-          assetId: _wire2api_u8_array_32(raw[4]),
-          gas: _wire2api_u64(raw[5]),
-          param1: _wire2api_u64(raw[6]),
-          param2: _wire2api_u64(raw[7]),
-          pc: _wire2api_u64(raw[8]),
-          isField: _wire2api_u64(raw[9]),
-        );
-      case 1:
-        return Receipt_ReturnReceipt(
-          id: _wire2api_u8_array_32(raw[1]),
-          val: _wire2api_u64(raw[2]),
-          pc: _wire2api_u64(raw[3]),
-          isField: _wire2api_u64(raw[4]),
-        );
-      case 2:
-        return Receipt_ReturnData(
-          id: _wire2api_u8_array_32(raw[1]),
-          ptr: _wire2api_u64(raw[2]),
-          len: _wire2api_u64(raw[3]),
-          digest: _wire2api_u8_array_32(raw[4]),
-          data: _wire2api_opt_uint_8_list(raw[5]),
-          pc: _wire2api_u64(raw[6]),
-          isField: _wire2api_u64(raw[7]),
-        );
-      case 3:
-        return Receipt_Panic(
-          id: _wire2api_u8_array_32(raw[1]),
-          reason: _wire2api_box_autoadd_panic_instruction(raw[2]),
-          pc: _wire2api_u64(raw[3]),
-          isField: _wire2api_u64(raw[4]),
-          contractId: _wire2api_opt_u8_array_32(raw[5]),
-        );
-      case 4:
-        return Receipt_Revert(
-          id: _wire2api_u8_array_32(raw[1]),
-          ra: _wire2api_u64(raw[2]),
-          pc: _wire2api_u64(raw[3]),
-          isField: _wire2api_u64(raw[4]),
-        );
-      case 5:
-        return Receipt_Log(
-          id: _wire2api_u8_array_32(raw[1]),
-          ra: _wire2api_u64(raw[2]),
-          rb: _wire2api_u64(raw[3]),
-          rc: _wire2api_u64(raw[4]),
-          rd: _wire2api_u64(raw[5]),
-          pc: _wire2api_u64(raw[6]),
-          isField: _wire2api_u64(raw[7]),
-        );
-      case 6:
-        return Receipt_LogData(
-          id: _wire2api_u8_array_32(raw[1]),
-          ra: _wire2api_u64(raw[2]),
-          rb: _wire2api_u64(raw[3]),
-          ptr: _wire2api_u64(raw[4]),
-          len: _wire2api_u64(raw[5]),
-          digest: _wire2api_u8_array_32(raw[6]),
-          data: _wire2api_opt_uint_8_list(raw[7]),
-          pc: _wire2api_u64(raw[8]),
-          isField: _wire2api_u64(raw[9]),
-        );
-      case 7:
-        return Receipt_Transfer(
-          id: _wire2api_u8_array_32(raw[1]),
-          to: _wire2api_u8_array_32(raw[2]),
-          amount: _wire2api_u64(raw[3]),
-          assetId: _wire2api_u8_array_32(raw[4]),
-          pc: _wire2api_u64(raw[5]),
-          isField: _wire2api_u64(raw[6]),
-        );
-      case 8:
-        return Receipt_TransferOut(
-          id: _wire2api_u8_array_32(raw[1]),
-          to: _wire2api_u8_array_32(raw[2]),
-          amount: _wire2api_u64(raw[3]),
-          assetId: _wire2api_u8_array_32(raw[4]),
-          pc: _wire2api_u64(raw[5]),
-          isField: _wire2api_u64(raw[6]),
-        );
-      case 9:
-        return Receipt_ScriptResult(
-          result: _wire2api_box_autoadd_script_execution_result(raw[1]),
-          gasUsed: _wire2api_u64(raw[2]),
-        );
-      case 10:
-        return Receipt_MessageOut(
-          sender: _wire2api_u8_array_32(raw[1]),
-          recipient: _wire2api_u8_array_32(raw[2]),
-          amount: _wire2api_u64(raw[3]),
-          nonce: _wire2api_u8_array_32(raw[4]),
-          len: _wire2api_u64(raw[5]),
-          digest: _wire2api_u8_array_32(raw[6]),
-          data: _wire2api_opt_uint_8_list(raw[7]),
-        );
-      case 11:
-        return Receipt_Mint(
-          subId: _wire2api_u8_array_32(raw[1]),
-          contractId: _wire2api_u8_array_32(raw[2]),
-          val: _wire2api_u64(raw[3]),
-          pc: _wire2api_u64(raw[4]),
-          isField: _wire2api_u64(raw[5]),
-        );
-      case 12:
-        return Receipt_Burn(
-          subId: _wire2api_u8_array_32(raw[1]),
-          contractId: _wire2api_u8_array_32(raw[2]),
-          val: _wire2api_u64(raw[3]),
-          pc: _wire2api_u64(raw[4]),
-          isField: _wire2api_u64(raw[5]),
-        );
-      default:
-        throw Exception("unreachable");
-    }
-  }
-
-  ScriptExecutionResult _wire2api_script_execution_result(dynamic raw) {
-    switch (raw[0]) {
-      case 0:
-        return ScriptExecutionResult_Success();
-      case 1:
-        return ScriptExecutionResult_Revert();
-      case 2:
-        return ScriptExecutionResult_Panic();
-      case 3:
-        return ScriptExecutionResult_GenericFailure(
-          _wire2api_u64(raw[1]),
-        );
-      default:
-        throw Exception("unreachable");
-    }
-  }
-
-  TransferResponse _wire2api_transfer_response(dynamic raw) {
-    final arr = raw as List<dynamic>;
-    if (arr.length != 2)
-      throw Exception('unexpected arr length: expect 2 but see ${arr.length}');
-    return TransferResponse(
-      txId: _wire2api_String(arr[0]),
-      receipts: _wire2api_list_receipt(arr[1]),
-    );
-  }
-
-  int _wire2api_u32(dynamic raw) {
-    return raw as int;
-  }
-
-  int _wire2api_u64(dynamic raw) {
-    return castInt(raw);
-  }
-
   int _wire2api_u8(dynamic raw) {
     return raw as int;
-  }
-
-  U8Array32 _wire2api_u8_array_32(dynamic raw) {
-    return U8Array32(_wire2api_uint_8_list(raw));
   }
 
   Uint8List _wire2api_uint_8_list(dynamic raw) {
@@ -1448,46 +1020,6 @@ class FuelsWire implements FlutterRustBridgeWireBase {
       'wire_address__method__WalletUnlocked');
   late final _wire_address__method__WalletUnlocked =
       _wire_address__method__WalletUnlockedPtr
-          .asFunction<void Function(int, ffi.Pointer<wire_WalletUnlocked>)>();
-
-  void wire_get_asset_balance__method__WalletUnlocked(
-    int port_,
-    ffi.Pointer<wire_WalletUnlocked> that,
-    ffi.Pointer<wire_uint_8_list> asset,
-  ) {
-    return _wire_get_asset_balance__method__WalletUnlocked(
-      port_,
-      that,
-      asset,
-    );
-  }
-
-  late final _wire_get_asset_balance__method__WalletUnlockedPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_WalletUnlocked>,
-                  ffi.Pointer<wire_uint_8_list>)>>(
-      'wire_get_asset_balance__method__WalletUnlocked');
-  late final _wire_get_asset_balance__method__WalletUnlocked =
-      _wire_get_asset_balance__method__WalletUnlockedPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_WalletUnlocked>,
-              ffi.Pointer<wire_uint_8_list>)>();
-
-  void wire_get_balances__method__WalletUnlocked(
-    int port_,
-    ffi.Pointer<wire_WalletUnlocked> that,
-  ) {
-    return _wire_get_balances__method__WalletUnlocked(
-      port_,
-      that,
-    );
-  }
-
-  late final _wire_get_balances__method__WalletUnlockedPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_WalletUnlocked>)>>(
-      'wire_get_balances__method__WalletUnlocked');
-  late final _wire_get_balances__method__WalletUnlocked =
-      _wire_get_balances__method__WalletUnlockedPtr
           .asFunction<void Function(int, ffi.Pointer<wire_WalletUnlocked>)>();
 
   void wire_transfer__method__WalletUnlocked(

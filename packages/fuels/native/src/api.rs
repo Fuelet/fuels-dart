@@ -11,8 +11,6 @@ pub use fuels::prelude::{Account, Bech32Address as NativeBech32Address, Provider
 use fuels_accounts::Signer;
 use fuels_accounts::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
 
-use crate::model::balance::{Balance, from_hash_map};
-use crate::model::response::TransferResponse;
 use crate::model::transaction::{build_transfer_transaction, get_min_tx_params, TxParameters, wrap_fuel_transaction};
 
 pub struct WalletUnlocked {
@@ -76,22 +74,6 @@ impl WalletUnlocked {
         native_wallet_unlocked.address().into()
     }
 
-    // TODO: remove
-    #[tokio::main]
-    pub async fn get_asset_balance(&self, asset: String) -> u64 {
-        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
-        let asset_id = AssetId::from_str(&asset).unwrap();
-        let result = native_wallet_unlocked.get_asset_balance(&asset_id).await;
-        result.unwrap()
-    }
-
-    #[tokio::main]
-    pub async fn get_balances(&self) -> Vec<Balance> {
-        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
-        let result = native_wallet_unlocked.get_balances().await;
-        from_hash_map(result.unwrap())
-    }
-
     #[tokio::main]
     pub async fn transfer(
         &self,
@@ -99,12 +81,12 @@ impl WalletUnlocked {
         amount: u64,
         asset: String,
         tx_parameters: TxParameters,
-    ) -> TransferResponse {
+    ) -> String {
         let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
         let asset_id = AssetId::from_str(&asset).unwrap();
         let result = native_wallet_unlocked.transfer(&*to.native, amount, asset_id, tx_parameters.into()).await;
         let (tx_id, receipts) = result.unwrap();
-        TransferResponse { tx_id: tx_id.to_string(), receipts: receipts.iter().map(Into::into).collect() }
+        tx_id.to_string()
     }
 
     /// Clones the transfer function but doesn't submit the transaction

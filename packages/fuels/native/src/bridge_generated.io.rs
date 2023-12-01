@@ -45,23 +45,6 @@ pub extern "C" fn wire_address__method__WalletUnlocked(port_: i64, that: *mut wi
 }
 
 #[no_mangle]
-pub extern "C" fn wire_get_asset_balance__method__WalletUnlocked(
-    port_: i64,
-    that: *mut wire_WalletUnlocked,
-    asset: *mut wire_uint_8_list,
-) {
-    wire_get_asset_balance__method__WalletUnlocked_impl(port_, that, asset)
-}
-
-#[no_mangle]
-pub extern "C" fn wire_get_balances__method__WalletUnlocked(
-    port_: i64,
-    that: *mut wire_WalletUnlocked,
-) {
-    wire_get_balances__method__WalletUnlocked_impl(port_, that)
-}
-
-#[no_mangle]
 pub extern "C" fn wire_transfer__method__WalletUnlocked(
     port_: i64,
     that: *mut wire_WalletUnlocked,

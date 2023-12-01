@@ -69,7 +69,7 @@ class FuelWalletImpl extends BaseWallet {
       privateKey: privateKey,
     );
 
-    final response = await w.transfer(
+    return await w.transfer(
       to: await Bech32Address.fromB256String(
         bridge: _bridge,
         s: destinationB256Address,
@@ -82,8 +82,6 @@ class FuelWalletImpl extends BaseWallet {
         maturity: maturity,
       ),
     );
-
-    return response.txId;
   }
 
   @override

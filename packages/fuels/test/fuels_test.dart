@@ -58,8 +58,9 @@ Future<WalletUnlocked> importWalletWithMnemonicsAndPath(
 void main() {
   test('test create wallet', () async {
     WalletUnlocked wallet = await createWallet();
-    var balance = await wallet.getAssetBalance(asset: ethAsset);
-    expect(0, balance);
+    final address = await wallet.address();
+    final bech32Address = await address.toBech32String();
+    expect(bech32Address.isNotEmpty, true);
   });
 
   test('test import wallet with private key', () async {
@@ -86,22 +87,6 @@ void main() {
         await recreated.address().then((addr) => addr.toBech32String());
     expect(recreatedAddr, walletAddr);
     expect(recreated.privateKey, wallet.privateKey);
-  });
-
-  test('test get ETH balance', () async {
-    // TODO: do not depend on external state and add assertions
-    WalletUnlocked wallet = await importWalletWithPK(testWalletPrivateKey);
-    var ethBalance = await wallet.getAssetBalance(asset: ethAsset);
-    print(ethBalance);
-  });
-
-  test('test get balances', () async {
-    // TODO: do not depend on external state and add assertions
-    WalletUnlocked wallet = await importWalletWithPK(testWalletPrivateKey);
-    var balances = await wallet.getBalances();
-    for (var i = 0; i < balances.length; i++) {
-      print('${balances[i].asset} -> ${balances[i].amount}');
-    }
   });
 
   test('test derive wallets from seed phrase', () async {
@@ -171,13 +156,12 @@ void main() {
     WalletUnlocked newWallet = await createWallet();
     WalletUnlocked testWallet = await importWalletWithPK(testWalletPrivateKey);
     var newWalletAddr = await newWallet.address();
-    await testWallet.transfer(
+    final txId = await testWallet.transfer(
         to: newWalletAddr,
         amount: transferAmount,
         asset: ethAsset,
         txParameters: txParams);
-    var newWalletBalance = await newWallet.getAssetBalance(asset: ethAsset);
-    expect(transferAmount, newWalletBalance);
+    expect(txId.isNotEmpty, true);
   }, skip: 'Should be run manually');
 
   test('test transfer eth request creation', () async {
@@ -189,9 +173,7 @@ void main() {
     final requestBytes = await testWallet.genTransferTxRequest(
         to: newWalletAddr, amount: transferAmount, asset: ethAsset);
 
-    await testWallet.sendTransaction(encodedTx: requestBytes);
-
-    var newWalletBalance = await newWallet.getAssetBalance(asset: ethAsset);
-    expect(transferAmount, newWalletBalance);
+    final txId = await testWallet.sendTransaction(encodedTx: requestBytes);
+    expect(txId.isNotEmpty, true);
   }, skip: 'Should be run manually');
 }
