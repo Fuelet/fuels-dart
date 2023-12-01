@@ -158,6 +158,8 @@ class WalletInterface {
     const {maxFee, requiredQuantities} = await provider.getTransactionCost(request);
 
     await wallet.fund(request, requiredQuantities, maxFee);
+    // request = await wallet.populateTransactionWitnessesSignature(request);
+    // request.toTransactionBytes()
 
     return JSON.stringify(request);
   }
