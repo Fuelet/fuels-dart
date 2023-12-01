@@ -3,15 +3,12 @@
 use std::str::FromStr;
 
 use flutter_rust_bridge::RustOpaque;
-use fuel_crypto::fuel_types::bytes::{Deserializable, SerializableVec};
 use fuel_crypto::SecretKey;
-use fuel_tx::{Address, Transaction as FuelTransaction};
-pub use fuels::prelude::{Account, Bech32Address as NativeBech32Address, Provider as NativeProvider, ViewOnlyAccount, WalletUnlocked as NativeWalletUnlocked};
-use fuels::prelude::AssetId;
-use fuels_accounts::Signer;
+use fuel_tx::Address;
+pub use fuels::prelude::{Bech32Address as NativeBech32Address, Provider as NativeProvider, WalletUnlocked as NativeWalletUnlocked};
 
-use crate::features::wallet_creation;
-use crate::model::transaction::{build_transfer_transaction, get_min_tx_params, TxParameters, wrap_fuel_transaction};
+use crate::features::{crypto, transaction, wallet};
+use crate::model::transaction::TxParameters;
 
 pub struct WalletUnlocked {
     pub private_key: String,
@@ -33,19 +30,19 @@ impl WalletUnlocked {
     }
 
     pub fn new_random(provider: Provider) -> WalletUnlocked {
-        wallet_creation::new_random(provider)
+        wallet::new_random(provider).unwrap()
     }
 
     pub fn new_from_private_key(private_key: String, provider: Provider) -> WalletUnlocked {
-        wallet_creation::new_from_private_key(private_key, provider)
+        wallet::new_from_private_key(private_key, provider).unwrap()
     }
 
     pub fn new_from_mnemonic_phrase(phrase: String, provider: Provider) -> WalletUnlocked {
-        wallet_creation::new_from_mnemonic_phrase(phrase, provider)
+        wallet::new_from_mnemonic_phrase(phrase, provider).unwrap()
     }
 
     pub fn new_from_mnemonic_phrase_with_path(phrase: String, path: String, provider: Provider) -> WalletUnlocked {
-        wallet_creation::new_from_mnemonic_phrase_with_path(phrase, path, provider)
+        wallet::new_from_mnemonic_phrase_with_path(phrase, path, provider).unwrap()
     }
 
     #[tokio::main]
@@ -57,14 +54,9 @@ impl WalletUnlocked {
         tx_parameters: TxParameters,
     ) -> String {
         let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
-        let asset_id = AssetId::from_str(&asset).unwrap();
-        let result = native_wallet_unlocked.transfer(&*to.native, amount, asset_id, tx_parameters.into()).await;
-        let (tx_id, _) = result.unwrap();
-        tx_id.to_string()
+        transaction::transfer(&native_wallet_unlocked, &*to.native, amount, asset, tx_parameters.into()).await.unwrap()
     }
 
-    /// Clones the transfer function but doesn't submit the transaction
-    /// TODO: do not sign the tx?
     #[tokio::main]
     pub async fn gen_transfer_tx_request(
         &self,
@@ -72,29 +64,17 @@ impl WalletUnlocked {
         amount: u64,
         asset: String,
     ) -> Vec<u8> {
-        let native_provider = self.get_native_provider().await;
         let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
-
-        let tx_without_tx_params = build_transfer_transaction(&native_wallet_unlocked, &native_provider, &to, amount, &asset, None).await.unwrap();
-        let min_tx_params = get_min_tx_params(&native_provider, &tx_without_tx_params).await.unwrap();
-        let tx_with_min_tx_params = build_transfer_transaction(&native_wallet_unlocked, &native_provider, &to, amount, &asset, Some(min_tx_params)).await.unwrap();
-
-        let fuel_tx: FuelTransaction = tx_with_min_tx_params.into();
-        fuel_tx.clone().to_bytes()
+        transaction::gen_transfer_tx_request(&native_wallet_unlocked, &*to.native, amount, asset).await.unwrap()
     }
 
-    // TODO: find a way to sign the tx here
     #[tokio::main]
     pub async fn send_transaction(
         &self,
         encoded_tx: Vec<u8>,
     ) -> String {
-        let decoded_tx: FuelTransaction = FuelTransaction::from_bytes(&encoded_tx).unwrap();
-        let tx = wrap_fuel_transaction(decoded_tx).unwrap();
-
         let native_provider = self.get_native_provider().await;
-        let tx_id = native_provider.send_transaction(tx).await.unwrap();
-        tx_id.to_string()
+        transaction::send_transaction(&native_provider, encoded_tx).await.unwrap()
     }
 
     #[tokio::main]
@@ -103,8 +83,7 @@ impl WalletUnlocked {
         message: String,
     ) -> String {
         let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
-        let signature = native_wallet_unlocked.sign_message(message).await.unwrap();
-        signature.to_string()
+        crypto::sign_message(&native_wallet_unlocked, message).await.unwrap()
     }
 }
 

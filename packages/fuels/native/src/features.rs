@@ -1,1 +1,3 @@
-pub mod wallet_creation;
+pub mod wallet;
+pub mod crypto;
+pub mod transaction;

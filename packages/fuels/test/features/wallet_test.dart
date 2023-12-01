@@ -30,7 +30,9 @@ void main() {
   test('test recreate wallet', () async {
     WalletUnlocked wallet = await createRandomWallet();
     WalletUnlocked recreated = await importWalletWithPK(wallet.privateKey);
-    expect(wallet.address, recreated.address);
+    final walletAddr = await wallet.address.toBech32String();
+    final recreatedAddr = await recreated.address.toBech32String();
+    expect(walletAddr, recreatedAddr);
     expect(recreated.privateKey, wallet.privateKey);
   });
 

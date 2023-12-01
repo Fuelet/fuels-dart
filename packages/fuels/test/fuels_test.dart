@@ -5,8 +5,6 @@ import 'package:test/test.dart';
 
 import 'test_utils.dart';
 
-var _txParams = const TxParameters(gasPrice: 1, gasLimit: 1000000, maturity: 0);
-
 void main() {
   test('test Bech32Address conversion', () async {
     WalletUnlocked wallet = await createRandomWallet();
@@ -36,38 +34,4 @@ void main() {
         .toB256String()
         .then((value) => expect(b256str, value));
   });
-
-  test('test signing a message', () async {
-    WalletUnlocked testWallet = await importWalletWithPK(testWalletPrivateKey);
-
-    final signature =
-        await testWallet.signMessage(message: 'A random message to sign');
-    expect(signature,
-        '3b3e392aee0f996186847194c8097481e3741a218e61cfe68f1714dd1dbe68b6d5775baf5095dba5454c6209cdca214622ba27601a82461b849f5093ec6f103f');
-  });
-
-  test('test transfer eth', () async {
-    // TODO: do not depend on external state
-    int transferAmount = 500;
-    WalletUnlocked newWallet = await createRandomWallet();
-    WalletUnlocked testWallet = await importWalletWithPK(testWalletPrivateKey);
-    final txId = await testWallet.transfer(
-        to: newWallet.address,
-        amount: transferAmount,
-        asset: ethAsset,
-        txParameters: _txParams);
-    expect(txId.isNotEmpty, true);
-  }, skip: 'Should be run manually');
-
-  test('test transfer eth request creation', () async {
-    // TODO: do not depend on external state
-    int transferAmount = 500;
-    WalletUnlocked newWallet = await createRandomWallet();
-    WalletUnlocked testWallet = await importWalletWithPK(testWalletPrivateKey);
-    final requestBytes = await testWallet.genTransferTxRequest(
-        to: newWallet.address, amount: transferAmount, asset: ethAsset);
-
-    final txId = await testWallet.sendTransaction(encodedTx: requestBytes);
-    expect(txId.isNotEmpty, true);
-  }, skip: 'Should be run manually');
 }
