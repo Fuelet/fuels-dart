@@ -75,6 +75,7 @@ impl WalletUnlocked {
         native_wallet_unlocked.address().into()
     }
 
+    // TODO: remove
     #[tokio::main]
     pub async fn get_asset_balance(&self, asset: String) -> u64 {
         let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
@@ -125,6 +126,7 @@ impl WalletUnlocked {
         fuel_tx.clone().to_bytes()
     }
 
+    // TODO: find a way to sign the tx here
     #[tokio::main]
     pub async fn send_transaction(
         &self,
