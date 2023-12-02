@@ -111,8 +111,15 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
 
   @override
   Future<transaction_cost.TransactionCost> getTransactionCost(
-      {required String transactionRequestHexOrJson}) {
-    throw UnimplementedError();
+      {required String transactionRequestHexOrJson}) async {
+    final bytes = hex.decode(transactionRequestHexOrJson);
+    final txCost = await _rustWalletUnlocked.estimateTransactionCost(
+        encodedTx: Uint8List.fromList(bytes));
+    return transaction_cost.TransactionCost(
+        minGasPrice: txCost.minGasPrice,
+        gasPrice: txCost.gasPrice,
+        gasUsed: txCost.gasUsed,
+        minFee: txCost.totalFee);
   }
 
   @override

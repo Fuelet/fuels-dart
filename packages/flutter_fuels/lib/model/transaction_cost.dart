@@ -3,22 +3,19 @@ class TransactionCost {
   final int gasPrice;
   final int gasUsed;
   final int minFee;
-  final int maxFee;
 
   TransactionCost(
       {required this.minGasPrice,
       required this.gasPrice,
       required this.gasUsed,
-      required this.minFee,
-      required this.maxFee});
+      required this.minFee});
 
   factory TransactionCost.fromJson(Map<String, dynamic> data) {
     return TransactionCost(
         minGasPrice: data['minGasPrice'],
         gasPrice: data['gasPrice'],
         gasUsed: data['gasUsed'],
-        minFee: data['minFee'],
-        maxFee: data['maxFee']);
+        minFee: data['minFee']);
   }
 
   Map<String, dynamic> toJson() => {
@@ -26,6 +23,5 @@ class TransactionCost {
         'gasPrice': gasPrice,
         'gasUsed': gasUsed,
         'minFee': minFee,
-        'maxFee': maxFee,
       };
 }
