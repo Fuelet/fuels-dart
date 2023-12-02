@@ -16,6 +16,7 @@ abstract class DartWalletUnlocked {
 
   Future<String> sendTransaction({required dynamic transactionRequest});
 
+  // TODO: move to a platform independent implementation
   Future<CallResult> simulateTransaction({required dynamic transactionRequest});
 
   Future<TransactionCost> getTransactionCost(
