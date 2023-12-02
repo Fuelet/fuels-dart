@@ -4,12 +4,12 @@ version: 1.16.0
 homepage: https://github.com/Fuelet/fuels-dart/tree/main/packages/fuels
 
 environment:
-  sdk: '>=2.18.2 <4.0.0'
+  sdk: '>=3.0.0 <4.0.0'
 
 dependencies:
   ffi: ^2.0.1
-  flutter_rust_bridge: 1.75.3
-  uuid: ^3.0.7 # must be compatible with flutter_rust_bridge version
+  flutter_rust_bridge: 1.82.4
+  uuid: ^4.2.1 # must be compatible with flutter_rust_bridge version
   freezed_annotation: ^2.2.0
   meta: ^1.8.0
   collection: ^1.17.0
@@ -17,6 +17,6 @@ dependencies:
 dev_dependencies:
   test: ^1.24.2
   lints: ^2.0.0
-  ffigen: ^7.2.11
+  ffigen: ^8.0.0
   freezed: ^2.3.2
   build_runner: ^2.3.2
