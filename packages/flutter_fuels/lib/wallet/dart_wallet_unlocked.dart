@@ -14,14 +14,19 @@ abstract class DartWalletUnlocked {
 
   Future<String> signMessage({required String message});
 
-  Future<String> sendTransaction({required dynamic transactionRequest});
+  /// Takes hex string on mobile and json tx request on web
+  Future<String> sendTransaction({required String transactionRequestHexOrJson});
 
   // TODO: move to a platform independent implementation
-  Future<CallResult> simulateTransaction({required dynamic transactionRequest});
+  /// Takes hex string on mobile and json tx request on web
+  Future<CallResult> simulateTransaction(
+      {required String transactionRequestHexOrJson});
 
+  /// Takes hex string on mobile and json tx request on web
   Future<TransactionCost> getTransactionCost(
-      {required dynamic transactionRequest});
+      {required String transactionRequestHexOrJson});
 
+  /// Returns hex string on mobile and json tx request on web
   Future<String> genTransferTransactionRequest({
     required String destinationB256Address,
     required int fractionalAmount,

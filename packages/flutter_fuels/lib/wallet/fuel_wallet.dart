@@ -96,12 +96,13 @@ class FuelWallet {
     required String destinationB256Address,
     required int fractionalAmount,
     required String assetId,
-  }) {
-    final transferRequest = _walletUnlocked.genTransferTransactionRequest(
+  }) async {
+    final transferRequest = await _walletUnlocked.genTransferTransactionRequest(
         destinationB256Address: destinationB256Address,
         fractionalAmount: fractionalAmount,
         assetId: assetId);
-    return _walletUnlocked.sendTransaction(transactionRequest: transferRequest);
+    return _walletUnlocked.sendTransaction(
+        transactionRequestHexOrJson: transferRequest);
   }
 
   Future<String> signMessage({
@@ -110,27 +111,31 @@ class FuelWallet {
     return _walletUnlocked.signMessage(message: message);
   }
 
+  /// Takes hex string on mobile and json tx request on web
   Future<String> sendTransaction({
-    required dynamic transactionRequest,
+    required String transactionRequestHexOrJson,
   }) {
     return _walletUnlocked.sendTransaction(
-        transactionRequest: transactionRequest);
+        transactionRequestHexOrJson: transactionRequestHexOrJson);
   }
 
+  /// Takes hex string on mobile and json tx request on web
   Future<CallResult> simulateTransaction({
-    required dynamic transactionRequest,
+    required String transactionRequestHexOrJson,
   }) {
     return _walletUnlocked.simulateTransaction(
-        transactionRequest: transactionRequest);
+        transactionRequestHexOrJson: transactionRequestHexOrJson);
   }
 
+  /// Takes hex string on mobile and json tx request on web
   Future<TransactionCost> getTransactionCost({
-    required dynamic transactionRequest,
+    required String transactionRequestHexOrJson,
   }) async {
     return _walletUnlocked.getTransactionCost(
-        transactionRequest: transactionRequest);
+        transactionRequestHexOrJson: transactionRequestHexOrJson);
   }
 
+  /// Returns hex string on mobile and json tx request on web
   Future<String> genTransferTransactionRequest(
       {required String destinationB256Address,
       required int fractionalAmount,

@@ -129,9 +129,9 @@ class WebWalletUnlocked extends DartWalletUnlocked {
 
   @override
   Future<TransactionCost> getTransactionCost(
-      {required transactionRequest}) async {
-    final txCostStr = await promiseToFuture(
-        js_wallet.getTransactionCost(_wallet.networkUrl, transactionRequest));
+      {required String transactionRequestHexOrJson}) async {
+    final txCostStr = await promiseToFuture(js_wallet.getTransactionCost(
+        _wallet.networkUrl, transactionRequestHexOrJson));
     final txCostJson = jsonDecode(txCostStr);
     try {
       return TransactionCost.fromJson(txCostJson);
@@ -141,9 +141,10 @@ class WebWalletUnlocked extends DartWalletUnlocked {
   }
 
   @override
-  Future<String> sendTransaction({required transactionRequest}) {
+  Future<String> sendTransaction(
+      {required String transactionRequestHexOrJson}) {
     return promiseToFuture(js_wallet.sendTransaction(
-        _wallet.privateKey, _wallet.networkUrl, transactionRequest));
+        _wallet.privateKey, _wallet.networkUrl, transactionRequestHexOrJson));
   }
 
   @override
@@ -153,9 +154,10 @@ class WebWalletUnlocked extends DartWalletUnlocked {
   }
 
   @override
-  Future<CallResult> simulateTransaction({required transactionRequest}) async {
+  Future<CallResult> simulateTransaction(
+      {required String transactionRequestHexOrJson}) async {
     final callResultStr = await promiseToFuture(js_wallet.simulateTransaction(
-        _wallet.privateKey, _wallet.networkUrl, transactionRequest));
+        _wallet.privateKey, _wallet.networkUrl, transactionRequestHexOrJson));
     final callResultJson = jsonDecode(callResultStr);
     try {
       return CallResult.fromJson(callResultJson);

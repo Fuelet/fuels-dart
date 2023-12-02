@@ -111,13 +111,14 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
 
   @override
   Future<transaction_cost.TransactionCost> getTransactionCost(
-      {required transactionRequest}) {
+      {required String transactionRequestHexOrJson}) {
     throw UnimplementedError();
   }
 
   @override
-  Future<String> sendTransaction({required transactionRequest}) {
-    final bytes = hex.decode(transactionRequest);
+  Future<String> sendTransaction(
+      {required String transactionRequestHexOrJson}) {
+    final bytes = hex.decode(transactionRequestHexOrJson);
     return _rustWalletUnlocked.sendTransaction(
         encodedTx: Uint8List.fromList(bytes));
   }
@@ -128,7 +129,8 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
   }
 
   @override
-  Future<CallResult> simulateTransaction({required transactionRequest}) {
+  Future<CallResult> simulateTransaction(
+      {required String transactionRequestHexOrJson}) {
     throw UnimplementedError();
   }
 }
