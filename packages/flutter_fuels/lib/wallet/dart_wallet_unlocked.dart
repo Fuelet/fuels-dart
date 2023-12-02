@@ -23,7 +23,7 @@ abstract class DartWalletUnlocked {
 
   Future<String> genTransferTransactionRequest({
     required String destinationB256Address,
-    required num fractionalAmount,
+    required int fractionalAmount,
     required String assetId,
   });
 }

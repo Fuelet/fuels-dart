@@ -133,7 +133,7 @@ class FuelWallet {
 
   Future<String> genTransferTransactionRequest(
       {required String destinationB256Address,
-      required num fractionalAmount,
+      required int fractionalAmount,
       required String assetId}) {
     return _walletUnlocked.genTransferTransactionRequest(
       destinationB256Address: destinationB256Address,

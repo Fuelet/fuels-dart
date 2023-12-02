@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+
+import 'package:convert/convert.dart';
 import 'package:flutter_fuels/model/call_result.dart';
 import 'package:flutter_fuels/model/transaction_cost.dart';
 import 'package:flutter_fuels/wallet/dart_wallet_unlocked.dart';
@@ -13,8 +16,8 @@ class FuelWalletImpl extends BaseWallet {
   Future<DartWalletUnlocked> generateNewWallet(
       {required String networkUrl}) async {
     final provider = await Provider.connect(bridge: _bridge, url: networkUrl);
-    final w = await WalletUnlocked.newRandom(
-        bridge: _bridge, provider: provider);
+    final w =
+    await WalletUnlocked.newRandom(bridge: _bridge, provider: provider);
     return await MobileWalletUnlocked.fromRust(w, networkUrl);
   }
 
@@ -69,16 +72,18 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
   @override
   final String bech32Address;
 
-  MobileWalletUnlocked(
-      {required WalletUnlocked rustWalletUnlocked, required this.networkUrl, required this.b256Address, required this.bech32Address})
+  MobileWalletUnlocked({required WalletUnlocked rustWalletUnlocked,
+    required this.networkUrl,
+    required this.b256Address,
+    required this.bech32Address})
       : _rustWalletUnlocked = rustWalletUnlocked;
 
   static Future<MobileWalletUnlocked> fromRust(
-      WalletUnlocked rustWalletUnlocked,
-      String networkUrl) async {
+      WalletUnlocked rustWalletUnlocked, String networkUrl) async {
     final bech32Address = await rustWalletUnlocked.address.toBech32String();
     final b256Address = await rustWalletUnlocked.address.toB256String();
-    return MobileWalletUnlocked(rustWalletUnlocked: rustWalletUnlocked,
+    return MobileWalletUnlocked(
+        rustWalletUnlocked: rustWalletUnlocked,
         networkUrl: networkUrl,
         b256Address: b256Address,
         bech32Address: bech32Address);
@@ -92,8 +97,14 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
 
   @override
   Future<String> genTransferTransactionRequest(
-      {required String destinationB256Address, required num fractionalAmount, required String assetId}) {
-    throw UnimplementedError();
+      {required String destinationB256Address,
+        required int fractionalAmount,
+        required String assetId}) async {
+    final to = await Bech32Address.fromB256String(
+        bridge: _rustWalletUnlocked.bridge, s: destinationB256Address);
+    final bytes = await _rustWalletUnlocked.genTransferTxRequest(
+        to: to, amount: fractionalAmount, asset: assetId);
+    return hex.encode(bytes);
   }
 
   @override
@@ -103,7 +114,9 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
 
   @override
   Future<String> sendTransaction({required transactionRequest}) {
-    throw UnimplementedError();
+    final bytes = hex.decode(transactionRequest);
+    return _rustWalletUnlocked.sendTransaction(
+        encodedTx: Uint8List.fromList(bytes))
   }
 
   @override

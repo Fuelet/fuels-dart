@@ -117,7 +117,7 @@ class WebWalletUnlocked extends DartWalletUnlocked {
   @override
   Future<String> genTransferTransactionRequest(
       {required String destinationB256Address,
-      required num fractionalAmount,
+      required int fractionalAmount,
       required String assetId}) async {
     return await promiseToFuture(js_wallet.genTransferTransactionRequest(
         _wallet.privateKey,
