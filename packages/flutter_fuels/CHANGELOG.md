@@ -1,3 +1,12 @@
+## 0.0.27
+
+ - **REFACTOR**: move wallet creation to a separate package. ([72091392](https://github.com/Fuelet/fuels-dart/commit/720913922a42c4952b181589aed4d02858bbec19))
+ - **FEAT**: refactor flutter wallet ([#25](https://github.com/Fuelet/fuels-dart/issues/25)). ([94df15cb](https://github.com/Fuelet/fuels-dart/commit/94df15cbfb264c1da908c8c2045194fb1cb3b828))
+ - **FEAT**: remove desktop platforms. ([0534d24f](https://github.com/Fuelet/fuels-dart/commit/0534d24f818d7a4fde0460f61ee815853b3a801a))
+ - **FEAT**: upgrade fuels-rs version. ([41511eaf](https://github.com/Fuelet/fuels-dart/commit/41511eafaf28c37b2fe656f34432e5de95fc7042))
+ - **FEAT**: tx cost estimation in rust ([#24](https://github.com/Fuelet/fuels-dart/issues/24)). ([89ecf82e](https://github.com/Fuelet/fuels-dart/commit/89ecf82ebb5d85299730be90cbc1a89f95be8d65))
+ - **FEAT**: make provider to be required. ([dee6ea0f](https://github.com/Fuelet/fuels-dart/commit/dee6ea0f91e5abdcfbfcf3c576e501fa97fc52d0))
+
 ## 0.0.26
 
  - **FEAT**: remove not needed functions from rust. ([36088788](https://github.com/Fuelet/fuels-dart/commit/360887888b4798c1fe74b86ea26e03f8a31b5243))

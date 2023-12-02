@@ -3,6 +3,43 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-12-02
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flutter_fuels` - `v0.0.27`](#flutter_fuels---v0027)
+ - [`fuels` - `v1.17.0`](#fuels---v1170)
+
+---
+
+#### `flutter_fuels` - `v0.0.27`
+
+ - **REFACTOR**: move wallet creation to a separate package. ([72091392](https://github.com/Fuelet/fuels-dart/commit/720913922a42c4952b181589aed4d02858bbec19))
+ - **FEAT**: refactor flutter wallet ([#25](https://github.com/Fuelet/fuels-dart/issues/25)). ([94df15cb](https://github.com/Fuelet/fuels-dart/commit/94df15cbfb264c1da908c8c2045194fb1cb3b828))
+ - **FEAT**: remove desktop platforms. ([0534d24f](https://github.com/Fuelet/fuels-dart/commit/0534d24f818d7a4fde0460f61ee815853b3a801a))
+ - **FEAT**: upgrade fuels-rs version. ([41511eaf](https://github.com/Fuelet/fuels-dart/commit/41511eafaf28c37b2fe656f34432e5de95fc7042))
+ - **FEAT**: tx cost estimation in rust ([#24](https://github.com/Fuelet/fuels-dart/issues/24)). ([89ecf82e](https://github.com/Fuelet/fuels-dart/commit/89ecf82ebb5d85299730be90cbc1a89f95be8d65))
+ - **FEAT**: make provider to be required. ([dee6ea0f](https://github.com/Fuelet/fuels-dart/commit/dee6ea0f91e5abdcfbfcf3c576e501fa97fc52d0))
+
+#### `fuels` - `v1.17.0`
+
+ - **REFACTOR**: move all logic to separate packages. ([02b46ee0](https://github.com/Fuelet/fuels-dart/commit/02b46ee04c35663cb8ed3f5c0972620fdded67e8))
+ - **REFACTOR**: move wallet creation to a separate package. ([72091392](https://github.com/Fuelet/fuels-dart/commit/720913922a42c4952b181589aed4d02858bbec19))
+ - **FIX**: add transfer script to rust tx request. ([ee17653d](https://github.com/Fuelet/fuels-dart/commit/ee17653d17b3b09066b747200678a9637ab0edae))
+ - **FEAT**: upgrade frb to 1.82.4. ([fda310d4](https://github.com/Fuelet/fuels-dart/commit/fda310d4a6bb24a6533fc7dff409313e2a758572))
+ - **FEAT**: upgrade fuels-rs version. ([41511eaf](https://github.com/Fuelet/fuels-dart/commit/41511eafaf28c37b2fe656f34432e5de95fc7042))
+ - **FEAT**: tx cost estimation in rust ([#24](https://github.com/Fuelet/fuels-dart/issues/24)). ([89ecf82e](https://github.com/Fuelet/fuels-dart/commit/89ecf82ebb5d85299730be90cbc1a89f95be8d65))
+ - **FEAT**: make provider to be required. ([dee6ea0f](https://github.com/Fuelet/fuels-dart/commit/dee6ea0f91e5abdcfbfcf3c576e501fa97fc52d0))
+
+
 ## 2023-12-01
 
 ### Changes

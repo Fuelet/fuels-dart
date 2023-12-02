@@ -1,3 +1,13 @@
+## 1.17.0
+
+ - **REFACTOR**: move all logic to separate packages. ([02b46ee0](https://github.com/Fuelet/fuels-dart/commit/02b46ee04c35663cb8ed3f5c0972620fdded67e8))
+ - **REFACTOR**: move wallet creation to a separate package. ([72091392](https://github.com/Fuelet/fuels-dart/commit/720913922a42c4952b181589aed4d02858bbec19))
+ - **FIX**: add transfer script to rust tx request. ([ee17653d](https://github.com/Fuelet/fuels-dart/commit/ee17653d17b3b09066b747200678a9637ab0edae))
+ - **FEAT**: upgrade frb to 1.82.4. ([fda310d4](https://github.com/Fuelet/fuels-dart/commit/fda310d4a6bb24a6533fc7dff409313e2a758572))
+ - **FEAT**: upgrade fuels-rs version. ([41511eaf](https://github.com/Fuelet/fuels-dart/commit/41511eafaf28c37b2fe656f34432e5de95fc7042))
+ - **FEAT**: tx cost estimation in rust ([#24](https://github.com/Fuelet/fuels-dart/issues/24)). ([89ecf82e](https://github.com/Fuelet/fuels-dart/commit/89ecf82ebb5d85299730be90cbc1a89f95be8d65))
+ - **FEAT**: make provider to be required. ([dee6ea0f](https://github.com/Fuelet/fuels-dart/commit/dee6ea0f91e5abdcfbfcf3c576e501fa97fc52d0))
+
 ## 1.16.0
 
  - **FEAT**: remove not needed functions from rust. ([36088788](https://github.com/Fuelet/fuels-dart/commit/360887888b4798c1fe74b86ea26e03f8a31b5243))
