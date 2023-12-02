@@ -28,12 +28,6 @@ flutter:
         ffiPlugin: true
       ios:
         ffiPlugin: true
-      linux:
-        ffiPlugin: true
-      macos:
-        ffiPlugin: true
-      windows:
-        ffiPlugin: true
       web:
         pluginClass: JsWalletInjector
         fileName: js_wallet_injector.dart
