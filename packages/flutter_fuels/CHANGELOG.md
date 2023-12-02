@@ -1,3 +1,9 @@
+## 0.0.28
+
+ - **FIX**: fix mobile implementation. ([9e5c8c3c](https://github.com/Fuelet/fuels-dart/commit/9e5c8c3ca0b2eb3433788aada17f84349386c66c))
+ - **FEAT**: tx cost estimation on mobile. ([08fc0fbb](https://github.com/Fuelet/fuels-dart/commit/08fc0fbb74a3d963a130d93c7d70d7496b923316))
+ - **DOCS**: clarify differences between web & mobile tx encoding. ([9ea5b78c](https://github.com/Fuelet/fuels-dart/commit/9ea5b78ca689210d6c522bd5a16c513b2ba54a6c))
+
 ## 0.0.27
 
  - **REFACTOR**: move wallet creation to a separate package. ([72091392](https://github.com/Fuelet/fuels-dart/commit/720913922a42c4952b181589aed4d02858bbec19))

@@ -15,6 +15,29 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`flutter_fuels` - `v0.0.28`](#flutter_fuels---v0028)
+
+---
+
+#### `flutter_fuels` - `v0.0.28`
+
+ - **FIX**: fix mobile implementation. ([9e5c8c3c](https://github.com/Fuelet/fuels-dart/commit/9e5c8c3ca0b2eb3433788aada17f84349386c66c))
+ - **FEAT**: tx cost estimation on mobile. ([08fc0fbb](https://github.com/Fuelet/fuels-dart/commit/08fc0fbb74a3d963a130d93c7d70d7496b923316))
+ - **DOCS**: clarify differences between web & mobile tx encoding. ([9ea5b78c](https://github.com/Fuelet/fuels-dart/commit/9ea5b78ca689210d6c522bd5a16c513b2ba54a6c))
+
+
+## 2023-12-02
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`flutter_fuels` - `v0.0.27`](#flutter_fuels---v0027)
  - [`fuels` - `v1.17.0`](#fuels---v1170)
 
