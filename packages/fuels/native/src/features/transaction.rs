@@ -96,24 +96,23 @@ async fn build_transfer_tx(wallet: &WalletUnlocked,
                            amount: u64,
                            asset: &String,
                            tx_params_opt: Option<TxParameters>) -> CustomResult<ScriptTransaction> {
+    let network_info = provider.network_info().await?;
     let asset_id = AssetId::from_str(asset)?;
     let inputs = wallet.get_asset_inputs_for_amount(asset_id, amount).await?;
     let outputs = wallet.get_asset_outputs_for_amount(to, asset_id, amount);
-    let consensus_parameters = provider.consensus_parameters();
+
     let tx_params = tx_params_opt.unwrap_or_else(TxParameters::default);
 
-    let tx_builder = ScriptTransactionBuilder::prepare_transfer(inputs, outputs, tx_params)
-        .with_consensus_parameters(consensus_parameters);
+    let mut tx_builder = ScriptTransactionBuilder::prepare_transfer(
+        inputs,
+        outputs,
+        tx_params,
+        network_info,
+    );
 
-    // if we are not transferring the base asset, previous base amount is 0
-    let previous_base_amount = if asset_id == AssetId::default() {
-        amount
-    } else {
-        0
-    };
+    wallet.add_witnessses(&mut tx_builder);
+    wallet.adjust_for_fee(&mut tx_builder, amount).await?;
 
-    let tx = wallet
-        .add_fee_resources(tx_builder, previous_base_amount)
-        .await?; // different error type
+    let tx = tx_builder.build()?;
     Ok(tx)
 }

@@ -149,6 +149,11 @@ pub extern "C" fn new_box_autoadd_tx_parameters_0() -> *mut wire_TxParameters {
 }
 
 #[no_mangle]
+pub extern "C" fn new_box_autoadd_u64_0(value: u64) -> *mut u64 {
+    support::new_leak_box_ptr(value)
+}
+
+#[no_mangle]
 pub extern "C" fn new_box_autoadd_wallet_unlocked_0() -> *mut wire_WalletUnlocked {
     support::new_leak_box_ptr(wire_WalletUnlocked::new_with_null_ptr())
 }
@@ -217,6 +222,11 @@ impl Wire2Api<TxParameters> for *mut wire_TxParameters {
         Wire2Api::<TxParameters>::wire2api(*wrap).into()
     }
 }
+impl Wire2Api<u64> for *mut u64 {
+    fn wire2api(self) -> u64 {
+        unsafe { *support::box_from_leak_ptr(self) }
+    }
+}
 impl Wire2Api<WalletUnlocked> for *mut wire_WalletUnlocked {
     fn wire2api(self) -> WalletUnlocked {
         let wrap = unsafe { support::box_from_leak_ptr(self) };
@@ -282,8 +292,8 @@ pub struct wire_Provider {
 #[repr(C)]
 #[derive(Clone)]
 pub struct wire_TxParameters {
-    gas_price: u64,
-    gas_limit: u64,
+    gas_price: *mut u64,
+    gas_limit: *mut u64,
     maturity: u32,
 }
 
@@ -354,8 +364,8 @@ impl Default for wire_Provider {
 impl NewWithNullPtr for wire_TxParameters {
     fn new_with_null_ptr() -> Self {
         Self {
-            gas_price: Default::default(),
-            gas_limit: Default::default(),
+            gas_price: core::ptr::null_mut(),
+            gas_limit: core::ptr::null_mut(),
             maturity: Default::default(),
         }
     }

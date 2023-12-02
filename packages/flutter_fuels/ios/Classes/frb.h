@@ -34,8 +34,8 @@ typedef struct wire_WalletUnlocked {
 } wire_WalletUnlocked;
 
 typedef struct wire_TxParameters {
-  uint64_t gas_price;
-  uint64_t gas_limit;
+  uint64_t *gas_price;
+  uint64_t *gas_limit;
   uint32_t maturity;
 } wire_TxParameters;
 
@@ -110,6 +110,8 @@ struct wire_Provider *new_box_autoadd_provider_0(void);
 
 struct wire_TxParameters *new_box_autoadd_tx_parameters_0(void);
 
+uint64_t *new_box_autoadd_u64_0(uint64_t value);
+
 struct wire_WalletUnlocked *new_box_autoadd_wallet_unlocked_0(void);
 
 struct wire_uint_8_list *new_uint_8_list_0(int32_t len);
@@ -140,6 +142,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_bech_32_address_0);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_provider_0);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_tx_parameters_0);
+    dummy_var ^= ((int64_t) (void*) new_box_autoadd_u64_0);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_wallet_unlocked_0);
     dummy_var ^= ((int64_t) (void*) new_uint_8_list_0);
     dummy_var ^= ((int64_t) (void*) drop_opaque_NativeBech32Address);

@@ -188,13 +188,13 @@ class TransactionCost {
 }
 
 class TxParameters {
-  final int gasPrice;
-  final int gasLimit;
+  final int? gasPrice;
+  final int? gasLimit;
   final int maturity;
 
   const TxParameters({
-    required this.gasPrice,
-    required this.gasLimit,
+    this.gasPrice,
+    this.gasLimit,
     required this.maturity,
   });
 }
@@ -756,6 +756,11 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
   }
 
   @protected
+  ffi.Pointer<ffi.Uint64> api2wire_box_autoadd_u64(int raw) {
+    return inner.new_box_autoadd_u64_0(api2wire_u64(raw));
+  }
+
+  @protected
   ffi.Pointer<wire_WalletUnlocked> api2wire_box_autoadd_wallet_unlocked(
       WalletUnlocked raw) {
     final ptr = inner.new_box_autoadd_wallet_unlocked_0();
@@ -766,6 +771,11 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
   @protected
   ffi.Pointer<wire_uint_8_list> api2wire_opt_String(String? raw) {
     return raw == null ? ffi.nullptr : api2wire_String(raw);
+  }
+
+  @protected
+  ffi.Pointer<ffi.Uint64> api2wire_opt_box_autoadd_u64(int? raw) {
+    return raw == null ? ffi.nullptr : api2wire_box_autoadd_u64(raw);
   }
 
   @protected
@@ -824,8 +834,8 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
 
   void _api_fill_to_wire_tx_parameters(
       TxParameters apiObj, wire_TxParameters wireObj) {
-    wireObj.gas_price = api2wire_u64(apiObj.gasPrice);
-    wireObj.gas_limit = api2wire_u64(apiObj.gasLimit);
+    wireObj.gas_price = api2wire_opt_box_autoadd_u64(apiObj.gasPrice);
+    wireObj.gas_limit = api2wire_opt_box_autoadd_u64(apiObj.gasLimit);
     wireObj.maturity = api2wire_u32(apiObj.maturity);
   }
 
@@ -1301,6 +1311,20 @@ class FuelsWire implements FlutterRustBridgeWireBase {
       _new_box_autoadd_tx_parameters_0Ptr
           .asFunction<ffi.Pointer<wire_TxParameters> Function()>();
 
+  ffi.Pointer<ffi.Uint64> new_box_autoadd_u64_0(
+    int value,
+  ) {
+    return _new_box_autoadd_u64_0(
+      value,
+    );
+  }
+
+  late final _new_box_autoadd_u64_0Ptr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Uint64> Function(ffi.Uint64)>>(
+          'new_box_autoadd_u64_0');
+  late final _new_box_autoadd_u64_0 = _new_box_autoadd_u64_0Ptr
+      .asFunction<ffi.Pointer<ffi.Uint64> Function(int)>();
+
   ffi.Pointer<wire_WalletUnlocked> new_box_autoadd_wallet_unlocked_0() {
     return _new_box_autoadd_wallet_unlocked_0();
   }
@@ -1405,11 +1429,9 @@ class wire_WalletUnlocked extends ffi.Struct {
 }
 
 class wire_TxParameters extends ffi.Struct {
-  @ffi.Uint64()
-  external int gas_price;
+  external ffi.Pointer<ffi.Uint64> gas_price;
 
-  @ffi.Uint64()
-  external int gas_limit;
+  external ffi.Pointer<ffi.Uint64> gas_limit;
 
   @ffi.Uint32()
   external int maturity;

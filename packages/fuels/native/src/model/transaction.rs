@@ -1,6 +1,6 @@
 pub struct TxParameters {
-    pub gas_price: u64,
-    pub gas_limit: u64,
+    pub gas_price: Option<u64>,
+    pub gas_limit: Option<u64>,
     pub maturity: u32,
 }
 
