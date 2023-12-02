@@ -11,6 +11,8 @@ use fuels_accounts::provider::TransactionCost;
 
 use crate::model::error::CustomResult;
 
+const TRANSFER_SCRIPT: [u8; 4] = [36, 0, 0, 0];
+
 pub async fn transfer(
     wallet: &WalletUnlocked,
     to: &Bech32Address,
@@ -108,7 +110,7 @@ async fn build_transfer_tx(wallet: &WalletUnlocked,
         outputs,
         tx_params,
         network_info,
-    );
+    ).with_script(TRANSFER_SCRIPT.to_vec()); // We manually add script here, because otherwise the fee estimation breaks
 
     wallet.add_witnessses(&mut tx_builder);
     wallet.adjust_for_fee(&mut tx_builder, amount).await?;
