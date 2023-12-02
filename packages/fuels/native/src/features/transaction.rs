@@ -46,10 +46,23 @@ pub async fn send_transaction(
     provider: &Provider,
     encoded_tx: Vec<u8>,
 ) -> CustomResult<String> {
-    let decoded_tx: FuelTransaction = FuelTransaction::from_bytes(&encoded_tx)?;
-    let tx = wrap_fuel_transaction(decoded_tx)?;
+    let tx = decode_transaction(&encoded_tx)?;
     let tx_id = provider.send_transaction(tx).await?;
     Ok(tx_id.to_string())
+}
+
+pub async fn estimate_transaction_cost(
+    provider: &Provider,
+    encoded_tx: Vec<u8>,
+) -> CustomResult<TransactionCost> {
+    let tx = decode_transaction(&encoded_tx)?;
+    let cost = provider.estimate_transaction_cost(tx, None).await?;
+    Ok(cost)
+}
+
+fn decode_transaction(encoded_tx: &Vec<u8>) -> CustomResult<TransactionType> {
+    let decoded_tx: FuelTransaction = FuelTransaction::from_bytes(&encoded_tx)?;
+    Ok(wrap_fuel_transaction(decoded_tx)?)
 }
 
 fn wrap_fuel_transaction(value: FuelTransaction) -> CustomResult<TransactionType> {
