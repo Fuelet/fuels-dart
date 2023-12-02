@@ -1,63 +1,20 @@
-import 'package:flutter_fuels/model/call_result.dart';
-import 'package:flutter_fuels/model/transaction_cost.dart';
+import 'package:flutter_fuels/wallet/dart_wallet_unlocked.dart';
 
 abstract class BaseWallet {
-  Future<Map> generateNewWallet({required String networkUrl});
+  Future<DartWalletUnlocked> generateNewWallet({required String networkUrl});
 
-  Future<Map> newFromMnemonic({
+  Future<DartWalletUnlocked> newFromMnemonic({
     required String networkUrl,
     required String mnemonic,
   });
 
-  Future<Map> newFromMnemonicAndPath(
+  Future<DartWalletUnlocked> newFromMnemonicAndPath(
       {required String networkUrl,
       required String mnemonic,
       required String derivationPath});
 
-  Future<Map> newFromPrivateKey({
+  Future<DartWalletUnlocked> newFromPrivateKey({
     required String networkUrl,
     required String privateKey,
-  });
-
-  Future<String> transfer({
-    required String networkUrl,
-    required String privateKey,
-    required String destinationB256Address,
-    required int fractionalAmount,
-    required String assetId,
-    required int gasPrice,
-    required int gasLimit,
-    required int maturity,
-  });
-
-  Future<String> signMessage({
-    required String networkUrl,
-    required String privateKey,
-    required String message,
-  });
-
-  Future<String> sendTransaction({
-    required String networkUrl,
-    required String privateKey,
-    required dynamic transactionRequest,
-  });
-
-  Future<CallResult> simulateTransaction({
-    required String networkUrl,
-    required String privateKey,
-    required dynamic transactionRequest,
-  });
-
-  Future<TransactionCost> getTransactionCost({
-    required String networkUrl,
-    required dynamic transactionRequest,
-  });
-
-  Future<String> genTransferTransactionRequest({
-    required String networkUrl,
-    required String privateKey,
-    required String destinationB256Address,
-    required num fractionalAmount,
-    required String assetId,
   });
 }

@@ -1,16 +1,15 @@
-import 'package:flutter_fuels/model/call_result.dart';
-import 'package:flutter_fuels/model/transaction_cost.dart';
+import 'package:flutter_fuels/wallet/dart_wallet_unlocked.dart';
 
 import 'base_wallet.dart';
 
 class FuelWalletImpl extends BaseWallet {
   @override
-  Future<Map> generateNewWallet({required String networkUrl}) {
+  Future<DartWalletUnlocked> generateNewWallet({required String networkUrl}) {
     throw Exception('Stub implementation');
   }
 
   @override
-  Future<Map> newFromMnemonic({
+  Future<DartWalletUnlocked> newFromMnemonic({
     required String networkUrl,
     required String mnemonic,
   }) {
@@ -18,7 +17,7 @@ class FuelWalletImpl extends BaseWallet {
   }
 
   @override
-  Future<Map> newFromMnemonicAndPath(
+  Future<DartWalletUnlocked> newFromMnemonicAndPath(
       {required String networkUrl,
       required String mnemonic,
       required String derivationPath}) {
@@ -26,66 +25,10 @@ class FuelWalletImpl extends BaseWallet {
   }
 
   @override
-  Future<Map> newFromPrivateKey({
+  Future<DartWalletUnlocked> newFromPrivateKey({
     required String networkUrl,
     required String privateKey,
   }) {
-    throw Exception('Stub implementation');
-  }
-
-  @override
-  Future<String> transfer({
-    required String networkUrl,
-    required String privateKey,
-    required String destinationB256Address,
-    required int fractionalAmount,
-    required String assetId,
-    required int gasPrice,
-    required int gasLimit,
-    required int maturity,
-  }) {
-    throw Exception('Stub implementation');
-  }
-
-  @override
-  Future<String> signMessage({
-    required String networkUrl,
-    required String privateKey,
-    required String message,
-  }) {
-    throw Exception('Stub implementation');
-  }
-
-  @override
-  Future<String> sendTransaction({
-    required String networkUrl,
-    required String privateKey,
-    required dynamic transactionRequest,
-  }) {
-    throw Exception('Stub implementation');
-  }
-
-  @override
-  Future<CallResult> simulateTransaction(
-      {required String networkUrl,
-      required String privateKey,
-      required transactionRequest}) {
-    throw Exception('Stub implementation');
-  }
-
-  @override
-  Future<TransactionCost> getTransactionCost(
-      {required String networkUrl, required transactionRequest}) {
-    throw Exception('Stub implementation');
-  }
-
-  @override
-  Future<String> genTransferTransactionRequest(
-      {required String networkUrl,
-      required String privateKey,
-      required String destinationB256Address,
-      required num fractionalAmount,
-      required String assetId}) {
     throw Exception('Stub implementation');
   }
 }

@@ -1,35 +1,17 @@
-import 'package:bip39_mnemonic/bip39_mnemonic.dart';
 import 'package:flutter_fuels/model/call_result.dart';
 import 'package:flutter_fuels/model/transaction_cost.dart';
+import 'package:flutter_fuels/utils/address_utils.dart';
+import 'package:flutter_fuels/utils/mnemonic_utils.dart';
+import 'package:flutter_fuels/wallet/dart_wallet_unlocked.dart';
 
 import 'platform_impl/stub_wallet.dart'
     if (dart.library.io) 'platform_impl/mobile_wallet.dart'
     if (dart.library.html) 'platform_impl/web_wallet.dart';
 
 class FuelWallet {
-  final String? mnemonicPhrase;
-  final String bech32Address;
-  final String b256Address;
-  final String privateKey;
-  final String networkUrl;
+  final DartWalletUnlocked _walletUnlocked;
 
-  FuelWallet({
-    required this.bech32Address,
-    required b256Address,
-    required this.mnemonicPhrase,
-    required this.privateKey,
-    required this.networkUrl,
-  }) : b256Address = _addHexPrefix(b256Address);
-
-  factory FuelWallet.fromData(Map data, String networkUrl) {
-    return FuelWallet(
-      bech32Address: data['address']['bech32Address'],
-      b256Address: data['address']['b256Address'],
-      mnemonicPhrase: data['mnemonicPhrase'],
-      privateKey: data['privateKey'],
-      networkUrl: networkUrl,
-    );
-  }
+  FuelWallet(this._walletUnlocked);
 
   static final _wallet = FuelWalletImpl();
 
@@ -37,8 +19,9 @@ class FuelWallet {
   static Future<FuelWallet> generateNewWallet({
     required String networkUrl,
   }) async {
-    final data = await _wallet.generateNewWallet(networkUrl: networkUrl);
-    return FuelWallet.fromData(data, networkUrl);
+    final walletUnlocked =
+        await _wallet.generateNewWallet(networkUrl: networkUrl);
+    return FuelWallet(walletUnlocked);
   }
 
   /// Imports the wallet from the provided private key. Mnemonic phrase would
@@ -47,11 +30,11 @@ class FuelWallet {
     required String networkUrl,
     required String privateKey,
   }) async {
-    final data = await _wallet.newFromPrivateKey(
+    final walletUnlocked = await _wallet.newFromPrivateKey(
       networkUrl: networkUrl,
       privateKey: privateKey,
     );
-    return FuelWallet.fromData(data, networkUrl);
+    return FuelWallet(walletUnlocked);
   }
 
   /// Imports the wallet from the provided mnemonic phrase
@@ -59,12 +42,12 @@ class FuelWallet {
     required String networkUrl,
     required String mnemonic,
   }) async {
-    _validateMnemonicPhrase(mnemonic);
-    final data = await _wallet.newFromMnemonic(
+    validateMnemonicPhrase(mnemonic);
+    final walletUnlocked = await _wallet.newFromMnemonic(
       networkUrl: networkUrl,
       mnemonic: mnemonic,
     );
-    return FuelWallet.fromData(data, networkUrl);
+    return FuelWallet(walletUnlocked);
   }
 
   /// Imports the wallet from the provided mnemonic phrase and derivation path
@@ -73,12 +56,12 @@ class FuelWallet {
     required String mnemonic,
     required String derivationPath,
   }) async {
-    _validateMnemonicPhrase(mnemonic);
-    final data = await _wallet.newFromMnemonicAndPath(
+    validateMnemonicPhrase(mnemonic);
+    final walletUnlocked = await _wallet.newFromMnemonicAndPath(
         networkUrl: networkUrl,
         mnemonic: mnemonic,
         derivationPath: derivationPath);
-    return FuelWallet.fromData(data, networkUrl);
+    return FuelWallet(walletUnlocked);
   }
 
   /// Derives the wallet from the provided mnemonic and index. Constructs the
@@ -99,88 +82,63 @@ class FuelWallet {
         derivationPath: derivationPath);
   }
 
+  String? get mnemonicPhrase => _walletUnlocked.mnemonicPhrase;
+
+  String get bech32Address => _walletUnlocked.bech32Address;
+
+  String get b256Address => addHexPrefix(_walletUnlocked.b256Address);
+
+  String get privateKey => _walletUnlocked.privateKey;
+
+  String get networkUrl => _walletUnlocked.networkUrl;
+
   Future<String> transfer({
     required String destinationB256Address,
     required int fractionalAmount,
     required String assetId,
-    required int gasPrice,
-    required int gasLimit,
-    required int maturity,
   }) {
-    return _wallet.transfer(
-      networkUrl: networkUrl,
-      privateKey: privateKey,
-      destinationB256Address: _addHexPrefix(destinationB256Address),
-      fractionalAmount: fractionalAmount,
-      assetId: assetId,
-      gasPrice: gasPrice,
-      gasLimit: gasLimit,
-      maturity: maturity,
-    );
+    final transferRequest = _walletUnlocked.genTransferTransactionRequest(
+        destinationB256Address: destinationB256Address,
+        fractionalAmount: fractionalAmount,
+        assetId: assetId);
+    return _walletUnlocked.sendTransaction(transactionRequest: transferRequest);
   }
 
   Future<String> signMessage({
     required String message,
   }) {
-    return _wallet.signMessage(
-      networkUrl: networkUrl,
-      privateKey: privateKey,
-      message: message,
-    );
+    return _walletUnlocked.signMessage(message: message);
   }
 
   Future<String> sendTransaction({
     required dynamic transactionRequest,
   }) {
-    return _wallet.sendTransaction(
-      networkUrl: networkUrl,
-      privateKey: privateKey,
-      transactionRequest: transactionRequest,
-    );
+    return _walletUnlocked.sendTransaction(
+        transactionRequest: transactionRequest);
   }
 
   Future<CallResult> simulateTransaction({
     required dynamic transactionRequest,
   }) {
-    return _wallet.simulateTransaction(
-      networkUrl: networkUrl,
-      privateKey: privateKey,
-      transactionRequest: transactionRequest,
-    );
+    return _walletUnlocked.simulateTransaction(
+        transactionRequest: transactionRequest);
   }
 
   Future<TransactionCost> getTransactionCost({
     required dynamic transactionRequest,
   }) async {
-    return _wallet.getTransactionCost(
-      networkUrl: networkUrl,
-      transactionRequest: transactionRequest,
-    );
+    return _walletUnlocked.getTransactionCost(
+        transactionRequest: transactionRequest);
   }
 
   Future<String> genTransferTransactionRequest(
       {required String destinationB256Address,
-      required num fractionalAmount,
+      required int fractionalAmount,
       required String assetId}) {
-    return _wallet.genTransferTransactionRequest(
-      networkUrl: networkUrl,
-      privateKey: privateKey,
+    return _walletUnlocked.genTransferTransactionRequest(
       destinationB256Address: destinationB256Address,
       fractionalAmount: fractionalAmount,
       assetId: assetId,
     );
-  }
-
-  static String _addHexPrefix(String address) {
-    if (address.startsWith('0x')) {
-      return address;
-    }
-    return '0x$address';
-  }
-
-  static void _validateMnemonicPhrase(String mnemonic) {
-    // tries to construct mnemonic from sentence and throws exceptions
-    // in case of any errors
-    Mnemonic.fromSentence(mnemonic, Language.english);
   }
 }
