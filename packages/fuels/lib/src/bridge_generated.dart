@@ -39,16 +39,6 @@ abstract class Fuels {
   FlutterRustBridgeTaskConstMeta
       get kNewFromMnemonicPhraseWithPathStaticMethodWalletUnlockedConstMeta;
 
-  Future<String> transferMethodWalletUnlocked(
-      {required WalletUnlocked that,
-      required Bech32Address to,
-      required int amount,
-      required String asset,
-      required TxParameters txParameters,
-      dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta get kTransferMethodWalletUnlockedConstMeta;
-
   Future<Uint8List> genTransferTxRequestMethodWalletUnlocked(
       {required WalletUnlocked that,
       required Bech32Address to,
@@ -187,18 +177,6 @@ class TransactionCost {
   });
 }
 
-class TxParameters {
-  final int? gasPrice;
-  final int? gasLimit;
-  final int maturity;
-
-  const TxParameters({
-    this.gasPrice,
-    this.gasLimit,
-    required this.maturity,
-  });
-}
-
 class WalletUnlocked {
   final Fuels bridge;
   final String privateKey;
@@ -243,20 +221,6 @@ class WalletUnlocked {
           dynamic hint}) =>
       bridge.newFromMnemonicPhraseWithPathStaticMethodWalletUnlocked(
           phrase: phrase, path: path, provider: provider, hint: hint);
-
-  Future<String> transfer(
-          {required Bech32Address to,
-          required int amount,
-          required String asset,
-          required TxParameters txParameters,
-          dynamic hint}) =>
-      bridge.transferMethodWalletUnlocked(
-        that: this,
-        to: to,
-        amount: amount,
-        asset: asset,
-        txParameters: txParameters,
-      );
 
   Future<Uint8List> genTransferTxRequest(
           {required Bech32Address to,
@@ -397,35 +361,6 @@ class FuelsImpl implements Fuels {
                 "new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked",
             argNames: ["phrase", "path", "provider"],
           );
-
-  Future<String> transferMethodWalletUnlocked(
-      {required WalletUnlocked that,
-      required Bech32Address to,
-      required int amount,
-      required String asset,
-      required TxParameters txParameters,
-      dynamic hint}) {
-    var arg0 = _platform.api2wire_box_autoadd_wallet_unlocked(that);
-    var arg1 = _platform.api2wire_box_autoadd_bech_32_address(to);
-    var arg2 = _platform.api2wire_u64(amount);
-    var arg3 = _platform.api2wire_String(asset);
-    var arg4 = _platform.api2wire_box_autoadd_tx_parameters(txParameters);
-    return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner.wire_transfer__method__WalletUnlocked(
-          port_, arg0, arg1, arg2, arg3, arg4),
-      parseSuccessData: _wire2api_String,
-      parseErrorData: null,
-      constMeta: kTransferMethodWalletUnlockedConstMeta,
-      argValues: [that, to, amount, asset, txParameters],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta get kTransferMethodWalletUnlockedConstMeta =>
-      const FlutterRustBridgeTaskConstMeta(
-        debugName: "transfer__method__WalletUnlocked",
-        argNames: ["that", "to", "amount", "asset", "txParameters"],
-      );
 
   Future<Uint8List> genTransferTxRequestMethodWalletUnlocked(
       {required WalletUnlocked that,
@@ -717,11 +652,6 @@ class FuelsImpl implements Fuels {
 // Section: api2wire
 
 @protected
-int api2wire_u32(int raw) {
-  return raw;
-}
-
-@protected
 int api2wire_u8(int raw) {
   return raw;
 }
@@ -762,19 +692,6 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
   }
 
   @protected
-  ffi.Pointer<wire_TxParameters> api2wire_box_autoadd_tx_parameters(
-      TxParameters raw) {
-    final ptr = inner.new_box_autoadd_tx_parameters_0();
-    _api_fill_to_wire_tx_parameters(raw, ptr.ref);
-    return ptr;
-  }
-
-  @protected
-  ffi.Pointer<ffi.Uint64> api2wire_box_autoadd_u64(int raw) {
-    return inner.new_box_autoadd_u64_0(api2wire_u64(raw));
-  }
-
-  @protected
   ffi.Pointer<wire_WalletUnlocked> api2wire_box_autoadd_wallet_unlocked(
       WalletUnlocked raw) {
     final ptr = inner.new_box_autoadd_wallet_unlocked_0();
@@ -785,11 +702,6 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
   @protected
   ffi.Pointer<wire_uint_8_list> api2wire_opt_String(String? raw) {
     return raw == null ? ffi.nullptr : api2wire_String(raw);
-  }
-
-  @protected
-  ffi.Pointer<ffi.Uint64> api2wire_opt_box_autoadd_u64(int? raw) {
-    return raw == null ? ffi.nullptr : api2wire_box_autoadd_u64(raw);
   }
 
   @protected
@@ -832,11 +744,6 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
     _api_fill_to_wire_provider(apiObj, wireObj.ref);
   }
 
-  void _api_fill_to_wire_box_autoadd_tx_parameters(
-      TxParameters apiObj, ffi.Pointer<wire_TxParameters> wireObj) {
-    _api_fill_to_wire_tx_parameters(apiObj, wireObj.ref);
-  }
-
   void _api_fill_to_wire_box_autoadd_wallet_unlocked(
       WalletUnlocked apiObj, ffi.Pointer<wire_WalletUnlocked> wireObj) {
     _api_fill_to_wire_wallet_unlocked(apiObj, wireObj.ref);
@@ -844,13 +751,6 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
 
   void _api_fill_to_wire_provider(Provider apiObj, wire_Provider wireObj) {
     wireObj.node_url = api2wire_String(apiObj.nodeUrl);
-  }
-
-  void _api_fill_to_wire_tx_parameters(
-      TxParameters apiObj, wire_TxParameters wireObj) {
-    wireObj.gas_price = api2wire_opt_box_autoadd_u64(apiObj.gasPrice);
-    wireObj.gas_limit = api2wire_opt_box_autoadd_u64(apiObj.gasLimit);
-    wireObj.maturity = api2wire_u32(apiObj.maturity);
   }
 
   void _api_fill_to_wire_wallet_unlocked(
@@ -1052,44 +952,6 @@ class FuelsWire implements FlutterRustBridgeWireBase {
           .asFunction<
               void Function(int, ffi.Pointer<wire_uint_8_list>,
                   ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_Provider>)>();
-
-  void wire_transfer__method__WalletUnlocked(
-    int port_,
-    ffi.Pointer<wire_WalletUnlocked> that,
-    ffi.Pointer<wire_Bech32Address> to,
-    int amount,
-    ffi.Pointer<wire_uint_8_list> asset,
-    ffi.Pointer<wire_TxParameters> tx_parameters,
-  ) {
-    return _wire_transfer__method__WalletUnlocked(
-      port_,
-      that,
-      to,
-      amount,
-      asset,
-      tx_parameters,
-    );
-  }
-
-  late final _wire_transfer__method__WalletUnlockedPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(
-                  ffi.Int64,
-                  ffi.Pointer<wire_WalletUnlocked>,
-                  ffi.Pointer<wire_Bech32Address>,
-                  ffi.Uint64,
-                  ffi.Pointer<wire_uint_8_list>,
-                  ffi.Pointer<wire_TxParameters>)>>(
-      'wire_transfer__method__WalletUnlocked');
-  late final _wire_transfer__method__WalletUnlocked =
-      _wire_transfer__method__WalletUnlockedPtr.asFunction<
-          void Function(
-              int,
-              ffi.Pointer<wire_WalletUnlocked>,
-              ffi.Pointer<wire_Bech32Address>,
-              int,
-              ffi.Pointer<wire_uint_8_list>,
-              ffi.Pointer<wire_TxParameters>)>();
 
   void wire_gen_transfer_tx_request__method__WalletUnlocked(
     int port_,
@@ -1314,31 +1176,6 @@ class FuelsWire implements FlutterRustBridgeWireBase {
   late final _new_box_autoadd_provider_0 = _new_box_autoadd_provider_0Ptr
       .asFunction<ffi.Pointer<wire_Provider> Function()>();
 
-  ffi.Pointer<wire_TxParameters> new_box_autoadd_tx_parameters_0() {
-    return _new_box_autoadd_tx_parameters_0();
-  }
-
-  late final _new_box_autoadd_tx_parameters_0Ptr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<wire_TxParameters> Function()>>(
-          'new_box_autoadd_tx_parameters_0');
-  late final _new_box_autoadd_tx_parameters_0 =
-      _new_box_autoadd_tx_parameters_0Ptr
-          .asFunction<ffi.Pointer<wire_TxParameters> Function()>();
-
-  ffi.Pointer<ffi.Uint64> new_box_autoadd_u64_0(
-    int value,
-  ) {
-    return _new_box_autoadd_u64_0(
-      value,
-    );
-  }
-
-  late final _new_box_autoadd_u64_0Ptr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<ffi.Uint64> Function(ffi.Uint64)>>(
-          'new_box_autoadd_u64_0');
-  late final _new_box_autoadd_u64_0 = _new_box_autoadd_u64_0Ptr
-      .asFunction<ffi.Pointer<ffi.Uint64> Function(int)>();
-
   ffi.Pointer<wire_WalletUnlocked> new_box_autoadd_wallet_unlocked_0() {
     return _new_box_autoadd_wallet_unlocked_0();
   }
@@ -1440,15 +1277,6 @@ final class wire_WalletUnlocked extends ffi.Struct {
   external wire_Provider provider;
 
   external wire_Bech32Address address;
-}
-
-final class wire_TxParameters extends ffi.Struct {
-  external ffi.Pointer<ffi.Uint64> gas_price;
-
-  external ffi.Pointer<ffi.Uint64> gas_limit;
-
-  @ffi.Uint32()
-  external int maturity;
 }
 
 typedef DartPostCObjectFnType = ffi.Pointer<
