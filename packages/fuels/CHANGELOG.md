@@ -1,3 +1,7 @@
+## 1.18.0
+
+ - **FEAT**: remove the transfer method. ([67d3e4ce](https://github.com/Fuelet/fuels-dart/commit/67d3e4ce4632288616e3c77188cb93400fac1e57))
+
 ## 1.17.0
 
  - **REFACTOR**: move all logic to separate packages. ([02b46ee0](https://github.com/Fuelet/fuels-dart/commit/02b46ee04c35663cb8ed3f5c0972620fdded67e8))

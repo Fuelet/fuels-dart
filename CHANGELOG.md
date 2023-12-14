@@ -3,6 +3,33 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-12-14
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flutter_fuels` - `v0.0.29`](#flutter_fuels---v0029)
+ - [`fuels` - `v1.18.0`](#fuels---v1180)
+
+---
+
+#### `flutter_fuels` - `v0.0.29`
+
+ - **FEAT**: add exports for the model. ([10da263f](https://github.com/Fuelet/fuels-dart/commit/10da263fd4ff9d823e238c4cf41323667411eea9))
+ - **FEAT**: remove the transfer method. ([67d3e4ce](https://github.com/Fuelet/fuels-dart/commit/67d3e4ce4632288616e3c77188cb93400fac1e57))
+
+#### `fuels` - `v1.18.0`
+
+ - **FEAT**: remove the transfer method. ([67d3e4ce](https://github.com/Fuelet/fuels-dart/commit/67d3e4ce4632288616e3c77188cb93400fac1e57))
+
+
 ## 2023-12-02
 
 ### Changes

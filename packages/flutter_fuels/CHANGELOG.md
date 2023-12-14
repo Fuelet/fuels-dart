@@ -1,3 +1,8 @@
+## 0.0.29
+
+ - **FEAT**: add exports for the model. ([10da263f](https://github.com/Fuelet/fuels-dart/commit/10da263fd4ff9d823e238c4cf41323667411eea9))
+ - **FEAT**: remove the transfer method. ([67d3e4ce](https://github.com/Fuelet/fuels-dart/commit/67d3e4ce4632288616e3c77188cb93400fac1e57))
+
 ## 0.0.28
 
  - **FIX**: fix mobile implementation. ([9e5c8c3c](https://github.com/Fuelet/fuels-dart/commit/9e5c8c3ca0b2eb3433788aada17f84349386c66c))
