@@ -16,18 +16,6 @@ external Object newWalletFromMnemonicAndPath(
 @JS('newWalletFromPrivateKey')
 external Object newWalletFromPrivateKey(String networkUrl, String privateKey);
 
-@JS('transfer')
-external Object transfer(
-  String privateKey,
-  String networkUrl,
-  String destinationB256Address,
-  num fractionanAmount,
-  String assetId,
-  num gasPrice,
-  num gasLimit,
-  num maturity,
-);
-
 @JS('signMessage')
 external Object signMessage(
   String privateKey,

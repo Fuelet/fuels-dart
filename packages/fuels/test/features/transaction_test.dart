@@ -25,17 +25,6 @@ void main() {
     expect(txCost.gasUsed > 0, true);
   });
 
-  test('test transfer eth', () async {
-    WalletUnlocked newWallet = await createRandomWallet();
-    WalletUnlocked testWallet = await importWalletWithPK(testWalletPrivateKey);
-    final txId = await testWallet.transfer(
-        to: newWallet.address,
-        amount: _transferAmount,
-        asset: ethAsset,
-        txParameters: _txParams);
-    expect(txId.isNotEmpty, true);
-  }, skip: 'Should be run manually');
-
   test('test transfer eth request creation', () async {
     WalletUnlocked newWallet = await createRandomWallet();
     WalletUnlocked testWallet = await importWalletWithPK(testWalletPrivateKey);

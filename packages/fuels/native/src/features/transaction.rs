@@ -13,18 +13,6 @@ use crate::model::error::CustomResult;
 
 const TRANSFER_SCRIPT: [u8; 4] = [36, 0, 0, 0];
 
-pub async fn transfer(
-    wallet: &WalletUnlocked,
-    to: &Bech32Address,
-    amount: u64,
-    asset: String,
-    tx_parameters: TxParameters,
-) -> CustomResult<String> {
-    let asset_id = AssetId::from_str(&asset)?;
-    let (tx_id, _) = wallet.transfer(to, amount, asset_id, tx_parameters).await?;
-    Ok(tx_id.to_string())
-}
-
 /// Clones the transfer function but doesn't submit the transaction
 /// TODO: do not sign the tx?
 pub async fn gen_transfer_tx_request(

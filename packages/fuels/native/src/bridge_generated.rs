@@ -21,7 +21,6 @@ use std::sync::Arc;
 // Section: imports
 
 use crate::model::transaction::TransactionCost;
-use crate::model::transaction::TxParameters;
 
 // Section: wire functions
 
@@ -108,38 +107,6 @@ fn wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked_impl(
                     api_phrase,
                     api_path,
                     api_provider,
-                ))
-            }
-        },
-    )
-}
-fn wire_transfer__method__WalletUnlocked_impl(
-    port_: MessagePort,
-    that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
-    to: impl Wire2Api<Bech32Address> + UnwindSafe,
-    amount: impl Wire2Api<u64> + UnwindSafe,
-    asset: impl Wire2Api<String> + UnwindSafe,
-    tx_parameters: impl Wire2Api<TxParameters> + UnwindSafe,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, String, _>(
-        WrapInfo {
-            debug_name: "transfer__method__WalletUnlocked",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || {
-            let api_that = that.wire2api();
-            let api_to = to.wire2api();
-            let api_amount = amount.wire2api();
-            let api_asset = asset.wire2api();
-            let api_tx_parameters = tx_parameters.wire2api();
-            move |task_callback| {
-                Result::<_, ()>::Ok(WalletUnlocked::transfer(
-                    &api_that,
-                    api_to,
-                    api_amount,
-                    api_asset,
-                    api_tx_parameters,
                 ))
             }
         },
@@ -337,11 +304,6 @@ where
     }
 }
 
-impl Wire2Api<u32> for u32 {
-    fn wire2api(self) -> u32 {
-        self
-    }
-}
 impl Wire2Api<u64> for u64 {
     fn wire2api(self) -> u64 {
         self

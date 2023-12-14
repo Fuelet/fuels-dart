@@ -61,32 +61,6 @@ class WalletInterface {
     return walletToJson(wallet);
   }
 
-  async transfer(
-    privateKey: string,
-    networkUrl: string,
-    destinationB256Address: string,
-    fractionalAmount: number,
-    assetId: string,
-    gasPrice: number,
-    gasLimit: number,
-    maturity: number
-  ): Promise<string> {
-    let provider = await Provider.create(networkUrl);
-    let wallet = Wallet.fromPrivateKey(privateKey, provider);
-    let res = await wallet.transfer(
-      Address.fromB256(destinationB256Address),
-      fractionalAmount,
-      assetId,
-      {
-        gasLimit,
-        gasPrice,
-        maturity,
-      }
-    );
-
-    return res.id;
-  }
-
   async signMessage(
     privateKey: string,
     networkUrl: string,

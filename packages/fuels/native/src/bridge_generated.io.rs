@@ -40,18 +40,6 @@ pub extern "C" fn wire_new_from_mnemonic_phrase_with_path__static_method__Wallet
 }
 
 #[no_mangle]
-pub extern "C" fn wire_transfer__method__WalletUnlocked(
-    port_: i64,
-    that: *mut wire_WalletUnlocked,
-    to: *mut wire_Bech32Address,
-    amount: u64,
-    asset: *mut wire_uint_8_list,
-    tx_parameters: *mut wire_TxParameters,
-) {
-    wire_transfer__method__WalletUnlocked_impl(port_, that, to, amount, asset, tx_parameters)
-}
-
-#[no_mangle]
 pub extern "C" fn wire_gen_transfer_tx_request__method__WalletUnlocked(
     port_: i64,
     that: *mut wire_WalletUnlocked,
@@ -144,16 +132,6 @@ pub extern "C" fn new_box_autoadd_provider_0() -> *mut wire_Provider {
 }
 
 #[no_mangle]
-pub extern "C" fn new_box_autoadd_tx_parameters_0() -> *mut wire_TxParameters {
-    support::new_leak_box_ptr(wire_TxParameters::new_with_null_ptr())
-}
-
-#[no_mangle]
-pub extern "C" fn new_box_autoadd_u64_0(value: u64) -> *mut u64 {
-    support::new_leak_box_ptr(value)
-}
-
-#[no_mangle]
 pub extern "C" fn new_box_autoadd_wallet_unlocked_0() -> *mut wire_WalletUnlocked {
     support::new_leak_box_ptr(wire_WalletUnlocked::new_with_null_ptr())
 }
@@ -216,17 +194,6 @@ impl Wire2Api<Provider> for *mut wire_Provider {
         Wire2Api::<Provider>::wire2api(*wrap).into()
     }
 }
-impl Wire2Api<TxParameters> for *mut wire_TxParameters {
-    fn wire2api(self) -> TxParameters {
-        let wrap = unsafe { support::box_from_leak_ptr(self) };
-        Wire2Api::<TxParameters>::wire2api(*wrap).into()
-    }
-}
-impl Wire2Api<u64> for *mut u64 {
-    fn wire2api(self) -> u64 {
-        unsafe { *support::box_from_leak_ptr(self) }
-    }
-}
 impl Wire2Api<WalletUnlocked> for *mut wire_WalletUnlocked {
     fn wire2api(self) -> WalletUnlocked {
         let wrap = unsafe { support::box_from_leak_ptr(self) };
@@ -238,15 +205,6 @@ impl Wire2Api<Provider> for wire_Provider {
     fn wire2api(self) -> Provider {
         Provider {
             node_url: self.node_url.wire2api(),
-        }
-    }
-}
-impl Wire2Api<TxParameters> for wire_TxParameters {
-    fn wire2api(self) -> TxParameters {
-        TxParameters {
-            gas_price: self.gas_price.wire2api(),
-            gas_limit: self.gas_limit.wire2api(),
-            maturity: self.maturity.wire2api(),
         }
     }
 }
@@ -287,14 +245,6 @@ pub struct wire_Bech32Address {
 #[derive(Clone)]
 pub struct wire_Provider {
     node_url: *mut wire_uint_8_list,
-}
-
-#[repr(C)]
-#[derive(Clone)]
-pub struct wire_TxParameters {
-    gas_price: *mut u64,
-    gas_limit: *mut u64,
-    maturity: u32,
 }
 
 #[repr(C)]
@@ -356,22 +306,6 @@ impl NewWithNullPtr for wire_Provider {
 }
 
 impl Default for wire_Provider {
-    fn default() -> Self {
-        Self::new_with_null_ptr()
-    }
-}
-
-impl NewWithNullPtr for wire_TxParameters {
-    fn new_with_null_ptr() -> Self {
-        Self {
-            gas_price: core::ptr::null_mut(),
-            gas_limit: core::ptr::null_mut(),
-            maturity: Default::default(),
-        }
-    }
-}
-
-impl Default for wire_TxParameters {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }

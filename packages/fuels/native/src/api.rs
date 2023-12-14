@@ -8,7 +8,7 @@ use fuel_tx::Address;
 pub use fuels::prelude::{Bech32Address as NativeBech32Address, Provider as NativeProvider, WalletUnlocked as NativeWalletUnlocked};
 
 use crate::features::{crypto, transaction, wallet};
-use crate::model::transaction::{TransactionCost, TxParameters};
+use crate::model::transaction::TransactionCost;
 
 pub struct WalletUnlocked {
     pub private_key: String,
@@ -43,18 +43,6 @@ impl WalletUnlocked {
 
     pub fn new_from_mnemonic_phrase_with_path(phrase: String, path: String, provider: Provider) -> WalletUnlocked {
         wallet::new_from_mnemonic_phrase_with_path(phrase, path, provider).unwrap()
-    }
-
-    #[tokio::main]
-    pub async fn transfer(
-        &self,
-        to: Bech32Address,
-        amount: u64,
-        asset: String,
-        tx_parameters: TxParameters,
-    ) -> String {
-        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
-        transaction::transfer(&native_wallet_unlocked, &*to.native, amount, asset, tx_parameters.into()).await.unwrap()
     }
 
     #[tokio::main]
