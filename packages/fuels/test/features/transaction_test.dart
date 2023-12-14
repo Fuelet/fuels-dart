@@ -5,7 +5,6 @@ import 'package:test/test.dart';
 
 import '../test_utils.dart';
 
-const _txParams = TxParameters(gasPrice: 1, gasLimit: 1000000, maturity: 0);
 const _transferAmount = 1;
 
 // TODO: do not depend on external state
