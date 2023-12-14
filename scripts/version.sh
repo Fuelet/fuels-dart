@@ -6,7 +6,8 @@ CURR_VERSION=fuels-v`awk '/^version: /{print $2}' packages/fuels/pubspec.yaml`
 APPLE_HEADER="release_tag_name = '$CURR_VERSION' # generated; do not edit"
 sed -i.bak "1 s/.*/$APPLE_HEADER/" packages/flutter_fuels/ios/flutter_fuels.podspec
 #sed -i.bak "1 s/.*/$APPLE_HEADER/" packages/flutter_fuels/macos/flutter_fuels.podspec
-rm packages/flutter_fuels/macos/*.bak packages/flutter_fuels/ios/*.bak
+#rm packages/flutter_fuels/macos/*.bak packages/flutter_fuels/ios/*.bak
+rm packages/flutter_fuels/ios/*.bak
 
 # CMake platforms (Linux, Windows, and Android)
 CMAKE_HEADER="set(LibraryVersion \"$CURR_VERSION\") # generated; do not edit"
