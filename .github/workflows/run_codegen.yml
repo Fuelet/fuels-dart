@@ -21,7 +21,7 @@ jobs:
           just-version: 1.9.0
 
       - name: Install FRB
-        run: cargo install --version 1.75.3 flutter_rust_bridge_codegen
+        run: cargo install --version 1.82.4 flutter_rust_bridge_codegen
 
       - name: Install cargo-expand
         run: cargo install cargo-expand
