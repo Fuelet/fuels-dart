@@ -3,6 +3,34 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-12-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`fuels` - `v1.18.1`](#fuels---v1181)
+ - [`flutter_fuels` - `v0.0.29+1`](#flutter_fuels---v00291)
+
+Packages with dependency updates only:
+
+> Packages listed below depend on other packages in this workspace that have had changes. Their versions have been incremented to bump the minimum dependency versions of the packages they depend upon in this project.
+
+ - `flutter_fuels` - `v0.0.29+1`
+
+---
+
+#### `fuels` - `v1.18.1`
+
+ - **FIX**: base fee calculation. ([a2dfee91](https://github.com/Fuelet/fuels-dart/commit/a2dfee913301358173cb29fb27fac6154d0d93db))
+
+
 ## 2023-12-14
 
 ### Changes

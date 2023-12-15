@@ -1,3 +1,7 @@
+## 0.0.29+1
+
+ - Update a dependency to the latest release.
+
 ## 0.0.29
 
  - **FEAT**: add exports for the model. ([10da263f](https://github.com/Fuelet/fuels-dart/commit/10da263fd4ff9d823e238c4cf41323667411eea9))

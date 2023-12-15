@@ -1,3 +1,7 @@
+## 1.18.1
+
+ - **FIX**: base fee calculation. ([a2dfee91](https://github.com/Fuelet/fuels-dart/commit/a2dfee913301358173cb29fb27fac6154d0d93db))
+
 ## 1.18.0
 
  - **FEAT**: remove the transfer method. ([67d3e4ce](https://github.com/Fuelet/fuels-dart/commit/67d3e4ce4632288616e3c77188cb93400fac1e57))
