@@ -101,7 +101,9 @@ async fn build_transfer_tx(wallet: &WalletUnlocked,
     ).with_script(TRANSFER_SCRIPT.to_vec()); // We manually add script here, because otherwise the fee estimation breaks
 
     wallet.add_witnessses(&mut tx_builder);
-    wallet.adjust_for_fee(&mut tx_builder, amount).await?;
+
+    let used_base_amount = if asset_id == AssetId::BASE { amount } else { 0 };
+    wallet.adjust_for_fee(&mut tx_builder, used_base_amount).await?;
 
     let tx = tx_builder.build()?;
     Ok(tx)
