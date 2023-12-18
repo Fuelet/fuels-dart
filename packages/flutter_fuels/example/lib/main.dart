@@ -3,7 +3,6 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_fuels/flutter_fuels.dart';
-import 'package:flutter_fuels/model/transaction_cost.dart';
 
 const _betaApiUrl = 'https://beta-4.fuel.network';
 const _ethAssetId =
@@ -25,8 +24,8 @@ String _convertToEth(num value) {
   return '${ethValue.toStringAsFixed(9)} ETH';
 }
 
-String _minMaxFees(TransactionCost transactionCost) {
-  return 'min fee: ${_convertToEth(transactionCost.minFee)}, max fee: ${_convertToEth(transactionCost.maxFee)}';
+String _showTxCost(TransactionCost transactionCost) {
+  return 'min fee: ${_convertToEth(transactionCost.minFee)}, gas used: ${_convertToEth(transactionCost.gasUsed)}';
 }
 
 class _MyAppState extends State<MyApp> {
@@ -121,7 +120,7 @@ class _MyAppState extends State<MyApp> {
                 SelectableText(
                   _estimatedTxCost == null
                       ? 'null'
-                      : _minMaxFees(_estimatedTxCost!),
+                      : _showTxCost(_estimatedTxCost!),
                   style: textStyle,
                   textAlign: TextAlign.center,
                 ),
@@ -186,8 +185,8 @@ class _MyAppState extends State<MyApp> {
           destinationB256Address: derivedWallet1.b256Address,
           fractionalAmount: 1,
           assetId: _ethAssetId);
-      estimatedTxCost =
-          await wallet.getTransactionCost(transactionRequest: txRequest);
+      estimatedTxCost = await wallet.getTransactionCost(
+          transactionRequestHexOrJson: txRequest);
     } catch (e) {
       txRequest = e.toString();
     }
@@ -209,7 +208,7 @@ class _MyAppState extends State<MyApp> {
     final String txLink;
     if (_testTxRequest != null && _currentWallet != null) {
       final txId = await _currentWallet!
-          .sendTransaction(transactionRequest: _testTxRequest);
+          .sendTransaction(transactionRequestHexOrJson: _testTxRequest!);
       txLink =
           'https://fuellabs.github.io/block-explorer-v2/beta-4/#/transaction/$txId';
     } else {

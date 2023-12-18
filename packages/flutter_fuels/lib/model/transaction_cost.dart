@@ -2,7 +2,7 @@ class TransactionCost {
   final int minGasPrice;
   final int gasPrice;
   final int gasUsed;
-  final int minFee;
+  final int minFee; // TODO: use usedFee when beta-5 is out
 
   TransactionCost(
       {required this.minGasPrice,
