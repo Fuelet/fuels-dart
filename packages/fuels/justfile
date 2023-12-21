@@ -15,6 +15,7 @@ gen:
             --rust-input native/src/api.rs \
             --dart-output lib/src/bridge_generated.dart \
             --c-output '../flutter_fuels/ios/Classes/frb.h' \
+            --extra-c-output-path '../flutter_fuels/macos/Classes/' \
             --llvm-path /opt/homebrew/opt/llvm \
         && break || ((ATTEMPT++)); echo 'Retrying...';\
     done
