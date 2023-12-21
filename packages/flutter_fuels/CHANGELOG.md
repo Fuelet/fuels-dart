@@ -1,3 +1,7 @@
+## 0.0.29+2
+
+ - **FIX**: update example. ([322d0757](https://github.com/Fuelet/fuels-dart/commit/322d0757428143e56e158497362a952c8a2a0665))
+
 ## 0.0.29+1
 
  - Update a dependency to the latest release.

@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2023-12-21
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flutter_fuels` - `v0.0.29+2`](#flutter_fuels---v00292)
+
+---
+
+#### `flutter_fuels` - `v0.0.29+2`
+
+ - **FIX**: update example. ([322d0757](https://github.com/Fuelet/fuels-dart/commit/322d0757428143e56e158497362a952c8a2a0665))
+
+
 ## 2023-12-15
 
 ### Changes
