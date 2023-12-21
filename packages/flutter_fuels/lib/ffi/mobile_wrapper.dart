@@ -10,13 +10,16 @@ const _base = 'fuels';
 const _flutterLibName = 'flutter_$_base';
 
 DynamicLibrary createLibraryImpl() {
-  if (Platform.isIOS || Platform.isMacOS) {
+  if (Platform.isIOS) {
     return DynamicLibrary.open('$_flutterLibName.framework/$_flutterLibName');
-  } else if (Platform.isWindows) {
-    return DynamicLibrary.open('$_base.dll');
-  } else {
-    return DynamicLibrary.open('lib$_base.so');
   }
+  if (Platform.isWindows) {
+    return DynamicLibrary.open('$_base.dll');
+  }
+  if (Platform.isMacOS) {
+    return DynamicLibrary.executable();
+  }
+  return DynamicLibrary.open('lib$_base.so');
 }
 
 Fuels createWrapper(ExternalLibrary lib) {
