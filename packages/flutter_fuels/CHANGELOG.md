@@ -1,3 +1,7 @@
+## 0.0.29+3
+
+ - **FIX**: change macos lib creation. ([d33011c9](https://github.com/Fuelet/fuels-dart/commit/d33011c9f7e2fd11e994f0b7da1771e1ed50b934))
+
 ## 0.0.29+2
 
  - **FIX**: update example. ([322d0757](https://github.com/Fuelet/fuels-dart/commit/322d0757428143e56e158497362a952c8a2a0665))

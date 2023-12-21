@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`flutter_fuels` - `v0.0.29+3`](#flutter_fuels---v00293)
+
+---
+
+#### `flutter_fuels` - `v0.0.29+3`
+
+ - **FIX**: change macos lib creation. ([d33011c9](https://github.com/Fuelet/fuels-dart/commit/d33011c9f7e2fd11e994f0b7da1771e1ed50b934))
+
+
+## 2023-12-21
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`flutter_fuels` - `v0.0.29+2`](#flutter_fuels---v00292)
 
 ---
