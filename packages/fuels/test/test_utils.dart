@@ -1,6 +1,6 @@
-import 'dart:ffi';
 import 'dart:io';
 
+import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:fuels/fuels.dart';
 
 const betaApiUrl = 'https://beta-4.fuel.network';
@@ -15,8 +15,8 @@ const ethAsset =
     '0x0000000000000000000000000000000000000000000000000000000000000000';
 
 String projectPath = Directory.current.parent.parent.path;
-final dynLib = DynamicLibrary.open('$projectPath/target/debug/libfuels.dylib');
-var rustSdk = FuelsImpl(dynLib);
+var rustSdk =
+    FuelsImpl(loadLibForFlutter('$projectPath/target/debug/libfuels.dylib'));
 
 Future<Provider> createTestnetProvider() {
   return Provider.connect(bridge: rustSdk, url: betaApiUrl);
