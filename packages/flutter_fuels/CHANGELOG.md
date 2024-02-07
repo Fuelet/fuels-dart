@@ -1,3 +1,9 @@
+## 0.0.31
+
+ - **FEAT**: specify max gas for transfer txs. ([6c0fc4ca](https://github.com/Fuelet/fuels-dart/commit/6c0fc4caedda9ca3972e0111ca89a1314e69b401))
+ - **FEAT**: upgrade js wrapper to beta-5. ([21c6612e](https://github.com/Fuelet/fuels-dart/commit/21c6612eb2edde3c1d8a4d349bfe1ed9706a1d26))
+ - **FEAT**: upgrade rust wrapper to beta-5. ([488dd146](https://github.com/Fuelet/fuels-dart/commit/488dd1469d5cf328e6bcaf3e271122733c913476))
+
 ## 0.0.30
 
  - Bump "flutter_fuels" to `0.0.30`.
