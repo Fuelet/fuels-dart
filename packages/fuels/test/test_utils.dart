@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:fuels/fuels.dart';
 
-const betaApiUrl = 'https://beta-4.fuel.network';
+const betaApiUrl = 'https://beta-5.fuel.network';
 const testWalletBechAddress =
     'fuel1lcghw4e6gucsw4hj0me9cu3fkhdg65gf5ujck2tlywn8drrcedqq2htmt3';
 const testWalletPrivateKey =

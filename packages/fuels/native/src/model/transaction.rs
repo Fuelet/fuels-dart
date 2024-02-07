@@ -1,7 +1,9 @@
-pub struct TxParameters {
+pub struct TxPolicies {
     pub gas_price: Option<u64>,
-    pub gas_limit: Option<u64>,
-    pub maturity: u32,
+    pub witness_limit: Option<u64>,
+    pub maturity: Option<u64>,
+    pub max_fee: Option<u64>,
+    pub script_gas_limit: Option<u64>,
 }
 
 pub struct TransactionCost {
@@ -12,19 +14,21 @@ pub struct TransactionCost {
     pub total_fee: u64,
 }
 
-impl From<&fuels::prelude::TxParameters> for TxParameters {
-    fn from(model: &fuels::prelude::TxParameters) -> Self {
-        TxParameters {
+impl From<&fuels::prelude::TxPolicies> for TxPolicies {
+    fn from(model: &fuels::prelude::TxPolicies) -> Self {
+        TxPolicies {
             gas_price: model.gas_price(),
-            gas_limit: model.gas_limit(),
+            witness_limit: model.witness_limit(),
             maturity: model.maturity(),
+            max_fee: model.max_fee(),
+            script_gas_limit: model.script_gas_limit(),
         }
     }
 }
 
-impl From<TxParameters> for fuels::prelude::TxParameters {
-    fn from(model: TxParameters) -> Self {
-        fuels::prelude::TxParameters::new(model.gas_price, model.gas_limit, model.maturity)
+impl From<TxPolicies> for fuels::prelude::TxPolicies {
+    fn from(model: TxPolicies) -> Self {
+        fuels::prelude::TxPolicies::new(model.gas_price, model.witness_limit, model.maturity, model.max_fee, model.script_gas_limit)
     }
 }
 
@@ -47,7 +51,7 @@ impl From<TransactionCost> for fuels_accounts::provider::TransactionCost {
             gas_price: model.gas_price,
             gas_used: model.gas_used,
             metered_bytes_size: model.metered_bytes_size,
-            total_fee: model.total_fee
+            total_fee: model.total_fee,
         }
     }
 }
