@@ -4,7 +4,7 @@ use std::str::FromStr;
 use fuel_crypto::fuel_types::canonical::Deserialize;
 use fuel_crypto::fuel_types::canonical::Serialize;
 use fuel_tx::Transaction as FuelTransaction;
-use fuels::prelude::{Account, AssetId, Bech32Address, BuildableTransaction, Provider, ScriptTransaction, Transaction, TxPolicies, WalletUnlocked};
+use fuels::prelude::{Account, AssetId, Bech32Address, BuildableTransaction, CreateTransaction, Provider, ScriptTransaction, Transaction, TxPolicies, WalletUnlocked};
 use fuels::prelude::TransactionType;
 use fuels::types::transaction_builders::ScriptTransactionBuilder;
 use fuels_accounts::provider::TransactionCost;
@@ -38,8 +38,16 @@ pub async fn send_transaction(
 ) -> CustomResult<String> {
     let tx = decode_transaction(&encoded_tx)?;
     let tx_id = match tx {
-        TransactionType::Script(script) => provider.send_transaction(script).await?,
-        TransactionType::Create(create) => provider.send_transaction(create).await?,
+        TransactionType::Script(script) => {
+            let id = provider.send_transaction(script).await?;
+            provider.await_transaction_commit::<ScriptTransaction>(id).await?;
+            id
+        }
+        TransactionType::Create(create) => {
+            let id = provider.send_transaction(create).await?;
+            provider.await_transaction_commit::<CreateTransaction>(id).await?;
+            id
+        }
         TransactionType::Mint(_) => panic!()
     };
     Ok(tx_id.to_string())
