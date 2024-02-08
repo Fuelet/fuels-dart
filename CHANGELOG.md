@@ -3,6 +3,35 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-02-08
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flutter_fuels` - `v0.0.32`](#flutter_fuels---v0032)
+ - [`fuels` - `v1.20.0`](#fuels---v1200)
+
+---
+
+#### `flutter_fuels` - `v0.0.32`
+
+ - **FEAT**: specify max gas for transfer txs. ([6c0fc4ca](https://github.com/Fuelet/fuels-dart/commit/6c0fc4caedda9ca3972e0111ca89a1314e69b401))
+ - **FEAT**: upgrade js wrapper to beta-5. ([21c6612e](https://github.com/Fuelet/fuels-dart/commit/21c6612eb2edde3c1d8a4d349bfe1ed9706a1d26))
+ - **FEAT**: upgrade rust wrapper to beta-5. ([488dd146](https://github.com/Fuelet/fuels-dart/commit/488dd1469d5cf328e6bcaf3e271122733c913476))
+
+#### `fuels` - `v1.20.0`
+
+ - **FEAT**: await transaction commit in rust. ([85a0fd27](https://github.com/Fuelet/fuels-dart/commit/85a0fd27b9cff76c546db24413f6030cb1482aaf))
+ - **FEAT**: upgrade rust wrapper to beta-5. ([488dd146](https://github.com/Fuelet/fuels-dart/commit/488dd1469d5cf328e6bcaf3e271122733c913476))
+
+
 ## 2024-02-07
 
 ### Changes
