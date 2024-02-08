@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_fuels/flutter_fuels.dart';
 
-const _betaApiUrl = 'https://beta-4.fuel.network';
+const _betaApiUrl = 'https://beta-5.fuel.network';
 const _ethAssetId =
     '0x0000000000000000000000000000000000000000000000000000000000000000';
 
@@ -210,7 +210,7 @@ class _MyAppState extends State<MyApp> {
       final txId = await _currentWallet!
           .sendTransaction(transactionRequestHexOrJson: _testTxRequest!);
       txLink =
-          'https://fuellabs.github.io/block-explorer-v2/beta-4/#/transaction/$txId';
+          'https://fuel-explorer.vercel.app/tx/$txId';
     } else {
       txLink = 'cannot send the tx yet';
     }

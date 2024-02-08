@@ -1,3 +1,7 @@
+## 1.19.0
+
+ - **FEAT**: upgrade rust wrapper to beta-5. ([488dd146](https://github.com/Fuelet/fuels-dart/commit/488dd1469d5cf328e6bcaf3e271122733c913476))
+
 ## 1.18.2
 
 ## 1.18.1

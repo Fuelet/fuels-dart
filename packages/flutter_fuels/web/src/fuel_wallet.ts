@@ -1,9 +1,7 @@
 import {Mnemonic} from "@fuel-ts/mnemonic";
 import {
-  Address,
   Bech32Address,
   Provider,
-  ScriptTransactionRequest,
   toB256,
   toBech32,
   TransactionCreate,
@@ -123,18 +121,9 @@ class WalletInterface {
   ): Promise<string> {
     let provider = await Provider.create(networkUrl);
     let wallet = Wallet.fromPrivateKey(privateKey, provider);
-
-    const destination = Address.fromB256(destinationB256Address);
-    const {minGasPrice, maxGasPerTx} = provider.getGasConfig();
-    const request = new ScriptTransactionRequest({gasLimit: maxGasPerTx, gasPrice: minGasPrice});
-    request.addCoinOutput(destination, fractionalAmount, assetId);
-
-    const {maxFee, requiredQuantities} = await provider.getTransactionCost(request);
-
-    await wallet.fund(request, requiredQuantities, maxFee);
-    // request = await wallet.populateTransactionWitnessesSignature(request);
-    // request.toTransactionBytes()
-
+    const {maxGasPerTx} = provider.getGasConfig();
+    const maxGas = maxGasPerTx.toNumber() / 4; // TODO: extimate max gas
+    const request = await wallet.createTransfer(destinationB256Address, fractionalAmount, assetId, {gasLimit: maxGas})
     return JSON.stringify(request);
   }
 }
