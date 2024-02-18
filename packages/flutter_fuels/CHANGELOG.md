@@ -1,3 +1,7 @@
+## 0.0.33
+
+ - **FEAT**: manage hex prefixes. ([e3caa7c0](https://github.com/Fuelet/fuels-dart/commit/e3caa7c097062f9f3fc6f157d4b6f3b836ef42f5))
+
 ## 0.0.32
 
  - **FEAT**: specify max gas for transfer txs. ([6c0fc4ca](https://github.com/Fuelet/fuels-dart/commit/6c0fc4caedda9ca3972e0111ca89a1314e69b401))

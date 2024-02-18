@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-02-18
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flutter_fuels` - `v0.0.33`](#flutter_fuels---v0033)
+
+---
+
+#### `flutter_fuels` - `v0.0.33`
+
+ - **FEAT**: manage hex prefixes. ([e3caa7c0](https://github.com/Fuelet/fuels-dart/commit/e3caa7c097062f9f3fc6f157d4b6f3b836ef42f5))
+
+
 ## 2024-02-08
 
 ### Changes
