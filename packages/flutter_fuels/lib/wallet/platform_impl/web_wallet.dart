@@ -3,6 +3,7 @@ import 'dart:js_util';
 
 import 'package:flutter_fuels/model/call_result.dart';
 import 'package:flutter_fuels/model/transaction_cost.dart';
+import 'package:flutter_fuels/utils/hex_utils.dart';
 import 'package:flutter_fuels/wallet/dart_wallet_unlocked.dart';
 import 'package:js/js_util.dart';
 
@@ -48,7 +49,7 @@ class FuelWalletImpl extends BaseWallet {
     required String privateKey,
   }) async {
     final newWallet = await promiseToFuture(js_wallet.newWalletFromPrivateKey(
-        _enrichNetworkUrl(networkUrl), privateKey));
+        _enrichNetworkUrl(networkUrl), addHexPrefix(privateKey)));
     final jsWallet = JsWallet.fromJsObject(newWallet, networkUrl);
     return WebWalletUnlocked(jsWallet);
   }
@@ -73,9 +74,9 @@ class JsWallet {
     final data = dartObject.cast<String, dynamic>();
     return JsWallet(
         bech32Address: data['address']['bech32Address'],
-        b256Address: data['address']['b256Address'],
+        b256Address: addHexPrefix(data['address']['b256Address']),
         mnemonicPhrase: data['mnemonicPhrase'],
-        privateKey: data['privateKey'],
+        privateKey: addHexPrefix(data['privateKey']),
         networkUrl: _enrichNetworkUrl(networkUrl));
   }
 }
@@ -122,9 +123,9 @@ class WebWalletUnlocked extends DartWalletUnlocked {
     return await promiseToFuture(js_wallet.genTransferTransactionRequest(
         _wallet.privateKey,
         _wallet.networkUrl,
-        destinationB256Address,
+        addHexPrefix(destinationB256Address),
         fractionalAmount,
-        assetId));
+        addHexPrefix(assetId)));
   }
 
   @override

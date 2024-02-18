@@ -1,4 +1,4 @@
-import 'package:flutter_fuels/utils/address_utils.dart';
+import 'package:flutter_fuels/utils/hex_utils.dart';
 import 'package:flutter_fuels/utils/json_utils.dart';
 
 abstract class Output {

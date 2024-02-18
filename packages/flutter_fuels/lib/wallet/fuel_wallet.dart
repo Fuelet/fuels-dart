@@ -1,6 +1,6 @@
 import 'package:flutter_fuels/model/call_result.dart';
 import 'package:flutter_fuels/model/transaction_cost.dart';
-import 'package:flutter_fuels/utils/address_utils.dart';
+import 'package:flutter_fuels/utils/hex_utils.dart';
 import 'package:flutter_fuels/utils/mnemonic_utils.dart';
 import 'package:flutter_fuels/wallet/dart_wallet_unlocked.dart';
 
@@ -88,7 +88,7 @@ class FuelWallet {
 
   String get b256Address => addHexPrefix(_walletUnlocked.b256Address);
 
-  String get privateKey => _walletUnlocked.privateKey;
+  String get privateKey => addHexPrefix(_walletUnlocked.privateKey);
 
   String get networkUrl => _walletUnlocked.networkUrl;
 
@@ -101,22 +101,25 @@ class FuelWallet {
         destinationB256Address: destinationB256Address,
         fractionalAmount: fractionalAmount,
         assetId: assetId);
-    return _walletUnlocked.sendTransaction(
-        transactionRequestHexOrJson: transferRequest);
+    return _walletUnlocked
+        .sendTransaction(transactionRequestHexOrJson: transferRequest)
+        .then(addHexPrefix);
   }
 
   Future<String> signMessage({
     required String message,
   }) {
-    return _walletUnlocked.signMessage(message: message);
+    return _walletUnlocked.signMessage(message: message).then(addHexPrefix);
   }
 
   /// Takes hex string on mobile and json tx request on web
   Future<String> sendTransaction({
     required String transactionRequestHexOrJson,
   }) {
-    return _walletUnlocked.sendTransaction(
-        transactionRequestHexOrJson: transactionRequestHexOrJson);
+    return _walletUnlocked
+        .sendTransaction(
+            transactionRequestHexOrJson: transactionRequestHexOrJson)
+        .then(addHexPrefix);
   }
 
   /// Takes hex string on mobile and json tx request on web

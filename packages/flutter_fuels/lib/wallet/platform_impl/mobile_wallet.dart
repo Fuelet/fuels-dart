@@ -3,6 +3,7 @@ import 'dart:typed_data';
 import 'package:convert/convert.dart';
 import 'package:flutter_fuels/model/call_result.dart';
 import 'package:flutter_fuels/model/transaction_cost.dart' as transaction_cost;
+import 'package:flutter_fuels/utils/hex_utils.dart';
 import 'package:flutter_fuels/wallet/dart_wallet_unlocked.dart';
 import 'package:fuels/fuels.dart';
 
@@ -58,7 +59,7 @@ class FuelWalletImpl extends BaseWallet {
     final w = await WalletUnlocked.newFromPrivateKey(
       bridge: _bridge,
       provider: provider,
-      privateKey: privateKey,
+      privateKey: removeHexPrefix(privateKey),
     );
     return await MobileWalletUnlocked.fromRust(w, networkUrl);
   }
@@ -87,7 +88,7 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
     return MobileWalletUnlocked(
         rustWalletUnlocked: rustWalletUnlocked,
         networkUrl: networkUrl,
-        b256Address: b256Address,
+        b256Address: addHexPrefix(b256Address),
         bech32Address: bech32Address);
   }
 
@@ -95,7 +96,7 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
   String? get mnemonicPhrase => _rustWalletUnlocked.mnemonicPhrase;
 
   @override
-  String get privateKey => _rustWalletUnlocked.privateKey;
+  String get privateKey => addHexPrefix(_rustWalletUnlocked.privateKey);
 
   @override
   Future<String> genTransferTransactionRequest(
@@ -103,16 +104,17 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
       required int fractionalAmount,
       required String assetId}) async {
     final to = await Bech32Address.fromB256String(
-        bridge: _rustWalletUnlocked.bridge, s: destinationB256Address);
+        bridge: _rustWalletUnlocked.bridge,
+        s: removeHexPrefix(destinationB256Address));
     final bytes = await _rustWalletUnlocked.genTransferTxRequest(
-        to: to, amount: fractionalAmount, asset: assetId);
-    return hex.encode(bytes);
+        to: to, amount: fractionalAmount, asset: removeHexPrefix(assetId));
+    return addHexPrefix(hex.encode(bytes));
   }
 
   @override
   Future<transaction_cost.TransactionCost> getTransactionCost(
       {required String transactionRequestHexOrJson}) async {
-    final bytes = hex.decode(transactionRequestHexOrJson);
+    final bytes = hex.decode(removeHexPrefix(transactionRequestHexOrJson));
     final txCost = await _rustWalletUnlocked.estimateTransactionCost(
         encodedTx: Uint8List.fromList(bytes));
     return transaction_cost.TransactionCost(
@@ -125,14 +127,14 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
   @override
   Future<String> sendTransaction(
       {required String transactionRequestHexOrJson}) {
-    final bytes = hex.decode(transactionRequestHexOrJson);
+    final bytes = hex.decode(removeHexPrefix(transactionRequestHexOrJson));
     return _rustWalletUnlocked.sendTransaction(
-        encodedTx: Uint8List.fromList(bytes));
+        encodedTx: Uint8List.fromList(bytes)).then(addHexPrefix);
   }
 
   @override
   Future<String> signMessage({required String message}) {
-    return _rustWalletUnlocked.signMessage(message: message);
+    return _rustWalletUnlocked.signMessage(message: message).then(addHexPrefix);
   }
 
   @override

@@ -1,5 +1,5 @@
 import 'package:flutter_fuels/model/transaction.dart';
-import 'package:flutter_fuels/utils/address_utils.dart';
+import 'package:flutter_fuels/utils/hex_utils.dart';
 
 import 'platform_impl/stub_fuel_utils.dart'
     if (dart.library.io) 'platform_impl/mobile_fuel_utils.dart'
