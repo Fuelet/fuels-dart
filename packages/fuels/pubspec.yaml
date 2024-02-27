@@ -8,7 +8,7 @@ environment:
 
 dependencies:
   ffi: ^2.0.1
-  flutter_rust_bridge: 1.82.4
+  flutter_rust_bridge: 1.82.6
   uuid: ^4.2.1 # must be compatible with flutter_rust_bridge version
   freezed_annotation: ^2.2.0
   meta: ^1.8.0
