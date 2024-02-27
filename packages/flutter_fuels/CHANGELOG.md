@@ -1,3 +1,7 @@
+## 0.0.34
+
+ - Bump "flutter_fuels" to `0.0.34`.
+
 ## 0.0.33
 
  - **FEAT**: manage hex prefixes. ([e3caa7c0](https://github.com/Fuelet/fuels-dart/commit/e3caa7c097062f9f3fc6f157d4b6f3b836ef42f5))

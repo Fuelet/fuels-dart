@@ -1,3 +1,5 @@
+## 1.20.1
+
 ## 1.20.0
 
  - **FEAT**: await transaction commit in rust. ([85a0fd27](https://github.com/Fuelet/fuels-dart/commit/85a0fd27b9cff76c546db24413f6030cb1482aaf))
