@@ -13,7 +13,7 @@ for TARGET in \
         x86_64-apple-darwin aarch64-apple-darwin
 do
     rustup target add $TARGET
-    cargo build -r --target=$TARGET
+    MACOSX_DEPLOYMENT_TARGET=12.0 cargo build -r --target=$TARGET
 done
 
 # Create XCFramework zip
