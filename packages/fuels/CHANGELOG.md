@@ -1,3 +1,7 @@
+## 1.21.0
+
+ - **FEAT**: return tx id along with the transfer request. ([fe926723](https://github.com/Fuelet/fuels-dart/commit/fe926723bc9061290b6bc2160214bb518f288fcd))
+
 ## 1.20.2
 
  - Bump "fuels" to `1.20.2`.

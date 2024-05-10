@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-05-10
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flutter_fuels` - `v0.0.36`](#flutter_fuels---v0036)
+ - [`fuels` - `v1.21.0`](#fuels---v1210)
+
+---
+
+#### `flutter_fuels` - `v0.0.36`
+
+ - **FEAT**: return tx id along with the transfer request. ([fe926723](https://github.com/Fuelet/fuels-dart/commit/fe926723bc9061290b6bc2160214bb518f288fcd))
+
+#### `fuels` - `v1.21.0`
+
+ - **FEAT**: return tx id along with the transfer request. ([fe926723](https://github.com/Fuelet/fuels-dart/commit/fe926723bc9061290b6bc2160214bb518f288fcd))
+
+
 ## 2024-04-29
 
 ### Changes
