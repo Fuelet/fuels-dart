@@ -4,11 +4,11 @@ on: workflow_call
 
 jobs:
   build_apple:
-    runs-on: macos-latest
+    runs-on: macos-14
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - uses: ./.github/actions/initialize
 
@@ -18,7 +18,7 @@ jobs:
         run: melos run build:apple
 
       - name: Uploading artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: apple_binary
           path: platform-build/FlutterFuels.xcframework.zip
@@ -28,7 +28,7 @@ jobs:
 
     steps:
       - name: Checkout the repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - uses: ./.github/actions/initialize
 
@@ -43,7 +43,7 @@ jobs:
         run: melos run build:android
 
       - name: Uploading artifact
-        uses: actions/upload-artifact@v3
+        uses: actions/upload-artifact@v4
         with:
           name: android_binary
           path: platform-build/android.tar.gz
@@ -52,7 +52,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: [ build_apple, build_android ]
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Download apple binary
         uses: actions/download-artifact@v3
