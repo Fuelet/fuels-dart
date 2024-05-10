@@ -97,7 +97,7 @@ class FuelWallet {
     required int fractionalAmount,
     required String assetId,
   }) async {
-    final transferRequest = await _walletUnlocked.genTransferTransactionRequest(
+    final (transferRequest, _) = await _walletUnlocked.genTransferTransactionRequest(
         destinationB256Address: destinationB256Address,
         fractionalAmount: fractionalAmount,
         assetId: assetId);
@@ -139,7 +139,7 @@ class FuelWallet {
   }
 
   /// Returns hex string on mobile and json tx request on web
-  Future<String> genTransferTransactionRequest(
+  Future<(String, String)> createTransferTransactionRequest(
       {required String destinationB256Address,
       required int fractionalAmount,
       required String assetId}) {

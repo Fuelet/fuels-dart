@@ -51,7 +51,7 @@ impl WalletUnlocked {
         to: Bech32Address,
         amount: u64,
         asset: String,
-    ) -> Vec<u8> {
+    ) -> (Vec<u8>, Vec<u8>) {
         let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
         transaction::gen_transfer_tx_request(&native_wallet_unlocked, &*to.native, amount, asset).await.unwrap()
     }

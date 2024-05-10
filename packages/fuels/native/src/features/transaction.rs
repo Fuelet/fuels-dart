@@ -20,15 +20,16 @@ pub async fn gen_transfer_tx_request(
     to: &Bech32Address,
     amount: u64,
     asset: String,
-) -> CustomResult<Vec<u8>> {
+) -> CustomResult<(Vec<u8>, Vec<u8>)> {
     let provider = wallet.provider().unwrap();
 
     let tx_without_tx_policies = build_transfer_tx(wallet, provider, to, amount, &asset, None).await?;
     let min_tx_policies = get_min_tx_policies(&provider, &tx_without_tx_policies).await?;
     let tx_with_min_tx_policies = build_transfer_tx(wallet, provider, to, amount, &asset, Some(min_tx_policies)).await?;
 
-    let fuel_tx: FuelTransaction = tx_with_min_tx_policies.into();
-    Ok(fuel_tx.clone().to_bytes())
+    let fuel_tx: FuelTransaction = tx_with_min_tx_policies.clone().into();
+    let tx_id = tx_with_min_tx_policies.id(provider.chain_id());
+    Ok((fuel_tx.clone().to_bytes(), tx_id.to_vec()))
 }
 
 // TODO: find a way to sign the tx here

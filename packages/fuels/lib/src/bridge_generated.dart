@@ -39,7 +39,7 @@ abstract class Fuels {
   FlutterRustBridgeTaskConstMeta
       get kNewFromMnemonicPhraseWithPathStaticMethodWalletUnlockedConstMeta;
 
-  Future<Uint8List> genTransferTxRequestMethodWalletUnlocked(
+  Future<(Uint8List, Uint8List)> genTransferTxRequestMethodWalletUnlocked(
       {required WalletUnlocked that,
       required Bech32Address to,
       required int amount,
@@ -222,7 +222,7 @@ class WalletUnlocked {
       bridge.newFromMnemonicPhraseWithPathStaticMethodWalletUnlocked(
           phrase: phrase, path: path, provider: provider, hint: hint);
 
-  Future<Uint8List> genTransferTxRequest(
+  Future<(Uint8List, Uint8List)> genTransferTxRequest(
           {required Bech32Address to,
           required int amount,
           required String asset,
@@ -362,7 +362,7 @@ class FuelsImpl implements Fuels {
             argNames: ["phrase", "path", "provider"],
           );
 
-  Future<Uint8List> genTransferTxRequestMethodWalletUnlocked(
+  Future<(Uint8List, Uint8List)> genTransferTxRequestMethodWalletUnlocked(
       {required WalletUnlocked that,
       required Bech32Address to,
       required int amount,
@@ -376,7 +376,7 @@ class FuelsImpl implements Fuels {
       callFfi: (port_) => _platform.inner
           .wire_gen_transfer_tx_request__method__WalletUnlocked(
               port_, arg0, arg1, arg2, arg3),
-      parseSuccessData: _wire2api_uint_8_list,
+      parseSuccessData: _wire2api___record__uint_8_list_uint_8_list,
       parseErrorData: null,
       constMeta: kGenTransferTxRequestMethodWalletUnlockedConstMeta,
       argValues: [that, to, amount, asset],
@@ -584,6 +584,18 @@ class FuelsImpl implements Fuels {
 
   String _wire2api_String(dynamic raw) {
     return raw as String;
+  }
+
+  (Uint8List, Uint8List) _wire2api___record__uint_8_list_uint_8_list(
+      dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 2) {
+      throw Exception('Expected 2 elements, got ${arr.length}');
+    }
+    return (
+      _wire2api_uint_8_list(arr[0]),
+      _wire2api_uint_8_list(arr[1]),
+    );
   }
 
   Bech32Address _wire2api_bech_32_address(dynamic raw) {

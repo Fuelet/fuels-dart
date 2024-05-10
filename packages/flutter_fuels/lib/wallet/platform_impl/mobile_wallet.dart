@@ -99,16 +99,19 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
   String get privateKey => addHexPrefix(_rustWalletUnlocked.privateKey);
 
   @override
-  Future<String> genTransferTransactionRequest(
+  Future<(String, String)> genTransferTransactionRequest(
       {required String destinationB256Address,
       required int fractionalAmount,
       required String assetId}) async {
     final to = await Bech32Address.fromB256String(
         bridge: _rustWalletUnlocked.bridge,
         s: removeHexPrefix(destinationB256Address));
-    final bytes = await _rustWalletUnlocked.genTransferTxRequest(
+    final (bytes, txIdBytes) = await _rustWalletUnlocked.genTransferTxRequest(
         to: to, amount: fractionalAmount, asset: removeHexPrefix(assetId));
-    return addHexPrefix(hex.encode(bytes));
+    return (
+      addHexPrefix(hex.encode(bytes)),
+      addHexPrefix(hex.encode(txIdBytes))
+    );
   }
 
   @override
@@ -128,8 +131,9 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
   Future<String> sendTransaction(
       {required String transactionRequestHexOrJson}) {
     final bytes = hex.decode(removeHexPrefix(transactionRequestHexOrJson));
-    return _rustWalletUnlocked.sendTransaction(
-        encodedTx: Uint8List.fromList(bytes)).then(addHexPrefix);
+    return _rustWalletUnlocked
+        .sendTransaction(encodedTx: Uint8List.fromList(bytes))
+        .then(addHexPrefix);
   }
 
   @override

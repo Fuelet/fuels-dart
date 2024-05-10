@@ -119,7 +119,7 @@ fn wire_gen_transfer_tx_request__method__WalletUnlocked_impl(
     amount: impl Wire2Api<u64> + UnwindSafe,
     asset: impl Wire2Api<String> + UnwindSafe,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, Vec<u8>, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, (Vec<u8>, Vec<u8>), _>(
         WrapInfo {
             debug_name: "gen_transfer_tx_request__method__WalletUnlocked",
             port: Some(port_),

@@ -27,7 +27,7 @@ abstract class DartWalletUnlocked {
       {required String transactionRequestHexOrJson});
 
   /// Returns hex string on mobile and json tx request on web
-  Future<String> genTransferTransactionRequest({
+  Future<(String, String)> genTransferTransactionRequest({
     required String destinationB256Address,
     required int fractionalAmount,
     required String assetId,

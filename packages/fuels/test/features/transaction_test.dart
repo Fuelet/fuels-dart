@@ -13,7 +13,7 @@ void main() {
     WalletUnlocked newWallet = await createRandomWallet();
     WalletUnlocked testWallet = await importWalletWithPK(testWalletPrivateKey);
 
-    final requestBytes = await testWallet.genTransferTxRequest(
+    final (requestBytes, _) = await testWallet.genTransferTxRequest(
         to: newWallet.address, amount: _transferAmount, asset: ethAsset);
     final txCost =
         await testWallet.estimateTransactionCost(encodedTx: requestBytes);
@@ -28,7 +28,7 @@ void main() {
     WalletUnlocked newWallet = await createRandomWallet();
     WalletUnlocked testWallet = await importWalletWithPK(testWalletPrivateKey);
 
-    final requestBytes = await testWallet.genTransferTxRequest(
+    final (requestBytes, _) = await testWallet.genTransferTxRequest(
         to: newWallet.address, amount: _transferAmount, asset: ethAsset);
     final txId = await testWallet.sendTransaction(encodedTx: requestBytes);
 

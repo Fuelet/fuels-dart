@@ -118,13 +118,14 @@ class WalletInterface {
     destinationB256Address: string,
     fractionalAmount: number,
     assetId: string,
-  ): Promise<string> {
+  ): Promise<[string, string]> {
     let provider = await Provider.create(networkUrl);
     let wallet = Wallet.fromPrivateKey(privateKey, provider);
     const {maxGasPerTx} = provider.getGasConfig();
-    const maxGas = maxGasPerTx.toNumber() / 4; // TODO: extimate max gas
+    const maxGas = maxGasPerTx.toNumber() / 4; // TODO: estimate max gas
     const request = await wallet.createTransfer(destinationB256Address, fractionalAmount, assetId, {gasLimit: maxGas})
-    return JSON.stringify(request);
+    const txId = request.getTransactionId(provider.getChainId())
+    return [JSON.stringify(request), txId];
   }
 }
 
