@@ -55,13 +55,13 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Download apple binary
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: apple_binary
           path: platform-build
 
       - name: Download android binary
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
         with:
           name: android_binary
           path: platform-build
