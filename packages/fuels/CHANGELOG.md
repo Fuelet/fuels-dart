@@ -1,3 +1,7 @@
+## 1.23.1
+
+ - **FIX**: use default tx policies for transfers. ([212bdd1a](https://github.com/Fuelet/fuels-dart/commit/212bdd1a1ae2ce66583b4c97c44989cfc9db1cfb))
+
 ## 1.23.0
 
  - Bump "fuels" to `1.23.0`.
