@@ -20,15 +20,12 @@ pub async fn gen_transfer_tx_request(
     to: &Bech32Address,
     amount: u64,
     asset: String,
+    tx_policies: TxPolicies,
 ) -> CustomResult<(Vec<u8>, Vec<u8>)> {
     let provider = wallet.provider().unwrap();
-
-    let tx_without_tx_policies = build_transfer_tx(wallet, provider, to, amount, &asset, None).await?;
-    let min_tx_policies = get_min_tx_policies(&provider, &tx_without_tx_policies).await?;
-    let tx_with_min_tx_policies = build_transfer_tx(wallet, provider, to, amount, &asset, Some(min_tx_policies)).await?;
-
-    let fuel_tx: FuelTransaction = tx_with_min_tx_policies.clone().into();
-    let tx_id = tx_with_min_tx_policies.id(provider.chain_id());
+    let script_tx = build_transfer_tx(wallet, provider, to, amount, &asset, tx_policies).await?;
+    let fuel_tx: FuelTransaction = script_tx.clone().into();
+    let tx_id = script_tx.id(provider.chain_id());
     Ok((fuel_tx.clone().to_bytes(), tx_id.to_vec()))
 }
 
@@ -102,18 +99,13 @@ async fn build_transfer_tx(wallet: &WalletUnlocked,
                            to: &Bech32Address,
                            amount: u64,
                            asset: &String,
-                           tx_policies_opt: Option<TxPolicies>) -> CustomResult<ScriptTransaction> {
+                           tx_policies: TxPolicies) -> CustomResult<ScriptTransaction> {
     let asset_id = AssetId::from_str(asset)?;
     let inputs = wallet.get_asset_inputs_for_amount(asset_id, amount).await?;
     let outputs = wallet.get_asset_outputs_for_amount(to, asset_id, amount);
 
-    let tx_policies = tx_policies_opt.unwrap_or_else(TxPolicies::default);
-
-    let mut tx_builder = ScriptTransactionBuilder::prepare_transfer(
-        inputs,
-        outputs,
-        tx_policies,
-    ).with_script(TRANSFER_SCRIPT.to_vec()); // We manually add script here, because otherwise the fee estimation breaks
+    let mut tx_builder =
+        ScriptTransactionBuilder::prepare_transfer(inputs, outputs, tx_policies);
 
     wallet.add_witnesses(&mut tx_builder)?;
 

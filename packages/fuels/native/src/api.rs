@@ -6,6 +6,7 @@ use flutter_rust_bridge::RustOpaque;
 use fuel_crypto::SecretKey;
 use fuel_tx::Address;
 pub use fuels::prelude::{Bech32Address as NativeBech32Address, Provider as NativeProvider, WalletUnlocked as NativeWalletUnlocked};
+use fuels::prelude::TxPolicies;
 
 use crate::features::{crypto, transaction, wallet};
 use crate::model::transaction::TransactionCost;
@@ -53,7 +54,7 @@ impl WalletUnlocked {
         asset: String,
     ) -> (Vec<u8>, Vec<u8>) {
         let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
-        transaction::gen_transfer_tx_request(&native_wallet_unlocked, &*to.native, amount, asset).await.unwrap()
+        transaction::gen_transfer_tx_request(&native_wallet_unlocked, &*to.native, amount, asset, TxPolicies::default()).await.unwrap()
     }
 
     #[tokio::main]
