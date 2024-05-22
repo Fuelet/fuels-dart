@@ -117,7 +117,6 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
     final txCost = await _rustWalletUnlocked.estimateTransactionCost(
         encodedTx: Uint8List.fromList(bytes));
     return transaction_cost.TransactionCost(
-        minGasPrice: txCost.minGasPrice,
         gasPrice: txCost.gasPrice,
         gasUsed: txCost.gasUsed,
         minFee: txCost.totalFee);
