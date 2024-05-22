@@ -1,3 +1,7 @@
+## 0.0.40+1
+
+ - **FIX**: remove minGasPrice from tx cost. ([e0c45c8c](https://github.com/Fuelet/fuels-dart/commit/e0c45c8cf7a2e9933219fb892515cead49418d80))
+
 ## 0.0.40
 
  - **FEAT**: fail simulation on panic and revert receipts. ([6bc46390](https://github.com/Fuelet/fuels-dart/commit/6bc46390d5767489828768ff810fd5c093d196ef))

@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`flutter_fuels` - `v0.0.40+1`](#flutter_fuels---v00401)
+
+---
+
+#### `flutter_fuels` - `v0.0.40+1`
+
+ - **FIX**: remove minGasPrice from tx cost. ([e0c45c8c](https://github.com/Fuelet/fuels-dart/commit/e0c45c8cf7a2e9933219fb892515cead49418d80))
+
+
+## 2024-05-22
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`flutter_fuels` - `v0.0.40`](#flutter_fuels---v0040)
 
 ---
