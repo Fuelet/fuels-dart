@@ -1,3 +1,7 @@
+## 1.25.0
+
+ - **FEAT**: don't connect to the network when creating wallets. ([be5b2a96](https://github.com/Fuelet/fuels-dart/commit/be5b2a96002f837d84775b512c414dcac0c5e693))
+
 ## 1.24.2
 
  - Bump "fuels" to `1.24.2`.

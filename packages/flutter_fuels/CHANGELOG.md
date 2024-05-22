@@ -1,3 +1,8 @@
+## 0.0.39
+
+ - **FEAT**: don't connect to the network when creating wallets. ([be5b2a96](https://github.com/Fuelet/fuels-dart/commit/be5b2a96002f837d84775b512c414dcac0c5e693))
+ - **FEAT**: upgrade ts wrapper to testnet. ([c6919e43](https://github.com/Fuelet/fuels-dart/commit/c6919e439ecf0e815ddf9dc0afd8011d4a665f8a))
+
 ## 0.0.38+4
 
  - Update a dependency to the latest release.

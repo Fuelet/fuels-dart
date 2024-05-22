@@ -15,6 +15,33 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`flutter_fuels` - `v0.0.39`](#flutter_fuels---v0039)
+ - [`fuels` - `v1.25.0`](#fuels---v1250)
+
+---
+
+#### `flutter_fuels` - `v0.0.39`
+
+ - **FEAT**: don't connect to the network when creating wallets. ([be5b2a96](https://github.com/Fuelet/fuels-dart/commit/be5b2a96002f837d84775b512c414dcac0c5e693))
+ - **FEAT**: upgrade ts wrapper to testnet. ([c6919e43](https://github.com/Fuelet/fuels-dart/commit/c6919e439ecf0e815ddf9dc0afd8011d4a665f8a))
+
+#### `fuels` - `v1.25.0`
+
+ - **FEAT**: don't connect to the network when creating wallets. ([be5b2a96](https://github.com/Fuelet/fuels-dart/commit/be5b2a96002f837d84775b512c414dcac0c5e693))
+
+
+## 2024-05-22
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`fuels` - `v1.24.2`](#fuels---v1242)
  - [`flutter_fuels` - `v0.0.38+4`](#flutter_fuels---v00384)
 
