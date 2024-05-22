@@ -12,19 +12,19 @@ import 'dart:ffi' as ffi;
 
 abstract class Fuels {
   Future<WalletUnlocked> newRandomStaticMethodWalletUnlocked(
-      {required Provider provider, dynamic hint});
+      {required String nodeUrl, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta
       get kNewRandomStaticMethodWalletUnlockedConstMeta;
 
   Future<WalletUnlocked> newFromPrivateKeyStaticMethodWalletUnlocked(
-      {required String privateKey, required Provider provider, dynamic hint});
+      {required String privateKey, required String nodeUrl, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta
       get kNewFromPrivateKeyStaticMethodWalletUnlockedConstMeta;
 
   Future<WalletUnlocked> newFromMnemonicPhraseStaticMethodWalletUnlocked(
-      {required String phrase, required Provider provider, dynamic hint});
+      {required String phrase, required String nodeUrl, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta
       get kNewFromMnemonicPhraseStaticMethodWalletUnlockedConstMeta;
@@ -33,7 +33,7 @@ abstract class Fuels {
       newFromMnemonicPhraseWithPathStaticMethodWalletUnlocked(
           {required String phrase,
           required String path,
-          required Provider provider,
+          required String nodeUrl,
           dynamic hint});
 
   FlutterRustBridgeTaskConstMeta
@@ -93,11 +93,6 @@ abstract class Fuels {
 
   FlutterRustBridgeTaskConstMeta get kToB256StringMethodBech32AddressConstMeta;
 
-  Future<Provider> connectStaticMethodProvider(
-      {required String url, dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta get kConnectStaticMethodProviderConstMeta;
-
   DropFnType get dropOpaqueNativeBech32Address;
   ShareFnType get shareOpaqueNativeBech32Address;
   OpaqueTypeFinalizer get NativeBech32AddressFinalizer;
@@ -147,20 +142,6 @@ class Bech32Address {
       );
 }
 
-class Provider {
-  final Fuels bridge;
-  final String nodeUrl;
-
-  const Provider({
-    required this.bridge,
-    required this.nodeUrl,
-  });
-
-  static Future<Provider> connect(
-          {required Fuels bridge, required String url, dynamic hint}) =>
-      bridge.connectStaticMethodProvider(url: url, hint: hint);
-}
-
 class TransactionCost {
   final int gasPrice;
   final int gasUsed;
@@ -179,46 +160,45 @@ class WalletUnlocked {
   final Fuels bridge;
   final String privateKey;
   final String? mnemonicPhrase;
-  final Provider provider;
+  final String nodeUrl;
   final Bech32Address address;
 
   const WalletUnlocked({
     required this.bridge,
     required this.privateKey,
     this.mnemonicPhrase,
-    required this.provider,
+    required this.nodeUrl,
     required this.address,
   });
 
   static Future<WalletUnlocked> newRandom(
-          {required Fuels bridge, required Provider provider, dynamic hint}) =>
-      bridge.newRandomStaticMethodWalletUnlocked(
-          provider: provider, hint: hint);
+          {required Fuels bridge, required String nodeUrl, dynamic hint}) =>
+      bridge.newRandomStaticMethodWalletUnlocked(nodeUrl: nodeUrl, hint: hint);
 
   static Future<WalletUnlocked> newFromPrivateKey(
           {required Fuels bridge,
           required String privateKey,
-          required Provider provider,
+          required String nodeUrl,
           dynamic hint}) =>
       bridge.newFromPrivateKeyStaticMethodWalletUnlocked(
-          privateKey: privateKey, provider: provider, hint: hint);
+          privateKey: privateKey, nodeUrl: nodeUrl, hint: hint);
 
   static Future<WalletUnlocked> newFromMnemonicPhrase(
           {required Fuels bridge,
           required String phrase,
-          required Provider provider,
+          required String nodeUrl,
           dynamic hint}) =>
       bridge.newFromMnemonicPhraseStaticMethodWalletUnlocked(
-          phrase: phrase, provider: provider, hint: hint);
+          phrase: phrase, nodeUrl: nodeUrl, hint: hint);
 
   static Future<WalletUnlocked> newFromMnemonicPhraseWithPath(
           {required Fuels bridge,
           required String phrase,
           required String path,
-          required Provider provider,
+          required String nodeUrl,
           dynamic hint}) =>
       bridge.newFromMnemonicPhraseWithPathStaticMethodWalletUnlocked(
-          phrase: phrase, path: path, provider: provider, hint: hint);
+          phrase: phrase, path: path, nodeUrl: nodeUrl, hint: hint);
 
   Future<(Uint8List, Uint8List)> genTransferTxRequest(
           {required Bech32Address to,
@@ -263,15 +243,15 @@ class FuelsImpl implements Fuels {
       FuelsImpl(module as ExternalLibrary);
   FuelsImpl.raw(this._platform);
   Future<WalletUnlocked> newRandomStaticMethodWalletUnlocked(
-      {required Provider provider, dynamic hint}) {
-    var arg0 = _platform.api2wire_box_autoadd_provider(provider);
+      {required String nodeUrl, dynamic hint}) {
+    var arg0 = _platform.api2wire_String(nodeUrl);
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) => _platform.inner
           .wire_new_random__static_method__WalletUnlocked(port_, arg0),
       parseSuccessData: (d) => _wire2api_wallet_unlocked(d),
       parseErrorData: null,
       constMeta: kNewRandomStaticMethodWalletUnlockedConstMeta,
-      argValues: [provider],
+      argValues: [nodeUrl],
       hint: hint,
     ));
   }
@@ -280,13 +260,13 @@ class FuelsImpl implements Fuels {
       get kNewRandomStaticMethodWalletUnlockedConstMeta =>
           const FlutterRustBridgeTaskConstMeta(
             debugName: "new_random__static_method__WalletUnlocked",
-            argNames: ["provider"],
+            argNames: ["nodeUrl"],
           );
 
   Future<WalletUnlocked> newFromPrivateKeyStaticMethodWalletUnlocked(
-      {required String privateKey, required Provider provider, dynamic hint}) {
+      {required String privateKey, required String nodeUrl, dynamic hint}) {
     var arg0 = _platform.api2wire_String(privateKey);
-    var arg1 = _platform.api2wire_box_autoadd_provider(provider);
+    var arg1 = _platform.api2wire_String(nodeUrl);
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) => _platform.inner
           .wire_new_from_private_key__static_method__WalletUnlocked(
@@ -294,7 +274,7 @@ class FuelsImpl implements Fuels {
       parseSuccessData: (d) => _wire2api_wallet_unlocked(d),
       parseErrorData: null,
       constMeta: kNewFromPrivateKeyStaticMethodWalletUnlockedConstMeta,
-      argValues: [privateKey, provider],
+      argValues: [privateKey, nodeUrl],
       hint: hint,
     ));
   }
@@ -303,13 +283,13 @@ class FuelsImpl implements Fuels {
       get kNewFromPrivateKeyStaticMethodWalletUnlockedConstMeta =>
           const FlutterRustBridgeTaskConstMeta(
             debugName: "new_from_private_key__static_method__WalletUnlocked",
-            argNames: ["privateKey", "provider"],
+            argNames: ["privateKey", "nodeUrl"],
           );
 
   Future<WalletUnlocked> newFromMnemonicPhraseStaticMethodWalletUnlocked(
-      {required String phrase, required Provider provider, dynamic hint}) {
+      {required String phrase, required String nodeUrl, dynamic hint}) {
     var arg0 = _platform.api2wire_String(phrase);
-    var arg1 = _platform.api2wire_box_autoadd_provider(provider);
+    var arg1 = _platform.api2wire_String(nodeUrl);
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) => _platform.inner
           .wire_new_from_mnemonic_phrase__static_method__WalletUnlocked(
@@ -317,7 +297,7 @@ class FuelsImpl implements Fuels {
       parseSuccessData: (d) => _wire2api_wallet_unlocked(d),
       parseErrorData: null,
       constMeta: kNewFromMnemonicPhraseStaticMethodWalletUnlockedConstMeta,
-      argValues: [phrase, provider],
+      argValues: [phrase, nodeUrl],
       hint: hint,
     ));
   }
@@ -327,18 +307,18 @@ class FuelsImpl implements Fuels {
           const FlutterRustBridgeTaskConstMeta(
             debugName:
                 "new_from_mnemonic_phrase__static_method__WalletUnlocked",
-            argNames: ["phrase", "provider"],
+            argNames: ["phrase", "nodeUrl"],
           );
 
   Future<WalletUnlocked>
       newFromMnemonicPhraseWithPathStaticMethodWalletUnlocked(
           {required String phrase,
           required String path,
-          required Provider provider,
+          required String nodeUrl,
           dynamic hint}) {
     var arg0 = _platform.api2wire_String(phrase);
     var arg1 = _platform.api2wire_String(path);
-    var arg2 = _platform.api2wire_box_autoadd_provider(provider);
+    var arg2 = _platform.api2wire_String(nodeUrl);
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) => _platform.inner
           .wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(
@@ -347,7 +327,7 @@ class FuelsImpl implements Fuels {
       parseErrorData: null,
       constMeta:
           kNewFromMnemonicPhraseWithPathStaticMethodWalletUnlockedConstMeta,
-      argValues: [phrase, path, provider],
+      argValues: [phrase, path, nodeUrl],
       hint: hint,
     ));
   }
@@ -357,7 +337,7 @@ class FuelsImpl implements Fuels {
           const FlutterRustBridgeTaskConstMeta(
             debugName:
                 "new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked",
-            argNames: ["phrase", "path", "provider"],
+            argNames: ["phrase", "path", "nodeUrl"],
           );
 
   Future<(Uint8List, Uint8List)> genTransferTxRequestMethodWalletUnlocked(
@@ -544,26 +524,6 @@ class FuelsImpl implements Fuels {
             argNames: ["that"],
           );
 
-  Future<Provider> connectStaticMethodProvider(
-      {required String url, dynamic hint}) {
-    var arg0 = _platform.api2wire_String(url);
-    return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) =>
-          _platform.inner.wire_connect__static_method__Provider(port_, arg0),
-      parseSuccessData: (d) => _wire2api_provider(d),
-      parseErrorData: null,
-      constMeta: kConnectStaticMethodProviderConstMeta,
-      argValues: [url],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta get kConnectStaticMethodProviderConstMeta =>
-      const FlutterRustBridgeTaskConstMeta(
-        debugName: "connect__static_method__Provider",
-        argNames: ["url"],
-      );
-
   DropFnType get dropOpaqueNativeBech32Address =>
       _platform.inner.drop_opaque_NativeBech32Address;
   ShareFnType get shareOpaqueNativeBech32Address =>
@@ -610,16 +570,6 @@ class FuelsImpl implements Fuels {
     return raw == null ? null : _wire2api_String(raw);
   }
 
-  Provider _wire2api_provider(dynamic raw) {
-    final arr = raw as List<dynamic>;
-    if (arr.length != 1)
-      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return Provider(
-      bridge: this,
-      nodeUrl: _wire2api_String(arr[0]),
-    );
-  }
-
   TransactionCost _wire2api_transaction_cost(dynamic raw) {
     final arr = raw as List<dynamic>;
     if (arr.length != 4)
@@ -652,7 +602,7 @@ class FuelsImpl implements Fuels {
       bridge: this,
       privateKey: _wire2api_String(arr[0]),
       mnemonicPhrase: _wire2api_opt_String(arr[1]),
-      provider: _wire2api_provider(arr[2]),
+      nodeUrl: _wire2api_String(arr[2]),
       address: _wire2api_bech_32_address(arr[3]),
     );
   }
@@ -690,13 +640,6 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
       Bech32Address raw) {
     final ptr = inner.new_box_autoadd_bech_32_address_0();
     _api_fill_to_wire_bech_32_address(raw, ptr.ref);
-    return ptr;
-  }
-
-  @protected
-  ffi.Pointer<wire_Provider> api2wire_box_autoadd_provider(Provider raw) {
-    final ptr = inner.new_box_autoadd_provider_0();
-    _api_fill_to_wire_provider(raw, ptr.ref);
     return ptr;
   }
 
@@ -748,25 +691,16 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
     _api_fill_to_wire_bech_32_address(apiObj, wireObj.ref);
   }
 
-  void _api_fill_to_wire_box_autoadd_provider(
-      Provider apiObj, ffi.Pointer<wire_Provider> wireObj) {
-    _api_fill_to_wire_provider(apiObj, wireObj.ref);
-  }
-
   void _api_fill_to_wire_box_autoadd_wallet_unlocked(
       WalletUnlocked apiObj, ffi.Pointer<wire_WalletUnlocked> wireObj) {
     _api_fill_to_wire_wallet_unlocked(apiObj, wireObj.ref);
-  }
-
-  void _api_fill_to_wire_provider(Provider apiObj, wire_Provider wireObj) {
-    wireObj.node_url = api2wire_String(apiObj.nodeUrl);
   }
 
   void _api_fill_to_wire_wallet_unlocked(
       WalletUnlocked apiObj, wire_WalletUnlocked wireObj) {
     wireObj.private_key = api2wire_String(apiObj.privateKey);
     wireObj.mnemonic_phrase = api2wire_opt_String(apiObj.mnemonicPhrase);
-    _api_fill_to_wire_provider(apiObj.provider, wireObj.provider);
+    wireObj.node_url = api2wire_String(apiObj.nodeUrl);
     _api_fill_to_wire_bech_32_address(apiObj.address, wireObj.address);
   }
 }
@@ -869,31 +803,31 @@ class FuelsWire implements FlutterRustBridgeWireBase {
 
   void wire_new_random__static_method__WalletUnlocked(
     int port_,
-    ffi.Pointer<wire_Provider> provider,
+    ffi.Pointer<wire_uint_8_list> node_url,
   ) {
     return _wire_new_random__static_method__WalletUnlocked(
       port_,
-      provider,
+      node_url,
     );
   }
 
   late final _wire_new_random__static_method__WalletUnlockedPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_Provider>)>>(
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>(
       'wire_new_random__static_method__WalletUnlocked');
   late final _wire_new_random__static_method__WalletUnlocked =
       _wire_new_random__static_method__WalletUnlockedPtr
-          .asFunction<void Function(int, ffi.Pointer<wire_Provider>)>();
+          .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
 
   void wire_new_from_private_key__static_method__WalletUnlocked(
     int port_,
     ffi.Pointer<wire_uint_8_list> private_key,
-    ffi.Pointer<wire_Provider> provider,
+    ffi.Pointer<wire_uint_8_list> node_url,
   ) {
     return _wire_new_from_private_key__static_method__WalletUnlocked(
       port_,
       private_key,
-      provider,
+      node_url,
     );
   }
 
@@ -901,22 +835,22 @@ class FuelsWire implements FlutterRustBridgeWireBase {
       _lookup<
               ffi.NativeFunction<
                   ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>,
-                      ffi.Pointer<wire_Provider>)>>(
+                      ffi.Pointer<wire_uint_8_list>)>>(
           'wire_new_from_private_key__static_method__WalletUnlocked');
   late final _wire_new_from_private_key__static_method__WalletUnlocked =
       _wire_new_from_private_key__static_method__WalletUnlockedPtr.asFunction<
           void Function(int, ffi.Pointer<wire_uint_8_list>,
-              ffi.Pointer<wire_Provider>)>();
+              ffi.Pointer<wire_uint_8_list>)>();
 
   void wire_new_from_mnemonic_phrase__static_method__WalletUnlocked(
     int port_,
     ffi.Pointer<wire_uint_8_list> phrase,
-    ffi.Pointer<wire_Provider> provider,
+    ffi.Pointer<wire_uint_8_list> node_url,
   ) {
     return _wire_new_from_mnemonic_phrase__static_method__WalletUnlocked(
       port_,
       phrase,
-      provider,
+      node_url,
     );
   }
 
@@ -924,25 +858,25 @@ class FuelsWire implements FlutterRustBridgeWireBase {
       _lookup<
               ffi.NativeFunction<
                   ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>,
-                      ffi.Pointer<wire_Provider>)>>(
+                      ffi.Pointer<wire_uint_8_list>)>>(
           'wire_new_from_mnemonic_phrase__static_method__WalletUnlocked');
   late final _wire_new_from_mnemonic_phrase__static_method__WalletUnlocked =
       _wire_new_from_mnemonic_phrase__static_method__WalletUnlockedPtr
           .asFunction<
               void Function(int, ffi.Pointer<wire_uint_8_list>,
-                  ffi.Pointer<wire_Provider>)>();
+                  ffi.Pointer<wire_uint_8_list>)>();
 
   void wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(
     int port_,
     ffi.Pointer<wire_uint_8_list> phrase,
     ffi.Pointer<wire_uint_8_list> path,
-    ffi.Pointer<wire_Provider> provider,
+    ffi.Pointer<wire_uint_8_list> node_url,
   ) {
     return _wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(
       port_,
       phrase,
       path,
-      provider,
+      node_url,
     );
   }
 
@@ -953,13 +887,16 @@ class FuelsWire implements FlutterRustBridgeWireBase {
                       ffi.Int64,
                       ffi.Pointer<wire_uint_8_list>,
                       ffi.Pointer<wire_uint_8_list>,
-                      ffi.Pointer<wire_Provider>)>>(
+                      ffi.Pointer<wire_uint_8_list>)>>(
           'wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked');
   late final _wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked =
       _wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlockedPtr
           .asFunction<
-              void Function(int, ffi.Pointer<wire_uint_8_list>,
-                  ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_Provider>)>();
+              void Function(
+                  int,
+                  ffi.Pointer<wire_uint_8_list>,
+                  ffi.Pointer<wire_uint_8_list>,
+                  ffi.Pointer<wire_uint_8_list>)>();
 
   void wire_gen_transfer_tx_request__method__WalletUnlocked(
     int port_,
@@ -1135,24 +1072,6 @@ class FuelsWire implements FlutterRustBridgeWireBase {
       _wire_to_b256_string__method__Bech32AddressPtr
           .asFunction<void Function(int, ffi.Pointer<wire_Bech32Address>)>();
 
-  void wire_connect__static_method__Provider(
-    int port_,
-    ffi.Pointer<wire_uint_8_list> url,
-  ) {
-    return _wire_connect__static_method__Provider(
-      port_,
-      url,
-    );
-  }
-
-  late final _wire_connect__static_method__ProviderPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>(
-      'wire_connect__static_method__Provider');
-  late final _wire_connect__static_method__Provider =
-      _wire_connect__static_method__ProviderPtr
-          .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
-
   wire_NativeBech32Address new_NativeBech32Address() {
     return _new_NativeBech32Address();
   }
@@ -1173,16 +1092,6 @@ class FuelsWire implements FlutterRustBridgeWireBase {
   late final _new_box_autoadd_bech_32_address_0 =
       _new_box_autoadd_bech_32_address_0Ptr
           .asFunction<ffi.Pointer<wire_Bech32Address> Function()>();
-
-  ffi.Pointer<wire_Provider> new_box_autoadd_provider_0() {
-    return _new_box_autoadd_provider_0();
-  }
-
-  late final _new_box_autoadd_provider_0Ptr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<wire_Provider> Function()>>(
-          'new_box_autoadd_provider_0');
-  late final _new_box_autoadd_provider_0 = _new_box_autoadd_provider_0Ptr
-      .asFunction<ffi.Pointer<wire_Provider> Function()>();
 
   ffi.Pointer<wire_WalletUnlocked> new_box_autoadd_wallet_unlocked_0() {
     return _new_box_autoadd_wallet_unlocked_0();
@@ -1265,10 +1174,6 @@ final class wire_uint_8_list extends ffi.Struct {
   external int len;
 }
 
-final class wire_Provider extends ffi.Struct {
-  external ffi.Pointer<wire_uint_8_list> node_url;
-}
-
 final class wire_NativeBech32Address extends ffi.Struct {
   external ffi.Pointer<ffi.Void> ptr;
 }
@@ -1282,7 +1187,7 @@ final class wire_WalletUnlocked extends ffi.Struct {
 
   external ffi.Pointer<wire_uint_8_list> mnemonic_phrase;
 
-  external wire_Provider provider;
+  external ffi.Pointer<wire_uint_8_list> node_url;
 
   external wire_Bech32Address address;
 }

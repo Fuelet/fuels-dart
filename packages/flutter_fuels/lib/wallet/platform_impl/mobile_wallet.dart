@@ -16,9 +16,8 @@ class FuelWalletImpl extends BaseWallet {
   @override
   Future<DartWalletUnlocked> generateNewWallet(
       {required String networkUrl}) async {
-    final provider = await Provider.connect(bridge: _bridge, url: networkUrl);
     final w =
-        await WalletUnlocked.newRandom(bridge: _bridge, provider: provider);
+        await WalletUnlocked.newRandom(bridge: _bridge, nodeUrl: networkUrl);
     return await MobileWalletUnlocked.fromRust(w, networkUrl);
   }
 
@@ -27,10 +26,9 @@ class FuelWalletImpl extends BaseWallet {
     required String networkUrl,
     required String mnemonic,
   }) async {
-    final provider = await Provider.connect(bridge: _bridge, url: networkUrl);
     final w = await WalletUnlocked.newFromMnemonicPhrase(
       bridge: _bridge,
-      provider: provider,
+      nodeUrl: networkUrl,
       phrase: mnemonic,
     );
     return await MobileWalletUnlocked.fromRust(w, networkUrl);
@@ -41,10 +39,9 @@ class FuelWalletImpl extends BaseWallet {
       {required String networkUrl,
       required String mnemonic,
       required String derivationPath}) async {
-    final provider = await Provider.connect(bridge: _bridge, url: networkUrl);
     final w = await WalletUnlocked.newFromMnemonicPhraseWithPath(
         bridge: _bridge,
-        provider: provider,
+        nodeUrl: networkUrl,
         phrase: mnemonic,
         path: derivationPath);
     return await MobileWalletUnlocked.fromRust(w, networkUrl);
@@ -55,10 +52,9 @@ class FuelWalletImpl extends BaseWallet {
     required String networkUrl,
     required String privateKey,
   }) async {
-    final provider = await Provider.connect(bridge: _bridge, url: networkUrl);
     final w = await WalletUnlocked.newFromPrivateKey(
       bridge: _bridge,
-      provider: provider,
+      nodeUrl: networkUrl,
       privateKey: removeHexPrefix(privateKey),
     );
     return await MobileWalletUnlocked.fromRust(w, networkUrl);

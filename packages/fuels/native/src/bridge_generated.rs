@@ -26,7 +26,7 @@ use crate::model::transaction::TransactionCost;
 
 fn wire_new_random__static_method__WalletUnlocked_impl(
     port_: MessagePort,
-    provider: impl Wire2Api<Provider> + UnwindSafe,
+    node_url: impl Wire2Api<String> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, WalletUnlocked, _>(
         WrapInfo {
@@ -35,15 +35,15 @@ fn wire_new_random__static_method__WalletUnlocked_impl(
             mode: FfiCallMode::Normal,
         },
         move || {
-            let api_provider = provider.wire2api();
-            move |task_callback| Result::<_, ()>::Ok(WalletUnlocked::new_random(api_provider))
+            let api_node_url = node_url.wire2api();
+            move |task_callback| Result::<_, ()>::Ok(WalletUnlocked::new_random(api_node_url))
         },
     )
 }
 fn wire_new_from_private_key__static_method__WalletUnlocked_impl(
     port_: MessagePort,
     private_key: impl Wire2Api<String> + UnwindSafe,
-    provider: impl Wire2Api<Provider> + UnwindSafe,
+    node_url: impl Wire2Api<String> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, WalletUnlocked, _>(
         WrapInfo {
@@ -53,11 +53,11 @@ fn wire_new_from_private_key__static_method__WalletUnlocked_impl(
         },
         move || {
             let api_private_key = private_key.wire2api();
-            let api_provider = provider.wire2api();
+            let api_node_url = node_url.wire2api();
             move |task_callback| {
                 Result::<_, ()>::Ok(WalletUnlocked::new_from_private_key(
                     api_private_key,
-                    api_provider,
+                    api_node_url,
                 ))
             }
         },
@@ -66,7 +66,7 @@ fn wire_new_from_private_key__static_method__WalletUnlocked_impl(
 fn wire_new_from_mnemonic_phrase__static_method__WalletUnlocked_impl(
     port_: MessagePort,
     phrase: impl Wire2Api<String> + UnwindSafe,
-    provider: impl Wire2Api<Provider> + UnwindSafe,
+    node_url: impl Wire2Api<String> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, WalletUnlocked, _>(
         WrapInfo {
@@ -76,11 +76,11 @@ fn wire_new_from_mnemonic_phrase__static_method__WalletUnlocked_impl(
         },
         move || {
             let api_phrase = phrase.wire2api();
-            let api_provider = provider.wire2api();
+            let api_node_url = node_url.wire2api();
             move |task_callback| {
                 Result::<_, ()>::Ok(WalletUnlocked::new_from_mnemonic_phrase(
                     api_phrase,
-                    api_provider,
+                    api_node_url,
                 ))
             }
         },
@@ -90,7 +90,7 @@ fn wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked_impl(
     port_: MessagePort,
     phrase: impl Wire2Api<String> + UnwindSafe,
     path: impl Wire2Api<String> + UnwindSafe,
-    provider: impl Wire2Api<Provider> + UnwindSafe,
+    node_url: impl Wire2Api<String> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, WalletUnlocked, _>(
         WrapInfo {
@@ -101,12 +101,12 @@ fn wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked_impl(
         move || {
             let api_phrase = phrase.wire2api();
             let api_path = path.wire2api();
-            let api_provider = provider.wire2api();
+            let api_node_url = node_url.wire2api();
             move |task_callback| {
                 Result::<_, ()>::Ok(WalletUnlocked::new_from_mnemonic_phrase_with_path(
                     api_phrase,
                     api_path,
-                    api_provider,
+                    api_node_url,
                 ))
             }
         },
@@ -265,22 +265,6 @@ fn wire_to_b256_string__method__Bech32Address_impl(
         },
     )
 }
-fn wire_connect__static_method__Provider_impl(
-    port_: MessagePort,
-    url: impl Wire2Api<String> + UnwindSafe,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, Provider, _>(
-        WrapInfo {
-            debug_name: "connect__static_method__Provider",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || {
-            let api_url = url.wire2api();
-            move |task_callback| Result::<_, ()>::Ok(Provider::connect(api_url))
-        },
-    )
-}
 // Section: wrapper structs
 
 // Section: static checks
@@ -329,18 +313,6 @@ impl rust2dart::IntoIntoDart<Bech32Address> for Bech32Address {
     }
 }
 
-impl support::IntoDart for Provider {
-    fn into_dart(self) -> support::DartAbi {
-        vec![self.node_url.into_into_dart().into_dart()].into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for Provider {}
-impl rust2dart::IntoIntoDart<Provider> for Provider {
-    fn into_into_dart(self) -> Self {
-        self
-    }
-}
-
 impl support::IntoDart for TransactionCost {
     fn into_dart(self) -> support::DartAbi {
         vec![
@@ -364,7 +336,7 @@ impl support::IntoDart for WalletUnlocked {
         vec![
             self.private_key.into_into_dart().into_dart(),
             self.mnemonic_phrase.into_dart(),
-            self.provider.into_into_dart().into_dart(),
+            self.node_url.into_into_dart().into_dart(),
             self.address.into_into_dart().into_dart(),
         ]
         .into_dart()

@@ -18,30 +18,22 @@ String projectPath = Directory.current.parent.parent.path;
 var rustSdk =
     FuelsImpl(loadLibForFlutter('$projectPath/target/debug/libfuels.dylib'));
 
-Future<Provider> createTestnetProvider() {
-  return Provider.connect(bridge: rustSdk, url: betaApiUrl);
-}
-
 Future<WalletUnlocked> createRandomWallet() {
-  return createTestnetProvider().then(
-      (prov) => WalletUnlocked.newRandom(bridge: rustSdk, provider: prov));
+  return WalletUnlocked.newRandom(bridge: rustSdk, nodeUrl: betaApiUrl);
 }
 
 Future<WalletUnlocked> importWalletWithPK(String privateKey) {
-  return createTestnetProvider().then((prov) =>
-      WalletUnlocked.newFromPrivateKey(
-          bridge: rustSdk, privateKey: privateKey, provider: prov));
+  return WalletUnlocked.newFromPrivateKey(
+      bridge: rustSdk, privateKey: privateKey, nodeUrl: betaApiUrl);
 }
 
 Future<WalletUnlocked> importWalletWithMnemonics(String mnemonicPhrase) {
-  return createTestnetProvider().then((prov) =>
-      WalletUnlocked.newFromMnemonicPhrase(
-          bridge: rustSdk, phrase: mnemonicPhrase, provider: prov));
+  return WalletUnlocked.newFromMnemonicPhrase(
+      bridge: rustSdk, phrase: mnemonicPhrase, nodeUrl: betaApiUrl);
 }
 
 Future<WalletUnlocked> importWalletWithMnemonicsAndPath(
     String mnemonicPhrase, String path) {
-  return createTestnetProvider().then((prov) =>
-      WalletUnlocked.newFromMnemonicPhraseWithPath(
-          bridge: rustSdk, phrase: mnemonicPhrase, path: path, provider: prov));
+  return WalletUnlocked.newFromMnemonicPhraseWithPath(
+      bridge: rustSdk, phrase: mnemonicPhrase, path: path, nodeUrl: betaApiUrl);
 }

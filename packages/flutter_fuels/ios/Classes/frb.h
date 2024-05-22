@@ -14,10 +14,6 @@ typedef struct wire_uint_8_list {
   int32_t len;
 } wire_uint_8_list;
 
-typedef struct wire_Provider {
-  struct wire_uint_8_list *node_url;
-} wire_Provider;
-
 typedef struct wire_NativeBech32Address {
   const void *ptr;
 } wire_NativeBech32Address;
@@ -29,7 +25,7 @@ typedef struct wire_Bech32Address {
 typedef struct wire_WalletUnlocked {
   struct wire_uint_8_list *private_key;
   struct wire_uint_8_list *mnemonic_phrase;
-  struct wire_Provider provider;
+  struct wire_uint_8_list *node_url;
   struct wire_Bech32Address address;
 } wire_WalletUnlocked;
 
@@ -45,20 +41,21 @@ uintptr_t new_dart_opaque(Dart_Handle handle);
 
 intptr_t init_frb_dart_api_dl(void *obj);
 
-void wire_new_random__static_method__WalletUnlocked(int64_t port_, struct wire_Provider *provider);
+void wire_new_random__static_method__WalletUnlocked(int64_t port_,
+                                                    struct wire_uint_8_list *node_url);
 
 void wire_new_from_private_key__static_method__WalletUnlocked(int64_t port_,
                                                               struct wire_uint_8_list *private_key,
-                                                              struct wire_Provider *provider);
+                                                              struct wire_uint_8_list *node_url);
 
 void wire_new_from_mnemonic_phrase__static_method__WalletUnlocked(int64_t port_,
                                                                   struct wire_uint_8_list *phrase,
-                                                                  struct wire_Provider *provider);
+                                                                  struct wire_uint_8_list *node_url);
 
 void wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked(int64_t port_,
                                                                             struct wire_uint_8_list *phrase,
                                                                             struct wire_uint_8_list *path,
-                                                                            struct wire_Provider *provider);
+                                                                            struct wire_uint_8_list *node_url);
 
 void wire_gen_transfer_tx_request__method__WalletUnlocked(int64_t port_,
                                                           struct wire_WalletUnlocked *that,
@@ -87,13 +84,9 @@ void wire_to_bech32_string__method__Bech32Address(int64_t port_, struct wire_Bec
 
 void wire_to_b256_string__method__Bech32Address(int64_t port_, struct wire_Bech32Address *that);
 
-void wire_connect__static_method__Provider(int64_t port_, struct wire_uint_8_list *url);
-
 struct wire_NativeBech32Address new_NativeBech32Address(void);
 
 struct wire_Bech32Address *new_box_autoadd_bech_32_address_0(void);
-
-struct wire_Provider *new_box_autoadd_provider_0(void);
 
 struct wire_WalletUnlocked *new_box_autoadd_wallet_unlocked_0(void);
 
@@ -119,10 +112,8 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) wire_from_b256_string__static_method__Bech32Address);
     dummy_var ^= ((int64_t) (void*) wire_to_bech32_string__method__Bech32Address);
     dummy_var ^= ((int64_t) (void*) wire_to_b256_string__method__Bech32Address);
-    dummy_var ^= ((int64_t) (void*) wire_connect__static_method__Provider);
     dummy_var ^= ((int64_t) (void*) new_NativeBech32Address);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_bech_32_address_0);
-    dummy_var ^= ((int64_t) (void*) new_box_autoadd_provider_0);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_wallet_unlocked_0);
     dummy_var ^= ((int64_t) (void*) new_uint_8_list_0);
     dummy_var ^= ((int64_t) (void*) drop_opaque_NativeBech32Address);

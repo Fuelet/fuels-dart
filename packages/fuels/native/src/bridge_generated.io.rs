@@ -4,27 +4,27 @@ use super::*;
 #[no_mangle]
 pub extern "C" fn wire_new_random__static_method__WalletUnlocked(
     port_: i64,
-    provider: *mut wire_Provider,
+    node_url: *mut wire_uint_8_list,
 ) {
-    wire_new_random__static_method__WalletUnlocked_impl(port_, provider)
+    wire_new_random__static_method__WalletUnlocked_impl(port_, node_url)
 }
 
 #[no_mangle]
 pub extern "C" fn wire_new_from_private_key__static_method__WalletUnlocked(
     port_: i64,
     private_key: *mut wire_uint_8_list,
-    provider: *mut wire_Provider,
+    node_url: *mut wire_uint_8_list,
 ) {
-    wire_new_from_private_key__static_method__WalletUnlocked_impl(port_, private_key, provider)
+    wire_new_from_private_key__static_method__WalletUnlocked_impl(port_, private_key, node_url)
 }
 
 #[no_mangle]
 pub extern "C" fn wire_new_from_mnemonic_phrase__static_method__WalletUnlocked(
     port_: i64,
     phrase: *mut wire_uint_8_list,
-    provider: *mut wire_Provider,
+    node_url: *mut wire_uint_8_list,
 ) {
-    wire_new_from_mnemonic_phrase__static_method__WalletUnlocked_impl(port_, phrase, provider)
+    wire_new_from_mnemonic_phrase__static_method__WalletUnlocked_impl(port_, phrase, node_url)
 }
 
 #[no_mangle]
@@ -32,10 +32,10 @@ pub extern "C" fn wire_new_from_mnemonic_phrase_with_path__static_method__Wallet
     port_: i64,
     phrase: *mut wire_uint_8_list,
     path: *mut wire_uint_8_list,
-    provider: *mut wire_Provider,
+    node_url: *mut wire_uint_8_list,
 ) {
     wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked_impl(
-        port_, phrase, path, provider,
+        port_, phrase, path, node_url,
     )
 }
 
@@ -109,11 +109,6 @@ pub extern "C" fn wire_to_b256_string__method__Bech32Address(
     wire_to_b256_string__method__Bech32Address_impl(port_, that)
 }
 
-#[no_mangle]
-pub extern "C" fn wire_connect__static_method__Provider(port_: i64, url: *mut wire_uint_8_list) {
-    wire_connect__static_method__Provider_impl(port_, url)
-}
-
 // Section: allocate functions
 
 #[no_mangle]
@@ -124,11 +119,6 @@ pub extern "C" fn new_NativeBech32Address() -> wire_NativeBech32Address {
 #[no_mangle]
 pub extern "C" fn new_box_autoadd_bech_32_address_0() -> *mut wire_Bech32Address {
     support::new_leak_box_ptr(wire_Bech32Address::new_with_null_ptr())
-}
-
-#[no_mangle]
-pub extern "C" fn new_box_autoadd_provider_0() -> *mut wire_Provider {
-    support::new_leak_box_ptr(wire_Provider::new_with_null_ptr())
 }
 
 #[no_mangle]
@@ -188,24 +178,10 @@ impl Wire2Api<Bech32Address> for *mut wire_Bech32Address {
         Wire2Api::<Bech32Address>::wire2api(*wrap).into()
     }
 }
-impl Wire2Api<Provider> for *mut wire_Provider {
-    fn wire2api(self) -> Provider {
-        let wrap = unsafe { support::box_from_leak_ptr(self) };
-        Wire2Api::<Provider>::wire2api(*wrap).into()
-    }
-}
 impl Wire2Api<WalletUnlocked> for *mut wire_WalletUnlocked {
     fn wire2api(self) -> WalletUnlocked {
         let wrap = unsafe { support::box_from_leak_ptr(self) };
         Wire2Api::<WalletUnlocked>::wire2api(*wrap).into()
-    }
-}
-
-impl Wire2Api<Provider> for wire_Provider {
-    fn wire2api(self) -> Provider {
-        Provider {
-            node_url: self.node_url.wire2api(),
-        }
     }
 }
 
@@ -222,7 +198,7 @@ impl Wire2Api<WalletUnlocked> for wire_WalletUnlocked {
         WalletUnlocked {
             private_key: self.private_key.wire2api(),
             mnemonic_phrase: self.mnemonic_phrase.wire2api(),
-            provider: self.provider.wire2api(),
+            node_url: self.node_url.wire2api(),
             address: self.address.wire2api(),
         }
     }
@@ -243,12 +219,6 @@ pub struct wire_Bech32Address {
 
 #[repr(C)]
 #[derive(Clone)]
-pub struct wire_Provider {
-    node_url: *mut wire_uint_8_list,
-}
-
-#[repr(C)]
-#[derive(Clone)]
 pub struct wire_uint_8_list {
     ptr: *mut u8,
     len: i32,
@@ -259,7 +229,7 @@ pub struct wire_uint_8_list {
 pub struct wire_WalletUnlocked {
     private_key: *mut wire_uint_8_list,
     mnemonic_phrase: *mut wire_uint_8_list,
-    provider: wire_Provider,
+    node_url: *mut wire_uint_8_list,
     address: wire_Bech32Address,
 }
 
@@ -297,26 +267,12 @@ impl Default for wire_Bech32Address {
     }
 }
 
-impl NewWithNullPtr for wire_Provider {
-    fn new_with_null_ptr() -> Self {
-        Self {
-            node_url: core::ptr::null_mut(),
-        }
-    }
-}
-
-impl Default for wire_Provider {
-    fn default() -> Self {
-        Self::new_with_null_ptr()
-    }
-}
-
 impl NewWithNullPtr for wire_WalletUnlocked {
     fn new_with_null_ptr() -> Self {
         Self {
             private_key: core::ptr::null_mut(),
             mnemonic_phrase: core::ptr::null_mut(),
-            provider: Default::default(),
+            node_url: core::ptr::null_mut(),
             address: Default::default(),
         }
     }

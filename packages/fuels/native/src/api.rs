@@ -15,13 +15,13 @@ pub struct WalletUnlocked {
     pub private_key: String,
     // Is present only when the wallet is created using a mnemonic phrase
     pub mnemonic_phrase: Option<String>,
-    pub provider: Provider,
+    pub node_url: String,
     pub address: Bech32Address,
 }
 
 impl WalletUnlocked {
     async fn get_native_provider(&self) -> NativeProvider {
-        self.provider.get_native_provider().await
+        NativeProvider::connect(&*self.node_url).await.unwrap()
     }
 
     async fn get_native_wallet_unlocked(&self) -> NativeWalletUnlocked {
@@ -30,20 +30,20 @@ impl WalletUnlocked {
         NativeWalletUnlocked::new_from_private_key(secret_key, Some(native_provider))
     }
 
-    pub fn new_random(provider: Provider) -> WalletUnlocked {
-        wallet::new_random(provider).unwrap()
+    pub fn new_random(node_url: String) -> WalletUnlocked {
+        wallet::new_random(node_url).unwrap()
     }
 
-    pub fn new_from_private_key(private_key: String, provider: Provider) -> WalletUnlocked {
-        wallet::new_from_private_key(private_key, provider).unwrap()
+    pub fn new_from_private_key(private_key: String, node_url: String) -> WalletUnlocked {
+        wallet::new_from_private_key(private_key, node_url).unwrap()
     }
 
-    pub fn new_from_mnemonic_phrase(phrase: String, provider: Provider) -> WalletUnlocked {
-        wallet::new_from_mnemonic_phrase(phrase, provider).unwrap()
+    pub fn new_from_mnemonic_phrase(phrase: String, node_url: String) -> WalletUnlocked {
+        wallet::new_from_mnemonic_phrase(phrase, node_url).unwrap()
     }
 
-    pub fn new_from_mnemonic_phrase_with_path(phrase: String, path: String, provider: Provider) -> WalletUnlocked {
-        wallet::new_from_mnemonic_phrase_with_path(phrase, path, provider).unwrap()
+    pub fn new_from_mnemonic_phrase_with_path(phrase: String, path: String, node_url: String) -> WalletUnlocked {
+        wallet::new_from_mnemonic_phrase_with_path(phrase, path, node_url).unwrap()
     }
 
     #[tokio::main]
@@ -117,20 +117,5 @@ impl From<NativeBech32Address> for Bech32Address {
         Bech32Address {
             native: RustOpaque::new(model)
         }
-    }
-}
-
-// Cannot move to another file, cause the methods won't be accessible in that case
-pub struct Provider {
-    pub node_url: String,
-}
-
-impl Provider {
-    pub fn connect(url: String) -> Provider {
-        Provider { node_url: url }
-    }
-
-    async fn get_native_provider(&self) -> NativeProvider {
-        NativeProvider::connect(&*self.node_url).await.unwrap()
     }
 }
