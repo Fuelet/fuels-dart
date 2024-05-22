@@ -1,3 +1,7 @@
+## 1.24.0
+
+ - **FEAT**: upgrade rust wrapper to testnet. ([f960531b](https://github.com/Fuelet/fuels-dart/commit/f960531bcb6cfa7c04e2541d5048e6728b393391))
+
 ## 1.23.1
 
  - **FIX**: use default tx policies for transfers. ([212bdd1a](https://github.com/Fuelet/fuels-dart/commit/212bdd1a1ae2ce66583b4c97c44989cfc9db1cfb))

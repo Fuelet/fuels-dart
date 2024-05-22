@@ -1,4 +1,4 @@
-release_tag_name = 'fuels-v1.23.1' # generated; do not edit
+release_tag_name = 'fuels-v1.24.0' # generated; do not edit
 
 # We cannot distribute the XCFramework alongside the library directly,
 # so we have to fetch the correct version here.

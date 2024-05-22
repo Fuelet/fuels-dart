@@ -1,3 +1,7 @@
+## 0.0.38+2
+
+ - Update a dependency to the latest release.
+
 ## 0.0.38+1
 
  - **FIX**: use default tx policies for transfers. ([212bdd1a](https://github.com/Fuelet/fuels-dart/commit/212bdd1a1ae2ce66583b4c97c44989cfc9db1cfb))
