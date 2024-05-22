@@ -14,14 +14,14 @@ void main() {
     WalletUnlocked testWallet = await importWalletWithPK(testWalletPrivateKey);
 
     final (requestBytes, _) = await testWallet.genTransferTxRequest(
-        to: newWallet.address, amount: _transferAmount, asset: ethAsset);
+        to: newWallet.address, amount: _transferAmount, asset: baseAsset);
     final txCost =
         await testWallet.estimateTransactionCost(encodedTx: requestBytes);
 
     print(
-        'Min gas price: ${txCost.minGasPrice}, gas used: ${txCost.gasUsed}, fee: ${txCost.totalFee}');
+        'Gas price: ${txCost.gasPrice}, gas used: ${txCost.gasUsed}, fee: ${txCost.totalFee}');
+    expect(txCost.gasPrice > 0, true);
     expect(txCost.totalFee > 0, true);
-    expect(txCost.gasUsed > 0, true);
   });
 
   test('test transfer eth request creation', () async {
@@ -29,7 +29,7 @@ void main() {
     WalletUnlocked testWallet = await importWalletWithPK(testWalletPrivateKey);
 
     final (requestBytes, _) = await testWallet.genTransferTxRequest(
-        to: newWallet.address, amount: _transferAmount, asset: ethAsset);
+        to: newWallet.address, amount: _transferAmount, asset: baseAsset);
     final txId = await testWallet.sendTransaction(encodedTx: requestBytes);
 
     expect(txId.isNotEmpty, true);

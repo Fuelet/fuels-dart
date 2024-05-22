@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:fuels/fuels.dart';
 
-const betaApiUrl = 'https://beta-5.fuel.network';
+const betaApiUrl = 'https://testnet.fuel.network';
 const testWalletBechAddress =
     'fuel1lcghw4e6gucsw4hj0me9cu3fkhdg65gf5ujck2tlywn8drrcedqq2htmt3';
 const testWalletPrivateKey =
@@ -11,8 +11,8 @@ const testWalletPrivateKey =
 const testWalletSeedPhrase =
     'sorry suit fade strike crucial theory rubber sign scrub burden enough trash';
 
-const ethAsset =
-    '0x0000000000000000000000000000000000000000000000000000000000000000';
+const baseAsset =
+    '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07';
 
 String projectPath = Directory.current.parent.parent.path;
 var rustSdk =

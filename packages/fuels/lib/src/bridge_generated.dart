@@ -162,14 +162,12 @@ class Provider {
 }
 
 class TransactionCost {
-  final int minGasPrice;
   final int gasPrice;
   final int gasUsed;
   final int meteredBytesSize;
   final int totalFee;
 
   const TransactionCost({
-    required this.minGasPrice,
     required this.gasPrice,
     required this.gasUsed,
     required this.meteredBytesSize,
@@ -624,14 +622,13 @@ class FuelsImpl implements Fuels {
 
   TransactionCost _wire2api_transaction_cost(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 5)
-      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
     return TransactionCost(
-      minGasPrice: _wire2api_u64(arr[0]),
-      gasPrice: _wire2api_u64(arr[1]),
-      gasUsed: _wire2api_u64(arr[2]),
-      meteredBytesSize: _wire2api_u64(arr[3]),
-      totalFee: _wire2api_u64(arr[4]),
+      gasPrice: _wire2api_u64(arr[0]),
+      gasUsed: _wire2api_u64(arr[1]),
+      meteredBytesSize: _wire2api_u64(arr[2]),
+      totalFee: _wire2api_u64(arr[3]),
     );
   }
 

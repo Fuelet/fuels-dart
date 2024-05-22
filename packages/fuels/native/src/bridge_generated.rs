@@ -344,7 +344,6 @@ impl rust2dart::IntoIntoDart<Provider> for Provider {
 impl support::IntoDart for TransactionCost {
     fn into_dart(self) -> support::DartAbi {
         vec![
-            self.min_gas_price.into_into_dart().into_dart(),
             self.gas_price.into_into_dart().into_dart(),
             self.gas_used.into_into_dart().into_dart(),
             self.metered_bytes_size.into_into_dart().into_dart(),

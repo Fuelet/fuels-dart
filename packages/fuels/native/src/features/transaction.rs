@@ -11,8 +11,6 @@ use fuels_accounts::provider::TransactionCost;
 
 use crate::model::error::CustomResult;
 
-const TRANSFER_SCRIPT: [u8; 4] = [36, 0, 0, 0];
-
 /// Clones the transfer function but doesn't submit the transaction
 /// TODO: do not sign the tx?
 pub async fn gen_transfer_tx_request(
@@ -46,7 +44,7 @@ pub async fn send_transaction(
             provider.await_transaction_commit::<CreateTransaction>(id).await?;
             id
         }
-        TransactionType::Mint(_) => panic!()
+        TransactionType::Mint(_) | TransactionType::Upload(_) | TransactionType::Upgrade(_) => panic!(),
     };
     Ok(tx_id.to_string())
 }
@@ -54,12 +52,14 @@ pub async fn send_transaction(
 pub async fn estimate_transaction_cost(
     provider: &Provider,
     encoded_tx: Vec<u8>,
+    tolerance: Option<f64>,
+    block_horizon: Option<u32>,
 ) -> CustomResult<TransactionCost> {
     let tx = decode_transaction(&encoded_tx)?;
     let cost = match tx {
-        TransactionType::Script(script) => provider.estimate_transaction_cost(script, None).await?,
-        TransactionType::Create(create) => provider.estimate_transaction_cost(create, None).await?,
-        TransactionType::Mint(_) => panic!()
+        TransactionType::Script(script) => provider.estimate_transaction_cost(script, tolerance, block_horizon).await?,
+        TransactionType::Create(create) => provider.estimate_transaction_cost(create, tolerance, block_horizon).await?,
+        TransactionType::Mint(_) | TransactionType::Upgrade(_) | TransactionType::Upload(_) => panic!()
     };
     Ok(cost)
 }
@@ -76,22 +76,16 @@ fn wrap_fuel_transaction(value: FuelTransaction) -> CustomResult<TransactionType
         FuelTransaction::Mint(_) => Err(io::Error::new(
             io::ErrorKind::InvalidData,
             "Cannot convert Mint transaction",
-        ).into())
+        ).into()),
+        FuelTransaction::Upgrade(_) => Err(io::Error::new(
+            io::ErrorKind::InvalidData,
+            "Cannot convert Upgrade transaction",
+        ).into()),
+        FuelTransaction::Upload(_) => Err(io::Error::new(
+            io::ErrorKind::InvalidData,
+            "Cannot convert Upload transaction",
+        ).into()),
     }
-}
-
-async fn get_min_tx_policies<T: Transaction>(provider: &Provider, tx: &T) -> CustomResult<TxPolicies> {
-    let TransactionCost {
-        gas_used,
-        min_gas_price,
-        ..
-    } = provider
-        .estimate_transaction_cost(tx.clone(), None)
-        .await?;
-
-    Ok(TxPolicies::default()
-        .with_script_gas_limit(gas_used)
-        .with_gas_price(min_gas_price))
 }
 
 async fn build_transfer_tx(wallet: &WalletUnlocked,

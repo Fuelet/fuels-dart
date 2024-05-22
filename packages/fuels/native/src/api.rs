@@ -72,7 +72,7 @@ impl WalletUnlocked {
         encoded_tx: Vec<u8>,
     ) -> TransactionCost {
         let native_provider = self.get_native_provider().await;
-        transaction::estimate_transaction_cost(&native_provider, encoded_tx).await.unwrap().into()
+        transaction::estimate_transaction_cost(&native_provider, encoded_tx, None, None).await.unwrap().into()
     }
 
     #[tokio::main]
