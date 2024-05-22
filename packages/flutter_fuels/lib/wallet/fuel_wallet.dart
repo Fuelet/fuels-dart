@@ -1,5 +1,6 @@
 import 'package:flutter_fuels/model/call_result.dart';
 import 'package:flutter_fuels/model/transaction_cost.dart';
+import 'package:flutter_fuels/model/transaction_receipt.dart';
 import 'package:flutter_fuels/utils/hex_utils.dart';
 import 'package:flutter_fuels/utils/mnemonic_utils.dart';
 import 'package:flutter_fuels/wallet/dart_wallet_unlocked.dart';
@@ -7,6 +8,17 @@ import 'package:flutter_fuels/wallet/dart_wallet_unlocked.dart';
 import 'platform_impl/stub_wallet.dart'
     if (dart.library.io) 'platform_impl/mobile_wallet.dart'
     if (dart.library.html) 'platform_impl/web_wallet.dart';
+
+void validateTransactionReceipts(CallResult callResult) {
+  for (var receipt in callResult.receipts) {
+    if (receipt is ReceiptPanic) {
+      throw Exception('Encountered panic receipt in transaction');
+    }
+    if (receipt is ReceiptRevert) {
+      throw Exception('Encountered revert receipt in transaction');
+    }
+  }
+}
 
 class FuelWallet {
   final DartWalletUnlocked _walletUnlocked;
@@ -97,10 +109,11 @@ class FuelWallet {
     required int fractionalAmount,
     required String assetId,
   }) async {
-    final (transferRequest, _) = await _walletUnlocked.genTransferTransactionRequest(
-        destinationB256Address: destinationB256Address,
-        fractionalAmount: fractionalAmount,
-        assetId: assetId);
+    final (transferRequest, _) =
+        await _walletUnlocked.genTransferTransactionRequest(
+            destinationB256Address: destinationB256Address,
+            fractionalAmount: fractionalAmount,
+            assetId: assetId);
     return _walletUnlocked
         .sendTransaction(transactionRequestHexOrJson: transferRequest)
         .then(addHexPrefix);
@@ -125,15 +138,17 @@ class FuelWallet {
   /// Takes hex string on mobile and json tx request on web
   Future<CallResult> simulateTransaction({
     required String transactionRequestHexOrJson,
-  }) {
-    return _walletUnlocked.simulateTransaction(
+  }) async {
+    final callResult = await _walletUnlocked.simulateTransaction(
         transactionRequestHexOrJson: transactionRequestHexOrJson);
+    validateTransactionReceipts(callResult);
+    return callResult;
   }
 
   /// Takes hex string on mobile and json tx request on web
   Future<TransactionCost> getTransactionCost({
     required String transactionRequestHexOrJson,
-  }) async {
+  }) {
     return _walletUnlocked.getTransactionCost(
         transactionRequestHexOrJson: transactionRequestHexOrJson);
   }
