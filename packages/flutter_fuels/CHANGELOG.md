@@ -1,3 +1,7 @@
+## 0.0.40
+
+ - **FEAT**: fail simulation on panic and revert receipts. ([6bc46390](https://github.com/Fuelet/fuels-dart/commit/6bc46390d5767489828768ff810fd5c093d196ef))
+
 ## 0.0.39
 
  - **FEAT**: don't connect to the network when creating wallets. ([be5b2a96](https://github.com/Fuelet/fuels-dart/commit/be5b2a96002f837d84775b512c414dcac0c5e693))

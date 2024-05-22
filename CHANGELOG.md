@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`flutter_fuels` - `v0.0.40`](#flutter_fuels---v0040)
+
+---
+
+#### `flutter_fuels` - `v0.0.40`
+
+ - **FEAT**: fail simulation on panic and revert receipts. ([6bc46390](https://github.com/Fuelet/fuels-dart/commit/6bc46390d5767489828768ff810fd5c093d196ef))
+
+
+## 2024-05-22
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`flutter_fuels` - `v0.0.39`](#flutter_fuels---v0039)
  - [`fuels` - `v1.25.0`](#fuels---v1250)
 
