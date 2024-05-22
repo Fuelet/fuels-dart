@@ -1,3 +1,7 @@
+## 1.24.1
+
+ - Bump "fuels" to `1.24.1`.
+
 ## 1.24.0
 
  - **FEAT**: upgrade rust wrapper to testnet. ([f960531b](https://github.com/Fuelet/fuels-dart/commit/f960531bcb6cfa7c04e2541d5048e6728b393391))
