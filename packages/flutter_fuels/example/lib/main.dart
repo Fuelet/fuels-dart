@@ -4,9 +4,9 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_fuels/flutter_fuels.dart';
 
-const _betaApiUrl = 'https://beta-5.fuel.network';
+const _betaApiUrl = 'https://testnet.fuel.network';
 const _ethAssetId =
-    '0x0000000000000000000000000000000000000000000000000000000000000000';
+    '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07';
 
 void main() {
   runApp(const MyApp());
@@ -210,8 +210,7 @@ class _MyAppState extends State<MyApp> {
     if (_testTxRequest != null && _currentWallet != null) {
       final txId = await _currentWallet!
           .sendTransaction(transactionRequestHexOrJson: _testTxRequest!);
-      txLink =
-          'https://fuel-explorer.vercel.app/tx/$txId';
+      txLink = 'https://fuel-explorer.vercel.app/tx/$txId';
     } else {
       txLink = 'cannot send the tx yet';
     }

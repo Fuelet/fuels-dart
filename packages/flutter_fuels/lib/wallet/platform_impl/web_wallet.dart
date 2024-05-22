@@ -14,8 +14,7 @@ class FuelWalletImpl extends BaseWallet {
   @override
   Future<DartWalletUnlocked> generateNewWallet(
       {required String networkUrl}) async {
-    final newWallet = await promiseToFuture(
-        js_wallet.generateNewWallet(_enrichNetworkUrl(networkUrl)));
+    final newWallet = await promiseToFuture(js_wallet.generateNewWallet());
     final jsWallet = JsWallet.fromJsObject(newWallet, networkUrl);
     return WebWalletUnlocked(jsWallet);
   }
@@ -25,8 +24,8 @@ class FuelWalletImpl extends BaseWallet {
     required String networkUrl,
     required String mnemonic,
   }) async {
-    final newWallet = await promiseToFuture(js_wallet.newWalletFromMnemonic(
-        _enrichNetworkUrl(networkUrl), mnemonic));
+    final newWallet =
+        await promiseToFuture(js_wallet.newWalletFromMnemonic(mnemonic));
     final jsWallet = JsWallet.fromJsObject(newWallet, networkUrl);
     return WebWalletUnlocked(jsWallet);
   }
@@ -37,8 +36,7 @@ class FuelWalletImpl extends BaseWallet {
       required String mnemonic,
       required String derivationPath}) async {
     final newWallet = await promiseToFuture(
-        js_wallet.newWalletFromMnemonicAndPath(
-            _enrichNetworkUrl(networkUrl), mnemonic, derivationPath));
+        js_wallet.newWalletFromMnemonicAndPath(mnemonic, derivationPath));
     final jsWallet = JsWallet.fromJsObject(newWallet, networkUrl);
     return WebWalletUnlocked(jsWallet);
   }
@@ -48,8 +46,8 @@ class FuelWalletImpl extends BaseWallet {
     required String networkUrl,
     required String privateKey,
   }) async {
-    final newWallet = await promiseToFuture(js_wallet.newWalletFromPrivateKey(
-        _enrichNetworkUrl(networkUrl), addHexPrefix(privateKey)));
+    final newWallet = await promiseToFuture(
+        js_wallet.newWalletFromPrivateKey(addHexPrefix(privateKey)));
     final jsWallet = JsWallet.fromJsObject(newWallet, networkUrl);
     return WebWalletUnlocked(jsWallet);
   }
@@ -151,8 +149,7 @@ class WebWalletUnlocked extends DartWalletUnlocked {
 
   @override
   Future<String> signMessage({required String message}) {
-    return promiseToFuture(
-        js_wallet.signMessage(_wallet.privateKey, _wallet.networkUrl, message));
+    return promiseToFuture(js_wallet.signMessage(_wallet.privateKey, message));
   }
 
   @override

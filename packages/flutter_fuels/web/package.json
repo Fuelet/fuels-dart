@@ -9,8 +9,7 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
-    "@fuel-ts/mnemonic": "^0.73.0",
-    "fuels": "^0.73.0",
+    "fuels": "^0.88.1",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "semver": ">=7.5.2",
     "graphql": ">=16.8.1",

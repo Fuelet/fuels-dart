@@ -1,17 +1,17 @@
-import {Mnemonic} from "@fuel-ts/mnemonic";
 import {
   Bech32Address,
+  Mnemonic,
   Provider,
   toB256,
   toBech32,
   TransactionCreate,
   TransactionRequest,
+  transactionRequestify,
   TransactionRequestLike,
   TransactionScript,
   Wallet,
   WalletUnlocked,
 } from "fuels";
-import {transactionRequestify} from "@fuel-ts/providers";
 
 type AddressObject = {
   bech32Address: string;
@@ -36,36 +36,31 @@ function walletToJson(wallet: WalletUnlocked, mnemonic?: string): WalletObject {
 }
 
 class WalletInterface {
-  async generateNewWallet(networkUrl: string): Promise<WalletObject> {
+  async generateNewWallet(): Promise<WalletObject> {
     let mnemonic = Mnemonic.generate(16);
-    return this.newWalletFromMnemonic(networkUrl, mnemonic);
+    return this.newWalletFromMnemonic(mnemonic);
   }
 
-  async newWalletFromMnemonic(networkUrl: string, mnemonic: string): Promise<WalletObject> {
-    let provider = await Provider.create(networkUrl);
-    let wallet = Wallet.fromMnemonic(mnemonic, provider);
+  async newWalletFromMnemonic(mnemonic: string): Promise<WalletObject> {
+    let wallet = Wallet.fromMnemonic(mnemonic);
     return walletToJson(wallet, mnemonic);
   }
 
-  async newWalletFromMnemonicAndPath(networkUrl: string, mnemonic: string, path: string): Promise<WalletObject> {
-    let provider = await Provider.create(networkUrl);
-    let wallet = Wallet.fromMnemonic(mnemonic, provider, path);
+  async newWalletFromMnemonicAndPath(mnemonic: string, path: string): Promise<WalletObject> {
+    let wallet = Wallet.fromMnemonic(mnemonic, path);
     return walletToJson(wallet, mnemonic);
   }
 
-  async newWalletFromPrivateKey(networkUrl: string, privateKey: string): Promise<WalletObject> {
-    let provider = await Provider.create(networkUrl);
-    let wallet = Wallet.fromPrivateKey(privateKey, provider);
+  async newWalletFromPrivateKey(privateKey: string): Promise<WalletObject> {
+    let wallet = Wallet.fromPrivateKey(privateKey);
     return walletToJson(wallet);
   }
 
   async signMessage(
     privateKey: string,
-    networkUrl: string,
     message: string
   ): Promise<string> {
-    let provider = await Provider.create(networkUrl);
-    let wallet = Wallet.fromPrivateKey(privateKey, provider);
+    let wallet = Wallet.fromPrivateKey(privateKey);
     return await wallet.signMessage(message);
   }
 
@@ -101,13 +96,14 @@ class WalletInterface {
   ): Promise<string> {
     let provider = await Provider.create(networkUrl);
     let transactionRequest = JSON.parse(transactionRequestJson);
-    const {minGasPrice, gasPrice, gasUsed, minFee, maxFee} = await provider.getTransactionCost(transactionRequest)
+    const {gasPrice, gasUsed, minFee, maxFee, minGas, maxGas} = await provider.getTransactionCost(transactionRequest)
     const responseObject = {
-      minGasPrice: minGasPrice.toNumber(),
       gasPrice: gasPrice.toNumber(),
       gasUsed: gasUsed.toNumber(),
       minFee: minFee.toNumber(),
       maxFee: maxFee.toNumber(),
+      minGas: minGas.toNumber(),
+      maxGas: maxGas.toNumber(),
     }
     return JSON.stringify(responseObject);
   }

@@ -4,24 +4,20 @@ library js_fuels_wallet;
 import 'package:js/js.dart';
 
 @JS('generateNewWallet')
-external Object generateNewWallet(String networkUrl);
+external Object generateNewWallet();
 
 @JS('newWalletFromMnemonic')
-external Object newWalletFromMnemonic(String networkUrl, String mnemonic);
+external Object newWalletFromMnemonic(String mnemonic);
 
 @JS('newWalletFromMnemonicAndPath')
 external Object newWalletFromMnemonicAndPath(
-    String networkUrl, String mnemonic, String path);
+    String mnemonic, String path);
 
 @JS('newWalletFromPrivateKey')
-external Object newWalletFromPrivateKey(String networkUrl, String privateKey);
+external Object newWalletFromPrivateKey(String privateKey);
 
 @JS('signMessage')
-external Object signMessage(
-  String privateKey,
-  String networkUrl,
-  String message,
-);
+external Object signMessage(String networkUrl, String message);
 
 @JS('sendTransaction')
 external Object sendTransaction(
