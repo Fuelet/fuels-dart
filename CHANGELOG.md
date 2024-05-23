@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-05-23
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flutter_fuels` - `v0.0.40+2`](#flutter_fuels---v00402)
+
+---
+
+#### `flutter_fuels` - `v0.0.40+2`
+
+ - **FIX**: use v1 graphql endpoint. ([36de4297](https://github.com/Fuelet/fuels-dart/commit/36de4297cefc44d6a1b7c863601586e4faf59104))
+
+
 ## 2024-05-22
 
 ### Changes

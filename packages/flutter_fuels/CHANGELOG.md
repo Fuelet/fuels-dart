@@ -1,3 +1,7 @@
+## 0.0.40+2
+
+ - **FIX**: use v1 graphql endpoint. ([36de4297](https://github.com/Fuelet/fuels-dart/commit/36de4297cefc44d6a1b7c863601586e4faf59104))
+
 ## 0.0.40+1
 
  - **FIX**: remove minGasPrice from tx cost. ([e0c45c8c](https://github.com/Fuelet/fuels-dart/commit/e0c45c8cf7a2e9933219fb892515cead49418d80))
