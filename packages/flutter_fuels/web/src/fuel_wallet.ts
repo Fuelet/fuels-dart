@@ -72,7 +72,7 @@ class WalletInterface {
     let provider = await Provider.create(networkUrl);
     let wallet = Wallet.fromPrivateKey(privateKey, provider);
     let transactionRequest = JSON.parse(transactionRequestJson);
-    let response = await wallet.sendTransaction(transactionRequest);
+    let response = await wallet.sendTransaction(transactionRequest, {awaitExecution: true});
 
     return response.id;
   }
