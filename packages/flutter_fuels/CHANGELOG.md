@@ -1,3 +1,7 @@
+## 0.0.41
+
+ - **FEAT**: await tx execution in ts. ([8c0e014b](https://github.com/Fuelet/fuels-dart/commit/8c0e014be7d8baaeff8b7c9d01ea2444be73b71b))
+
 ## 0.0.40+2
 
  - **FIX**: use v1 graphql endpoint. ([36de4297](https://github.com/Fuelet/fuels-dart/commit/36de4297cefc44d6a1b7c863601586e4faf59104))

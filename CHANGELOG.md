@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`flutter_fuels` - `v0.0.41`](#flutter_fuels---v0041)
+
+---
+
+#### `flutter_fuels` - `v0.0.41`
+
+ - **FEAT**: await tx execution in ts. ([8c0e014b](https://github.com/Fuelet/fuels-dart/commit/8c0e014be7d8baaeff8b7c9d01ea2444be73b71b))
+
+
+## 2024-05-23
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`flutter_fuels` - `v0.0.40+2`](#flutter_fuels---v00402)
 
 ---
