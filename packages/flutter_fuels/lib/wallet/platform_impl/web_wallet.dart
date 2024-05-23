@@ -84,9 +84,9 @@ String _enrichNetworkUrl(String url) {
 
   if (!url.contains('graphql')) {
     if (networkUrl[networkUrl.length - 1] == '/') {
-      networkUrl += 'graphql';
+      networkUrl += 'v1/graphql';
     } else {
-      networkUrl += '/graphql';
+      networkUrl += '/v1/graphql';
     }
   }
 
