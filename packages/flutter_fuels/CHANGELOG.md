@@ -1,3 +1,7 @@
+## 0.0.42
+
+ - **FEAT**: add waitForResult in ts wrapper. ([a3685012](https://github.com/Fuelet/fuels-dart/commit/a3685012c72983b822f27bb233b273dce79a6ccd))
+
 ## 0.0.41
 
  - **FEAT**: await tx execution in ts. ([8c0e014b](https://github.com/Fuelet/fuels-dart/commit/8c0e014be7d8baaeff8b7c9d01ea2444be73b71b))

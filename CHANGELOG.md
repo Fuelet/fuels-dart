@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-05-31
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flutter_fuels` - `v0.0.42`](#flutter_fuels---v0042)
+
+---
+
+#### `flutter_fuels` - `v0.0.42`
+
+ - **FEAT**: add waitForResult in ts wrapper. ([a3685012](https://github.com/Fuelet/fuels-dart/commit/a3685012c72983b822f27bb233b273dce79a6ccd))
+
+
 ## 2024-05-23
 
 ### Changes
