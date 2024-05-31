@@ -73,7 +73,10 @@ class WalletInterface {
     let wallet = Wallet.fromPrivateKey(privateKey, provider);
     let transactionRequest = JSON.parse(transactionRequestJson);
     let response = await wallet.sendTransaction(transactionRequest, {awaitExecution: true});
-
+    let txResult = await response.waitForResult()
+    if (!txResult.isStatusSuccess) {
+      throw new Error(`Transaction failed: ${txResult.status}`);
+    }
     return response.id;
   }
 
