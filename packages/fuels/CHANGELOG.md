@@ -1,3 +1,7 @@
+## 1.26.0
+
+ - **FEAT**: upgrade underlying SDKs. ([b0b2d8fa](https://github.com/Fuelet/fuels-dart/commit/b0b2d8fab28d281cad2f55b6718fe37657f2d40c))
+
 ## 1.25.0
 
  - **FEAT**: don't connect to the network when creating wallets. ([be5b2a96](https://github.com/Fuelet/fuels-dart/commit/be5b2a96002f837d84775b512c414dcac0c5e693))
