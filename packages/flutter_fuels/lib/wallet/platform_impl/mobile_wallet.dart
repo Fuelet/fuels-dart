@@ -119,7 +119,9 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
     return transaction_cost.TransactionCost(
         gasPrice: txCost.gasPrice,
         gasUsed: txCost.gasUsed,
-        minFee: txCost.totalFee);
+        minFee: txCost.totalFee,
+        maxFee: txCost.totalFee,
+    );
   }
 
   @override

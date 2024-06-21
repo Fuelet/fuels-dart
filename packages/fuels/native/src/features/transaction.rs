@@ -95,7 +95,7 @@ async fn build_transfer_tx(wallet: &WalletUnlocked,
                            asset: &String,
                            tx_policies: TxPolicies) -> CustomResult<ScriptTransaction> {
     let asset_id = AssetId::from_str(asset)?;
-    let inputs = wallet.get_asset_inputs_for_amount(asset_id, amount).await?;
+    let inputs = wallet.get_asset_inputs_for_amount(asset_id, amount, None).await?;
     let outputs = wallet.get_asset_outputs_for_amount(to, asset_id, amount);
 
     let mut tx_builder =

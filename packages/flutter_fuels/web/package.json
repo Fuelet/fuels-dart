@@ -9,7 +9,7 @@
     "webpack-cli": "^5.0.1"
   },
   "dependencies": {
-    "fuels": "^0.89.2",
+    "fuels": "^0.90.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "semver": ">=7.5.2",
     "graphql": ">=16.8.1",
