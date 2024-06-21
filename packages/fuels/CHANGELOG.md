@@ -1,3 +1,7 @@
+## 1.28.0
+
+ - **FEAT**: don't require wallet for estimating tx cost. ([0812cf15](https://github.com/Fuelet/fuels-dart/commit/0812cf15d9f2bdf073365e7db7b324c9b76c2ada))
+
 ## 1.27.0
 
  - **FEAT**: propagate max fee. ([2605fa6d](https://github.com/Fuelet/fuels-dart/commit/2605fa6de0751cdf37b1ebbb0221b6fe64edddeb))

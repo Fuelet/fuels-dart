@@ -15,6 +15,32 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`flutter_fuels` - `v0.0.47`](#flutter_fuels---v0047)
+ - [`fuels` - `v1.28.0`](#fuels---v1280)
+
+---
+
+#### `flutter_fuels` - `v0.0.47`
+
+ - **FEAT**: don't require wallet for estimating tx cost. ([0812cf15](https://github.com/Fuelet/fuels-dart/commit/0812cf15d9f2bdf073365e7db7b324c9b76c2ada))
+
+#### `fuels` - `v1.28.0`
+
+ - **FEAT**: don't require wallet for estimating tx cost. ([0812cf15](https://github.com/Fuelet/fuels-dart/commit/0812cf15d9f2bdf073365e7db7b324c9b76c2ada))
+
+
+## 2024-06-21
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`flutter_fuels` - `v0.0.46`](#flutter_fuels---v0046)
 
 ---
