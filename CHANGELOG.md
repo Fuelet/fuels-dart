@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-06-21
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flutter_fuels` - `v0.0.44`](#flutter_fuels---v0044)
+ - [`fuels` - `v1.27.0`](#fuels---v1270)
+
+---
+
+#### `flutter_fuels` - `v0.0.44`
+
+ - **FEAT**: propagate max fee. ([2605fa6d](https://github.com/Fuelet/fuels-dart/commit/2605fa6de0751cdf37b1ebbb0221b6fe64edddeb))
+
+#### `fuels` - `v1.27.0`
+
+ - **FEAT**: propagate max fee. ([2605fa6d](https://github.com/Fuelet/fuels-dart/commit/2605fa6de0751cdf37b1ebbb0221b6fe64edddeb))
+
+
 ## 2024-06-12
 
 ### Changes

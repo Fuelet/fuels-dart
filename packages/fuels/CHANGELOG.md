@@ -1,3 +1,7 @@
+## 1.27.0
+
+ - **FEAT**: propagate max fee. ([2605fa6d](https://github.com/Fuelet/fuels-dart/commit/2605fa6de0751cdf37b1ebbb0221b6fe64edddeb))
+
 ## 1.26.0
 
  - **FEAT**: upgrade underlying SDKs. ([b0b2d8fa](https://github.com/Fuelet/fuels-dart/commit/b0b2d8fab28d281cad2f55b6718fe37657f2d40c))
