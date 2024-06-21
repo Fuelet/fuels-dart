@@ -3,14 +3,14 @@
     "build": "webpack --config webpack/webpack.config.js"
   },
   "devDependencies": {
-    "ts-loader": "^9.5.1",
-    "typescript": "^5.5.2",
-    "webpack": "^5.92.1",
-    "webpack-cli": "^5.1.4"
+    "ts-loader": "^9.4.2",
+    "typescript": "^4.8.4",
+    "webpack": "^5.76.1",
+    "webpack-cli": "^5.0.1"
   },
   "dependencies": {
     "fuels": "^0.90.0",
-    "node-polyfill-webpack-plugin": "^4.0.0",
+    "node-polyfill-webpack-plugin": "^2.0.1",
     "semver": ">=7.6.2",
     "graphql": ">=16.9.0",
     "browserify-sign": ">=4.2.3"
