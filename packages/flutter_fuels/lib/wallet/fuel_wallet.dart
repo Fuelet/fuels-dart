@@ -1,5 +1,4 @@
 import 'package:flutter_fuels/model/call_result.dart';
-import 'package:flutter_fuels/model/transaction_cost.dart';
 import 'package:flutter_fuels/model/transaction_receipt.dart';
 import 'package:flutter_fuels/utils/hex_utils.dart';
 import 'package:flutter_fuels/utils/mnemonic_utils.dart';
@@ -143,14 +142,6 @@ class FuelWallet {
         transactionRequestHexOrJson: transactionRequestHexOrJson);
     validateTransactionReceipts(callResult);
     return callResult;
-  }
-
-  /// Takes hex string on mobile and json tx request on web
-  Future<TransactionCost> getTransactionCost({
-    required String transactionRequestHexOrJson,
-  }) {
-    return _walletUnlocked.getTransactionCost(
-        transactionRequestHexOrJson: transactionRequestHexOrJson);
   }
 
   /// Returns hex string on mobile and json tx request on web

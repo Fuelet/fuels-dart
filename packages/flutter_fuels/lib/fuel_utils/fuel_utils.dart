@@ -1,4 +1,5 @@
 import 'package:flutter_fuels/model/transaction.dart';
+import 'package:flutter_fuels/model/transaction_cost.dart';
 import 'package:flutter_fuels/utils/hex_utils.dart';
 
 import 'platform_impl/stub_fuel_utils.dart'
@@ -20,5 +21,14 @@ class FuelUtils {
   static Future<Transaction> transformTxRequest(
       dynamic transactionRequestLike) {
     return _utils.transformTxRequest(transactionRequestLike);
+  }
+
+  /// Takes hex string on mobile and json tx request on web
+  static Future<TransactionCost> getTransactionCost(
+      {required String networkUrl,
+      required String transactionRequestHexOrJson}) {
+    return _utils.getTransactionCost(
+        networkUrl: networkUrl,
+        transactionRequestHexOrJson: transactionRequestHexOrJson);
   }
 }

@@ -11,3 +11,9 @@ external String b256FromBech32String(String bech32Address);
 
 @JS('transformTxRequest')
 external String transformTxRequest(String transactionRequestJson);
+
+@JS('getTransactionCost')
+external Object getTransactionCost(
+  String networkUrl,
+  String transactionRequestJson,
+);

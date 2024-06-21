@@ -2,7 +2,6 @@ import 'dart:typed_data';
 
 import 'package:convert/convert.dart';
 import 'package:flutter_fuels/model/call_result.dart';
-import 'package:flutter_fuels/model/transaction_cost.dart' as transaction_cost;
 import 'package:flutter_fuels/utils/hex_utils.dart';
 import 'package:flutter_fuels/wallet/dart_wallet_unlocked.dart';
 import 'package:fuels/fuels.dart';
@@ -107,20 +106,6 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
     return (
       addHexPrefix(hex.encode(bytes)),
       addHexPrefix(hex.encode(txIdBytes))
-    );
-  }
-
-  @override
-  Future<transaction_cost.TransactionCost> getTransactionCost(
-      {required String transactionRequestHexOrJson}) async {
-    final bytes = hex.decode(removeHexPrefix(transactionRequestHexOrJson));
-    final txCost = await _rustWalletUnlocked.estimateTransactionCost(
-        encodedTx: Uint8List.fromList(bytes));
-    return transaction_cost.TransactionCost(
-        gasPrice: txCost.gasPrice,
-        gasUsed: txCost.gasUsed,
-        minFee: txCost.totalFee,
-        maxFee: txCost.totalFee,
     );
   }
 

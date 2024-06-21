@@ -60,21 +60,21 @@ pub extern "C" fn wire_send_transaction__method__WalletUnlocked(
 }
 
 #[no_mangle]
-pub extern "C" fn wire_estimate_transaction_cost__method__WalletUnlocked(
-    port_: i64,
-    that: *mut wire_WalletUnlocked,
-    encoded_tx: *mut wire_uint_8_list,
-) {
-    wire_estimate_transaction_cost__method__WalletUnlocked_impl(port_, that, encoded_tx)
-}
-
-#[no_mangle]
 pub extern "C" fn wire_sign_message__method__WalletUnlocked(
     port_: i64,
     that: *mut wire_WalletUnlocked,
     message: *mut wire_uint_8_list,
 ) {
     wire_sign_message__method__WalletUnlocked_impl(port_, that, message)
+}
+
+#[no_mangle]
+pub extern "C" fn wire_estimate_transaction_cost__method__Provider(
+    port_: i64,
+    that: *mut wire_Provider,
+    encoded_tx: *mut wire_uint_8_list,
+) {
+    wire_estimate_transaction_cost__method__Provider_impl(port_, that, encoded_tx)
 }
 
 #[no_mangle]
@@ -119,6 +119,11 @@ pub extern "C" fn new_NativeBech32Address() -> wire_NativeBech32Address {
 #[no_mangle]
 pub extern "C" fn new_box_autoadd_bech_32_address_0() -> *mut wire_Bech32Address {
     support::new_leak_box_ptr(wire_Bech32Address::new_with_null_ptr())
+}
+
+#[no_mangle]
+pub extern "C" fn new_box_autoadd_provider_0() -> *mut wire_Provider {
+    support::new_leak_box_ptr(wire_Provider::new_with_null_ptr())
 }
 
 #[no_mangle]
@@ -178,10 +183,24 @@ impl Wire2Api<Bech32Address> for *mut wire_Bech32Address {
         Wire2Api::<Bech32Address>::wire2api(*wrap).into()
     }
 }
+impl Wire2Api<Provider> for *mut wire_Provider {
+    fn wire2api(self) -> Provider {
+        let wrap = unsafe { support::box_from_leak_ptr(self) };
+        Wire2Api::<Provider>::wire2api(*wrap).into()
+    }
+}
 impl Wire2Api<WalletUnlocked> for *mut wire_WalletUnlocked {
     fn wire2api(self) -> WalletUnlocked {
         let wrap = unsafe { support::box_from_leak_ptr(self) };
         Wire2Api::<WalletUnlocked>::wire2api(*wrap).into()
+    }
+}
+
+impl Wire2Api<Provider> for wire_Provider {
+    fn wire2api(self) -> Provider {
+        Provider {
+            node_url: self.node_url.wire2api(),
+        }
     }
 }
 
@@ -215,6 +234,12 @@ pub struct wire_NativeBech32Address {
 #[derive(Clone)]
 pub struct wire_Bech32Address {
     native: wire_NativeBech32Address,
+}
+
+#[repr(C)]
+#[derive(Clone)]
+pub struct wire_Provider {
+    node_url: *mut wire_uint_8_list,
 }
 
 #[repr(C)]
@@ -262,6 +287,20 @@ impl NewWithNullPtr for wire_Bech32Address {
 }
 
 impl Default for wire_Bech32Address {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+
+impl NewWithNullPtr for wire_Provider {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            node_url: core::ptr::null_mut(),
+        }
+    }
+}
+
+impl Default for wire_Provider {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }

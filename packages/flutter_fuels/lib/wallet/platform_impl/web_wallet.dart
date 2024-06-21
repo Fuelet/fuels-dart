@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'dart:js_util';
 
 import 'package:flutter_fuels/model/call_result.dart';
-import 'package:flutter_fuels/model/transaction_cost.dart';
 import 'package:flutter_fuels/utils/hex_utils.dart';
 import 'package:flutter_fuels/wallet/dart_wallet_unlocked.dart';
 import 'package:js/js_util.dart';
@@ -125,19 +124,6 @@ class WebWalletUnlocked extends DartWalletUnlocked {
         fractionalAmount,
         addHexPrefix(assetId)));
     return (tuple[0] as String, tuple[1] as String);
-  }
-
-  @override
-  Future<TransactionCost> getTransactionCost(
-      {required String transactionRequestHexOrJson}) async {
-    final txCostStr = await promiseToFuture(js_wallet.getTransactionCost(
-        _wallet.networkUrl, transactionRequestHexOrJson));
-    final txCostJson = jsonDecode(txCostStr);
-    try {
-      return TransactionCost.fromJson(txCostJson);
-    } catch (err) {
-      return Future.error(err);
-    }
   }
 
   @override

@@ -33,12 +33,6 @@ external Object simulateTransaction(
   String transactionRequestJson,
 );
 
-@JS('getTransactionCost')
-external Object getTransactionCost(
-  String networkUrl,
-  String transactionRequestJson,
-);
-
 @JS('genTransferTransactionRequest')
 external Object genTransferTransactionRequest(
   String privateKey,

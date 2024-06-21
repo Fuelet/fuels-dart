@@ -93,24 +93,6 @@ class WalletInterface {
     return JSON.stringify(response);
   }
 
-  async getTransactionCost(
-    networkUrl: string,
-    transactionRequestJson: string
-  ): Promise<string> {
-    let provider = await Provider.create(networkUrl);
-    let transactionRequest = JSON.parse(transactionRequestJson);
-    const {gasPrice, gasUsed, minFee, maxFee, minGas, maxGas} = await provider.getTransactionCost(transactionRequest)
-    const responseObject = {
-      gasPrice: gasPrice.toNumber(),
-      gasUsed: gasUsed.toNumber(),
-      minFee: minFee.toNumber(),
-      maxFee: maxFee.toNumber(),
-      minGas: minGas.toNumber(),
-      maxGas: maxGas.toNumber(),
-    }
-    return JSON.stringify(responseObject);
-  }
-
   async genTransferTransactionRequest(
     privateKey: string,
     networkUrl: string,
@@ -142,6 +124,24 @@ class FuelsUtils {
     let txRequest: TransactionRequest = transactionRequestify(txRequestLike);
     let tx: TransactionCreate | TransactionScript = txRequest.toTransaction();
     return JSON.stringify(tx);
+  }
+
+  async getTransactionCost(
+    networkUrl: string,
+    transactionRequestJson: string
+  ): Promise<string> {
+    let provider = await Provider.create(networkUrl);
+    let transactionRequest = JSON.parse(transactionRequestJson);
+    const {gasPrice, gasUsed, minFee, maxFee, minGas, maxGas} = await provider.getTransactionCost(transactionRequest)
+    const responseObject = {
+      gasPrice: gasPrice.toNumber(),
+      gasUsed: gasUsed.toNumber(),
+      minFee: minFee.toNumber(),
+      maxFee: maxFee.toNumber(),
+      minGas: minGas.toNumber(),
+      maxGas: maxGas.toNumber(),
+    }
+    return JSON.stringify(responseObject);
   }
 }
 

@@ -22,10 +22,6 @@ abstract class DartWalletUnlocked {
   Future<CallResult> simulateTransaction(
       {required String transactionRequestHexOrJson});
 
-  /// Takes hex string on mobile and json tx request on web
-  Future<TransactionCost> getTransactionCost(
-      {required String transactionRequestHexOrJson});
-
   /// Returns hex string on mobile and json tx request on web
   Future<(String, String)> genTransferTransactionRequest({
     required String destinationB256Address,

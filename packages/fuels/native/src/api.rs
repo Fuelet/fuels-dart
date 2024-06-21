@@ -11,6 +11,10 @@ use fuels::prelude::TxPolicies;
 use crate::features::{crypto, transaction, wallet};
 use crate::model::transaction::TransactionCost;
 
+async fn get_native_provider(node_url: &String) -> NativeProvider {
+    NativeProvider::connect(node_url).await.unwrap()
+}
+
 pub struct WalletUnlocked {
     pub private_key: String,
     // Is present only when the wallet is created using a mnemonic phrase
@@ -20,13 +24,9 @@ pub struct WalletUnlocked {
 }
 
 impl WalletUnlocked {
-    async fn get_native_provider(&self) -> NativeProvider {
-        NativeProvider::connect(&*self.node_url).await.unwrap()
-    }
-
     async fn get_native_wallet_unlocked(&self) -> NativeWalletUnlocked {
         let secret_key = SecretKey::from_str(self.private_key.as_str()).unwrap();
-        let native_provider = self.get_native_provider().await;
+        let native_provider = get_native_provider(&self.node_url).await;
         NativeWalletUnlocked::new_from_private_key(secret_key, Some(native_provider))
     }
 
@@ -62,17 +62,8 @@ impl WalletUnlocked {
         &self,
         encoded_tx: Vec<u8>,
     ) -> String {
-        let native_provider = self.get_native_provider().await;
+        let native_provider = get_native_provider(&self.node_url).await;
         transaction::send_transaction(&native_provider, encoded_tx).await.unwrap()
-    }
-
-    #[tokio::main]
-    pub async fn estimate_transaction_cost(
-        &self,
-        encoded_tx: Vec<u8>,
-    ) -> TransactionCost {
-        let native_provider = self.get_native_provider().await;
-        transaction::estimate_transaction_cost(&native_provider, encoded_tx, None, None).await.unwrap().into()
     }
 
     #[tokio::main]
@@ -86,6 +77,21 @@ impl WalletUnlocked {
 }
 
 // Cannot move to another file, cause the methods won't be accessible in that case
+pub struct Provider {
+    pub node_url: String,
+}
+
+impl Provider {
+    #[tokio::main]
+    pub async fn estimate_transaction_cost(
+        &self,
+        encoded_tx: Vec<u8>,
+    ) -> TransactionCost {
+        let native_provider = get_native_provider(&self.node_url).await;
+        transaction::estimate_transaction_cost(&native_provider, encoded_tx, None, None).await.unwrap().into()
+    }
+}
+
 pub struct Bech32Address {
     pub native: RustOpaque<NativeBech32Address>,
 }

@@ -22,6 +22,10 @@ Future<WalletUnlocked> createRandomWallet() {
   return WalletUnlocked.newRandom(bridge: rustSdk, nodeUrl: betaApiUrl);
 }
 
+Provider createProvider() {
+  return Provider(bridge: rustSdk, nodeUrl: betaApiUrl);
+}
+
 Future<WalletUnlocked> importWalletWithPK(String privateKey) {
   return WalletUnlocked.newFromPrivateKey(
       bridge: rustSdk, privateKey: privateKey, nodeUrl: betaApiUrl);

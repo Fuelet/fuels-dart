@@ -158,29 +158,6 @@ fn wire_send_transaction__method__WalletUnlocked_impl(
         },
     )
 }
-fn wire_estimate_transaction_cost__method__WalletUnlocked_impl(
-    port_: MessagePort,
-    that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
-    encoded_tx: impl Wire2Api<Vec<u8>> + UnwindSafe,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, TransactionCost, _>(
-        WrapInfo {
-            debug_name: "estimate_transaction_cost__method__WalletUnlocked",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || {
-            let api_that = that.wire2api();
-            let api_encoded_tx = encoded_tx.wire2api();
-            move |task_callback| {
-                Result::<_, ()>::Ok(WalletUnlocked::estimate_transaction_cost(
-                    &api_that,
-                    api_encoded_tx,
-                ))
-            }
-        },
-    )
-}
 fn wire_sign_message__method__WalletUnlocked_impl(
     port_: MessagePort,
     that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
@@ -197,6 +174,29 @@ fn wire_sign_message__method__WalletUnlocked_impl(
             let api_message = message.wire2api();
             move |task_callback| {
                 Result::<_, ()>::Ok(WalletUnlocked::sign_message(&api_that, api_message))
+            }
+        },
+    )
+}
+fn wire_estimate_transaction_cost__method__Provider_impl(
+    port_: MessagePort,
+    that: impl Wire2Api<Provider> + UnwindSafe,
+    encoded_tx: impl Wire2Api<Vec<u8>> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, TransactionCost, _>(
+        WrapInfo {
+            debug_name: "estimate_transaction_cost__method__Provider",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.wire2api();
+            let api_encoded_tx = encoded_tx.wire2api();
+            move |task_callback| {
+                Result::<_, ()>::Ok(Provider::estimate_transaction_cost(
+                    &api_that,
+                    api_encoded_tx,
+                ))
             }
         },
     )

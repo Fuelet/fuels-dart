@@ -29,6 +29,10 @@ typedef struct wire_WalletUnlocked {
   struct wire_Bech32Address address;
 } wire_WalletUnlocked;
 
+typedef struct wire_Provider {
+  struct wire_uint_8_list *node_url;
+} wire_Provider;
+
 typedef struct DartCObject *WireSyncReturn;
 
 void store_dart_post_cobject(DartPostCObjectFnType ptr);
@@ -67,13 +71,13 @@ void wire_send_transaction__method__WalletUnlocked(int64_t port_,
                                                    struct wire_WalletUnlocked *that,
                                                    struct wire_uint_8_list *encoded_tx);
 
-void wire_estimate_transaction_cost__method__WalletUnlocked(int64_t port_,
-                                                            struct wire_WalletUnlocked *that,
-                                                            struct wire_uint_8_list *encoded_tx);
-
 void wire_sign_message__method__WalletUnlocked(int64_t port_,
                                                struct wire_WalletUnlocked *that,
                                                struct wire_uint_8_list *message);
+
+void wire_estimate_transaction_cost__method__Provider(int64_t port_,
+                                                      struct wire_Provider *that,
+                                                      struct wire_uint_8_list *encoded_tx);
 
 void wire_from_bech32_string__static_method__Bech32Address(int64_t port_,
                                                            struct wire_uint_8_list *s);
@@ -87,6 +91,8 @@ void wire_to_b256_string__method__Bech32Address(int64_t port_, struct wire_Bech3
 struct wire_NativeBech32Address new_NativeBech32Address(void);
 
 struct wire_Bech32Address *new_box_autoadd_bech_32_address_0(void);
+
+struct wire_Provider *new_box_autoadd_provider_0(void);
 
 struct wire_WalletUnlocked *new_box_autoadd_wallet_unlocked_0(void);
 
@@ -106,14 +112,15 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_gen_transfer_tx_request__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_send_transaction__method__WalletUnlocked);
-    dummy_var ^= ((int64_t) (void*) wire_estimate_transaction_cost__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_sign_message__method__WalletUnlocked);
+    dummy_var ^= ((int64_t) (void*) wire_estimate_transaction_cost__method__Provider);
     dummy_var ^= ((int64_t) (void*) wire_from_bech32_string__static_method__Bech32Address);
     dummy_var ^= ((int64_t) (void*) wire_from_b256_string__static_method__Bech32Address);
     dummy_var ^= ((int64_t) (void*) wire_to_bech32_string__method__Bech32Address);
     dummy_var ^= ((int64_t) (void*) wire_to_b256_string__method__Bech32Address);
     dummy_var ^= ((int64_t) (void*) new_NativeBech32Address);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_bech_32_address_0);
+    dummy_var ^= ((int64_t) (void*) new_box_autoadd_provider_0);
     dummy_var ^= ((int64_t) (void*) new_box_autoadd_wallet_unlocked_0);
     dummy_var ^= ((int64_t) (void*) new_uint_8_list_0);
     dummy_var ^= ((int64_t) (void*) drop_opaque_NativeBech32Address);

@@ -10,13 +10,14 @@ const _transferAmount = 1;
 // TODO: do not depend on external state
 void main() {
   test('test transfer tx gas estimation', () async {
+    Provider provider = createProvider();
     WalletUnlocked newWallet = await createRandomWallet();
     WalletUnlocked testWallet = await importWalletWithPK(testWalletPrivateKey);
 
     final (requestBytes, _) = await testWallet.genTransferTxRequest(
         to: newWallet.address, amount: _transferAmount, asset: baseAsset);
     final txCost =
-        await testWallet.estimateTransactionCost(encodedTx: requestBytes);
+        await provider.estimateTransactionCost(encodedTx: requestBytes);
 
     print(
         'Gas price: ${txCost.gasPrice}, gas used: ${txCost.gasUsed}, fee: ${txCost.totalFee}');
