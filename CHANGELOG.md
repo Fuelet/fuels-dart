@@ -15,6 +15,25 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`flutter_fuels` - `v0.0.46`](#flutter_fuels---v0046)
+
+---
+
+#### `flutter_fuels` - `v0.0.46`
+
+
+## 2024-06-21
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`flutter_fuels` - `v0.0.45`](#flutter_fuels---v0045)
 
 ---
