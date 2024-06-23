@@ -61,19 +61,12 @@ class OutputCoin extends Output {
 
 class OutputContract extends Output {
   final int inputIndex;
-  final String balanceRoot;
-  final String stateRoot;
 
-  const OutputContract(
-      {required this.inputIndex,
-      required this.balanceRoot,
-      required this.stateRoot});
+  const OutputContract({required this.inputIndex});
 
   factory OutputContract.fromJson(Map<String, dynamic> data) {
     return OutputContract(
       inputIndex: data['inputIndex'],
-      balanceRoot: data['balanceRoot'],
-      stateRoot: data['stateRoot'],
     );
   }
 }
@@ -125,14 +118,10 @@ class OutputVariable extends Output {
 
 class OutputContractCreated extends Output {
   final String contractId;
-  final String stateRoot;
 
-  const OutputContractCreated(
-      {required this.contractId, required this.stateRoot});
+  const OutputContractCreated({required this.contractId});
 
   factory OutputContractCreated.fromJson(Map<String, dynamic> data) {
-    return OutputContractCreated(
-        contractId: addHexPrefix(data['contractId']),
-        stateRoot: data['stateRoot']);
+    return OutputContractCreated(contractId: addHexPrefix(data['contractId']));
   }
 }

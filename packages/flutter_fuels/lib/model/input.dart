@@ -1,5 +1,3 @@
-import 'package:flutter_fuels/model/tx_pointer.dart';
-import 'package:flutter_fuels/model/utxo_id.dart';
 import 'package:flutter_fuels/utils/hex_utils.dart';
 import 'package:flutter_fuels/utils/json_utils.dart';
 
@@ -39,68 +37,34 @@ class UnparsedInput extends Input {
 }
 
 class InputCoin extends Input {
-  final UtxoId utxoID;
   final String owner;
   final BigInt amount;
   final String assetId;
-  final TxPointer txPointer;
   final int witnessIndex;
-  final int maturity;
-  final int predicateLength;
-  final int predicateDataLength;
-  final String predicate;
-  final String predicateData;
 
   const InputCoin(
-      {required this.utxoID,
-      required this.owner,
+      {required this.owner,
       required this.amount,
       required this.assetId,
-      required this.txPointer,
-      required this.witnessIndex,
-      required this.maturity,
-      required this.predicateLength,
-      required this.predicateDataLength,
-      required this.predicate,
-      required this.predicateData});
+      required this.witnessIndex});
 
   factory InputCoin.fromJson(Map<String, dynamic> data) {
     return InputCoin(
-        utxoID: UtxoId.fromJson(data['utxoID']),
-        owner: addHexPrefix(data['owner']),
-        amount: parseBigInt(data['amount']),
-        assetId: addHexPrefix(data['assetId']),
-        txPointer: TxPointer.fromJson(data['txPointer']),
-        witnessIndex: data['witnessIndex'],
-        maturity: data['maturity'],
-        predicateLength: data['predicateLength'],
-        predicateDataLength: data['predicateDataLength'],
-        predicate: data['predicate'],
-        predicateData: data['predicateData']);
+      owner: addHexPrefix(data['owner']),
+      amount: parseBigInt(data['amount']),
+      assetId: addHexPrefix(data['assetId']),
+      witnessIndex: data['witnessIndex'],
+    );
   }
 }
 
 class InputContract extends Input {
-  final UtxoId utxoID;
-  final String balanceRoot;
-  final String stateRoot;
-  final TxPointer txPointer;
   final String contractID;
 
-  const InputContract(
-      {required this.utxoID,
-      required this.balanceRoot,
-      required this.stateRoot,
-      required this.txPointer,
-      required this.contractID});
+  const InputContract({required this.contractID});
 
   factory InputContract.fromJson(Map<String, dynamic> data) {
-    return InputContract(
-        utxoID: UtxoId.fromJson(data['utxoID']),
-        balanceRoot: data['balanceRoot'],
-        stateRoot: data['stateRoot'],
-        txPointer: TxPointer.fromJson(data['txPointer']),
-        contractID: addHexPrefix(data['contractID']));
+    return InputContract(contractID: addHexPrefix(data['contractID']));
   }
 }
 
@@ -108,40 +72,20 @@ class InputMessage extends Input {
   final BigInt amount;
   final String sender;
   final String recipient;
-  final String data;
-  final BigInt nonce;
   final int witnessIndex;
-  final int dataLength;
-  final int predicateLength;
-  final int predicateDataLength;
-  final String predicate;
-  final String predicateData;
 
-  const InputMessage(
-      {required this.amount,
-      required this.sender,
-      required this.recipient,
-      required this.data,
-      required this.nonce,
-      required this.witnessIndex,
-      required this.dataLength,
-      required this.predicateLength,
-      required this.predicateDataLength,
-      required this.predicate,
-      required this.predicateData});
+  const InputMessage({
+    required this.amount,
+    required this.sender,
+    required this.recipient,
+    required this.witnessIndex,
+  });
 
   factory InputMessage.fromJson(Map<String, dynamic> data) {
     return InputMessage(
         amount: parseBigInt(data['amount']),
         sender: addHexPrefix(data['sender']),
         recipient: addHexPrefix(data['recipient']),
-        data: data['data'],
-        nonce: parseBigInt(data['nonce']),
-        witnessIndex: data['witnessIndex'],
-        dataLength: data['dataLength'],
-        predicateLength: data['predicateLength'],
-        predicateDataLength: data['predicateDataLength'],
-        predicate: data['predicate'],
-        predicateData: data['predicateData']);
+        witnessIndex: data['witnessIndex']);
   }
 }

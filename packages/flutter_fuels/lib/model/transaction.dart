@@ -1,9 +1,7 @@
 import 'package:flutter_fuels/model/input.dart';
 import 'package:flutter_fuels/model/output.dart';
 import 'package:flutter_fuels/model/storage_slot.dart';
-import 'package:flutter_fuels/model/tx_pointer.dart';
 import 'package:flutter_fuels/model/witness.dart';
-import 'package:flutter_fuels/utils/json_utils.dart';
 
 abstract class Transaction {
   const Transaction();
@@ -41,41 +39,15 @@ class UnparsedTransaction extends Transaction {
 }
 
 class TransactionScript extends Transaction {
-  final BigInt gasPrice;
-  final BigInt gasLimit;
-  final int maturity;
-  final int scriptLength;
-  final int scriptDataLength;
-  final String receiptsRoot;
-  final String script;
-  final String scriptData;
   final List<Input> inputs;
   final List<Output> outputs;
   final List<Witness> witnesses;
 
   const TransactionScript(
-      {required this.gasPrice,
-      required this.gasLimit,
-      required this.maturity,
-      required this.scriptLength,
-      required this.scriptDataLength,
-      required this.receiptsRoot,
-      required this.script,
-      required this.scriptData,
-      required this.inputs,
-      required this.outputs,
-      required this.witnesses});
+      {required this.inputs, required this.outputs, required this.witnesses});
 
   factory TransactionScript.fromJson(Map<String, dynamic> data) {
     return TransactionScript(
-        gasPrice: parseBigInt(data['gasPrice']),
-        gasLimit: parseBigInt(data['gasLimit']),
-        maturity: data['maturity'],
-        scriptLength: data['scriptLength'],
-        scriptDataLength: data['scriptDataLength'],
-        receiptsRoot: data['receiptsRoot'],
-        script: data['script'],
-        scriptData: data['scriptData'],
         inputs: _parseInputs(data),
         outputs: _parseOutputs(data),
         witnesses: _parseWitnesses(data));
@@ -83,38 +55,15 @@ class TransactionScript extends Transaction {
 }
 
 class TransactionCreate extends Transaction {
-  final BigInt gasPrice;
-  final BigInt gasLimit;
-  final int maturity;
-  final int bytecodeLength;
-  final int bytecodeWitnessIndex;
-  final String salt;
-  final List<StorageSlot> storageSlots;
   final List<Input> inputs;
   final List<Output> outputs;
   final List<Witness> witnesses;
 
   const TransactionCreate(
-      {required this.gasPrice,
-      required this.gasLimit,
-      required this.maturity,
-      required this.bytecodeLength,
-      required this.bytecodeWitnessIndex,
-      required this.salt,
-      required this.storageSlots,
-      required this.inputs,
-      required this.outputs,
-      required this.witnesses});
+      {required this.inputs, required this.outputs, required this.witnesses});
 
   factory TransactionCreate.fromJson(Map<String, dynamic> data) {
     return TransactionCreate(
-        gasPrice: parseBigInt(data['gasPrice']),
-        gasLimit: parseBigInt(data['gasLimit']),
-        maturity: data['maturity'],
-        bytecodeLength: data['bytecodeLength'],
-        bytecodeWitnessIndex: data['bytecodeWitnessIndex'],
-        salt: data['salt'],
-        storageSlots: _parseStorageSlots(data),
         inputs: _parseInputs(data),
         outputs: _parseOutputs(data),
         witnesses: _parseWitnesses(data));
@@ -123,14 +72,11 @@ class TransactionCreate extends Transaction {
 
 class TransactionMint extends Transaction {
   final List<Output> outputs;
-  final TxPointer txPointer;
 
-  const TransactionMint({required this.outputs, required this.txPointer});
+  const TransactionMint({required this.outputs});
 
   factory TransactionMint.fromJson(Map<String, dynamic> data) {
-    return TransactionMint(
-        outputs: _parseOutputs(data),
-        txPointer: TxPointer.fromJson(data['txPointer']));
+    return TransactionMint(outputs: _parseOutputs(data));
   }
 }
 
