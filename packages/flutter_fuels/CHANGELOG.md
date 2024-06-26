@@ -1,3 +1,7 @@
+## 0.0.50
+
+ - **FEAT**: remove legacy output. ([2bd14580](https://github.com/Fuelet/fuels-dart/commit/2bd14580c094d62fc4c0e0e656080167dd9a2baa))
+
 ## 0.0.49
 
  - **FEAT**: make some output fields to be optional. ([e14d5f4a](https://github.com/Fuelet/fuels-dart/commit/e14d5f4a2b8f33b7e719bc6e9b0d6ddbb3b05f0a))

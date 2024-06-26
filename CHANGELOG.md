@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`flutter_fuels` - `v0.0.50`](#flutter_fuels---v0050)
+
+---
+
+#### `flutter_fuels` - `v0.0.50`
+
+ - **FEAT**: remove legacy output. ([2bd14580](https://github.com/Fuelet/fuels-dart/commit/2bd14580c094d62fc4c0e0e656080167dd9a2baa))
+
+
+## 2024-06-26
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`flutter_fuels` - `v0.0.49`](#flutter_fuels---v0049)
 
 ---
