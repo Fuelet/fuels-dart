@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-06-26
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flutter_fuels` - `v0.0.49`](#flutter_fuels---v0049)
+
+---
+
+#### `flutter_fuels` - `v0.0.49`
+
+ - **FEAT**: make some output fields to be optional. ([e14d5f4a](https://github.com/Fuelet/fuels-dart/commit/e14d5f4a2b8f33b7e719bc6e9b0d6ddbb3b05f0a))
+
+
 ## 2024-06-24
 
 ### Changes
