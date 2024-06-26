@@ -86,7 +86,7 @@ class OutputMessage extends Output {
 
 class OutputChange extends Output {
   final String to;
-  final BigInt amount;
+  final BigInt? amount;
   final String assetId;
 
   const OutputChange(
@@ -95,24 +95,25 @@ class OutputChange extends Output {
   factory OutputChange.fromJson(Map<String, dynamic> data) {
     return OutputChange(
         to: addHexPrefix(data['to']),
-        amount: parseBigInt(data['amount']),
+        amount: data['amount'] == null ? null : parseBigInt(data['amount']),
         assetId: addHexPrefix(data['assetId']));
   }
 }
 
 class OutputVariable extends Output {
-  final String to;
-  final BigInt amount;
-  final String assetId;
+  final String? to;
+  final BigInt? amount;
+  final String? assetId;
 
   const OutputVariable(
       {required this.to, required this.amount, required this.assetId});
 
   factory OutputVariable.fromJson(Map<String, dynamic> data) {
     return OutputVariable(
-        to: addHexPrefix(data['to']),
-        amount: parseBigInt(data['amount']),
-        assetId: addHexPrefix(data['assetId']));
+        to: data['to'] == null ? null : addHexPrefix(data['to']),
+        amount: data['amount'] == null ? null : parseBigInt(data['amount']),
+        assetId:
+            data['assetId'] == null ? null : addHexPrefix(data['assetId']));
   }
 }
 
