@@ -13,12 +13,10 @@ abstract class Output {
         case 1:
           return OutputContract.fromJson(jsonOutput);
         case 2:
-          return OutputMessage.fromJson(jsonOutput);
-        case 3:
           return OutputChange.fromJson(jsonOutput);
-        case 4:
+        case 3:
           return OutputVariable.fromJson(jsonOutput);
-        case 5:
+        case 4:
           return OutputContractCreated.fromJson(jsonOutput);
         default:
           return UnknownOutput(raw: jsonOutput);
@@ -68,19 +66,6 @@ class OutputContract extends Output {
     return OutputContract(
       inputIndex: data['inputIndex'],
     );
-  }
-}
-
-class OutputMessage extends Output {
-  final String recipient;
-  final BigInt amount;
-
-  const OutputMessage({required this.recipient, required this.amount});
-
-  factory OutputMessage.fromJson(Map<String, dynamic> data) {
-    return OutputMessage(
-        recipient: addHexPrefix(data['recipient']),
-        amount: parseBigInt(data['amount']));
   }
 }
 
