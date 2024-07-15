@@ -1,3 +1,7 @@
+## 0.0.51
+
+ - FuelAddress model
+
 ## 0.0.50
 
  - **FEAT**: remove legacy output. ([2bd14580](https://github.com/Fuelet/fuels-dart/commit/2bd14580c094d62fc4c0e0e656080167dd9a2baa))

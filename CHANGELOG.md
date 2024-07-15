@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-07-15
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flutter_fuels` - `v0.0.51`](#flutter_fuels---v0051)
+
+---
+
+#### `flutter_fuels` - `v0.0.51`
+
+ - FuelAddress model
+
+
 ## 2024-06-26
 
 ### Changes
