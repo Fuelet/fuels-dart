@@ -3,6 +3,32 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2024-08-28
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`fuels` - `v1.29.0`](#fuels---v1290)
+ - [`flutter_fuels` - `v0.0.52`](#flutter_fuels---v0052)
+
+---
+
+#### `fuels` - `v1.29.0`
+
+ - Bump "fuels" to `1.29.0`.
+
+#### `flutter_fuels` - `v0.0.52`
+
+ - Bump "flutter_fuels" to `0.0.52`.
+
+
 ## 2024-07-15
 
 ### Changes

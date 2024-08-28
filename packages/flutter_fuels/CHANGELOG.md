@@ -1,3 +1,7 @@
+## 0.0.52
+
+ - Bump "flutter_fuels" to `0.0.52`.
+
 ## 0.0.51
 
  - FuelAddress model
