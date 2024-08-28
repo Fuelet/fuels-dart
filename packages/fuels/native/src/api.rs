@@ -62,8 +62,8 @@ impl WalletUnlocked {
         tx_bytes: Option<Vec<u8>>,
         json_tx: Option<String>,
     ) -> String {
-        let native_provider = get_native_provider(&self.node_url).await;
-        transaction::send_transaction(&native_provider, tx_bytes, json_tx).await.unwrap()
+        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
+        transaction::send_transaction(&native_wallet_unlocked, tx_bytes, json_tx).await.unwrap()
     }
 
     #[tokio::main]
