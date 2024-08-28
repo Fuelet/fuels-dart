@@ -69,7 +69,8 @@ void wire_gen_transfer_tx_request__method__WalletUnlocked(int64_t port_,
 
 void wire_send_transaction__method__WalletUnlocked(int64_t port_,
                                                    struct wire_WalletUnlocked *that,
-                                                   struct wire_uint_8_list *encoded_tx);
+                                                   struct wire_uint_8_list *tx_bytes,
+                                                   struct wire_uint_8_list *json_tx);
 
 void wire_sign_message__method__WalletUnlocked(int64_t port_,
                                                struct wire_WalletUnlocked *that,
@@ -77,7 +78,8 @@ void wire_sign_message__method__WalletUnlocked(int64_t port_,
 
 void wire_estimate_transaction_cost__method__Provider(int64_t port_,
                                                       struct wire_Provider *that,
-                                                      struct wire_uint_8_list *encoded_tx);
+                                                      struct wire_uint_8_list *tx_bytes,
+                                                      struct wire_uint_8_list *json_tx);
 
 void wire_from_bech32_string__static_method__Bech32Address(int64_t port_,
                                                            struct wire_uint_8_list *s);

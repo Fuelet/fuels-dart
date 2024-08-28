@@ -1,15 +1,14 @@
 use std::io;
 use std::str::FromStr;
 
+use crate::model::error::CustomResult;
 use fuel_crypto::fuel_types::canonical::Deserialize;
 use fuel_crypto::fuel_types::canonical::Serialize;
 use fuel_tx::Transaction as FuelTransaction;
-use fuels::prelude::{Account, AssetId, Bech32Address, BuildableTransaction, CreateTransaction, Provider, ScriptTransaction, Transaction, TxPolicies, WalletUnlocked};
 use fuels::prelude::TransactionType;
+use fuels::prelude::{Account, AssetId, Bech32Address, BuildableTransaction, CreateTransaction, Provider, ScriptTransaction, Transaction, TxPolicies, WalletUnlocked};
 use fuels::types::transaction_builders::ScriptTransactionBuilder;
 use fuels_accounts::provider::TransactionCost;
-
-use crate::model::error::CustomResult;
 
 /// Clones the transfer function but doesn't submit the transaction
 /// TODO: do not sign the tx?
@@ -30,9 +29,10 @@ pub async fn gen_transfer_tx_request(
 // TODO: find a way to sign the tx here
 pub async fn send_transaction(
     provider: &Provider,
-    encoded_tx: Vec<u8>,
+    tx_bytes: Option<Vec<u8>>,
+    json_tx: Option<String>,
 ) -> CustomResult<String> {
-    let tx = decode_transaction(&encoded_tx)?;
+    let tx = decode_transaction(&tx_bytes, &json_tx)?;
     let tx_id = match tx {
         TransactionType::Script(script) => {
             let id = provider.send_transaction(script).await?;
@@ -51,11 +51,12 @@ pub async fn send_transaction(
 
 pub async fn estimate_transaction_cost(
     provider: &Provider,
-    encoded_tx: Vec<u8>,
+    tx_bytes: Option<Vec<u8>>,
+    json_tx: Option<String>,
     tolerance: Option<f64>,
     block_horizon: Option<u32>,
 ) -> CustomResult<TransactionCost> {
-    let tx = decode_transaction(&encoded_tx)?;
+    let tx = decode_transaction(&tx_bytes, &json_tx)?;
     let cost = match tx {
         TransactionType::Script(script) => provider.estimate_transaction_cost(script, tolerance, block_horizon).await?,
         TransactionType::Create(create) => provider.estimate_transaction_cost(create, tolerance, block_horizon).await?,
@@ -64,9 +65,14 @@ pub async fn estimate_transaction_cost(
     Ok(cost)
 }
 
-fn decode_transaction(encoded_tx: &Vec<u8>) -> CustomResult<TransactionType> {
-    let decoded_tx: FuelTransaction = FuelTransaction::from_bytes(&encoded_tx).unwrap();
-    Ok(wrap_fuel_transaction(decoded_tx)?)
+fn decode_transaction(tx_bytes: &Option<Vec<u8>>, json_tx: &Option<String>) -> CustomResult<TransactionType> {
+    // FRB does not support either type yet
+    let fuel_tx = match (tx_bytes, json_tx) {
+        (Some(bytes), None) => FuelTransaction::from_bytes(bytes).unwrap(),
+        (None, Some(json)) => FuelTransaction::from_json(json).unwrap(),
+        _ => panic!(),
+    };
+    Ok(wrap_fuel_transaction(fuel_tx)?)
 }
 
 fn wrap_fuel_transaction(value: FuelTransaction) -> CustomResult<TransactionType> {

@@ -2,14 +2,13 @@
 
 use std::str::FromStr;
 
+use crate::features::{crypto, transaction, wallet};
+use crate::model::transaction::TransactionCost;
 use flutter_rust_bridge::RustOpaque;
 use fuel_crypto::SecretKey;
 use fuel_tx::Address;
-pub use fuels::prelude::{Bech32Address as NativeBech32Address, Provider as NativeProvider, WalletUnlocked as NativeWalletUnlocked};
 use fuels::prelude::TxPolicies;
-
-use crate::features::{crypto, transaction, wallet};
-use crate::model::transaction::TransactionCost;
+pub use fuels::prelude::{Bech32Address as NativeBech32Address, Provider as NativeProvider, WalletUnlocked as NativeWalletUnlocked};
 
 async fn get_native_provider(node_url: &String) -> NativeProvider {
     NativeProvider::connect(node_url).await.unwrap()
@@ -60,10 +59,11 @@ impl WalletUnlocked {
     #[tokio::main]
     pub async fn send_transaction(
         &self,
-        encoded_tx: Vec<u8>,
+        tx_bytes: Option<Vec<u8>>,
+        json_tx: Option<String>,
     ) -> String {
         let native_provider = get_native_provider(&self.node_url).await;
-        transaction::send_transaction(&native_provider, encoded_tx).await.unwrap()
+        transaction::send_transaction(&native_provider, tx_bytes, json_tx).await.unwrap()
     }
 
     #[tokio::main]
@@ -85,10 +85,11 @@ impl Provider {
     #[tokio::main]
     pub async fn estimate_transaction_cost(
         &self,
-        encoded_tx: Vec<u8>,
+        tx_bytes: Option<Vec<u8>>,
+        json_tx: Option<String>,
     ) -> TransactionCost {
         let native_provider = get_native_provider(&self.node_url).await;
-        transaction::estimate_transaction_cost(&native_provider, encoded_tx, None, None).await.unwrap().into()
+        transaction::estimate_transaction_cost(&native_provider, tx_bytes, json_tx, None, None).await.unwrap().into()
     }
 }
 

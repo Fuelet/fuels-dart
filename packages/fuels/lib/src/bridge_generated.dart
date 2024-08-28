@@ -51,7 +51,8 @@ abstract class Fuels {
 
   Future<String> sendTransactionMethodWalletUnlocked(
       {required WalletUnlocked that,
-      required Uint8List encodedTx,
+      Uint8List? txBytes,
+      String? jsonTx,
       dynamic hint});
 
   FlutterRustBridgeTaskConstMeta
@@ -63,7 +64,10 @@ abstract class Fuels {
   FlutterRustBridgeTaskConstMeta get kSignMessageMethodWalletUnlockedConstMeta;
 
   Future<TransactionCost> estimateTransactionCostMethodProvider(
-      {required Provider that, required Uint8List encodedTx, dynamic hint});
+      {required Provider that,
+      Uint8List? txBytes,
+      String? jsonTx,
+      dynamic hint});
 
   FlutterRustBridgeTaskConstMeta
       get kEstimateTransactionCostMethodProviderConstMeta;
@@ -150,10 +154,11 @@ class Provider {
   });
 
   Future<TransactionCost> estimateTransactionCost(
-          {required Uint8List encodedTx, dynamic hint}) =>
+          {Uint8List? txBytes, String? jsonTx, dynamic hint}) =>
       bridge.estimateTransactionCostMethodProvider(
         that: this,
-        encodedTx: encodedTx,
+        txBytes: txBytes,
+        jsonTx: jsonTx,
       );
 }
 
@@ -228,10 +233,11 @@ class WalletUnlocked {
       );
 
   Future<String> sendTransaction(
-          {required Uint8List encodedTx, dynamic hint}) =>
+          {Uint8List? txBytes, String? jsonTx, dynamic hint}) =>
       bridge.sendTransactionMethodWalletUnlocked(
         that: this,
-        encodedTx: encodedTx,
+        txBytes: txBytes,
+        jsonTx: jsonTx,
       );
 
   Future<String> signMessage({required String message, dynamic hint}) =>
@@ -379,17 +385,20 @@ class FuelsImpl implements Fuels {
 
   Future<String> sendTransactionMethodWalletUnlocked(
       {required WalletUnlocked that,
-      required Uint8List encodedTx,
+      Uint8List? txBytes,
+      String? jsonTx,
       dynamic hint}) {
     var arg0 = _platform.api2wire_box_autoadd_wallet_unlocked(that);
-    var arg1 = _platform.api2wire_uint_8_list(encodedTx);
+    var arg1 = _platform.api2wire_opt_uint_8_list(txBytes);
+    var arg2 = _platform.api2wire_opt_String(jsonTx);
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) => _platform.inner
-          .wire_send_transaction__method__WalletUnlocked(port_, arg0, arg1),
+          .wire_send_transaction__method__WalletUnlocked(
+              port_, arg0, arg1, arg2),
       parseSuccessData: _wire2api_String,
       parseErrorData: null,
       constMeta: kSendTransactionMethodWalletUnlockedConstMeta,
-      argValues: [that, encodedTx],
+      argValues: [that, txBytes, jsonTx],
       hint: hint,
     ));
   }
@@ -398,7 +407,7 @@ class FuelsImpl implements Fuels {
       get kSendTransactionMethodWalletUnlockedConstMeta =>
           const FlutterRustBridgeTaskConstMeta(
             debugName: "send_transaction__method__WalletUnlocked",
-            argNames: ["that", "encodedTx"],
+            argNames: ["that", "txBytes", "jsonTx"],
           );
 
   Future<String> signMessageMethodWalletUnlocked(
@@ -424,16 +433,21 @@ class FuelsImpl implements Fuels {
           );
 
   Future<TransactionCost> estimateTransactionCostMethodProvider(
-      {required Provider that, required Uint8List encodedTx, dynamic hint}) {
+      {required Provider that,
+      Uint8List? txBytes,
+      String? jsonTx,
+      dynamic hint}) {
     var arg0 = _platform.api2wire_box_autoadd_provider(that);
-    var arg1 = _platform.api2wire_uint_8_list(encodedTx);
+    var arg1 = _platform.api2wire_opt_uint_8_list(txBytes);
+    var arg2 = _platform.api2wire_opt_String(jsonTx);
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) => _platform.inner
-          .wire_estimate_transaction_cost__method__Provider(port_, arg0, arg1),
+          .wire_estimate_transaction_cost__method__Provider(
+              port_, arg0, arg1, arg2),
       parseSuccessData: _wire2api_transaction_cost,
       parseErrorData: null,
       constMeta: kEstimateTransactionCostMethodProviderConstMeta,
-      argValues: [that, encodedTx],
+      argValues: [that, txBytes, jsonTx],
       hint: hint,
     ));
   }
@@ -442,7 +456,7 @@ class FuelsImpl implements Fuels {
       get kEstimateTransactionCostMethodProviderConstMeta =>
           const FlutterRustBridgeTaskConstMeta(
             debugName: "estimate_transaction_cost__method__Provider",
-            argNames: ["that", "encodedTx"],
+            argNames: ["that", "txBytes", "jsonTx"],
           );
 
   Future<Bech32Address> fromBech32StringStaticMethodBech32Address(
@@ -666,6 +680,11 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
   @protected
   ffi.Pointer<wire_uint_8_list> api2wire_opt_String(String? raw) {
     return raw == null ? ffi.nullptr : api2wire_String(raw);
+  }
+
+  @protected
+  ffi.Pointer<wire_uint_8_list> api2wire_opt_uint_8_list(Uint8List? raw) {
+    return raw == null ? ffi.nullptr : api2wire_uint_8_list(raw);
   }
 
   @protected
@@ -956,24 +975,29 @@ class FuelsWire implements FlutterRustBridgeWireBase {
   void wire_send_transaction__method__WalletUnlocked(
     int port_,
     ffi.Pointer<wire_WalletUnlocked> that,
-    ffi.Pointer<wire_uint_8_list> encoded_tx,
+    ffi.Pointer<wire_uint_8_list> tx_bytes,
+    ffi.Pointer<wire_uint_8_list> json_tx,
   ) {
     return _wire_send_transaction__method__WalletUnlocked(
       port_,
       that,
-      encoded_tx,
+      tx_bytes,
+      json_tx,
     );
   }
 
   late final _wire_send_transaction__method__WalletUnlockedPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_WalletUnlocked>,
+              ffi.Void Function(
+                  ffi.Int64,
+                  ffi.Pointer<wire_WalletUnlocked>,
+                  ffi.Pointer<wire_uint_8_list>,
                   ffi.Pointer<wire_uint_8_list>)>>(
       'wire_send_transaction__method__WalletUnlocked');
   late final _wire_send_transaction__method__WalletUnlocked =
       _wire_send_transaction__method__WalletUnlockedPtr.asFunction<
           void Function(int, ffi.Pointer<wire_WalletUnlocked>,
-              ffi.Pointer<wire_uint_8_list>)>();
+              ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
 
   void wire_sign_message__method__WalletUnlocked(
     int port_,
@@ -1000,24 +1024,29 @@ class FuelsWire implements FlutterRustBridgeWireBase {
   void wire_estimate_transaction_cost__method__Provider(
     int port_,
     ffi.Pointer<wire_Provider> that,
-    ffi.Pointer<wire_uint_8_list> encoded_tx,
+    ffi.Pointer<wire_uint_8_list> tx_bytes,
+    ffi.Pointer<wire_uint_8_list> json_tx,
   ) {
     return _wire_estimate_transaction_cost__method__Provider(
       port_,
       that,
-      encoded_tx,
+      tx_bytes,
+      json_tx,
     );
   }
 
   late final _wire_estimate_transaction_cost__method__ProviderPtr = _lookup<
           ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_Provider>,
+              ffi.Void Function(
+                  ffi.Int64,
+                  ffi.Pointer<wire_Provider>,
+                  ffi.Pointer<wire_uint_8_list>,
                   ffi.Pointer<wire_uint_8_list>)>>(
       'wire_estimate_transaction_cost__method__Provider');
   late final _wire_estimate_transaction_cost__method__Provider =
       _wire_estimate_transaction_cost__method__ProviderPtr.asFunction<
           void Function(int, ffi.Pointer<wire_Provider>,
-              ffi.Pointer<wire_uint_8_list>)>();
+              ffi.Pointer<wire_uint_8_list>, ffi.Pointer<wire_uint_8_list>)>();
 
   void wire_from_bech32_string__static_method__Bech32Address(
     int port_,

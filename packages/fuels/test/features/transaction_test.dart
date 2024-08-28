@@ -17,7 +17,7 @@ void main() {
     final (requestBytes, _) = await testWallet.genTransferTxRequest(
         to: newWallet.address, amount: _transferAmount, asset: baseAsset);
     final txCost =
-        await provider.estimateTransactionCost(encodedTx: requestBytes);
+        await provider.estimateTransactionCost(txBytes: requestBytes);
 
     print(
         'Gas price: ${txCost.gasPrice}, gas used: ${txCost.gasUsed}, fee: ${txCost.totalFee}');
@@ -31,7 +31,7 @@ void main() {
 
     final (requestBytes, _) = await testWallet.genTransferTxRequest(
         to: newWallet.address, amount: _transferAmount, asset: baseAsset);
-    final txId = await testWallet.sendTransaction(encodedTx: requestBytes);
+    final txId = await testWallet.sendTransaction(txBytes: requestBytes);
 
     expect(txId.isNotEmpty, true);
   }, skip: 'Should be run manually');
