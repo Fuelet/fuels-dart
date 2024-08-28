@@ -41,9 +41,15 @@ class FuelUtilsImpl extends BaseFuelUtils {
       {required String networkUrl,
       required String transactionRequestHexOrJson}) async {
     final provider = fuels.Provider(bridge: _bridge, nodeUrl: networkUrl);
-    final bytes = hex.decode(removeHexPrefix(transactionRequestHexOrJson));
-    final txCost = await provider.estimateTransactionCost(
-        encodedTx: Uint8List.fromList(bytes));
+    fuels.TransactionCost txCost;
+    try {
+      final bytes = hex.decode(removeHexPrefix(transactionRequestHexOrJson));
+      txCost = await provider.estimateTransactionCost(
+          txBytes: Uint8List.fromList(bytes));
+    } catch (_) {
+      txCost = await provider.estimateTransactionCost(
+          jsonTx: transactionRequestHexOrJson);
+    }
     return TransactionCost(
       gasPrice: txCost.gasPrice,
       gasUsed: txCost.gasUsed,

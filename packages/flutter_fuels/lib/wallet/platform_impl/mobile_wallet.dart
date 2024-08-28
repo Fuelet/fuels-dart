@@ -112,10 +112,16 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
   @override
   Future<String> sendTransaction(
       {required String transactionRequestHexOrJson}) {
-    final bytes = hex.decode(removeHexPrefix(transactionRequestHexOrJson));
-    return _rustWalletUnlocked
-        .sendTransaction(encodedTx: Uint8List.fromList(bytes))
-        .then(addHexPrefix);
+    try {
+      final bytes = hex.decode(removeHexPrefix(transactionRequestHexOrJson));
+      return _rustWalletUnlocked
+          .sendTransaction(txBytes: Uint8List.fromList(bytes))
+          .then(addHexPrefix);
+    } catch (_) {
+      return _rustWalletUnlocked
+          .sendTransaction(jsonTx: transactionRequestHexOrJson)
+          .then(addHexPrefix);
+    }
   }
 
   @override
