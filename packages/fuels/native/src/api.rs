@@ -5,11 +5,12 @@ use std::str::FromStr;
 use flutter_rust_bridge::RustOpaque;
 use fuel_crypto::SecretKey;
 use fuel_tx::Address;
-pub use fuels::prelude::{Bech32Address as NativeBech32Address, Provider as NativeProvider, WalletUnlocked as NativeWalletUnlocked};
 use fuels::prelude::TxPolicies;
+pub use fuels::prelude::{Bech32Address as NativeBech32Address, Provider as NativeProvider, WalletUnlocked as NativeWalletUnlocked};
 
 use crate::features::{crypto, transaction, wallet};
-use crate::model::transaction::TransactionCost;
+use crate::model::receipt::Receipt;
+use crate::model::transaction::{Transaction, TransactionCost};
 
 async fn get_native_provider(node_url: &String) -> NativeProvider {
     NativeProvider::connect(node_url).await.unwrap()
@@ -62,8 +63,18 @@ impl WalletUnlocked {
         &self,
         encoded_tx: Vec<u8>,
     ) -> String {
-        let native_provider = get_native_provider(&self.node_url).await;
-        transaction::send_transaction(&native_provider, encoded_tx).await.unwrap()
+        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
+        transaction::send_transaction(&native_wallet_unlocked, encoded_tx).await.unwrap()
+    }
+
+    #[tokio::main]
+    pub async fn simulate_transaction(
+        &self,
+        encoded_tx: Vec<u8>,
+    ) -> Vec<Receipt> {
+        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
+        let fuel_receipts = transaction::simulate_transaction(&native_wallet_unlocked, encoded_tx).await.unwrap();
+        fuel_receipts.into_iter().map(|receipt| (&receipt).into()).collect()
     }
 
     #[tokio::main]
@@ -124,4 +135,11 @@ impl From<NativeBech32Address> for Bech32Address {
             native: RustOpaque::new(model)
         }
     }
+}
+
+#[tokio::main]
+pub async fn transform_tx_request(
+    encoded_tx: Vec<u8>,
+) -> Transaction {
+    (&transaction::transform_tx_request(encoded_tx).await.unwrap()).into()
 }

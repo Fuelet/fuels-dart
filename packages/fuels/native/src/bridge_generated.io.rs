@@ -2,6 +2,11 @@ use super::*;
 // Section: wire functions
 
 #[no_mangle]
+pub extern "C" fn wire_transform_tx_request(port_: i64, encoded_tx: *mut wire_uint_8_list) {
+    wire_transform_tx_request_impl(port_, encoded_tx)
+}
+
+#[no_mangle]
 pub extern "C" fn wire_new_random__static_method__WalletUnlocked(
     port_: i64,
     node_url: *mut wire_uint_8_list,
@@ -57,6 +62,15 @@ pub extern "C" fn wire_send_transaction__method__WalletUnlocked(
     encoded_tx: *mut wire_uint_8_list,
 ) {
     wire_send_transaction__method__WalletUnlocked_impl(port_, that, encoded_tx)
+}
+
+#[no_mangle]
+pub extern "C" fn wire_simulate_transaction__method__WalletUnlocked(
+    port_: i64,
+    that: *mut wire_WalletUnlocked,
+    encoded_tx: *mut wire_uint_8_list,
+) {
+    wire_simulate_transaction__method__WalletUnlocked_impl(port_, that, encoded_tx)
 }
 
 #[no_mangle]

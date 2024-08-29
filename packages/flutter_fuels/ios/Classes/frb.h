@@ -45,6 +45,8 @@ uintptr_t new_dart_opaque(Dart_Handle handle);
 
 intptr_t init_frb_dart_api_dl(void *obj);
 
+void wire_transform_tx_request(int64_t port_, struct wire_uint_8_list *encoded_tx);
+
 void wire_new_random__static_method__WalletUnlocked(int64_t port_,
                                                     struct wire_uint_8_list *node_url);
 
@@ -70,6 +72,10 @@ void wire_gen_transfer_tx_request__method__WalletUnlocked(int64_t port_,
 void wire_send_transaction__method__WalletUnlocked(int64_t port_,
                                                    struct wire_WalletUnlocked *that,
                                                    struct wire_uint_8_list *encoded_tx);
+
+void wire_simulate_transaction__method__WalletUnlocked(int64_t port_,
+                                                       struct wire_WalletUnlocked *that,
+                                                       struct wire_uint_8_list *encoded_tx);
 
 void wire_sign_message__method__WalletUnlocked(int64_t port_,
                                                struct wire_WalletUnlocked *that,
@@ -106,12 +112,14 @@ void free_WireSyncReturn(WireSyncReturn ptr);
 
 static int64_t dummy_method_to_enforce_bundling(void) {
     int64_t dummy_var = 0;
+    dummy_var ^= ((int64_t) (void*) wire_transform_tx_request);
     dummy_var ^= ((int64_t) (void*) wire_new_random__static_method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_new_from_private_key__static_method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_new_from_mnemonic_phrase__static_method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_gen_transfer_tx_request__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_send_transaction__method__WalletUnlocked);
+    dummy_var ^= ((int64_t) (void*) wire_simulate_transaction__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_sign_message__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_estimate_transaction_cost__method__Provider);
     dummy_var ^= ((int64_t) (void*) wire_from_bech32_string__static_method__Bech32Address);

@@ -7,10 +7,18 @@ import 'dart:async';
 import 'package:meta/meta.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:uuid/uuid.dart';
+import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 
 import 'dart:ffi' as ffi;
 
+part 'bridge_generated.freezed.dart';
+
 abstract class Fuels {
+  Future<Transaction> transformTxRequest(
+      {required Uint8List encodedTx, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kTransformTxRequestConstMeta;
+
   Future<WalletUnlocked> newRandomStaticMethodWalletUnlocked(
       {required String nodeUrl, dynamic hint});
 
@@ -56,6 +64,14 @@ abstract class Fuels {
 
   FlutterRustBridgeTaskConstMeta
       get kSendTransactionMethodWalletUnlockedConstMeta;
+
+  Future<List<Receipt>> simulateTransactionMethodWalletUnlocked(
+      {required WalletUnlocked that,
+      required Uint8List encodedTx,
+      dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta
+      get kSimulateTransactionMethodWalletUnlockedConstMeta;
 
   Future<String> signMessageMethodWalletUnlocked(
       {required WalletUnlocked that, required String message, dynamic hint});
@@ -140,6 +156,52 @@ class Bech32Address {
       );
 }
 
+@freezed
+sealed class Input with _$Input {
+  const factory Input.inputCoin({
+    required String owner,
+    required int amount,
+    required String assetId,
+    int? witnessIndex,
+  }) = Input_InputCoin;
+  const factory Input.inputContract({
+    required String contractId,
+  }) = Input_InputContract;
+  const factory Input.inputMessage({
+    required int amount,
+    required String sender,
+    required String recipient,
+    int? witnessIndex,
+  }) = Input_InputMessage;
+  const factory Input.unknownInput() = Input_UnknownInput;
+}
+
+@freezed
+sealed class Output with _$Output {
+  const factory Output.outputCoin({
+    required String to,
+    required int amount,
+    required String assetId,
+  }) = Output_OutputCoin;
+  const factory Output.outputContract({
+    required int inputIndex,
+  }) = Output_OutputContract;
+  const factory Output.outputChange({
+    required String to,
+    required int amount,
+    required String assetId,
+  }) = Output_OutputChange;
+  const factory Output.outputVariable({
+    required String to,
+    required int amount,
+    required String assetId,
+  }) = Output_OutputVariable;
+  const factory Output.outputContractCreated({
+    required String contractId,
+  }) = Output_OutputContractCreated;
+  const factory Output.unknownOutput() = Output_UnknownOutput;
+}
+
 class Provider {
   final Fuels bridge;
   final String nodeUrl;
@@ -155,6 +217,63 @@ class Provider {
         that: this,
         encodedTx: encodedTx,
       );
+}
+
+@freezed
+sealed class Receipt with _$Receipt {
+  const factory Receipt.call({
+    required String to,
+    required int amount,
+    required String assetId,
+  }) = Receipt_Call;
+  const factory Receipt.returnReceipt() = Receipt_ReturnReceipt;
+  const factory Receipt.returnData() = Receipt_ReturnData;
+  const factory Receipt.panic() = Receipt_Panic;
+  const factory Receipt.revert() = Receipt_Revert;
+  const factory Receipt.log() = Receipt_Log;
+  const factory Receipt.logData() = Receipt_LogData;
+  const factory Receipt.transfer({
+    required String from,
+    required String to,
+    required int amount,
+    required String assetId,
+  }) = Receipt_Transfer;
+  const factory Receipt.transferOut({
+    required String from,
+    required String to,
+    required int amount,
+    required String assetId,
+  }) = Receipt_TransferOut;
+  const factory Receipt.scriptResult({
+    required int gasUsed,
+  }) = Receipt_ScriptResult;
+  const factory Receipt.messageOut({
+    required String sender,
+    required String recipient,
+    required int amount,
+  }) = Receipt_MessageOut;
+  const factory Receipt.mint({
+    required String subId,
+    required String contractId,
+  }) = Receipt_Mint;
+  const factory Receipt.burn({
+    required String subId,
+    required String contractId,
+  }) = Receipt_Burn;
+}
+
+class Transaction {
+  final int txType;
+  final List<Input> inputs;
+  final List<Output> outputs;
+  final List<Witness> witnesses;
+
+  const Transaction({
+    required this.txType,
+    required this.inputs,
+    required this.outputs,
+    required this.witnesses,
+  });
 }
 
 class TransactionCost {
@@ -234,11 +353,26 @@ class WalletUnlocked {
         encodedTx: encodedTx,
       );
 
+  Future<List<Receipt>> simulateTransaction(
+          {required Uint8List encodedTx, dynamic hint}) =>
+      bridge.simulateTransactionMethodWalletUnlocked(
+        that: this,
+        encodedTx: encodedTx,
+      );
+
   Future<String> signMessage({required String message, dynamic hint}) =>
       bridge.signMessageMethodWalletUnlocked(
         that: this,
         message: message,
       );
+}
+
+class Witness {
+  final Uint8List data;
+
+  const Witness({
+    required this.data,
+  });
 }
 
 class FuelsImpl implements Fuels {
@@ -250,6 +384,26 @@ class FuelsImpl implements Fuels {
   factory FuelsImpl.wasm(FutureOr<WasmModule> module) =>
       FuelsImpl(module as ExternalLibrary);
   FuelsImpl.raw(this._platform);
+  Future<Transaction> transformTxRequest(
+      {required Uint8List encodedTx, dynamic hint}) {
+    var arg0 = _platform.api2wire_uint_8_list(encodedTx);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) =>
+          _platform.inner.wire_transform_tx_request(port_, arg0),
+      parseSuccessData: _wire2api_transaction,
+      parseErrorData: null,
+      constMeta: kTransformTxRequestConstMeta,
+      argValues: [encodedTx],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kTransformTxRequestConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "transform_tx_request",
+        argNames: ["encodedTx"],
+      );
+
   Future<WalletUnlocked> newRandomStaticMethodWalletUnlocked(
       {required String nodeUrl, dynamic hint}) {
     var arg0 = _platform.api2wire_String(nodeUrl);
@@ -398,6 +552,30 @@ class FuelsImpl implements Fuels {
       get kSendTransactionMethodWalletUnlockedConstMeta =>
           const FlutterRustBridgeTaskConstMeta(
             debugName: "send_transaction__method__WalletUnlocked",
+            argNames: ["that", "encodedTx"],
+          );
+
+  Future<List<Receipt>> simulateTransactionMethodWalletUnlocked(
+      {required WalletUnlocked that,
+      required Uint8List encodedTx,
+      dynamic hint}) {
+    var arg0 = _platform.api2wire_box_autoadd_wallet_unlocked(that);
+    var arg1 = _platform.api2wire_uint_8_list(encodedTx);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_simulate_transaction__method__WalletUnlocked(port_, arg0, arg1),
+      parseSuccessData: _wire2api_list_receipt,
+      parseErrorData: null,
+      constMeta: kSimulateTransactionMethodWalletUnlockedConstMeta,
+      argValues: [that, encodedTx],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta
+      get kSimulateTransactionMethodWalletUnlockedConstMeta =>
+          const FlutterRustBridgeTaskConstMeta(
+            debugName: "simulate_transaction__method__WalletUnlocked",
             argNames: ["that", "encodedTx"],
           );
 
@@ -571,8 +749,165 @@ class FuelsImpl implements Fuels {
     );
   }
 
+  int _wire2api_box_autoadd_u16(dynamic raw) {
+    return raw as int;
+  }
+
+  Input _wire2api_input(dynamic raw) {
+    switch (raw[0]) {
+      case 0:
+        return Input_InputCoin(
+          owner: _wire2api_String(raw[1]),
+          amount: _wire2api_u64(raw[2]),
+          assetId: _wire2api_String(raw[3]),
+          witnessIndex: _wire2api_opt_box_autoadd_u16(raw[4]),
+        );
+      case 1:
+        return Input_InputContract(
+          contractId: _wire2api_String(raw[1]),
+        );
+      case 2:
+        return Input_InputMessage(
+          amount: _wire2api_u64(raw[1]),
+          sender: _wire2api_String(raw[2]),
+          recipient: _wire2api_String(raw[3]),
+          witnessIndex: _wire2api_opt_box_autoadd_u16(raw[4]),
+        );
+      case 3:
+        return Input_UnknownInput();
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  List<Input> _wire2api_list_input(dynamic raw) {
+    return (raw as List<dynamic>).map(_wire2api_input).toList();
+  }
+
+  List<Output> _wire2api_list_output(dynamic raw) {
+    return (raw as List<dynamic>).map(_wire2api_output).toList();
+  }
+
+  List<Receipt> _wire2api_list_receipt(dynamic raw) {
+    return (raw as List<dynamic>).map(_wire2api_receipt).toList();
+  }
+
+  List<Witness> _wire2api_list_witness(dynamic raw) {
+    return (raw as List<dynamic>).map(_wire2api_witness).toList();
+  }
+
   String? _wire2api_opt_String(dynamic raw) {
     return raw == null ? null : _wire2api_String(raw);
+  }
+
+  int? _wire2api_opt_box_autoadd_u16(dynamic raw) {
+    return raw == null ? null : _wire2api_box_autoadd_u16(raw);
+  }
+
+  Output _wire2api_output(dynamic raw) {
+    switch (raw[0]) {
+      case 0:
+        return Output_OutputCoin(
+          to: _wire2api_String(raw[1]),
+          amount: _wire2api_u64(raw[2]),
+          assetId: _wire2api_String(raw[3]),
+        );
+      case 1:
+        return Output_OutputContract(
+          inputIndex: _wire2api_u16(raw[1]),
+        );
+      case 2:
+        return Output_OutputChange(
+          to: _wire2api_String(raw[1]),
+          amount: _wire2api_u64(raw[2]),
+          assetId: _wire2api_String(raw[3]),
+        );
+      case 3:
+        return Output_OutputVariable(
+          to: _wire2api_String(raw[1]),
+          amount: _wire2api_u64(raw[2]),
+          assetId: _wire2api_String(raw[3]),
+        );
+      case 4:
+        return Output_OutputContractCreated(
+          contractId: _wire2api_String(raw[1]),
+        );
+      case 5:
+        return Output_UnknownOutput();
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  Receipt _wire2api_receipt(dynamic raw) {
+    switch (raw[0]) {
+      case 0:
+        return Receipt_Call(
+          to: _wire2api_String(raw[1]),
+          amount: _wire2api_u64(raw[2]),
+          assetId: _wire2api_String(raw[3]),
+        );
+      case 1:
+        return Receipt_ReturnReceipt();
+      case 2:
+        return Receipt_ReturnData();
+      case 3:
+        return Receipt_Panic();
+      case 4:
+        return Receipt_Revert();
+      case 5:
+        return Receipt_Log();
+      case 6:
+        return Receipt_LogData();
+      case 7:
+        return Receipt_Transfer(
+          from: _wire2api_String(raw[1]),
+          to: _wire2api_String(raw[2]),
+          amount: _wire2api_u64(raw[3]),
+          assetId: _wire2api_String(raw[4]),
+        );
+      case 8:
+        return Receipt_TransferOut(
+          from: _wire2api_String(raw[1]),
+          to: _wire2api_String(raw[2]),
+          amount: _wire2api_u64(raw[3]),
+          assetId: _wire2api_String(raw[4]),
+        );
+      case 9:
+        return Receipt_ScriptResult(
+          gasUsed: _wire2api_u64(raw[1]),
+        );
+      case 10:
+        return Receipt_MessageOut(
+          sender: _wire2api_String(raw[1]),
+          recipient: _wire2api_String(raw[2]),
+          amount: _wire2api_u64(raw[3]),
+        );
+      case 11:
+        return Receipt_Mint(
+          subId: _wire2api_String(raw[1]),
+          contractId: _wire2api_String(raw[2]),
+        );
+      case 12:
+        return Receipt_Burn(
+          subId: _wire2api_String(raw[1]),
+          contractId: _wire2api_String(raw[2]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  Transaction _wire2api_transaction(dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    return Transaction(
+      txType: _wire2api_u8(arr[0]),
+      inputs: _wire2api_list_input(arr[1]),
+      outputs: _wire2api_list_output(arr[2]),
+      witnesses: _wire2api_list_witness(arr[3]),
+    );
   }
 
   TransactionCost _wire2api_transaction_cost(dynamic raw) {
@@ -585,6 +920,10 @@ class FuelsImpl implements Fuels {
       meteredBytesSize: _wire2api_u64(arr[2]),
       totalFee: _wire2api_u64(arr[3]),
     );
+  }
+
+  int _wire2api_u16(dynamic raw) {
+    return raw as int;
   }
 
   int _wire2api_u64(dynamic raw) {
@@ -609,6 +948,15 @@ class FuelsImpl implements Fuels {
       mnemonicPhrase: _wire2api_opt_String(arr[1]),
       nodeUrl: _wire2api_String(arr[2]),
       address: _wire2api_bech_32_address(arr[3]),
+    );
+  }
+
+  Witness _wire2api_witness(dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
+    return Witness(
+      data: _wire2api_uint_8_list(arr[0]),
     );
   }
 }
@@ -822,6 +1170,23 @@ class FuelsWire implements FlutterRustBridgeWireBase {
   late final _init_frb_dart_api_dl = _init_frb_dart_api_dlPtr
       .asFunction<int Function(ffi.Pointer<ffi.Void>)>();
 
+  void wire_transform_tx_request(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> encoded_tx,
+  ) {
+    return _wire_transform_tx_request(
+      port_,
+      encoded_tx,
+    );
+  }
+
+  late final _wire_transform_tx_requestPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Int64,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_transform_tx_request');
+  late final _wire_transform_tx_request = _wire_transform_tx_requestPtr
+      .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+
   void wire_new_random__static_method__WalletUnlocked(
     int port_,
     ffi.Pointer<wire_uint_8_list> node_url,
@@ -972,6 +1337,28 @@ class FuelsWire implements FlutterRustBridgeWireBase {
       'wire_send_transaction__method__WalletUnlocked');
   late final _wire_send_transaction__method__WalletUnlocked =
       _wire_send_transaction__method__WalletUnlockedPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_WalletUnlocked>,
+              ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_simulate_transaction__method__WalletUnlocked(
+    int port_,
+    ffi.Pointer<wire_WalletUnlocked> that,
+    ffi.Pointer<wire_uint_8_list> encoded_tx,
+  ) {
+    return _wire_simulate_transaction__method__WalletUnlocked(
+      port_,
+      that,
+      encoded_tx,
+    );
+  }
+
+  late final _wire_simulate_transaction__method__WalletUnlockedPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_WalletUnlocked>,
+                  ffi.Pointer<wire_uint_8_list>)>>(
+      'wire_simulate_transaction__method__WalletUnlocked');
+  late final _wire_simulate_transaction__method__WalletUnlocked =
+      _wire_simulate_transaction__method__WalletUnlockedPtr.asFunction<
           void Function(int, ffi.Pointer<wire_WalletUnlocked>,
               ffi.Pointer<wire_uint_8_list>)>();
 

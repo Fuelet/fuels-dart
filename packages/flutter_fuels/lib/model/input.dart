@@ -1,5 +1,6 @@
 import 'package:flutter_fuels/utils/hex_utils.dart';
 import 'package:flutter_fuels/utils/json_utils.dart';
+import 'package:fuels/fuels.dart' as fuels;
 
 abstract class Input {
   const Input();
@@ -20,6 +21,25 @@ abstract class Input {
     } catch (e) {
       return UnparsedInput(raw: jsonInput, err: e);
     }
+  }
+
+  static Input fromRust(fuels.Input rustInput) {
+    return rustInput.map(
+        inputCoin: (i) => InputCoin(
+              owner: addHexPrefix(i.owner),
+              amount: BigInt.from(i.amount),
+              assetId: addHexPrefix(i.assetId),
+              witnessIndex: i.witnessIndex ?? -1,
+            ),
+        inputContract: (i) =>
+            InputContract(contractID: addHexPrefix(i.contractId)),
+        inputMessage: (i) => InputMessage(
+              amount: BigInt.from(i.amount),
+              sender: addHexPrefix(i.sender),
+              recipient: addHexPrefix(i.recipient),
+              witnessIndex: i.witnessIndex ?? -1,
+            ),
+        unknownInput: (i) => UnknownInput(raw: Map.identity()));
   }
 }
 

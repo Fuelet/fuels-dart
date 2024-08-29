@@ -39,3 +39,6 @@ build/
 /Cargo.lock
 /platform-build
 /llvm/
+
+.fvm/flutter_sdk
+.fvmrc

@@ -20,10 +20,31 @@ use std::sync::Arc;
 
 // Section: imports
 
+use crate::model::input::Input;
+use crate::model::output::Output;
+use crate::model::receipt::Receipt;
+use crate::model::transaction::Transaction;
 use crate::model::transaction::TransactionCost;
+use crate::model::witness::Witness;
 
 // Section: wire functions
 
+fn wire_transform_tx_request_impl(
+    port_: MessagePort,
+    encoded_tx: impl Wire2Api<Vec<u8>> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, Transaction, _>(
+        WrapInfo {
+            debug_name: "transform_tx_request",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_encoded_tx = encoded_tx.wire2api();
+            move |task_callback| Result::<_, ()>::Ok(transform_tx_request(api_encoded_tx))
+        },
+    )
+}
 fn wire_new_random__static_method__WalletUnlocked_impl(
     port_: MessagePort,
     node_url: impl Wire2Api<String> + UnwindSafe,
@@ -154,6 +175,29 @@ fn wire_send_transaction__method__WalletUnlocked_impl(
             let api_encoded_tx = encoded_tx.wire2api();
             move |task_callback| {
                 Result::<_, ()>::Ok(WalletUnlocked::send_transaction(&api_that, api_encoded_tx))
+            }
+        },
+    )
+}
+fn wire_simulate_transaction__method__WalletUnlocked_impl(
+    port_: MessagePort,
+    that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
+    encoded_tx: impl Wire2Api<Vec<u8>> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, Vec<Receipt>, _>(
+        WrapInfo {
+            debug_name: "simulate_transaction__method__WalletUnlocked",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.wire2api();
+            let api_encoded_tx = encoded_tx.wire2api();
+            move |task_callback| {
+                Result::<_, ()>::Ok(WalletUnlocked::simulate_transaction(
+                    &api_that,
+                    api_encoded_tx,
+                ))
             }
         },
     )
@@ -313,6 +357,200 @@ impl rust2dart::IntoIntoDart<Bech32Address> for Bech32Address {
     }
 }
 
+impl support::IntoDart for Input {
+    fn into_dart(self) -> support::DartAbi {
+        match self {
+            Self::InputCoin {
+                owner,
+                amount,
+                asset_id,
+                witness_index,
+            } => vec![
+                0.into_dart(),
+                owner.into_into_dart().into_dart(),
+                amount.into_into_dart().into_dart(),
+                asset_id.into_into_dart().into_dart(),
+                witness_index.into_dart(),
+            ],
+            Self::InputContract { contract_id } => {
+                vec![1.into_dart(), contract_id.into_into_dart().into_dart()]
+            }
+            Self::InputMessage {
+                amount,
+                sender,
+                recipient,
+                witness_index,
+            } => vec![
+                2.into_dart(),
+                amount.into_into_dart().into_dart(),
+                sender.into_into_dart().into_dart(),
+                recipient.into_into_dart().into_dart(),
+                witness_index.into_dart(),
+            ],
+            Self::UnknownInput => vec![3.into_dart()],
+        }
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for Input {}
+impl rust2dart::IntoIntoDart<Input> for Input {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
+
+impl support::IntoDart for Output {
+    fn into_dart(self) -> support::DartAbi {
+        match self {
+            Self::OutputCoin {
+                to,
+                amount,
+                asset_id,
+            } => vec![
+                0.into_dart(),
+                to.into_into_dart().into_dart(),
+                amount.into_into_dart().into_dart(),
+                asset_id.into_into_dart().into_dart(),
+            ],
+            Self::OutputContract { input_index } => {
+                vec![1.into_dart(), input_index.into_into_dart().into_dart()]
+            }
+            Self::OutputChange {
+                to,
+                amount,
+                asset_id,
+            } => vec![
+                2.into_dart(),
+                to.into_into_dart().into_dart(),
+                amount.into_into_dart().into_dart(),
+                asset_id.into_into_dart().into_dart(),
+            ],
+            Self::OutputVariable {
+                to,
+                amount,
+                asset_id,
+            } => vec![
+                3.into_dart(),
+                to.into_into_dart().into_dart(),
+                amount.into_into_dart().into_dart(),
+                asset_id.into_into_dart().into_dart(),
+            ],
+            Self::OutputContractCreated { contract_id } => {
+                vec![4.into_dart(), contract_id.into_into_dart().into_dart()]
+            }
+            Self::UnknownOutput => vec![5.into_dart()],
+        }
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for Output {}
+impl rust2dart::IntoIntoDart<Output> for Output {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
+
+impl support::IntoDart for Receipt {
+    fn into_dart(self) -> support::DartAbi {
+        match self {
+            Self::Call {
+                to,
+                amount,
+                asset_id,
+            } => vec![
+                0.into_dart(),
+                to.into_into_dart().into_dart(),
+                amount.into_into_dart().into_dart(),
+                asset_id.into_into_dart().into_dart(),
+            ],
+            Self::ReturnReceipt => vec![1.into_dart()],
+            Self::ReturnData => vec![2.into_dart()],
+            Self::Panic => vec![3.into_dart()],
+            Self::Revert => vec![4.into_dart()],
+            Self::Log => vec![5.into_dart()],
+            Self::LogData => vec![6.into_dart()],
+            Self::Transfer {
+                from,
+                to,
+                amount,
+                asset_id,
+            } => vec![
+                7.into_dart(),
+                from.into_into_dart().into_dart(),
+                to.into_into_dart().into_dart(),
+                amount.into_into_dart().into_dart(),
+                asset_id.into_into_dart().into_dart(),
+            ],
+            Self::TransferOut {
+                from,
+                to,
+                amount,
+                asset_id,
+            } => vec![
+                8.into_dart(),
+                from.into_into_dart().into_dart(),
+                to.into_into_dart().into_dart(),
+                amount.into_into_dart().into_dart(),
+                asset_id.into_into_dart().into_dart(),
+            ],
+            Self::ScriptResult { gas_used } => {
+                vec![9.into_dart(), gas_used.into_into_dart().into_dart()]
+            }
+            Self::MessageOut {
+                sender,
+                recipient,
+                amount,
+            } => vec![
+                10.into_dart(),
+                sender.into_into_dart().into_dart(),
+                recipient.into_into_dart().into_dart(),
+                amount.into_into_dart().into_dart(),
+            ],
+            Self::Mint {
+                sub_id,
+                contract_id,
+            } => vec![
+                11.into_dart(),
+                sub_id.into_into_dart().into_dart(),
+                contract_id.into_into_dart().into_dart(),
+            ],
+            Self::Burn {
+                sub_id,
+                contract_id,
+            } => vec![
+                12.into_dart(),
+                sub_id.into_into_dart().into_dart(),
+                contract_id.into_into_dart().into_dart(),
+            ],
+        }
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for Receipt {}
+impl rust2dart::IntoIntoDart<Receipt> for Receipt {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
+
+impl support::IntoDart for Transaction {
+    fn into_dart(self) -> support::DartAbi {
+        vec![
+            self.tx_type.into_into_dart().into_dart(),
+            self.inputs.into_into_dart().into_dart(),
+            self.outputs.into_into_dart().into_dart(),
+            self.witnesses.into_into_dart().into_dart(),
+        ]
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for Transaction {}
+impl rust2dart::IntoIntoDart<Transaction> for Transaction {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
+
 impl support::IntoDart for TransactionCost {
     fn into_dart(self) -> support::DartAbi {
         vec![
@@ -344,6 +582,18 @@ impl support::IntoDart for WalletUnlocked {
 }
 impl support::IntoDartExceptPrimitive for WalletUnlocked {}
 impl rust2dart::IntoIntoDart<WalletUnlocked> for WalletUnlocked {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
+
+impl support::IntoDart for Witness {
+    fn into_dart(self) -> support::DartAbi {
+        vec![self.data.into_into_dart().into_dart()].into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for Witness {}
+impl rust2dart::IntoIntoDart<Witness> for Witness {
     fn into_into_dart(self) -> Self {
         self
     }
