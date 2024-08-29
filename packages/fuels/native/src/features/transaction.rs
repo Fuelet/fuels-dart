@@ -1,20 +1,19 @@
-use std::io;
-use std::str::FromStr;
-
+use async_trait::async_trait;
 use fuel_crypto::fuel_types::canonical::Deserialize;
 use fuel_crypto::fuel_types::canonical::Serialize;
-use fuel_crypto::Message;
+use fuel_crypto::{Message, Signature};
 use fuel_tx::field::{Inputs, Witnesses};
 use fuel_tx::{Input, Script, Transaction as FuelTransaction, UniqueIdentifier};
-use fuels::prelude::{Account, AssetId, Bech32Address, BuildableTransaction, CreateTransaction, Provider, ScriptTransaction, Transaction, TxPolicies, WalletUnlocked};
+use fuels::prelude::{Account, AssetId, Bech32Address, BuildableTransaction, CreateTransaction, Provider, Result, ScriptTransaction, Transaction, TransactionBuilder, TxPolicies, WalletUnlocked};
 use fuels::prelude::{Address, Signer, TransactionType};
 use fuels::types::transaction_builders::ScriptTransactionBuilder;
 use fuels_accounts::provider::TransactionCost;
+use std::io;
+use std::str::FromStr;
 
 use crate::model::error::CustomResult;
 
 /// Clones the transfer function but doesn't submit the transaction
-/// TODO: do not sign the tx?
 pub async fn gen_transfer_tx_request(
     wallet: &WalletUnlocked,
     to: &Bech32Address,
@@ -98,6 +97,22 @@ fn wrap_fuel_transaction(value: FuelTransaction) -> CustomResult<TransactionType
     }
 }
 
+#[derive(Clone, Debug, Default)]
+struct MockSigner {
+    address: Bech32Address,
+}
+
+#[cfg_attr(target_arch = "wasm32", async_trait(?Send))]
+#[cfg_attr(not(target_arch = "wasm32"), async_trait)]
+impl Signer for MockSigner {
+    async fn sign(&self, _message: Message) -> Result<Signature> {
+        Ok(Default::default())
+    }
+    fn address(&self) -> &Bech32Address {
+        &self.address
+    }
+}
+
 async fn build_transfer_tx(wallet: &WalletUnlocked,
                            provider: &Provider,
                            to: &Bech32Address,
@@ -111,7 +126,8 @@ async fn build_transfer_tx(wallet: &WalletUnlocked,
     let mut tx_builder =
         ScriptTransactionBuilder::prepare_transfer(inputs, outputs, tx_policies);
 
-    wallet.add_witnesses(&mut tx_builder)?;
+    let mock_signer = MockSigner { address: wallet.address().clone() };
+    tx_builder.add_signer(mock_signer)?;
 
     let used_base_amount = if asset_id == AssetId::BASE { amount } else { 0 };
     wallet.adjust_for_fee(&mut tx_builder, used_base_amount).await?;
