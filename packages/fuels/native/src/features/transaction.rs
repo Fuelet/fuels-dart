@@ -3,7 +3,7 @@ use fuel_crypto::fuel_types::canonical::Deserialize;
 use fuel_crypto::fuel_types::canonical::Serialize;
 use fuel_crypto::{Message, Signature};
 use fuel_tx::field::{Inputs, Witnesses};
-use fuel_tx::{Input, Script, Transaction as FuelTransaction, UniqueIdentifier};
+use fuel_tx::{Input, Receipt, Script, Transaction as FuelTransaction, UniqueIdentifier};
 use fuels::prelude::{Account, AssetId, Bech32Address, BuildableTransaction, CreateTransaction, Provider, Result, ScriptTransaction, Transaction, TransactionBuilder, TxPolicies, WalletUnlocked};
 use fuels::prelude::{Address, Signer, TransactionType};
 use fuels::types::transaction_builders::ScriptTransactionBuilder;
@@ -52,6 +52,31 @@ pub async fn send_transaction(
         TransactionType::Mint(_) | TransactionType::Upload(_) | TransactionType::Upgrade(_) | TransactionType::Blob(_) => panic!(),
     };
     Ok(tx_id.to_string())
+}
+
+pub async fn simulate_transaction(
+    wallet: &WalletUnlocked,
+    encoded_tx: Vec<u8>,
+) -> CustomResult<Vec<Receipt>> {
+    let provider = wallet.provider().unwrap();
+    let tx = decode_transaction(&encoded_tx)?;
+    let receipts = match tx {
+        TransactionType::Script(script_tx) => {
+            let mut script: Script = script_tx.into();
+            update_witness_by_owner(wallet, &mut script).await;
+            let script_tx: ScriptTransaction = script.into();
+            let status = provider.dry_run(script_tx).await?;
+            status.take_receipts()
+        }
+        TransactionType::Create(mut create) => {
+            // TODO: do the same as for scripts ^
+            create.sign_with(wallet, provider.chain_id()).await?;
+            let status = provider.dry_run(create).await?;
+            status.take_receipts()
+        }
+        TransactionType::Mint(_) | TransactionType::Upload(_) | TransactionType::Upgrade(_) | TransactionType::Blob(_) => panic!(),
+    };
+    Ok(receipts)
 }
 
 pub async fn estimate_transaction_cost(

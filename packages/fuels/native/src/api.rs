@@ -9,6 +9,7 @@ use fuels::prelude::TxPolicies;
 pub use fuels::prelude::{Bech32Address as NativeBech32Address, Provider as NativeProvider, WalletUnlocked as NativeWalletUnlocked};
 
 use crate::features::{crypto, transaction, wallet};
+use crate::model::receipt::Receipt;
 use crate::model::transaction::TransactionCost;
 
 async fn get_native_provider(node_url: &String) -> NativeProvider {
@@ -64,6 +65,16 @@ impl WalletUnlocked {
     ) -> String {
         let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
         transaction::send_transaction(&native_wallet_unlocked, encoded_tx).await.unwrap()
+    }
+
+    #[tokio::main]
+    pub async fn simulate_transaction(
+        &self,
+        encoded_tx: Vec<u8>,
+    ) -> Vec<Receipt> {
+        let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
+        let fuel_receipts = transaction::simulate_transaction(&native_wallet_unlocked, encoded_tx).await.unwrap();
+        fuel_receipts.into_iter().map(|receipt| (&receipt).into()).collect()
     }
 
     #[tokio::main]

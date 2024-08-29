@@ -20,6 +20,7 @@ use std::sync::Arc;
 
 // Section: imports
 
+use crate::model::receipt::Receipt;
 use crate::model::transaction::TransactionCost;
 
 // Section: wire functions
@@ -154,6 +155,29 @@ fn wire_send_transaction__method__WalletUnlocked_impl(
             let api_encoded_tx = encoded_tx.wire2api();
             move |task_callback| {
                 Result::<_, ()>::Ok(WalletUnlocked::send_transaction(&api_that, api_encoded_tx))
+            }
+        },
+    )
+}
+fn wire_simulate_transaction__method__WalletUnlocked_impl(
+    port_: MessagePort,
+    that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
+    encoded_tx: impl Wire2Api<Vec<u8>> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, Vec<Receipt>, _>(
+        WrapInfo {
+            debug_name: "simulate_transaction__method__WalletUnlocked",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.wire2api();
+            let api_encoded_tx = encoded_tx.wire2api();
+            move |task_callback| {
+                Result::<_, ()>::Ok(WalletUnlocked::simulate_transaction(
+                    &api_that,
+                    api_encoded_tx,
+                ))
             }
         },
     )
@@ -308,6 +332,89 @@ impl support::IntoDart for Bech32Address {
 }
 impl support::IntoDartExceptPrimitive for Bech32Address {}
 impl rust2dart::IntoIntoDart<Bech32Address> for Bech32Address {
+    fn into_into_dart(self) -> Self {
+        self
+    }
+}
+
+impl support::IntoDart for Receipt {
+    fn into_dart(self) -> support::DartAbi {
+        match self {
+            Self::Call {
+                to,
+                amount,
+                asset_id,
+            } => vec![
+                0.into_dart(),
+                to.into_into_dart().into_dart(),
+                amount.into_into_dart().into_dart(),
+                asset_id.into_into_dart().into_dart(),
+            ],
+            Self::ReturnReceipt => vec![1.into_dart()],
+            Self::ReturnData => vec![2.into_dart()],
+            Self::Panic => vec![3.into_dart()],
+            Self::Revert => vec![4.into_dart()],
+            Self::Log => vec![5.into_dart()],
+            Self::LogData => vec![6.into_dart()],
+            Self::Transfer {
+                from,
+                to,
+                amount,
+                asset_id,
+            } => vec![
+                7.into_dart(),
+                from.into_into_dart().into_dart(),
+                to.into_into_dart().into_dart(),
+                amount.into_into_dart().into_dart(),
+                asset_id.into_into_dart().into_dart(),
+            ],
+            Self::TransferOut {
+                from,
+                to,
+                amount,
+                asset_id,
+            } => vec![
+                8.into_dart(),
+                from.into_into_dart().into_dart(),
+                to.into_into_dart().into_dart(),
+                amount.into_into_dart().into_dart(),
+                asset_id.into_into_dart().into_dart(),
+            ],
+            Self::ScriptResult { gas_used } => {
+                vec![9.into_dart(), gas_used.into_into_dart().into_dart()]
+            }
+            Self::MessageOut {
+                sender,
+                recipient,
+                amount,
+            } => vec![
+                10.into_dart(),
+                sender.into_into_dart().into_dart(),
+                recipient.into_into_dart().into_dart(),
+                amount.into_into_dart().into_dart(),
+            ],
+            Self::Mint {
+                sub_id,
+                contract_id,
+            } => vec![
+                11.into_dart(),
+                sub_id.into_into_dart().into_dart(),
+                contract_id.into_into_dart().into_dart(),
+            ],
+            Self::Burn {
+                sub_id,
+                contract_id,
+            } => vec![
+                12.into_dart(),
+                sub_id.into_into_dart().into_dart(),
+                contract_id.into_into_dart().into_dart(),
+            ],
+        }
+        .into_dart()
+    }
+}
+impl support::IntoDartExceptPrimitive for Receipt {}
+impl rust2dart::IntoIntoDart<Receipt> for Receipt {
     fn into_into_dart(self) -> Self {
         self
     }
