@@ -10,7 +10,7 @@ pub use fuels::prelude::{Bech32Address as NativeBech32Address, Provider as Nativ
 
 use crate::features::{crypto, transaction, wallet};
 use crate::model::receipt::Receipt;
-use crate::model::transaction::TransactionCost;
+use crate::model::transaction::{Transaction, TransactionCost};
 
 async fn get_native_provider(node_url: &String) -> NativeProvider {
     NativeProvider::connect(node_url).await.unwrap()
@@ -84,6 +84,14 @@ impl WalletUnlocked {
     ) -> String {
         let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
         crypto::sign_message(&native_wallet_unlocked, message).await.unwrap()
+    }
+
+    #[tokio::main]
+    pub async fn transform_tx_request(
+        &self,
+        encoded_tx: Vec<u8>,
+    ) -> Transaction {
+        (&transaction::transform_tx_request(encoded_tx).await.unwrap()).into()
     }
 }
 

@@ -80,6 +80,12 @@ pub async fn simulate_transaction(
     Ok(receipts)
 }
 
+pub async fn transform_tx_request(
+    encoded_tx: Vec<u8>,
+) -> CustomResult<TransactionType> {
+    decode_transaction(&encoded_tx)
+}
+
 pub async fn estimate_transaction_cost(
     provider: &Provider,
     encoded_tx: Vec<u8>,

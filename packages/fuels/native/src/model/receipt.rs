@@ -53,7 +53,6 @@ pub enum Receipt {
     },
 }
 
-
 impl From<&fuels::prelude::Receipt> for Receipt {
     fn from(model: &fuels::prelude::Receipt) -> Self {
         match model {

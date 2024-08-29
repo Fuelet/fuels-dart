@@ -13,6 +13,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) wire_send_transaction__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_simulate_transaction__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_sign_message__method__WalletUnlocked);
+    dummy_var ^= ((int64_t) (void*) wire_transform_tx_request__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_estimate_transaction_cost__method__Provider);
     dummy_var ^= ((int64_t) (void*) wire_from_bech32_string__static_method__Bech32Address);
     dummy_var ^= ((int64_t) (void*) wire_from_b256_string__static_method__Bech32Address);
