@@ -31,9 +31,12 @@ class FuelUtilsImpl extends BaseFuelUtils {
   }
 
   @override
-  Future<Transaction> transformTxRequest(dynamic transactionRequestLike) {
-    // TODO: implement
-    throw UnimplementedError();
+  Future<Transaction> transformTxRequest(
+      dynamic transactionRequestHexOrJson) async {
+    final bytes = hex.decode(removeHexPrefix(transactionRequestHexOrJson));
+    final txModel =
+        await _bridge.transformTxRequest(encodedTx: Uint8List.fromList(bytes));
+    return Transaction.fromRust(txModel);
   }
 
   @override
