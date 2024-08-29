@@ -85,14 +85,6 @@ impl WalletUnlocked {
         let native_wallet_unlocked = self.get_native_wallet_unlocked().await;
         crypto::sign_message(&native_wallet_unlocked, message).await.unwrap()
     }
-
-    #[tokio::main]
-    pub async fn transform_tx_request(
-        &self,
-        encoded_tx: Vec<u8>,
-    ) -> Transaction {
-        (&transaction::transform_tx_request(encoded_tx).await.unwrap()).into()
-    }
 }
 
 // Cannot move to another file, cause the methods won't be accessible in that case
@@ -143,4 +135,11 @@ impl From<NativeBech32Address> for Bech32Address {
             native: RustOpaque::new(model)
         }
     }
+}
+
+#[tokio::main]
+pub async fn transform_tx_request(
+    encoded_tx: Vec<u8>,
+) -> Transaction {
+    (&transaction::transform_tx_request(encoded_tx).await.unwrap()).into()
 }

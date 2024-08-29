@@ -29,6 +29,22 @@ use crate::model::witness::Witness;
 
 // Section: wire functions
 
+fn wire_transform_tx_request_impl(
+    port_: MessagePort,
+    encoded_tx: impl Wire2Api<Vec<u8>> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, Transaction, _>(
+        WrapInfo {
+            debug_name: "transform_tx_request",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_encoded_tx = encoded_tx.wire2api();
+            move |task_callback| Result::<_, ()>::Ok(transform_tx_request(api_encoded_tx))
+        },
+    )
+}
 fn wire_new_random__static_method__WalletUnlocked_impl(
     port_: MessagePort,
     node_url: impl Wire2Api<String> + UnwindSafe,
@@ -202,29 +218,6 @@ fn wire_sign_message__method__WalletUnlocked_impl(
             let api_message = message.wire2api();
             move |task_callback| {
                 Result::<_, ()>::Ok(WalletUnlocked::sign_message(&api_that, api_message))
-            }
-        },
-    )
-}
-fn wire_transform_tx_request__method__WalletUnlocked_impl(
-    port_: MessagePort,
-    that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
-    encoded_tx: impl Wire2Api<Vec<u8>> + UnwindSafe,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, Transaction, _>(
-        WrapInfo {
-            debug_name: "transform_tx_request__method__WalletUnlocked",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || {
-            let api_that = that.wire2api();
-            let api_encoded_tx = encoded_tx.wire2api();
-            move |task_callback| {
-                Result::<_, ()>::Ok(WalletUnlocked::transform_tx_request(
-                    &api_that,
-                    api_encoded_tx,
-                ))
             }
         },
     )

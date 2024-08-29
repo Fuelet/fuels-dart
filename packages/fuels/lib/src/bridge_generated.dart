@@ -14,6 +14,11 @@ import 'dart:ffi' as ffi;
 part 'bridge_generated.freezed.dart';
 
 abstract class Fuels {
+  Future<Transaction> transformTxRequest(
+      {required Uint8List encodedTx, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kTransformTxRequestConstMeta;
+
   Future<WalletUnlocked> newRandomStaticMethodWalletUnlocked(
       {required String nodeUrl, dynamic hint});
 
@@ -72,14 +77,6 @@ abstract class Fuels {
       {required WalletUnlocked that, required String message, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kSignMessageMethodWalletUnlockedConstMeta;
-
-  Future<Transaction> transformTxRequestMethodWalletUnlocked(
-      {required WalletUnlocked that,
-      required Uint8List encodedTx,
-      dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta
-      get kTransformTxRequestMethodWalletUnlockedConstMeta;
 
   Future<TransactionCost> estimateTransactionCostMethodProvider(
       {required Provider that, required Uint8List encodedTx, dynamic hint});
@@ -368,13 +365,6 @@ class WalletUnlocked {
         that: this,
         message: message,
       );
-
-  Future<Transaction> transformTxRequest(
-          {required Uint8List encodedTx, dynamic hint}) =>
-      bridge.transformTxRequestMethodWalletUnlocked(
-        that: this,
-        encodedTx: encodedTx,
-      );
 }
 
 class Witness {
@@ -394,6 +384,26 @@ class FuelsImpl implements Fuels {
   factory FuelsImpl.wasm(FutureOr<WasmModule> module) =>
       FuelsImpl(module as ExternalLibrary);
   FuelsImpl.raw(this._platform);
+  Future<Transaction> transformTxRequest(
+      {required Uint8List encodedTx, dynamic hint}) {
+    var arg0 = _platform.api2wire_uint_8_list(encodedTx);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) =>
+          _platform.inner.wire_transform_tx_request(port_, arg0),
+      parseSuccessData: _wire2api_transaction,
+      parseErrorData: null,
+      constMeta: kTransformTxRequestConstMeta,
+      argValues: [encodedTx],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kTransformTxRequestConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "transform_tx_request",
+        argNames: ["encodedTx"],
+      );
+
   Future<WalletUnlocked> newRandomStaticMethodWalletUnlocked(
       {required String nodeUrl, dynamic hint}) {
     var arg0 = _platform.api2wire_String(nodeUrl);
@@ -589,30 +599,6 @@ class FuelsImpl implements Fuels {
           const FlutterRustBridgeTaskConstMeta(
             debugName: "sign_message__method__WalletUnlocked",
             argNames: ["that", "message"],
-          );
-
-  Future<Transaction> transformTxRequestMethodWalletUnlocked(
-      {required WalletUnlocked that,
-      required Uint8List encodedTx,
-      dynamic hint}) {
-    var arg0 = _platform.api2wire_box_autoadd_wallet_unlocked(that);
-    var arg1 = _platform.api2wire_uint_8_list(encodedTx);
-    return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_transform_tx_request__method__WalletUnlocked(port_, arg0, arg1),
-      parseSuccessData: _wire2api_transaction,
-      parseErrorData: null,
-      constMeta: kTransformTxRequestMethodWalletUnlockedConstMeta,
-      argValues: [that, encodedTx],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta
-      get kTransformTxRequestMethodWalletUnlockedConstMeta =>
-          const FlutterRustBridgeTaskConstMeta(
-            debugName: "transform_tx_request__method__WalletUnlocked",
-            argNames: ["that", "encodedTx"],
           );
 
   Future<TransactionCost> estimateTransactionCostMethodProvider(
@@ -1184,6 +1170,23 @@ class FuelsWire implements FlutterRustBridgeWireBase {
   late final _init_frb_dart_api_dl = _init_frb_dart_api_dlPtr
       .asFunction<int Function(ffi.Pointer<ffi.Void>)>();
 
+  void wire_transform_tx_request(
+    int port_,
+    ffi.Pointer<wire_uint_8_list> encoded_tx,
+  ) {
+    return _wire_transform_tx_request(
+      port_,
+      encoded_tx,
+    );
+  }
+
+  late final _wire_transform_tx_requestPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Int64,
+              ffi.Pointer<wire_uint_8_list>)>>('wire_transform_tx_request');
+  late final _wire_transform_tx_request = _wire_transform_tx_requestPtr
+      .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
+
   void wire_new_random__static_method__WalletUnlocked(
     int port_,
     ffi.Pointer<wire_uint_8_list> node_url,
@@ -1378,28 +1381,6 @@ class FuelsWire implements FlutterRustBridgeWireBase {
       'wire_sign_message__method__WalletUnlocked');
   late final _wire_sign_message__method__WalletUnlocked =
       _wire_sign_message__method__WalletUnlockedPtr.asFunction<
-          void Function(int, ffi.Pointer<wire_WalletUnlocked>,
-              ffi.Pointer<wire_uint_8_list>)>();
-
-  void wire_transform_tx_request__method__WalletUnlocked(
-    int port_,
-    ffi.Pointer<wire_WalletUnlocked> that,
-    ffi.Pointer<wire_uint_8_list> encoded_tx,
-  ) {
-    return _wire_transform_tx_request__method__WalletUnlocked(
-      port_,
-      that,
-      encoded_tx,
-    );
-  }
-
-  late final _wire_transform_tx_request__method__WalletUnlockedPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_WalletUnlocked>,
-                  ffi.Pointer<wire_uint_8_list>)>>(
-      'wire_transform_tx_request__method__WalletUnlocked');
-  late final _wire_transform_tx_request__method__WalletUnlocked =
-      _wire_transform_tx_request__method__WalletUnlockedPtr.asFunction<
           void Function(int, ffi.Pointer<wire_WalletUnlocked>,
               ffi.Pointer<wire_uint_8_list>)>();
 
