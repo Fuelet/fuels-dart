@@ -2,7 +2,6 @@ import 'package:flutter_fuels/model/input.dart';
 import 'package:flutter_fuels/model/output.dart';
 import 'package:flutter_fuels/model/storage_slot.dart';
 import 'package:flutter_fuels/model/witness.dart';
-import 'package:fuels/fuels.dart' as fuels;
 
 abstract class Transaction {
   const Transaction();
@@ -22,36 +21,6 @@ abstract class Transaction {
       }
     } catch (e) {
       return UnparsedTransaction(raw: jsonTransaction, err: e);
-    }
-  }
-
-  static Transaction fromRust(fuels.Transaction rustTransaction) {
-    final inputs =
-        rustTransaction.inputs.map((e) => Input.fromRust(e)).toList();
-    final outputs =
-        rustTransaction.outputs.map((e) => Output.fromRust(e)).toList();
-    final witnesses =
-        rustTransaction.witnesses.map((e) => Witness.fromRust(e)).toList();
-
-    switch (rustTransaction.txType) {
-      case 0:
-        return TransactionScript(
-          inputs: inputs,
-          outputs: outputs,
-          witnesses: witnesses,
-        );
-      case 1:
-        return TransactionCreate(
-          inputs: inputs,
-          outputs: outputs,
-          witnesses: witnesses,
-        );
-      case 2:
-        return TransactionMint(
-          outputs: outputs,
-        );
-      default:
-        return UnknownTransaction(raw: Map.identity());
     }
   }
 }

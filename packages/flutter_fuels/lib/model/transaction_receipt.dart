@@ -1,6 +1,5 @@
 import 'package:flutter_fuels/utils/hex_utils.dart';
 import 'package:flutter_fuels/utils/json_utils.dart';
-import 'package:fuels/fuels.dart' as fuels;
 
 abstract class TransactionReceipt {
   const TransactionReceipt();
@@ -41,49 +40,6 @@ abstract class TransactionReceipt {
     } catch (e) {
       return UnparsedReceipt(raw: jsonReceipt, err: e);
     }
-  }
-
-  static TransactionReceipt fromRust(fuels.Receipt rustReceipt) {
-    return rustReceipt.map(
-        call: (r) => ReceiptCall(
-              to: addHexPrefix(r.to),
-              amount: BigInt.from(r.amount),
-              assetId: addHexPrefix(r.assetId),
-            ),
-        returnReceipt: (r) => const ReceiptReturn(),
-        returnData: (r) => const ReceiptReturnData(),
-        panic: (r) => const ReceiptPanic(),
-        revert: (r) => const ReceiptRevert(),
-        log: (r) => const ReceiptLog(),
-        logData: (r) => const ReceiptLogData(),
-        transfer: (r) => ReceiptTransfer(
-              from: addHexPrefix(r.from),
-              to: addHexPrefix(r.to),
-              amount: BigInt.from(r.amount),
-              assetId: addHexPrefix(r.assetId),
-            ),
-        transferOut: (r) => ReceiptTransferOut(
-              from: addHexPrefix(r.from),
-              to: addHexPrefix(r.to),
-              amount: BigInt.from(r.amount),
-              assetId: addHexPrefix(r.assetId),
-            ),
-        scriptResult: (r) => ReceiptScriptResult(
-              gasUsed: BigInt.from(r.gasUsed),
-            ),
-        messageOut: (r) => ReceiptMessageOut(
-              sender: addHexPrefix(r.sender),
-              recipient: addHexPrefix(r.recipient),
-              amount: BigInt.from(r.amount),
-            ),
-        mint: (r) => ReceiptMint(
-              subId: addHexPrefix(r.subId),
-              contractId: addHexPrefix(r.contractId),
-            ),
-        burn: (r) => ReceiptBurn(
-              subId: addHexPrefix(r.subId),
-              contractId: addHexPrefix(r.contractId),
-            ));
   }
 }
 

@@ -6,7 +6,7 @@ abstract class BaseFuelUtils {
 
   Future<String> b256FromBech32String(String address);
 
-  Future<Transaction> transformTxRequest(dynamic transactionRequestLike);
+  Future<Transaction> transformTxRequest(dynamic transactionRequestHexOrJson);
 
   Future<TransactionCost> getTransactionCost(
       {required String networkUrl,

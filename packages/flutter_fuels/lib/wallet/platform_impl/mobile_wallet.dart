@@ -130,7 +130,51 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
     final List<fuels.Receipt> receipts = await _rustWalletUnlocked
         .simulateTransaction(encodedTx: Uint8List.fromList(bytes));
 
-    return CallResult(
-        receipts: receipts.map(TransactionReceipt.fromRust).toList());
+    return CallResult(receipts: receipts.map(parseRustReceipt).toList());
   }
+}
+
+// This is ffi specific code, that should be executed only on mobile platforms.
+// It will not work on web, that's why it's in this file
+TransactionReceipt parseRustReceipt(fuels.Receipt rustReceipt) {
+  return rustReceipt.map(
+      call: (r) => ReceiptCall(
+            to: addHexPrefix(r.to),
+            amount: BigInt.from(r.amount),
+            assetId: addHexPrefix(r.assetId),
+          ),
+      returnReceipt: (r) => const ReceiptReturn(),
+      returnData: (r) => const ReceiptReturnData(),
+      panic: (r) => const ReceiptPanic(),
+      revert: (r) => const ReceiptRevert(),
+      log: (r) => const ReceiptLog(),
+      logData: (r) => const ReceiptLogData(),
+      transfer: (r) => ReceiptTransfer(
+            from: addHexPrefix(r.from),
+            to: addHexPrefix(r.to),
+            amount: BigInt.from(r.amount),
+            assetId: addHexPrefix(r.assetId),
+          ),
+      transferOut: (r) => ReceiptTransferOut(
+            from: addHexPrefix(r.from),
+            to: addHexPrefix(r.to),
+            amount: BigInt.from(r.amount),
+            assetId: addHexPrefix(r.assetId),
+          ),
+      scriptResult: (r) => ReceiptScriptResult(
+            gasUsed: BigInt.from(r.gasUsed),
+          ),
+      messageOut: (r) => ReceiptMessageOut(
+            sender: addHexPrefix(r.sender),
+            recipient: addHexPrefix(r.recipient),
+            amount: BigInt.from(r.amount),
+          ),
+      mint: (r) => ReceiptMint(
+            subId: addHexPrefix(r.subId),
+            contractId: addHexPrefix(r.contractId),
+          ),
+      burn: (r) => ReceiptBurn(
+            subId: addHexPrefix(r.subId),
+            contractId: addHexPrefix(r.contractId),
+          ));
 }

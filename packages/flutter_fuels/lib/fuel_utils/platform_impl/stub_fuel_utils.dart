@@ -15,7 +15,7 @@ class FuelUtilsImpl extends BaseFuelUtils {
   }
 
   @override
-  Future<Transaction> transformTxRequest(dynamic transactionRequestLike) {
+  Future<Transaction> transformTxRequest(dynamic transactionRequestHexOrJson) {
     throw Exception('Stub implementation');
   }
 

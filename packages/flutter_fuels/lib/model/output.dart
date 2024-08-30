@@ -1,6 +1,5 @@
 import 'package:flutter_fuels/utils/hex_utils.dart';
 import 'package:flutter_fuels/utils/json_utils.dart';
-import 'package:fuels/fuels.dart' as fuels;
 
 abstract class Output {
   const Output();
@@ -25,30 +24,6 @@ abstract class Output {
     } catch (e) {
       return UnparsedOutput(raw: jsonOutput, err: e);
     }
-  }
-
-  static Output fromRust(fuels.Output rustOutput) {
-    return rustOutput.map(
-        outputCoin: (o) => OutputCoin(
-              to: addHexPrefix(o.to),
-              amount: BigInt.from(o.amount),
-              assetId: addHexPrefix(o.assetId),
-            ),
-        outputContract: (o) => OutputContract(inputIndex: o.inputIndex),
-        outputChange: (o) => OutputChange(
-              to: addHexPrefix(o.to),
-              amount: BigInt.from(o.amount),
-              assetId: addHexPrefix(o.assetId),
-            ),
-        outputVariable: (o) => OutputVariable(
-              to: addHexPrefix(o.to),
-              amount: BigInt.from(o.amount),
-              assetId: addHexPrefix(o.assetId),
-            ),
-        outputContractCreated: (o) => OutputContractCreated(
-              contractId: addHexPrefix(o.contractId),
-            ),
-        unknownOutput: (o) => UnknownOutput(raw: Map.identity()));
   }
 }
 

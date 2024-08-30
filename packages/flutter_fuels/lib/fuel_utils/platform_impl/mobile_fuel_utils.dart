@@ -1,8 +1,11 @@
 import 'dart:typed_data';
 
 import 'package:convert/convert.dart';
+import 'package:flutter_fuels/model/input.dart';
+import 'package:flutter_fuels/model/output.dart';
 import 'package:flutter_fuels/model/transaction.dart';
 import 'package:flutter_fuels/model/transaction_cost.dart';
+import 'package:flutter_fuels/model/witness.dart';
 import 'package:flutter_fuels/utils/hex_utils.dart';
 import 'package:fuels/fuels.dart' as fuels;
 
@@ -36,7 +39,7 @@ class FuelUtilsImpl extends BaseFuelUtils {
     final bytes = hex.decode(removeHexPrefix(transactionRequestHexOrJson));
     final txModel =
         await _bridge.transformTxRequest(encodedTx: Uint8List.fromList(bytes));
-    return Transaction.fromRust(txModel);
+    return parseRustTransaction(txModel);
   }
 
   @override
@@ -53,5 +56,81 @@ class FuelUtilsImpl extends BaseFuelUtils {
       minFee: txCost.totalFee,
       maxFee: txCost.totalFee,
     );
+  }
+}
+
+// This is ffi specific code, that should be executed only on mobile platforms.
+// It will not work on web, that's why it's in this file
+Input parseRustInput(fuels.Input rustInput) {
+  return rustInput.map(
+      inputCoin: (i) => InputCoin(
+            owner: addHexPrefix(i.owner),
+            amount: BigInt.from(i.amount),
+            assetId: addHexPrefix(i.assetId),
+            witnessIndex: i.witnessIndex ?? -1,
+          ),
+      inputContract: (i) =>
+          InputContract(contractID: addHexPrefix(i.contractId)),
+      inputMessage: (i) => InputMessage(
+            amount: BigInt.from(i.amount),
+            sender: addHexPrefix(i.sender),
+            recipient: addHexPrefix(i.recipient),
+            witnessIndex: i.witnessIndex ?? -1,
+          ),
+      unknownInput: (i) => UnknownInput(raw: Map.identity()));
+}
+
+Output parseRustOutput(fuels.Output rustOutput) {
+  return rustOutput.map(
+      outputCoin: (o) => OutputCoin(
+            to: addHexPrefix(o.to),
+            amount: BigInt.from(o.amount),
+            assetId: addHexPrefix(o.assetId),
+          ),
+      outputContract: (o) => OutputContract(inputIndex: o.inputIndex),
+      outputChange: (o) => OutputChange(
+            to: addHexPrefix(o.to),
+            amount: BigInt.from(o.amount),
+            assetId: addHexPrefix(o.assetId),
+          ),
+      outputVariable: (o) => OutputVariable(
+            to: addHexPrefix(o.to),
+            amount: BigInt.from(o.amount),
+            assetId: addHexPrefix(o.assetId),
+          ),
+      outputContractCreated: (o) => OutputContractCreated(
+            contractId: addHexPrefix(o.contractId),
+          ),
+      unknownOutput: (o) => UnknownOutput(raw: Map.identity()));
+}
+
+Witness parseRustWitness(fuels.Witness rustWitness) {
+  return Witness(data: addHexPrefix(hex.encode(rustWitness.data.toList())));
+}
+
+Transaction parseRustTransaction(fuels.Transaction rustTransaction) {
+  final inputs = rustTransaction.inputs.map(parseRustInput).toList();
+  final outputs = rustTransaction.outputs.map(parseRustOutput).toList();
+  final witnesses = rustTransaction.witnesses.map(parseRustWitness).toList();
+
+  switch (rustTransaction.txType) {
+    case 0:
+      return TransactionScript(
+        inputs: inputs,
+        outputs: outputs,
+        witnesses: witnesses,
+      );
+    case 1:
+      return TransactionCreate(
+        inputs: inputs,
+        outputs: outputs,
+        witnesses: witnesses,
+      );
+    case 2:
+      return TransactionMint(
+        outputs: outputs,
+      );
+    default:
+      return UnknownTransaction(raw: Map.identity());
   }
 }

@@ -19,8 +19,8 @@ class FuelUtilsImpl extends BaseFuelUtils {
   }
 
   @override
-  Future<Transaction> transformTxRequest(dynamic transactionRequestLike) {
-    String jsTransaction = js_utils.transformTxRequest(transactionRequestLike);
+  Future<Transaction> transformTxRequest(dynamic transactionRequestHexOrJson) {
+    String jsTransaction = js_utils.transformTxRequest(transactionRequestHexOrJson);
     try {
       Transaction dartTransaction =
           Transaction.fromJson(jsonDecode(jsTransaction));
