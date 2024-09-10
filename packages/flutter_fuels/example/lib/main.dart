@@ -4,7 +4,7 @@ import 'dart:math';
 import 'package:flutter/material.dart';
 import 'package:flutter_fuels/flutter_fuels.dart';
 
-const _betaApiUrl = 'https://testnet.fuel.network';
+const _testnetApiUrl = 'https://testnet.fuel.network';
 const _ethAssetId =
     '0xf8f8b6283d7fa5b672b530cbb84fcccb4ff8dc40f8176ef4544ddb1f1952ad07';
 
@@ -154,7 +154,7 @@ class _MyAppState extends State<MyApp> {
   }
 
   Future<void> _generateWallet() async {
-    final wallet = await FuelWallet.generateNewWallet(networkUrl: _betaApiUrl);
+    final wallet = await FuelWallet.generateNewWallet(networkUrl: _testnetApiUrl);
     await _setState(wallet);
   }
 
@@ -162,7 +162,7 @@ class _MyAppState extends State<MyApp> {
     String mnemonic =
         'sorry suit fade strike crucial theory rubber sign scrub burden enough trash';
     final wallet = await FuelWallet.newFromMnemonicPhrase(
-        networkUrl: _betaApiUrl, mnemonic: mnemonic);
+        networkUrl: _testnetApiUrl, mnemonic: mnemonic);
     await _setState(wallet);
   }
 
@@ -172,11 +172,11 @@ class _MyAppState extends State<MyApp> {
     final signedMessage = await wallet.signMessage(message: 'message');
 
     final derivedWallet0 = await FuelWallet.newFromMnemonicPhraseAndIndex(
-        networkUrl: _betaApiUrl, mnemonic: wallet.mnemonicPhrase!, index: 0);
+        networkUrl: _testnetApiUrl, mnemonic: wallet.mnemonicPhrase!, index: 0);
     final derivedWallet1 = await FuelWallet.newFromMnemonicPhraseAndIndex(
-        networkUrl: _betaApiUrl, mnemonic: wallet.mnemonicPhrase!, index: 1);
+        networkUrl: _testnetApiUrl, mnemonic: wallet.mnemonicPhrase!, index: 1);
     final derivedWallet2 = await FuelWallet.newFromMnemonicPhraseAndIndex(
-        networkUrl: _betaApiUrl, mnemonic: wallet.mnemonicPhrase!, index: 2);
+        networkUrl: _testnetApiUrl, mnemonic: wallet.mnemonicPhrase!, index: 2);
 
     String txRequest;
     TransactionCost? estimatedTxCost;
@@ -186,8 +186,8 @@ class _MyAppState extends State<MyApp> {
               fractionalAmount: 1,
               assetId: _ethAssetId))
           .$1;
-      estimatedTxCost = await wallet.getTransactionCost(
-          transactionRequestHexOrJson: txRequest);
+      estimatedTxCost = await FuelUtils.getTransactionCost(
+          networkUrl: _testnetApiUrl, transactionRequestHexOrJson: txRequest);
     } catch (e) {
       txRequest = e.toString();
     }

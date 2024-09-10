@@ -4,6 +4,7 @@ import {
   Provider,
   toB256,
   toBech32,
+  TransactionBlob,
   TransactionCreate,
   TransactionRequest,
   transactionRequestify,
@@ -72,7 +73,7 @@ class WalletInterface {
     let provider = await Provider.create(networkUrl);
     let wallet = Wallet.fromPrivateKey(privateKey, provider);
     let transactionRequest = JSON.parse(transactionRequestJson);
-    let response = await wallet.sendTransaction(transactionRequest, {awaitExecution: true});
+    let response = await wallet.sendTransaction(transactionRequest);
     let txResult = await response.waitForResult()
     if (!txResult.isStatusSuccess) {
       throw new Error(`Transaction failed: ${txResult.status}`);
@@ -122,7 +123,7 @@ class FuelsUtils {
   transformTxRequest(transactionRequestJson: string): string {
     let txRequestLike: TransactionRequestLike = JSON.parse(transactionRequestJson);
     let txRequest: TransactionRequest = transactionRequestify(txRequestLike);
-    let tx: TransactionCreate | TransactionScript = txRequest.toTransaction();
+    let tx: TransactionBlob | TransactionScript | TransactionCreate = txRequest.toTransaction();
     return JSON.stringify(tx);
   }
 
