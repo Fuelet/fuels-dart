@@ -2,6 +2,7 @@ import {
   Bech32Address,
   Mnemonic,
   Provider,
+  ScriptTransactionRequest,
   toB256,
   toBech32,
   TransactionBlob,
@@ -10,6 +11,8 @@ import {
   transactionRequestify,
   TransactionRequestLike,
   TransactionScript,
+  TransactionUpgrade,
+  TransactionUpload,
   Wallet,
   WalletUnlocked,
 } from "fuels";
@@ -103,9 +106,12 @@ class WalletInterface {
   ): Promise<[string, string]> {
     let provider = await Provider.create(networkUrl);
     let wallet = Wallet.fromPrivateKey(privateKey, provider);
-    const {maxGasPerTx} = provider.getGasConfig();
-    const maxGas = maxGasPerTx.toNumber() / 4; // TODO: estimate max gas
-    const request = await wallet.createTransfer(destinationB256Address, fractionalAmount, assetId, {gasLimit: maxGas})
+
+    let request = new ScriptTransactionRequest();
+    request = wallet.addTransfer(request, {destination: destinationB256Address, amount: fractionalAmount, assetId});
+    const txCost = await wallet.getTransactionCost(request);
+    request = await wallet.fund(request, txCost);
+
     const txId = request.getTransactionId(provider.getChainId())
     return [JSON.stringify(request), txId];
   }
@@ -123,7 +129,7 @@ class FuelsUtils {
   transformTxRequest(transactionRequestJson: string): string {
     let txRequestLike: TransactionRequestLike = JSON.parse(transactionRequestJson);
     let txRequest: TransactionRequest = transactionRequestify(txRequestLike);
-    let tx: TransactionBlob | TransactionScript | TransactionCreate = txRequest.toTransaction();
+    let tx: TransactionBlob | TransactionScript | TransactionCreate | TransactionUpgrade | TransactionUpload = txRequest.toTransaction();
     return JSON.stringify(tx);
   }
 
