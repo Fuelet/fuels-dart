@@ -1,3 +1,11 @@
+## 0.0.59
+
+ - Bump "flutter_fuels" to `0.0.59`.
+
+## 0.0.58
+
+ - Bump "flutter_fuels" to `0.0.58`.
+
 ## 0.0.57
 
  - Bump "flutter_fuels" to `0.0.57`.
