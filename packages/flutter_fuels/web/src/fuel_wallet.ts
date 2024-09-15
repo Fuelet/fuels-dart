@@ -107,7 +107,7 @@ class WalletInterface {
     let provider = await Provider.create(networkUrl);
     let wallet = Wallet.fromPrivateKey(privateKey, provider);
 
-    let request = new ScriptTransactionRequest();
+    let request = new ScriptTransactionRequest({gasLimit: 20000});
     request = wallet.addTransfer(request, {destination: destinationB256Address, amount: fractionalAmount, assetId});
     const txCost = await wallet.getTransactionCost(request);
     request = await wallet.fund(request, txCost);
