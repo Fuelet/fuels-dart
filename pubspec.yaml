@@ -3,5 +3,5 @@ name: fuels_dart
 environment:
   sdk: '>=2.18.2 <4.0.0'
 
-dev_dependencies:
-  melos: ^6.1.0
+dependencies:
+  melos: ^6.2.0
