@@ -19,7 +19,7 @@ gen:
             --llvm-path /opt/homebrew/opt/llvm \
         && break || ((ATTEMPT++)); echo 'Retrying...';\
     done
-    fvm dart run build_runner build
+    fvm dart run build_runner build --delete-conflicting-outputs
     fvm dart format .
     cargo build --manifest-path=native/Cargo.toml
 
