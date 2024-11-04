@@ -1,3 +1,7 @@
+## 0.0.60
+
+ - Bump "flutter_fuels" to `0.0.60`.
+
 ## 0.0.59+2
 
  - Update a dependency to the latest release.
