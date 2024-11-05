@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "browserify-sign": ">=4.2.3",
-    "fuels": "^0.95.0",
+    "fuels": "^0.96.1",
     "graphql": ">=16.9.0",
     "node-polyfill-webpack-plugin": "^2.0.1",
     "semver": ">=7.6.2"
