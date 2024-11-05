@@ -73,5 +73,11 @@ void main() {
         await provider.isUserAccount(
             address: await parseAddress(
                 'fuel13envz7r5vtddgxfuu6r74vyp4k7tem2t9nzpwrcxz2z6gjyc2hnsvwyjmm')));
+    // hash of a transaction on testnet
+    expect(
+        false,
+        await provider.isUserAccount(
+            address: await parseAddress(
+                'fuel10namrts428j8la5662ew9vhnm4s9mevn6dt586qx2m87m2nyhmes64dyx7')));
   });
 }
