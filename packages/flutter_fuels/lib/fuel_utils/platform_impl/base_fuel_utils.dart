@@ -11,4 +11,7 @@ abstract class BaseFuelUtils {
   Future<TransactionCost> getTransactionCost(
       {required String networkUrl,
       required String transactionRequestHexOrJson});
+
+  Future<bool> isUserAccount(
+      {required String network, required String address});
 }

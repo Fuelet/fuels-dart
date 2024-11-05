@@ -41,3 +41,7 @@ Future<WalletUnlocked> importWalletWithMnemonicsAndPath(
   return WalletUnlocked.newFromMnemonicPhraseWithPath(
       bridge: rustSdk, phrase: mnemonicPhrase, path: path, nodeUrl: betaApiUrl);
 }
+
+Future<Bech32Address> parseAddress(String address) {
+  return Bech32Address.fromBech32String(bridge: rustSdk, s: address);
+}

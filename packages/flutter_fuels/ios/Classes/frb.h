@@ -85,6 +85,10 @@ void wire_estimate_transaction_cost__method__Provider(int64_t port_,
                                                       struct wire_Provider *that,
                                                       struct wire_uint_8_list *encoded_tx);
 
+void wire_is_user_account__method__Provider(int64_t port_,
+                                            struct wire_Provider *that,
+                                            struct wire_Bech32Address *address);
+
 void wire_from_bech32_string__static_method__Bech32Address(int64_t port_,
                                                            struct wire_uint_8_list *s);
 
@@ -122,6 +126,7 @@ static int64_t dummy_method_to_enforce_bundling(void) {
     dummy_var ^= ((int64_t) (void*) wire_simulate_transaction__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_sign_message__method__WalletUnlocked);
     dummy_var ^= ((int64_t) (void*) wire_estimate_transaction_cost__method__Provider);
+    dummy_var ^= ((int64_t) (void*) wire_is_user_account__method__Provider);
     dummy_var ^= ((int64_t) (void*) wire_from_bech32_string__static_method__Bech32Address);
     dummy_var ^= ((int64_t) (void*) wire_from_b256_string__static_method__Bech32Address);
     dummy_var ^= ((int64_t) (void*) wire_to_bech32_string__method__Bech32Address);

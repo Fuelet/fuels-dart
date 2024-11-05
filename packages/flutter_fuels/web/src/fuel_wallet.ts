@@ -108,6 +108,10 @@ class WalletInterface {
     let wallet = Wallet.fromPrivateKey(privateKey, provider);
 
     let request = new ScriptTransactionRequest({gasLimit: 20000});
+    let isUserAccount = await provider.isUserAccount(destinationB256Address);
+    if (!isUserAccount) {
+      throw new Error(`Not a valid user address`);
+    }
     request = wallet.addTransfer(request, {destination: destinationB256Address, amount: fractionalAmount, assetId});
     const txCost = await wallet.getTransactionCost(request);
     request = await wallet.fund(request, txCost);
@@ -149,6 +153,14 @@ class FuelsUtils {
       maxGas: maxGas.toNumber(),
     }
     return JSON.stringify(responseObject);
+  }
+
+  async isUserAccount(
+    networkUrl: string,
+    address: string
+  ): Promise<boolean> {
+    let provider = await Provider.create(networkUrl);
+    return provider.isUserAccount(address);
   }
 }
 

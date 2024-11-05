@@ -1,7 +1,8 @@
 use std::str::FromStr;
 
 use fuel_crypto::{PublicKey, SecretKey};
-use fuels::prelude::{Bech32Address as NativeBech32Address, generate_mnemonic_phrase};
+use fuel_tx::Bytes32;
+use fuels::prelude::{generate_mnemonic_phrase, Bech32Address as NativeBech32Address, Provider};
 use fuels::types::bech32::FUEL_BECH32_HRP;
 use fuels_accounts::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
 
@@ -29,7 +30,11 @@ pub fn new_from_mnemonic_phrase(phrase: String, node_url: String) -> CustomResul
     new_from_mnemonic_phrase_with_path(phrase, path, node_url)
 }
 
-pub fn new_from_mnemonic_phrase_with_path(phrase: String, path: String, node_url: String) -> CustomResult<WalletUnlocked> {
+pub fn new_from_mnemonic_phrase_with_path(
+    phrase: String,
+    path: String,
+    node_url: String,
+) -> CustomResult<WalletUnlocked> {
     let secret_key = SecretKey::new_from_mnemonic_phrase_with_path(&phrase, &path)?;
     Ok(WalletUnlocked {
         private_key: secret_key.to_string(),
@@ -44,4 +49,11 @@ fn get_public_address(private_key: SecretKey) -> Bech32Address {
     let hashed = public.hash();
     let address = NativeBech32Address::new(FUEL_BECH32_HRP, hashed);
     address.into()
+}
+
+pub async fn is_user_account(provider: &Provider, address: Bech32Address) -> bool {
+    provider
+        .is_user_account(Bytes32::from_str(address.to_b256_string().as_str()).unwrap())
+        .await
+        .unwrap_or(false)
 }

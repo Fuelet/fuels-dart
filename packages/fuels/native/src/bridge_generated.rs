@@ -245,6 +245,26 @@ fn wire_estimate_transaction_cost__method__Provider_impl(
         },
     )
 }
+fn wire_is_user_account__method__Provider_impl(
+    port_: MessagePort,
+    that: impl Wire2Api<Provider> + UnwindSafe,
+    address: impl Wire2Api<Bech32Address> + UnwindSafe,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, bool, _>(
+        WrapInfo {
+            debug_name: "is_user_account__method__Provider",
+            port: Some(port_),
+            mode: FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.wire2api();
+            let api_address = address.wire2api();
+            move |task_callback| {
+                Result::<_, ()>::Ok(Provider::is_user_account(&api_that, api_address))
+            }
+        },
+    )
+}
 fn wire_from_bech32_string__static_method__Bech32Address_impl(
     port_: MessagePort,
     s: impl Wire2Api<String> + UnwindSafe,

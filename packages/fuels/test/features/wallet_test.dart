@@ -54,4 +54,24 @@ void main() {
     await third.address.toBech32String().then((bech) => expect(bech,
         'fuel184jsv6n79z6mlhtzj80tehx3826huumehmlenrcsa89dsy6jz4yq9gs55j'));
   });
+
+  test('test is user account', () async {
+    Provider provider = createProvider();
+
+    expect(
+        true,
+        await provider.isUserAccount(
+            address: await parseAddress(testWalletBechAddress)));
+    expect(
+        true,
+        await provider.isUserAccount(
+            address: await parseAddress(
+                'fuel1pvazxjtdrnfvt0s4pj90zftxktwfpslqltwcfhuptqr37ha0slxsepphq6')));
+    // address of a deployed contract on testnet
+    expect(
+        false,
+        await provider.isUserAccount(
+            address: await parseAddress(
+                'fuel13envz7r5vtddgxfuu6r74vyp4k7tem2t9nzpwrcxz2z6gjyc2hnsvwyjmm')));
+  });
 }

@@ -101,6 +101,15 @@ impl Provider {
         let native_provider = get_native_provider(&self.node_url).await;
         transaction::estimate_transaction_cost(&native_provider, encoded_tx, None, None).await.unwrap().into()
     }
+
+    #[tokio::main]
+    pub async fn is_user_account(
+        &self,
+        address: Bech32Address,
+    ) -> bool {
+        let native_provider = get_native_provider(&self.node_url).await;
+        wallet::is_user_account(&native_provider, address).await
+    }
 }
 
 pub struct Bech32Address {

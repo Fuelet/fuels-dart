@@ -57,6 +57,17 @@ class FuelUtilsImpl extends BaseFuelUtils {
       maxFee: txCost.totalFee,
     );
   }
+
+  @override
+  Future<bool> isUserAccount(
+      {required String network, required String address}) async {
+    final provider = fuels.Provider(bridge: _bridge, nodeUrl: network);
+    final addressModel = await fuels.Bech32Address.fromBech32String(
+      bridge: _bridge,
+      s: address,
+    );
+    return provider.isUserAccount(address: addressModel);
+  }
 }
 
 // This is ffi specific code, that should be executed only on mobile platforms.

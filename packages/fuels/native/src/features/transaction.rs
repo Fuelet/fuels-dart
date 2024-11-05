@@ -12,6 +12,7 @@ use std::io;
 use std::str::FromStr;
 
 use crate::model::error::CustomResult;
+use crate::features::wallet::is_user_account;
 
 /// Clones the transfer function but doesn't submit the transaction
 pub async fn gen_transfer_tx_request(
@@ -22,10 +23,18 @@ pub async fn gen_transfer_tx_request(
     tx_policies: TxPolicies,
 ) -> CustomResult<(Vec<u8>, Vec<u8>)> {
     let provider = wallet.provider().unwrap();
-    let script_tx = build_transfer_tx(wallet, provider, to, amount, &asset, tx_policies).await?;
-    let fuel_tx: FuelTransaction = script_tx.clone().into();
-    let tx_id = script_tx.id(provider.chain_id());
-    Ok((fuel_tx.clone().to_bytes(), tx_id.to_vec()))
+    let is_valid_account = is_user_account(provider, to.clone().into()).await;
+    if is_valid_account {
+        let script_tx = build_transfer_tx(wallet, provider, to, amount, &asset, tx_policies).await?;
+        let fuel_tx: FuelTransaction = script_tx.clone().into();
+        let tx_id = script_tx.id(provider.chain_id());
+        Ok((fuel_tx.clone().to_bytes(), tx_id.to_vec()))
+    } else {
+        Err(io::Error::new(
+            io::ErrorKind::InvalidData,
+            "Not a user address",
+        ).into())
+    }
 }
 
 pub async fn send_transaction(
