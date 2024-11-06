@@ -21,7 +21,14 @@ class FuelUtilsImpl extends BaseFuelUtils {
 
   @override
   Future<TransactionCost> getTransactionCost(
-      {required String networkUrl, required String transactionRequestHexOrJson}) {
+      {required String networkUrl,
+      required String transactionRequestHexOrJson}) {
+    throw Exception('Stub implementation');
+  }
+
+  @override
+  Future<bool> isUserAccount(
+      {required String network, required String address}) {
     throw Exception('Stub implementation');
   }
 }

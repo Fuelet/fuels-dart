@@ -92,6 +92,15 @@ pub extern "C" fn wire_estimate_transaction_cost__method__Provider(
 }
 
 #[no_mangle]
+pub extern "C" fn wire_is_user_account__method__Provider(
+    port_: i64,
+    that: *mut wire_Provider,
+    address: *mut wire_Bech32Address,
+) {
+    wire_is_user_account__method__Provider_impl(port_, that, address)
+}
+
+#[no_mangle]
 pub extern "C" fn wire_from_bech32_string__static_method__Bech32Address(
     port_: i64,
     s: *mut wire_uint_8_list,

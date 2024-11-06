@@ -20,7 +20,8 @@ class FuelUtilsImpl extends BaseFuelUtils {
 
   @override
   Future<Transaction> transformTxRequest(dynamic transactionRequestHexOrJson) {
-    String jsTransaction = js_utils.transformTxRequest(transactionRequestHexOrJson);
+    String jsTransaction =
+        js_utils.transformTxRequest(transactionRequestHexOrJson);
     try {
       Transaction dartTransaction =
           Transaction.fromJson(jsonDecode(jsTransaction));
@@ -42,5 +43,11 @@ class FuelUtilsImpl extends BaseFuelUtils {
     } catch (err) {
       return Future.error(err);
     }
+  }
+
+  @override
+  Future<bool> isUserAccount(
+      {required String network, required String address}) {
+    return promiseToFuture(js_utils.isUserAccount(network, address));
   }
 }

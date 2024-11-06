@@ -17,3 +17,9 @@ external Object getTransactionCost(
   String networkUrl,
   String transactionRequestJson,
 );
+
+@JS('isUserAccount')
+external Object isUserAccount(
+  String networkUrl,
+  String address,
+);

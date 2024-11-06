@@ -31,4 +31,9 @@ class FuelUtils {
         networkUrl: networkUrl,
         transactionRequestHexOrJson: transactionRequestHexOrJson);
   }
+
+  static Future<bool> isUserAccount(
+      {required String network, required String address}) {
+    return _utils.isUserAccount(network: network, address: address);
+  }
 }

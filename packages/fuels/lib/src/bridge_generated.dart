@@ -84,6 +84,11 @@ abstract class Fuels {
   FlutterRustBridgeTaskConstMeta
       get kEstimateTransactionCostMethodProviderConstMeta;
 
+  Future<bool> isUserAccountMethodProvider(
+      {required Provider that, required Bech32Address address, dynamic hint});
+
+  FlutterRustBridgeTaskConstMeta get kIsUserAccountMethodProviderConstMeta;
+
   Future<Bech32Address> fromBech32StringStaticMethodBech32Address(
       {required String s, dynamic hint});
 
@@ -216,6 +221,12 @@ class Provider {
       bridge.estimateTransactionCostMethodProvider(
         that: this,
         encodedTx: encodedTx,
+      );
+
+  Future<bool> isUserAccount({required Bech32Address address, dynamic hint}) =>
+      bridge.isUserAccountMethodProvider(
+        that: this,
+        address: address,
       );
 }
 
@@ -623,6 +634,27 @@ class FuelsImpl implements Fuels {
             argNames: ["that", "encodedTx"],
           );
 
+  Future<bool> isUserAccountMethodProvider(
+      {required Provider that, required Bech32Address address, dynamic hint}) {
+    var arg0 = _platform.api2wire_box_autoadd_provider(that);
+    var arg1 = _platform.api2wire_box_autoadd_bech_32_address(address);
+    return _platform.executeNormal(FlutterRustBridgeTask(
+      callFfi: (port_) => _platform.inner
+          .wire_is_user_account__method__Provider(port_, arg0, arg1),
+      parseSuccessData: _wire2api_bool,
+      parseErrorData: null,
+      constMeta: kIsUserAccountMethodProviderConstMeta,
+      argValues: [that, address],
+      hint: hint,
+    ));
+  }
+
+  FlutterRustBridgeTaskConstMeta get kIsUserAccountMethodProviderConstMeta =>
+      const FlutterRustBridgeTaskConstMeta(
+        debugName: "is_user_account__method__Provider",
+        argNames: ["that", "address"],
+      );
+
   Future<Bech32Address> fromBech32StringStaticMethodBech32Address(
       {required String s, dynamic hint}) {
     var arg0 = _platform.api2wire_String(s);
@@ -747,6 +779,10 @@ class FuelsImpl implements Fuels {
       bridge: this,
       native: _wire2api_NativeBech32Address(arr[0]),
     );
+  }
+
+  bool _wire2api_bool(dynamic raw) {
+    return raw as bool;
   }
 
   int _wire2api_box_autoadd_u16(dynamic raw) {
@@ -1405,6 +1441,28 @@ class FuelsWire implements FlutterRustBridgeWireBase {
       _wire_estimate_transaction_cost__method__ProviderPtr.asFunction<
           void Function(int, ffi.Pointer<wire_Provider>,
               ffi.Pointer<wire_uint_8_list>)>();
+
+  void wire_is_user_account__method__Provider(
+    int port_,
+    ffi.Pointer<wire_Provider> that,
+    ffi.Pointer<wire_Bech32Address> address,
+  ) {
+    return _wire_is_user_account__method__Provider(
+      port_,
+      that,
+      address,
+    );
+  }
+
+  late final _wire_is_user_account__method__ProviderPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_Provider>,
+                  ffi.Pointer<wire_Bech32Address>)>>(
+      'wire_is_user_account__method__Provider');
+  late final _wire_is_user_account__method__Provider =
+      _wire_is_user_account__method__ProviderPtr.asFunction<
+          void Function(int, ffi.Pointer<wire_Provider>,
+              ffi.Pointer<wire_Bech32Address>)>();
 
   void wire_from_bech32_string__static_method__Bech32Address(
     int port_,
