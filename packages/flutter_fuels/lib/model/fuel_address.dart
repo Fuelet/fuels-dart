@@ -4,6 +4,7 @@ import 'package:convert/convert.dart';
 import 'package:dart_bech32/dart_bech32.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_fuels/utils/hex_utils.dart';
+import 'package:eip55/eip55.dart';
 
 const _hrp = 'fuel';
 
@@ -12,9 +13,10 @@ class FuelAddress with EquatableMixin {
   final String b256Address;
 
   FuelAddress({
-    required this.bech32Address,
+    required String bech32Address,
     required String b256Address,
-  }) : b256Address = _formatB256Address(b256Address);
+  })  : bech32Address = _formatBechAddress(bech32Address),
+        b256Address = _formatB256Address(b256Address);
 
   factory FuelAddress.fromString(String s) {
     try {
@@ -46,5 +48,9 @@ String _formatB256Address(String b256Address) {
   if (withPrefix.length != 66) {
     throw Exception('b256Address must contain 64 hex symbols: $withPrefix');
   }
-  return withPrefix;
+  return toChecksumAddress(b256Address);
+}
+
+String _formatBechAddress(String bechAddress) {
+  return bechAddress.toLowerCase();
 }
