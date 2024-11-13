@@ -1,3 +1,4 @@
+import 'package:flutter_fuels/model/fuel_address.dart';
 import 'package:flutter_fuels/model/transaction.dart';
 import 'package:flutter_fuels/model/transaction_cost.dart';
 import 'package:flutter_fuels/utils/hex_utils.dart';
@@ -34,6 +35,8 @@ class FuelUtils {
 
   static Future<bool> isUserAccount(
       {required String network, required String address}) {
-    return _utils.isUserAccount(network: network, address: address);
+    final fuelAddress = FuelAddress.fromString(address);
+    return _utils.isUserAccount(
+        network: network, address: fuelAddress.b256Address);
   }
 }
