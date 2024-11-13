@@ -35,8 +35,12 @@ class FuelUtils {
 
   static Future<bool> isUserAccount(
       {required String network, required String address}) {
-    final fuelAddress = FuelAddress.fromString(address);
-    return _utils.isUserAccount(
-        network: network, address: fuelAddress.b256Address);
+    try {
+      final fuelAddress = FuelAddress.fromString(address);
+      return _utils.isUserAccount(
+          network: network, address: fuelAddress.b256Address);
+    } catch (e) {
+      return Future.value(false);
+    }
   }
 }
