@@ -62,7 +62,7 @@ class FuelUtilsImpl extends BaseFuelUtils {
   Future<bool> isUserAccount(
       {required String network, required String address}) async {
     final provider = fuels.Provider(bridge: _bridge, nodeUrl: network);
-    final addressModel = await fuels.Bech32Address.fromBech32String(
+    final addressModel = await fuels.Bech32Address.fromB256String(
       bridge: _bridge,
       s: address,
     );
