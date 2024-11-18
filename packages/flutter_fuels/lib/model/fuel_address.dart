@@ -48,7 +48,7 @@ String _formatB256Address(String b256Address) {
   if (withPrefix.length != 66) {
     throw Exception('b256Address must contain 64 hex symbols: $withPrefix');
   }
-  return toChecksumAddress(b256Address);
+  return addHexPrefix(toChecksumAddress(b256Address));
 }
 
 String _formatBechAddress(String bechAddress) {
