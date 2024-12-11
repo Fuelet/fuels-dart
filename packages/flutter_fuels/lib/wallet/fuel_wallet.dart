@@ -1,5 +1,4 @@
-import 'package:flutter_fuels/model/call_result.dart';
-import 'package:flutter_fuels/model/transaction_receipt.dart';
+import 'package:flutter_fuels/flutter_fuels.dart';
 import 'package:flutter_fuels/utils/hex_utils.dart';
 import 'package:flutter_fuels/utils/mnemonic_utils.dart';
 import 'package:flutter_fuels/wallet/dart_wallet_unlocked.dart';
@@ -95,9 +94,12 @@ class FuelWallet {
 
   String? get mnemonicPhrase => _walletUnlocked.mnemonicPhrase;
 
-  String get bech32Address => _walletUnlocked.bech32Address;
+  FuelAddress get fuelAddress =>
+      FuelAddress.fromString(_walletUnlocked.b256Address);
 
-  String get b256Address => addHexPrefix(_walletUnlocked.b256Address);
+  String get bech32Address => fuelAddress.bech32Address;
+
+  String get b256Address => fuelAddress.b256Address;
 
   String get privateKey => addHexPrefix(_walletUnlocked.privateKey);
 

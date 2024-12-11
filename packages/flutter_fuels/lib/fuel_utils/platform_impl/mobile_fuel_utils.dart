@@ -16,24 +16,6 @@ class FuelUtilsImpl extends BaseFuelUtils {
   static final fuels.Fuels _bridge = createLib();
 
   @override
-  Future<String> bech32FromB256String(String address) async {
-    final addressModel = await fuels.Bech32Address.fromB256String(
-      bridge: _bridge,
-      s: address,
-    );
-    return addressModel.toBech32String();
-  }
-
-  @override
-  Future<String> b256FromBech32String(String address) async {
-    final addressModel = await fuels.Bech32Address.fromBech32String(
-      bridge: _bridge,
-      s: address,
-    );
-    return addressModel.toB256String();
-  }
-
-  @override
   Future<Transaction> transformTxRequest(
       dynamic transactionRequestHexOrJson) async {
     final bytes = hex.decode(removeHexPrefix(transactionRequestHexOrJson));

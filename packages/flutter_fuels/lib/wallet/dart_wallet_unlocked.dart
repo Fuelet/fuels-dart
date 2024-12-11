@@ -1,10 +1,7 @@
 import 'package:flutter_fuels/model/call_result.dart';
-import 'package:flutter_fuels/model/transaction_cost.dart';
 
 abstract class DartWalletUnlocked {
   String? get mnemonicPhrase;
-
-  String get bech32Address;
 
   String get b256Address;
 

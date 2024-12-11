@@ -54,14 +54,12 @@ class FuelWalletImpl extends BaseWallet {
 
 class JsWallet {
   final String? mnemonicPhrase;
-  final String bech32Address;
   final String b256Address;
   final String privateKey;
   final String networkUrl;
 
   JsWallet(
       {required this.mnemonicPhrase,
-      required this.bech32Address,
       required this.b256Address,
       required this.privateKey,
       required this.networkUrl});
@@ -70,7 +68,6 @@ class JsWallet {
     final dartObject = dartify(o) as Map;
     final data = dartObject.cast<String, dynamic>();
     return JsWallet(
-        bech32Address: data['address']['bech32Address'],
         b256Address: addHexPrefix(data['address']['b256Address']),
         mnemonicPhrase: data['mnemonicPhrase'],
         privateKey: addHexPrefix(data['privateKey']),
@@ -99,9 +96,6 @@ class WebWalletUnlocked extends DartWalletUnlocked {
 
   @override
   String get b256Address => _wallet.b256Address;
-
-  @override
-  String get bech32Address => _wallet.bech32Address;
 
   @override
   String? get mnemonicPhrase => _wallet.mnemonicPhrase;

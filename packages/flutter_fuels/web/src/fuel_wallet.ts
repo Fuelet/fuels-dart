@@ -18,7 +18,6 @@ import {
 } from "fuels";
 
 type AddressObject = {
-  bech32Address: string;
   b256Address: string;
 };
 
@@ -31,7 +30,6 @@ type WalletObject = {
 function walletToJson(wallet: WalletUnlocked, mnemonic?: string): WalletObject {
   return {
     address: {
-      bech32Address: wallet.address.toString(),
       b256Address: wallet.address.toB256(),
     },
     privateKey: wallet.privateKey,
@@ -122,14 +120,6 @@ class WalletInterface {
 }
 
 class FuelsUtils {
-  bech32FromB256String(b256Address: string): Bech32Address {
-    return toBech32(b256Address);
-  }
-
-  b256FromBech32String(bech32Address: Bech32Address): string {
-    return toB256(bech32Address);
-  }
-
   transformTxRequest(transactionRequestJson: string): string {
     let txRequestLike: TransactionRequestLike = JSON.parse(transactionRequestJson);
     let txRequest: TransactionRequest = transactionRequestify(txRequestLike);

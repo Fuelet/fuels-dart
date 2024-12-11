@@ -66,25 +66,20 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
   final String networkUrl;
   @override
   final String b256Address;
-  @override
-  final String bech32Address;
 
   MobileWalletUnlocked(
       {required fuels.WalletUnlocked rustWalletUnlocked,
       required this.networkUrl,
-      required this.b256Address,
-      required this.bech32Address})
+      required this.b256Address})
       : _rustWalletUnlocked = rustWalletUnlocked;
 
   static Future<MobileWalletUnlocked> fromRust(
       fuels.WalletUnlocked rustWalletUnlocked, String networkUrl) async {
-    final bech32Address = await rustWalletUnlocked.address.toBech32String();
     final b256Address = await rustWalletUnlocked.address.toB256String();
     return MobileWalletUnlocked(
         rustWalletUnlocked: rustWalletUnlocked,
         networkUrl: networkUrl,
-        b256Address: addHexPrefix(b256Address),
-        bech32Address: bech32Address);
+        b256Address: addHexPrefix(b256Address));
   }
 
   @override
