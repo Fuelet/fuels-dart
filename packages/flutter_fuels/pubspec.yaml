@@ -19,6 +19,7 @@ dependencies:
   convert: ^3.1.1
   dart_bech32: ^2.0.0
   equatable: ^2.0.5
+  dio: ^5.8.0+1
   eip55: 1.0.2
 dev_dependencies:
   flutter_lints: ^2.0.0
