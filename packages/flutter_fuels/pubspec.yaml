@@ -20,7 +20,7 @@ dependencies:
   dart_bech32: ^2.0.0
   equatable: ^2.0.5
   dio: '>=5.0.0'
-  eip55: 1.0.2
+  crypto: ^3.0.3
 dev_dependencies:
   flutter_lints: ^2.0.0
   test: ^1.24.2

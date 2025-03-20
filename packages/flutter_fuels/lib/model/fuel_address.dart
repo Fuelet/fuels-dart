@@ -1,10 +1,11 @@
+import 'dart:convert';
 import 'dart:typed_data';
 
 import 'package:convert/convert.dart';
+import 'package:crypto/crypto.dart';
 import 'package:dart_bech32/dart_bech32.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter_fuels/utils/hex_utils.dart';
-import 'package:eip55/eip55.dart';
 
 const _hrp = 'fuel';
 
@@ -43,12 +44,31 @@ class FuelAddress with EquatableMixin {
   List<Object?> get props => [b256Address, bech32Address];
 }
 
+String _toChecksum(String address) {
+  address = address.toLowerCase();
+  if (address.startsWith('0x') || address.startsWith('0X')) {
+    address = address.substring(2);
+  }
+  final checksum = sha256.convert(utf8.encode(address)).bytes;
+
+  StringBuffer ret = StringBuffer('0x');
+  for (int i = 0; i < 32; ++i) {
+    final byte = checksum[i];
+    final ha = address[i * 2];
+    final hb = address[i * 2 + 1];
+    ret.write((byte & 0xf0) >= 0x80 ? ha.toUpperCase() : ha);
+    ret.write((byte & 0x0f) >= 0x08 ? hb.toUpperCase() : hb);
+  }
+
+  return ret.toString();
+}
+
 String _formatB256Address(String b256Address) {
   final withPrefix = addHexPrefix(b256Address);
   if (withPrefix.length != 66) {
     throw Exception('b256Address must contain 64 hex symbols: $withPrefix');
   }
-  return addHexPrefix(toChecksumAddress(b256Address));
+  return addHexPrefix(_toChecksum(b256Address));
 }
 
 String _formatBechAddress(String bechAddress) {
