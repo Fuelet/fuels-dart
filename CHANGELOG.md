@@ -3,6 +3,27 @@
 All notable changes to this project will be documented in this file.
 See [Conventional Commits](https://conventionalcommits.org) for commit guidelines.
 
+## 2025-03-20
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
+ - [`flutter_fuels` - `v0.0.71`](#flutter_fuels---v0071)
+
+---
+
+#### `flutter_fuels` - `v0.0.71`
+
+ - Update checksum algorithm
+
+
 ## 2025-02-04
 
 ### Changes
