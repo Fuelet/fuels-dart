@@ -122,9 +122,13 @@ class WebWalletUnlocked extends DartWalletUnlocked {
 
   @override
   Future<String> sendTransaction(
-      {required String transactionRequestHexOrJson}) {
+      {required String transactionRequestHexOrJson,
+      required bool returnTransactionResponse}) {
     return promiseToFuture(js_wallet.sendTransaction(
-        _wallet.privateKey, _wallet.networkUrl, transactionRequestHexOrJson));
+        _wallet.privateKey,
+        _wallet.networkUrl,
+        transactionRequestHexOrJson,
+        returnTransactionResponse));
   }
 
   @override

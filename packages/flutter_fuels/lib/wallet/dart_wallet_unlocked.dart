@@ -12,7 +12,10 @@ abstract class DartWalletUnlocked {
   Future<String> signMessage({required String message});
 
   /// Takes hex string on mobile and json tx request on web
-  Future<String> sendTransaction({required String transactionRequestHexOrJson});
+  Future<String> sendTransaction({
+    required String transactionRequestHexOrJson,
+    required bool returnTransactionResponse,
+  });
 
   // TODO: move to a platform independent implementation
   /// Takes hex string on mobile and json tx request on web

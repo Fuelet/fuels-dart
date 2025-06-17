@@ -116,7 +116,9 @@ class FuelWallet {
             fractionalAmount: fractionalAmount,
             assetId: assetId);
     return _walletUnlocked
-        .sendTransaction(transactionRequestHexOrJson: transferRequest)
+        .sendTransaction(
+            transactionRequestHexOrJson: transferRequest,
+            returnTransactionResponse: false)
         .then(addHexPrefix);
   }
 
@@ -129,11 +131,16 @@ class FuelWallet {
   /// Takes hex string on mobile and json tx request on web
   Future<String> sendTransaction({
     required String transactionRequestHexOrJson,
-  }) {
-    return _walletUnlocked
+    bool returnTransactionResponse = false,
+  }) async {
+    final response = await _walletUnlocked
         .sendTransaction(
-            transactionRequestHexOrJson: transactionRequestHexOrJson)
-        .then(addHexPrefix);
+            transactionRequestHexOrJson: transactionRequestHexOrJson,
+            returnTransactionResponse: returnTransactionResponse);
+    if (returnTransactionResponse) {
+      return response;
+    }
+    return addHexPrefix(response);
   }
 
   /// Takes hex string on mobile and json tx request on web

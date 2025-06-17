@@ -24,6 +24,7 @@ external Object sendTransaction(
   String privateKey,
   String networkUrl,
   String transactionRequestJson,
+  bool returnTransactionResponse,
 );
 
 @JS('simulateTransaction')
