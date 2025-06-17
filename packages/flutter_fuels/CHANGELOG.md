@@ -1,3 +1,7 @@
+## 0.0.72
+
+ - Bump "flutter_fuels" to `0.0.72`.
+
 ## 0.0.71
 
  - Update checksum algorithm
