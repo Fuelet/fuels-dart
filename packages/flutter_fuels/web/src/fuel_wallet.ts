@@ -1,10 +1,8 @@
 import {
-  Bech32Address,
   Mnemonic,
   Provider,
   ScriptTransactionRequest,
-  toB256,
-  toBech32,
+  serializeTransactionResponseJson,
   TransactionBlob,
   TransactionCreate,
   TransactionRequest,
@@ -69,15 +67,25 @@ class WalletInterface {
   async sendTransaction(
     privateKey: string,
     networkUrl: string,
-    transactionRequestJson: string
+    transactionRequestJson: string,
+    returnTransactionResponse: boolean
   ): Promise<string> {
-    let provider = await Provider.create(networkUrl);
+    let provider = new Provider(networkUrl);
     let wallet = Wallet.fromPrivateKey(privateKey, provider);
     let transactionRequest = JSON.parse(transactionRequestJson);
     let response = await wallet.sendTransaction(transactionRequest);
     let txResult = await response.waitForResult()
     if (!txResult.isStatusSuccess) {
       throw new Error(`Transaction failed: ${txResult.status}`);
+    }
+    if (!returnTransactionResponse) {
+      return response.id;
+    }
+    try {
+      const serializedTxResponse = await serializeTransactionResponseJson(response);
+      return JSON.stringify(serializedTxResponse);
+    } catch (error) {
+      console.error('Error serializing transaction response:', error);
     }
     return response.id;
   }
@@ -87,7 +95,7 @@ class WalletInterface {
     networkUrl: string,
     transactionRequestJson: string
   ): Promise<string> {
-    let provider = await Provider.create(networkUrl);
+    let provider = new Provider(networkUrl);
     let wallet = Wallet.fromPrivateKey(privateKey, provider);
     let transactionRequest = JSON.parse(transactionRequestJson);
     let response = await wallet.simulateTransaction(transactionRequest);
@@ -102,7 +110,7 @@ class WalletInterface {
     fractionalAmount: number,
     assetId: string,
   ): Promise<[string, string]> {
-    let provider = await Provider.create(networkUrl);
+    let provider = new Provider(networkUrl);
     let wallet = Wallet.fromPrivateKey(privateKey, provider);
 
     let request = new ScriptTransactionRequest({gasLimit: 20000});
@@ -114,7 +122,7 @@ class WalletInterface {
     const txCost = await wallet.getTransactionCost(request);
     request = await wallet.fund(request, txCost);
 
-    const txId = request.getTransactionId(provider.getChainId())
+    const txId = request.getTransactionId(await provider.getChainId())
     return [JSON.stringify(request), txId];
   }
 }
@@ -131,7 +139,7 @@ class FuelsUtils {
     networkUrl: string,
     transactionRequestJson: string
   ): Promise<string> {
-    let provider = await Provider.create(networkUrl);
+    let provider = new Provider(networkUrl);
     let transactionRequest = JSON.parse(transactionRequestJson);
     const {gasPrice, gasUsed, minFee, maxFee, minGas, maxGas} = await provider.getTransactionCost(transactionRequest)
     const responseObject = {
@@ -149,7 +157,7 @@ class FuelsUtils {
     networkUrl: string,
     address: string
   ): Promise<boolean> {
-    let provider = await Provider.create(networkUrl);
+    let provider = new Provider(networkUrl);
     return provider.isUserAccount(address);
   }
 }
