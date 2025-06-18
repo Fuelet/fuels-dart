@@ -137,7 +137,7 @@ class ReceiptTransfer extends TransactionReceipt {
 
   factory ReceiptTransfer.fromJson(Map<String, dynamic> data) {
     return ReceiptTransfer(
-        from: addHexPrefix(data['from']),
+        from: addHexPrefix(data['id']),
         to: addHexPrefix(data['to']),
         amount: parseBigInt(data['amount']),
         assetId: addHexPrefix(data['assetId']));
@@ -159,7 +159,7 @@ class ReceiptTransferOut extends TransactionReceipt {
 
   factory ReceiptTransferOut.fromJson(Map<String, dynamic> data) {
     return ReceiptTransferOut(
-        from: addHexPrefix(data['from']),
+        from: addHexPrefix(data['id']),
         to: addHexPrefix(data['to']),
         amount: parseBigInt(data['amount']),
         assetId: addHexPrefix(data['assetId']));
