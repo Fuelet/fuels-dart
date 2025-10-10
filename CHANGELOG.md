@@ -15,6 +15,27 @@ Packages with breaking changes:
 
 Packages with other changes:
 
+ - [`flutter_fuels` - `v0.0.74`](#flutter_fuels---v0074)
+
+---
+
+#### `flutter_fuels` - `v0.0.74`
+
+ - Bump "flutter_fuels" to `0.0.74`.
+
+
+## 2025-10-10
+
+### Changes
+
+---
+
+Packages with breaking changes:
+
+ - There are no breaking changes in this release.
+
+Packages with other changes:
+
  - [`fuels` - `v1.37.0`](#fuels---v1370)
  - [`flutter_fuels` - `v0.0.73+1`](#flutter_fuels---v00731)
 

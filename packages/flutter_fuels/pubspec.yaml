@@ -1,6 +1,6 @@
 name: flutter_fuels
 description: Flutter Plugin for Fuel SDK
-version: 0.0.73+1
+version: 0.0.74
 homepage: https://github.com/Fuelet/fuels-dart/tree/main/packages/flutter_fuels
 
 environment:
