@@ -1,13 +1,15 @@
 use std::str::FromStr;
+use std::string::String;
 
-use fuel_crypto::{PublicKey, SecretKey};
-use fuel_tx::Bytes32;
-use fuels::prelude::{generate_mnemonic_phrase, Bech32Address as NativeBech32Address, Provider};
-use fuels::types::bech32::FUEL_BECH32_HRP;
-use fuels_accounts::wallet::DEFAULT_DERIVATION_PATH_PREFIX;
+use fuel_crypto::SecretKey;
+use fuel_tx::Address;
+use fuels::prelude::Provider;
+use fuels_accounts::signers::private_key::{PrivateKeySigner, generate_mnemonic_phrase};
 
-use crate::api::{Bech32Address, WalletUnlocked};
+use crate::api::{WalletUnlocked};
 use crate::model::error::CustomResult;
+
+pub const DEFAULT_DERIVATION_PATH_PREFIX: &str = "m/44'/1179993420'";
 
 pub fn new_random(node_url: String) -> CustomResult<WalletUnlocked> {
     let mut rng = rand::thread_rng();
@@ -21,7 +23,7 @@ pub fn new_from_private_key(private_key: String, node_url: String) -> CustomResu
         private_key: secret_key.to_string(),
         mnemonic_phrase: None,
         node_url,
-        address: get_public_address(secret_key),
+        b256_address: get_public_address(secret_key).to_string(),
     })
 }
 
@@ -40,20 +42,18 @@ pub fn new_from_mnemonic_phrase_with_path(
         private_key: secret_key.to_string(),
         mnemonic_phrase: Some(phrase),
         node_url,
-        address: get_public_address(secret_key),
+        b256_address: get_public_address(secret_key).to_string(),
     })
 }
 
-fn get_public_address(private_key: SecretKey) -> Bech32Address {
-    let public = PublicKey::from(&private_key);
-    let hashed = public.hash();
-    let address = NativeBech32Address::new(FUEL_BECH32_HRP, hashed);
-    address.into()
+fn get_public_address(private_key: SecretKey) -> Address {
+    let signer = PrivateKeySigner::new(private_key);
+    signer.address()
 }
 
-pub async fn is_user_account(provider: &Provider, address: Bech32Address) -> bool {
+pub async fn is_user_account(provider: &Provider, address: Address) -> bool {
     provider
-        .is_user_account(Bytes32::from_str(address.to_b256_string().as_str()).unwrap())
+        .is_user_account(*address)
         .await
         .unwrap_or(false)
 }

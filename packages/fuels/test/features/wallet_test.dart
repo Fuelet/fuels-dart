@@ -10,29 +10,24 @@ const _thirdAccountDerivationPath = "m/44'/1179993420'/2'/0/0";
 void main() {
   test('test create a random wallet', () async {
     WalletUnlocked wallet = await createRandomWallet();
-    final bech32Address = await wallet.address.toBech32String();
-    expect(bech32Address.isNotEmpty, true);
+    expect(wallet.b256Address.isNotEmpty, true);
   });
 
   test('test import wallet with private key', () async {
     WalletUnlocked wallet = await importWalletWithPK(testWalletPrivateKey);
-    var bech32Address = await wallet.address.toBech32String();
-    expect(testWalletBechAddress, bech32Address);
+    expect(testWalletAddress, wallet.b256Address);
   });
 
   test('test import wallet with mnemonics', () async {
     WalletUnlocked wallet =
         await importWalletWithMnemonics(testWalletSeedPhrase);
-    var bech32Address = await wallet.address.toBech32String();
-    expect(testWalletBechAddress, bech32Address);
+    expect(testWalletAddress, wallet.b256Address);
   });
 
   test('test recreate wallet', () async {
     WalletUnlocked wallet = await createRandomWallet();
     WalletUnlocked recreated = await importWalletWithPK(wallet.privateKey);
-    final walletAddr = await wallet.address.toBech32String();
-    final recreatedAddr = await recreated.address.toBech32String();
-    expect(walletAddr, recreatedAddr);
+    expect(recreated.b256Address, wallet.b256Address);
     expect(recreated.privateKey, wallet.privateKey);
   });
 
@@ -44,40 +39,33 @@ void main() {
     WalletUnlocked third = await importWalletWithMnemonicsAndPath(
         testWalletSeedPhrase, _thirdAccountDerivationPath);
 
-    await first.address
-        .toBech32String()
-        .then((bech) => expect(bech, testWalletBechAddress));
-
-    await second.address.toBech32String().then((bech) => expect(bech,
-        'fuel1pvazxjtdrnfvt0s4pj90zftxktwfpslqltwcfhuptqr37ha0slxsepphq6'));
-
-    await third.address.toBech32String().then((bech) => expect(bech,
-        'fuel184jsv6n79z6mlhtzj80tehx3826huumehmlenrcsa89dsy6jz4yq9gs55j'));
+    expect(testWalletAddress, first.b256Address);
+    expect('0b3a23496d1cd2c5be150c8af12566b2dc90c3e0fadd84df8158071f5faf87cd',
+        second.b256Address);
+    expect('3d65066a7e28b5bfdd6291debcdcd13ab57e7379beff998f10e9cad813521548',
+        third.b256Address);
   });
 
   test('test is user account', () async {
     Provider provider = createProvider();
 
+    expect(true, await provider.isUserAccount(address: testWalletAddress));
     expect(
         true,
         await provider.isUserAccount(
-            address: await parseAddress(testWalletBechAddress)));
-    expect(
-        true,
-        await provider.isUserAccount(
-            address: await parseAddress(
-                'fuel1pvazxjtdrnfvt0s4pj90zftxktwfpslqltwcfhuptqr37ha0slxsepphq6')));
+            address:
+                '0x0B3A23496D1CD2c5Be150c8aF12566B2dc90c3e0FadD84df8158071F5FaF87Cd'));
     // address of a deployed contract on testnet
     expect(
         false,
         await provider.isUserAccount(
-            address: await parseAddress(
-                'fuel13envz7r5vtddgxfuu6r74vyp4k7tem2t9nzpwrcxz2z6gjyc2hnsvwyjmm')));
+            address:
+                '0xb942Cd8440A4Fe2E2E7548CFcB1D1547881CfE02DB66a463b19E1E46Ae56F0CA'));
     // hash of a transaction on testnet
     expect(
         false,
         await provider.isUserAccount(
-            address: await parseAddress(
-                'fuel10namrts428j8la5662ew9vhnm4s9mevn6dt586qx2m87m2nyhmes64dyx7')));
+            address:
+                '0x14ad1d2168f25ebc6b73a0ab83af2055acf8ac12bf1a953e754219d03f0885fd'));
   });
 }

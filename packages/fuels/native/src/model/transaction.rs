@@ -16,15 +16,17 @@ pub struct TxPolicies {
     pub tip: Option<u64>,
     pub witness_limit: Option<u64>,
     pub maturity: Option<u64>,
+    pub expiration: Option<u64>,
     pub max_fee: Option<u64>,
     pub script_gas_limit: Option<u64>,
 }
 
 pub struct TransactionCost {
     pub gas_price: u64,
-    pub gas_used: u64,
     pub metered_bytes_size: u64,
     pub total_fee: u64,
+    pub script_gas: u64,
+    pub total_gas: u64,
 }
 
 impl From<&fuels::prelude::TxPolicies> for TxPolicies {
@@ -33,6 +35,7 @@ impl From<&fuels::prelude::TxPolicies> for TxPolicies {
             tip: model.tip(),
             witness_limit: model.witness_limit(),
             maturity: model.maturity(),
+            expiration: model.expiration(),
             max_fee: model.max_fee(),
             script_gas_limit: model.script_gas_limit(),
         }
@@ -41,7 +44,7 @@ impl From<&fuels::prelude::TxPolicies> for TxPolicies {
 
 impl From<TxPolicies> for fuels::prelude::TxPolicies {
     fn from(model: TxPolicies) -> Self {
-        fuels::prelude::TxPolicies::new(model.tip, model.witness_limit, model.maturity, model.max_fee, model.script_gas_limit)
+        fuels::prelude::TxPolicies::new(model.tip, model.witness_limit, model.maturity, model.expiration, model.max_fee, model.script_gas_limit)
     }
 }
 
@@ -49,9 +52,10 @@ impl From<fuels_accounts::provider::TransactionCost> for TransactionCost {
     fn from(model: fuels_accounts::provider::TransactionCost) -> Self {
         TransactionCost {
             gas_price: model.gas_price,
-            gas_used: model.gas_used,
             metered_bytes_size: model.metered_bytes_size,
             total_fee: model.total_fee,
+            script_gas: model.script_gas,
+            total_gas: model.total_gas
         }
     }
 }
@@ -60,9 +64,10 @@ impl From<TransactionCost> for fuels_accounts::provider::TransactionCost {
     fn from(model: TransactionCost) -> Self {
         fuels_accounts::provider::TransactionCost {
             gas_price: model.gas_price,
-            gas_used: model.gas_used,
             metered_bytes_size: model.metered_bytes_size,
             total_fee: model.total_fee,
+            script_gas: model.script_gas,
+            total_gas: model.total_gas
         }
     }
 }
@@ -115,6 +120,14 @@ impl From<&TransactionType> for Transaction {
             TransactionType::Blob(_) => {
                 Transaction {
                     tx_type: 5,
+                    inputs: vec![],
+                    outputs: vec![],
+                    witnesses: vec![],
+                }
+            }
+            TransactionType::Unknown => {
+                Transaction {
+                    tx_type: 255,
                     inputs: vec![],
                     outputs: vec![],
                     witnesses: vec![],

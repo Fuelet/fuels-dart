@@ -4,8 +4,8 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge.dart';
 import 'package:fuels/fuels.dart';
 
 const betaApiUrl = 'https://testnet.fuel.network';
-const testWalletBechAddress =
-    'fuel1lcghw4e6gucsw4hj0me9cu3fkhdg65gf5ujck2tlywn8drrcedqq2htmt3';
+const testWalletAddress =
+    'fe1177573a47310756f27ef25c7229b5da8d5109a7258b297f23a6768c78cb40';
 const testWalletPrivateKey =
     'e5e05a4ab2919dc01b97c90a48853fd4dfbd204e92e44327375702ab09bb184e';
 const testWalletSeedPhrase =
@@ -40,8 +40,4 @@ Future<WalletUnlocked> importWalletWithMnemonicsAndPath(
     String mnemonicPhrase, String path) {
   return WalletUnlocked.newFromMnemonicPhraseWithPath(
       bridge: rustSdk, phrase: mnemonicPhrase, path: path, nodeUrl: betaApiUrl);
-}
-
-Future<Bech32Address> parseAddress(String address) {
-  return Bech32Address.fromBech32String(bridge: rustSdk, s: address);
 }

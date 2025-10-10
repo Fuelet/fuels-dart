@@ -1,13 +1,16 @@
-use async_trait::async_trait;
 use fuel_crypto::fuel_types::canonical::Deserialize;
 use fuel_crypto::fuel_types::canonical::Serialize;
-use fuel_crypto::{Message, Signature};
+use fuel_crypto::Message;
 use fuel_tx::field::{Inputs, Witnesses};
 use fuel_tx::{Create, Input, Receipt, Script, Transaction as FuelTransaction, UniqueIdentifier};
-use fuels::prelude::{Account, AssetId, Bech32Address, BuildableTransaction, CreateTransaction, Provider, Result, ScriptTransaction, Transaction, TransactionBuilder, TxPolicies, WalletUnlocked};
+use fuels::prelude::{AssetId, BuildableTransaction, CreateTransaction, Provider, ScriptTransaction, Transaction, TransactionBuilder, TxPolicies, Wallet};
 use fuels::prelude::{Address, Signer, TransactionType};
 use fuels::types::transaction_builders::ScriptTransactionBuilder;
 use fuels_accounts::provider::TransactionCost;
+use fuels_accounts::signers::fake::FakeSigner;
+use fuels_accounts::signers::private_key::PrivateKeySigner;
+use fuels_accounts::wallet::Unlocked;
+use fuels_accounts::ViewOnlyAccount;
 use std::io;
 use std::str::FromStr;
 
@@ -16,18 +19,19 @@ use crate::features::wallet::is_user_account;
 
 /// Clones the transfer function but doesn't submit the transaction
 pub async fn gen_transfer_tx_request(
-    wallet: &WalletUnlocked,
-    to: &Bech32Address,
+    wallet: &Wallet<Unlocked<PrivateKeySigner>>,
+    to: &Address,
     amount: u64,
     asset: String,
     tx_policies: TxPolicies,
 ) -> CustomResult<(Vec<u8>, Vec<u8>)> {
-    let provider = wallet.provider().unwrap();
-    let is_valid_account = is_user_account(provider, to.clone().into()).await;
+    let provider = wallet.provider();
+    let is_valid_account = is_user_account(provider, *to).await;
     if is_valid_account {
         let script_tx = build_transfer_tx(wallet, provider, to, amount, &asset, tx_policies).await?;
         let fuel_tx: FuelTransaction = script_tx.clone().into();
-        let tx_id = script_tx.id(provider.chain_id());
+        let chain_id = provider.chain_info().await.unwrap().consensus_parameters.chain_id();
+        let tx_id = script_tx.id(chain_id);
         Ok((fuel_tx.clone().to_bytes(), tx_id.to_vec()))
     } else {
         Err(io::Error::new(
@@ -38,10 +42,10 @@ pub async fn gen_transfer_tx_request(
 }
 
 pub async fn send_transaction(
-    wallet: &WalletUnlocked,
+    wallet: &Wallet<Unlocked<PrivateKeySigner>>,
     encoded_tx: Vec<u8>,
 ) -> CustomResult<String> {
-    let provider = wallet.provider().unwrap();
+    let provider = wallet.provider();
     let tx = decode_transaction(&encoded_tx)?;
     let tx_id = match tx {
         TransactionType::Script(script_tx) => {
@@ -58,16 +62,16 @@ pub async fn send_transaction(
             provider.await_transaction_commit::<CreateTransaction>(id).await?;
             id
         }
-        TransactionType::Mint(_) | TransactionType::Upload(_) | TransactionType::Upgrade(_) | TransactionType::Blob(_) => panic!(),
+        TransactionType::Mint(_) | TransactionType::Upload(_) | TransactionType::Upgrade(_) | TransactionType::Blob(_) | TransactionType::Unknown => panic!(),
     };
     Ok(tx_id.to_string())
 }
 
 pub async fn simulate_transaction(
-    wallet: &WalletUnlocked,
+    wallet: &Wallet<Unlocked<PrivateKeySigner>>,
     encoded_tx: Vec<u8>,
 ) -> CustomResult<Vec<Receipt>> {
-    let provider = wallet.provider().unwrap();
+    let provider = wallet.provider();
     let tx = decode_transaction(&encoded_tx)?;
     let receipts = match tx {
         TransactionType::Script(script_tx) => {
@@ -84,7 +88,7 @@ pub async fn simulate_transaction(
             let status = provider.dry_run(create_tx).await?;
             status.take_receipts()
         }
-        TransactionType::Mint(_) | TransactionType::Upload(_) | TransactionType::Upgrade(_) | TransactionType::Blob(_) => panic!(),
+        TransactionType::Mint(_) | TransactionType::Upload(_) | TransactionType::Upgrade(_) | TransactionType::Blob(_) | TransactionType::Unknown => panic!(),
     };
     Ok(receipts)
 }
@@ -105,7 +109,7 @@ pub async fn estimate_transaction_cost(
     let cost = match tx {
         TransactionType::Script(script) => provider.estimate_transaction_cost(script, tolerance, block_horizon).await?,
         TransactionType::Create(create) => provider.estimate_transaction_cost(create, tolerance, block_horizon).await?,
-        TransactionType::Mint(_) | TransactionType::Upgrade(_) | TransactionType::Upload(_) | TransactionType::Blob(_) => panic!()
+        TransactionType::Mint(_) | TransactionType::Upgrade(_) | TransactionType::Upload(_) | TransactionType::Blob(_) | TransactionType::Unknown => panic!()
     };
     Ok(cost)
 }
@@ -138,40 +142,24 @@ fn wrap_fuel_transaction(value: FuelTransaction) -> CustomResult<TransactionType
     }
 }
 
-#[derive(Clone, Debug, Default)]
-struct MockSigner {
-    address: Bech32Address,
-}
-
-#[cfg_attr(target_arch = "wasm32", async_trait(?Send))]
-#[cfg_attr(not(target_arch = "wasm32"), async_trait)]
-impl Signer for MockSigner {
-    async fn sign(&self, _message: Message) -> Result<Signature> {
-        Ok(Default::default())
-    }
-    fn address(&self) -> &Bech32Address {
-        &self.address
-    }
-}
-
-async fn build_transfer_tx(wallet: &WalletUnlocked,
+async fn build_transfer_tx(wallet: &Wallet<Unlocked<PrivateKeySigner>>,
                            provider: &Provider,
-                           to: &Bech32Address,
+                           to: &Address,
                            amount: u64,
                            asset: &String,
                            tx_policies: TxPolicies) -> CustomResult<ScriptTransaction> {
     let asset_id = AssetId::from_str(asset)?;
-    let inputs = wallet.get_asset_inputs_for_amount(asset_id, amount, None).await?;
-    let outputs = wallet.get_asset_outputs_for_amount(to, asset_id, amount);
+    let inputs = wallet.get_asset_inputs_for_amount(asset_id, amount as u128, None).await?;
+    let outputs = wallet.get_asset_outputs_for_amount(*to, asset_id, amount);
 
     let mut tx_builder =
         ScriptTransactionBuilder::prepare_transfer(inputs, outputs, tx_policies);
 
-    let mock_signer = MockSigner { address: wallet.address().clone() };
+    let mock_signer = FakeSigner::new(wallet.address());
     tx_builder.add_signer(mock_signer)?;
 
     let used_base_amount = if asset_id == AssetId::BASE { amount } else { 0 };
-    wallet.adjust_for_fee(&mut tx_builder, used_base_amount).await?;
+    wallet.adjust_for_fee(&mut tx_builder, used_base_amount as u128).await?;
 
     let tx = tx_builder.build(provider).await?;
     Ok(tx)
@@ -179,11 +167,12 @@ async fn build_transfer_tx(wallet: &WalletUnlocked,
 
 /// Analogue of the function from fuels-ts
 /// Finds the owner witness index and updates the witness
-async fn update_witness_by_owner_script(wallet: &WalletUnlocked, script: &mut Script) {
-    let provider = wallet.provider().unwrap();
-    let tx_id = script.id(&provider.chain_id());
+async fn update_witness_by_owner_script(wallet: &Wallet<Unlocked<PrivateKeySigner>>, script: &mut Script) {
+    let provider = wallet.provider();
+    let chain_id = provider.chain_info().await.unwrap().consensus_parameters.chain_id();
+    let tx_id = script.id(&chain_id);
     let message = Message::from_bytes(*tx_id);
-    let signature = wallet.sign(message).await.unwrap();
+    let signature = wallet.signer().sign(message).await.unwrap();
 
     let owner_witness_index = find_owner_witness_index(wallet.address().into(), script.inputs());
 
@@ -193,11 +182,12 @@ async fn update_witness_by_owner_script(wallet: &WalletUnlocked, script: &mut Sc
     }
 }
 
-async fn update_witness_by_owner_create(wallet: &WalletUnlocked, create: &mut Create) {
-    let provider = wallet.provider().unwrap();
-    let tx_id = create.id(&provider.chain_id());
+async fn update_witness_by_owner_create(wallet: &Wallet<Unlocked<PrivateKeySigner>>, create: &mut Create) {
+    let provider = wallet.provider();
+    let chain_id = provider.chain_info().await.unwrap().consensus_parameters.chain_id();
+    let tx_id = create.id(&chain_id);
     let message = Message::from_bytes(*tx_id);
-    let signature = wallet.sign(message).await.unwrap();
+    let signature = wallet.signer().sign(message).await.unwrap();
 
     let owner_witness_index = find_owner_witness_index(wallet.address().into(), create.inputs());
 

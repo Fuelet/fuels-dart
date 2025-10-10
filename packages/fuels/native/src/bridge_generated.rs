@@ -136,7 +136,7 @@ fn wire_new_from_mnemonic_phrase_with_path__static_method__WalletUnlocked_impl(
 fn wire_gen_transfer_tx_request__method__WalletUnlocked_impl(
     port_: MessagePort,
     that: impl Wire2Api<WalletUnlocked> + UnwindSafe,
-    to: impl Wire2Api<Bech32Address> + UnwindSafe,
+    to: impl Wire2Api<String> + UnwindSafe,
     amount: impl Wire2Api<u64> + UnwindSafe,
     asset: impl Wire2Api<String> + UnwindSafe,
 ) {
@@ -248,7 +248,7 @@ fn wire_estimate_transaction_cost__method__Provider_impl(
 fn wire_is_user_account__method__Provider_impl(
     port_: MessagePort,
     that: impl Wire2Api<Provider> + UnwindSafe,
-    address: impl Wire2Api<Bech32Address> + UnwindSafe,
+    address: impl Wire2Api<String> + UnwindSafe,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, bool, _>(
         WrapInfo {
@@ -262,70 +262,6 @@ fn wire_is_user_account__method__Provider_impl(
             move |task_callback| {
                 Result::<_, ()>::Ok(Provider::is_user_account(&api_that, api_address))
             }
-        },
-    )
-}
-fn wire_from_bech32_string__static_method__Bech32Address_impl(
-    port_: MessagePort,
-    s: impl Wire2Api<String> + UnwindSafe,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, Bech32Address, _>(
-        WrapInfo {
-            debug_name: "from_bech32_string__static_method__Bech32Address",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || {
-            let api_s = s.wire2api();
-            move |task_callback| Result::<_, ()>::Ok(Bech32Address::from_bech32_string(api_s))
-        },
-    )
-}
-fn wire_from_b256_string__static_method__Bech32Address_impl(
-    port_: MessagePort,
-    s: impl Wire2Api<String> + UnwindSafe,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, Bech32Address, _>(
-        WrapInfo {
-            debug_name: "from_b256_string__static_method__Bech32Address",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || {
-            let api_s = s.wire2api();
-            move |task_callback| Result::<_, ()>::Ok(Bech32Address::from_b256_string(api_s))
-        },
-    )
-}
-fn wire_to_bech32_string__method__Bech32Address_impl(
-    port_: MessagePort,
-    that: impl Wire2Api<Bech32Address> + UnwindSafe,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, String, _>(
-        WrapInfo {
-            debug_name: "to_bech32_string__method__Bech32Address",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || {
-            let api_that = that.wire2api();
-            move |task_callback| Result::<_, ()>::Ok(Bech32Address::to_bech32_string(&api_that))
-        },
-    )
-}
-fn wire_to_b256_string__method__Bech32Address_impl(
-    port_: MessagePort,
-    that: impl Wire2Api<Bech32Address> + UnwindSafe,
-) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap::<_, _, _, String, _>(
-        WrapInfo {
-            debug_name: "to_b256_string__method__Bech32Address",
-            port: Some(port_),
-            mode: FfiCallMode::Normal,
-        },
-        move || {
-            let api_that = that.wire2api();
-            move |task_callback| Result::<_, ()>::Ok(Bech32Address::to_b256_string(&api_that))
         },
     )
 }
@@ -364,18 +300,6 @@ impl Wire2Api<u8> for u8 {
 }
 
 // Section: impl IntoDart
-
-impl support::IntoDart for Bech32Address {
-    fn into_dart(self) -> support::DartAbi {
-        vec![self.native.into_dart()].into_dart()
-    }
-}
-impl support::IntoDartExceptPrimitive for Bech32Address {}
-impl rust2dart::IntoIntoDart<Bech32Address> for Bech32Address {
-    fn into_into_dart(self) -> Self {
-        self
-    }
-}
 
 impl support::IntoDart for Input {
     fn into_dart(self) -> support::DartAbi {
@@ -575,9 +499,10 @@ impl support::IntoDart for TransactionCost {
     fn into_dart(self) -> support::DartAbi {
         vec![
             self.gas_price.into_into_dart().into_dart(),
-            self.gas_used.into_into_dart().into_dart(),
             self.metered_bytes_size.into_into_dart().into_dart(),
             self.total_fee.into_into_dart().into_dart(),
+            self.script_gas.into_into_dart().into_dart(),
+            self.total_gas.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -595,7 +520,7 @@ impl support::IntoDart for WalletUnlocked {
             self.private_key.into_into_dart().into_dart(),
             self.mnemonic_phrase.into_dart(),
             self.node_url.into_into_dart().into_dart(),
-            self.address.into_into_dart().into_dart(),
+            self.b256_address.into_into_dart().into_dart(),
         ]
         .into_dart()
     }

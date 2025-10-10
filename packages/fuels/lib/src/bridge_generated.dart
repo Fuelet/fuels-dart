@@ -49,7 +49,7 @@ abstract class Fuels {
 
   Future<(Uint8List, Uint8List)> genTransferTxRequestMethodWalletUnlocked(
       {required WalletUnlocked that,
-      required Bech32Address to,
+      required String to,
       required int amount,
       required String asset,
       dynamic hint});
@@ -85,80 +85,9 @@ abstract class Fuels {
       get kEstimateTransactionCostMethodProviderConstMeta;
 
   Future<bool> isUserAccountMethodProvider(
-      {required Provider that, required Bech32Address address, dynamic hint});
+      {required Provider that, required String address, dynamic hint});
 
   FlutterRustBridgeTaskConstMeta get kIsUserAccountMethodProviderConstMeta;
-
-  Future<Bech32Address> fromBech32StringStaticMethodBech32Address(
-      {required String s, dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta
-      get kFromBech32StringStaticMethodBech32AddressConstMeta;
-
-  Future<Bech32Address> fromB256StringStaticMethodBech32Address(
-      {required String s, dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta
-      get kFromB256StringStaticMethodBech32AddressConstMeta;
-
-  Future<String> toBech32StringMethodBech32Address(
-      {required Bech32Address that, dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta
-      get kToBech32StringMethodBech32AddressConstMeta;
-
-  Future<String> toB256StringMethodBech32Address(
-      {required Bech32Address that, dynamic hint});
-
-  FlutterRustBridgeTaskConstMeta get kToB256StringMethodBech32AddressConstMeta;
-
-  DropFnType get dropOpaqueNativeBech32Address;
-  ShareFnType get shareOpaqueNativeBech32Address;
-  OpaqueTypeFinalizer get NativeBech32AddressFinalizer;
-}
-
-@sealed
-class NativeBech32Address extends FrbOpaque {
-  final Fuels bridge;
-  NativeBech32Address.fromRaw(int ptr, int size, this.bridge)
-      : super.unsafe(ptr, size);
-  @override
-  DropFnType get dropFn => bridge.dropOpaqueNativeBech32Address;
-
-  @override
-  ShareFnType get shareFn => bridge.shareOpaqueNativeBech32Address;
-
-  @override
-  OpaqueTypeFinalizer get staticFinalizer =>
-      bridge.NativeBech32AddressFinalizer;
-}
-
-class Bech32Address {
-  final Fuels bridge;
-  final NativeBech32Address native;
-
-  const Bech32Address({
-    required this.bridge,
-    required this.native,
-  });
-
-  static Future<Bech32Address> fromBech32String(
-          {required Fuels bridge, required String s, dynamic hint}) =>
-      bridge.fromBech32StringStaticMethodBech32Address(s: s, hint: hint);
-
-  static Future<Bech32Address> fromB256String(
-          {required Fuels bridge, required String s, dynamic hint}) =>
-      bridge.fromB256StringStaticMethodBech32Address(s: s, hint: hint);
-
-  Future<String> toBech32String({dynamic hint}) =>
-      bridge.toBech32StringMethodBech32Address(
-        that: this,
-      );
-
-  Future<String> toB256String({dynamic hint}) =>
-      bridge.toB256StringMethodBech32Address(
-        that: this,
-      );
 }
 
 @freezed
@@ -223,7 +152,7 @@ class Provider {
         encodedTx: encodedTx,
       );
 
-  Future<bool> isUserAccount({required Bech32Address address, dynamic hint}) =>
+  Future<bool> isUserAccount({required String address, dynamic hint}) =>
       bridge.isUserAccountMethodProvider(
         that: this,
         address: address,
@@ -289,15 +218,17 @@ class Transaction {
 
 class TransactionCost {
   final int gasPrice;
-  final int gasUsed;
   final int meteredBytesSize;
   final int totalFee;
+  final int scriptGas;
+  final int totalGas;
 
   const TransactionCost({
     required this.gasPrice,
-    required this.gasUsed,
     required this.meteredBytesSize,
     required this.totalFee,
+    required this.scriptGas,
+    required this.totalGas,
   });
 }
 
@@ -306,14 +237,14 @@ class WalletUnlocked {
   final String privateKey;
   final String? mnemonicPhrase;
   final String nodeUrl;
-  final Bech32Address address;
+  final String b256Address;
 
   const WalletUnlocked({
     required this.bridge,
     required this.privateKey,
     this.mnemonicPhrase,
     required this.nodeUrl,
-    required this.address,
+    required this.b256Address,
   });
 
   static Future<WalletUnlocked> newRandom(
@@ -346,7 +277,7 @@ class WalletUnlocked {
           phrase: phrase, path: path, nodeUrl: nodeUrl, hint: hint);
 
   Future<(Uint8List, Uint8List)> genTransferTxRequest(
-          {required Bech32Address to,
+          {required String to,
           required int amount,
           required String asset,
           dynamic hint}) =>
@@ -515,12 +446,12 @@ class FuelsImpl implements Fuels {
 
   Future<(Uint8List, Uint8List)> genTransferTxRequestMethodWalletUnlocked(
       {required WalletUnlocked that,
-      required Bech32Address to,
+      required String to,
       required int amount,
       required String asset,
       dynamic hint}) {
     var arg0 = _platform.api2wire_box_autoadd_wallet_unlocked(that);
-    var arg1 = _platform.api2wire_box_autoadd_bech_32_address(to);
+    var arg1 = _platform.api2wire_String(to);
     var arg2 = _platform.api2wire_u64(amount);
     var arg3 = _platform.api2wire_String(asset);
     return _platform.executeNormal(FlutterRustBridgeTask(
@@ -635,9 +566,9 @@ class FuelsImpl implements Fuels {
           );
 
   Future<bool> isUserAccountMethodProvider(
-      {required Provider that, required Bech32Address address, dynamic hint}) {
+      {required Provider that, required String address, dynamic hint}) {
     var arg0 = _platform.api2wire_box_autoadd_provider(that);
-    var arg1 = _platform.api2wire_box_autoadd_bech_32_address(address);
+    var arg1 = _platform.api2wire_String(address);
     return _platform.executeNormal(FlutterRustBridgeTask(
       callFfi: (port_) => _platform.inner
           .wire_is_user_account__method__Provider(port_, arg0, arg1),
@@ -655,105 +586,10 @@ class FuelsImpl implements Fuels {
         argNames: ["that", "address"],
       );
 
-  Future<Bech32Address> fromBech32StringStaticMethodBech32Address(
-      {required String s, dynamic hint}) {
-    var arg0 = _platform.api2wire_String(s);
-    return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_from_bech32_string__static_method__Bech32Address(port_, arg0),
-      parseSuccessData: (d) => _wire2api_bech_32_address(d),
-      parseErrorData: null,
-      constMeta: kFromBech32StringStaticMethodBech32AddressConstMeta,
-      argValues: [s],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta
-      get kFromBech32StringStaticMethodBech32AddressConstMeta =>
-          const FlutterRustBridgeTaskConstMeta(
-            debugName: "from_bech32_string__static_method__Bech32Address",
-            argNames: ["s"],
-          );
-
-  Future<Bech32Address> fromB256StringStaticMethodBech32Address(
-      {required String s, dynamic hint}) {
-    var arg0 = _platform.api2wire_String(s);
-    return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_from_b256_string__static_method__Bech32Address(port_, arg0),
-      parseSuccessData: (d) => _wire2api_bech_32_address(d),
-      parseErrorData: null,
-      constMeta: kFromB256StringStaticMethodBech32AddressConstMeta,
-      argValues: [s],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta
-      get kFromB256StringStaticMethodBech32AddressConstMeta =>
-          const FlutterRustBridgeTaskConstMeta(
-            debugName: "from_b256_string__static_method__Bech32Address",
-            argNames: ["s"],
-          );
-
-  Future<String> toBech32StringMethodBech32Address(
-      {required Bech32Address that, dynamic hint}) {
-    var arg0 = _platform.api2wire_box_autoadd_bech_32_address(that);
-    return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_to_bech32_string__method__Bech32Address(port_, arg0),
-      parseSuccessData: _wire2api_String,
-      parseErrorData: null,
-      constMeta: kToBech32StringMethodBech32AddressConstMeta,
-      argValues: [that],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta
-      get kToBech32StringMethodBech32AddressConstMeta =>
-          const FlutterRustBridgeTaskConstMeta(
-            debugName: "to_bech32_string__method__Bech32Address",
-            argNames: ["that"],
-          );
-
-  Future<String> toB256StringMethodBech32Address(
-      {required Bech32Address that, dynamic hint}) {
-    var arg0 = _platform.api2wire_box_autoadd_bech_32_address(that);
-    return _platform.executeNormal(FlutterRustBridgeTask(
-      callFfi: (port_) => _platform.inner
-          .wire_to_b256_string__method__Bech32Address(port_, arg0),
-      parseSuccessData: _wire2api_String,
-      parseErrorData: null,
-      constMeta: kToB256StringMethodBech32AddressConstMeta,
-      argValues: [that],
-      hint: hint,
-    ));
-  }
-
-  FlutterRustBridgeTaskConstMeta
-      get kToB256StringMethodBech32AddressConstMeta =>
-          const FlutterRustBridgeTaskConstMeta(
-            debugName: "to_b256_string__method__Bech32Address",
-            argNames: ["that"],
-          );
-
-  DropFnType get dropOpaqueNativeBech32Address =>
-      _platform.inner.drop_opaque_NativeBech32Address;
-  ShareFnType get shareOpaqueNativeBech32Address =>
-      _platform.inner.share_opaque_NativeBech32Address;
-  OpaqueTypeFinalizer get NativeBech32AddressFinalizer =>
-      _platform.NativeBech32AddressFinalizer;
-
   void dispose() {
     _platform.dispose();
   }
 // Section: wire2api
-
-  NativeBech32Address _wire2api_NativeBech32Address(dynamic raw) {
-    return NativeBech32Address.fromRaw(raw[0], raw[1], this);
-  }
 
   String _wire2api_String(dynamic raw) {
     return raw as String;
@@ -768,16 +604,6 @@ class FuelsImpl implements Fuels {
     return (
       _wire2api_uint_8_list(arr[0]),
       _wire2api_uint_8_list(arr[1]),
-    );
-  }
-
-  Bech32Address _wire2api_bech_32_address(dynamic raw) {
-    final arr = raw as List<dynamic>;
-    if (arr.length != 1)
-      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
-    return Bech32Address(
-      bridge: this,
-      native: _wire2api_NativeBech32Address(arr[0]),
     );
   }
 
@@ -948,13 +774,14 @@ class FuelsImpl implements Fuels {
 
   TransactionCost _wire2api_transaction_cost(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
     return TransactionCost(
       gasPrice: _wire2api_u64(arr[0]),
-      gasUsed: _wire2api_u64(arr[1]),
-      meteredBytesSize: _wire2api_u64(arr[2]),
-      totalFee: _wire2api_u64(arr[3]),
+      meteredBytesSize: _wire2api_u64(arr[1]),
+      totalFee: _wire2api_u64(arr[2]),
+      scriptGas: _wire2api_u64(arr[3]),
+      totalGas: _wire2api_u64(arr[4]),
     );
   }
 
@@ -983,7 +810,7 @@ class FuelsImpl implements Fuels {
       privateKey: _wire2api_String(arr[0]),
       mnemonicPhrase: _wire2api_opt_String(arr[1]),
       nodeUrl: _wire2api_String(arr[2]),
-      address: _wire2api_bech_32_address(arr[3]),
+      b256Address: _wire2api_String(arr[3]),
     );
   }
 
@@ -1012,24 +839,8 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
 // Section: api2wire
 
   @protected
-  wire_NativeBech32Address api2wire_NativeBech32Address(
-      NativeBech32Address raw) {
-    final ptr = inner.new_NativeBech32Address();
-    _api_fill_to_wire_NativeBech32Address(raw, ptr);
-    return ptr;
-  }
-
-  @protected
   ffi.Pointer<wire_uint_8_list> api2wire_String(String raw) {
     return api2wire_uint_8_list(utf8.encoder.convert(raw));
-  }
-
-  @protected
-  ffi.Pointer<wire_Bech32Address> api2wire_box_autoadd_bech_32_address(
-      Bech32Address raw) {
-    final ptr = inner.new_box_autoadd_bech_32_address_0();
-    _api_fill_to_wire_bech_32_address(raw, ptr.ref);
-    return ptr;
   }
 
   @protected
@@ -1066,26 +877,7 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
 
 // Section: finalizer
 
-  late final OpaqueTypeFinalizer _NativeBech32AddressFinalizer =
-      OpaqueTypeFinalizer(inner._drop_opaque_NativeBech32AddressPtr);
-  OpaqueTypeFinalizer get NativeBech32AddressFinalizer =>
-      _NativeBech32AddressFinalizer;
 // Section: api_fill_to_wire
-
-  void _api_fill_to_wire_NativeBech32Address(
-      NativeBech32Address apiObj, wire_NativeBech32Address wireObj) {
-    wireObj.ptr = apiObj.shareOrMove();
-  }
-
-  void _api_fill_to_wire_bech_32_address(
-      Bech32Address apiObj, wire_Bech32Address wireObj) {
-    wireObj.native = api2wire_NativeBech32Address(apiObj.native);
-  }
-
-  void _api_fill_to_wire_box_autoadd_bech_32_address(
-      Bech32Address apiObj, ffi.Pointer<wire_Bech32Address> wireObj) {
-    _api_fill_to_wire_bech_32_address(apiObj, wireObj.ref);
-  }
 
   void _api_fill_to_wire_box_autoadd_provider(
       Provider apiObj, ffi.Pointer<wire_Provider> wireObj) {
@@ -1106,7 +898,7 @@ class FuelsPlatform extends FlutterRustBridgeBase<FuelsWire> {
     wireObj.private_key = api2wire_String(apiObj.privateKey);
     wireObj.mnemonic_phrase = api2wire_opt_String(apiObj.mnemonicPhrase);
     wireObj.node_url = api2wire_String(apiObj.nodeUrl);
-    _api_fill_to_wire_bech_32_address(apiObj.address, wireObj.address);
+    wireObj.b256_address = api2wire_String(apiObj.b256Address);
   }
 }
 
@@ -1323,7 +1115,7 @@ class FuelsWire implements FlutterRustBridgeWireBase {
   void wire_gen_transfer_tx_request__method__WalletUnlocked(
     int port_,
     ffi.Pointer<wire_WalletUnlocked> that,
-    ffi.Pointer<wire_Bech32Address> to,
+    ffi.Pointer<wire_uint_8_list> to,
     int amount,
     ffi.Pointer<wire_uint_8_list> asset,
   ) {
@@ -1341,7 +1133,7 @@ class FuelsWire implements FlutterRustBridgeWireBase {
               ffi.Void Function(
                   ffi.Int64,
                   ffi.Pointer<wire_WalletUnlocked>,
-                  ffi.Pointer<wire_Bech32Address>,
+                  ffi.Pointer<wire_uint_8_list>,
                   ffi.Uint64,
                   ffi.Pointer<wire_uint_8_list>)>>(
       'wire_gen_transfer_tx_request__method__WalletUnlocked');
@@ -1350,7 +1142,7 @@ class FuelsWire implements FlutterRustBridgeWireBase {
           void Function(
               int,
               ffi.Pointer<wire_WalletUnlocked>,
-              ffi.Pointer<wire_Bech32Address>,
+              ffi.Pointer<wire_uint_8_list>,
               int,
               ffi.Pointer<wire_uint_8_list>)>();
 
@@ -1445,7 +1237,7 @@ class FuelsWire implements FlutterRustBridgeWireBase {
   void wire_is_user_account__method__Provider(
     int port_,
     ffi.Pointer<wire_Provider> that,
-    ffi.Pointer<wire_Bech32Address> address,
+    ffi.Pointer<wire_uint_8_list> address,
   ) {
     return _wire_is_user_account__method__Provider(
       port_,
@@ -1457,106 +1249,12 @@ class FuelsWire implements FlutterRustBridgeWireBase {
   late final _wire_is_user_account__method__ProviderPtr = _lookup<
           ffi.NativeFunction<
               ffi.Void Function(ffi.Int64, ffi.Pointer<wire_Provider>,
-                  ffi.Pointer<wire_Bech32Address>)>>(
+                  ffi.Pointer<wire_uint_8_list>)>>(
       'wire_is_user_account__method__Provider');
   late final _wire_is_user_account__method__Provider =
       _wire_is_user_account__method__ProviderPtr.asFunction<
           void Function(int, ffi.Pointer<wire_Provider>,
-              ffi.Pointer<wire_Bech32Address>)>();
-
-  void wire_from_bech32_string__static_method__Bech32Address(
-    int port_,
-    ffi.Pointer<wire_uint_8_list> s,
-  ) {
-    return _wire_from_bech32_string__static_method__Bech32Address(
-      port_,
-      s,
-    );
-  }
-
-  late final _wire_from_bech32_string__static_method__Bech32AddressPtr =
-      _lookup<
-              ffi.NativeFunction<
-                  ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>(
-          'wire_from_bech32_string__static_method__Bech32Address');
-  late final _wire_from_bech32_string__static_method__Bech32Address =
-      _wire_from_bech32_string__static_method__Bech32AddressPtr
-          .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
-
-  void wire_from_b256_string__static_method__Bech32Address(
-    int port_,
-    ffi.Pointer<wire_uint_8_list> s,
-  ) {
-    return _wire_from_b256_string__static_method__Bech32Address(
-      port_,
-      s,
-    );
-  }
-
-  late final _wire_from_b256_string__static_method__Bech32AddressPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_uint_8_list>)>>(
-      'wire_from_b256_string__static_method__Bech32Address');
-  late final _wire_from_b256_string__static_method__Bech32Address =
-      _wire_from_b256_string__static_method__Bech32AddressPtr
-          .asFunction<void Function(int, ffi.Pointer<wire_uint_8_list>)>();
-
-  void wire_to_bech32_string__method__Bech32Address(
-    int port_,
-    ffi.Pointer<wire_Bech32Address> that,
-  ) {
-    return _wire_to_bech32_string__method__Bech32Address(
-      port_,
-      that,
-    );
-  }
-
-  late final _wire_to_bech32_string__method__Bech32AddressPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_Bech32Address>)>>(
-      'wire_to_bech32_string__method__Bech32Address');
-  late final _wire_to_bech32_string__method__Bech32Address =
-      _wire_to_bech32_string__method__Bech32AddressPtr
-          .asFunction<void Function(int, ffi.Pointer<wire_Bech32Address>)>();
-
-  void wire_to_b256_string__method__Bech32Address(
-    int port_,
-    ffi.Pointer<wire_Bech32Address> that,
-  ) {
-    return _wire_to_b256_string__method__Bech32Address(
-      port_,
-      that,
-    );
-  }
-
-  late final _wire_to_b256_string__method__Bech32AddressPtr = _lookup<
-          ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<wire_Bech32Address>)>>(
-      'wire_to_b256_string__method__Bech32Address');
-  late final _wire_to_b256_string__method__Bech32Address =
-      _wire_to_b256_string__method__Bech32AddressPtr
-          .asFunction<void Function(int, ffi.Pointer<wire_Bech32Address>)>();
-
-  wire_NativeBech32Address new_NativeBech32Address() {
-    return _new_NativeBech32Address();
-  }
-
-  late final _new_NativeBech32AddressPtr =
-      _lookup<ffi.NativeFunction<wire_NativeBech32Address Function()>>(
-          'new_NativeBech32Address');
-  late final _new_NativeBech32Address = _new_NativeBech32AddressPtr
-      .asFunction<wire_NativeBech32Address Function()>();
-
-  ffi.Pointer<wire_Bech32Address> new_box_autoadd_bech_32_address_0() {
-    return _new_box_autoadd_bech_32_address_0();
-  }
-
-  late final _new_box_autoadd_bech_32_address_0Ptr =
-      _lookup<ffi.NativeFunction<ffi.Pointer<wire_Bech32Address> Function()>>(
-          'new_box_autoadd_bech_32_address_0');
-  late final _new_box_autoadd_bech_32_address_0 =
-      _new_box_autoadd_bech_32_address_0Ptr
-          .asFunction<ffi.Pointer<wire_Bech32Address> Function()>();
+              ffi.Pointer<wire_uint_8_list>)>();
 
   ffi.Pointer<wire_Provider> new_box_autoadd_provider_0() {
     return _new_box_autoadd_provider_0();
@@ -1594,37 +1292,6 @@ class FuelsWire implements FlutterRustBridgeWireBase {
   late final _new_uint_8_list_0 = _new_uint_8_list_0Ptr
       .asFunction<ffi.Pointer<wire_uint_8_list> Function(int)>();
 
-  void drop_opaque_NativeBech32Address(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _drop_opaque_NativeBech32Address(
-      ptr,
-    );
-  }
-
-  late final _drop_opaque_NativeBech32AddressPtr =
-      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'drop_opaque_NativeBech32Address');
-  late final _drop_opaque_NativeBech32Address =
-      _drop_opaque_NativeBech32AddressPtr
-          .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
-
-  ffi.Pointer<ffi.Void> share_opaque_NativeBech32Address(
-    ffi.Pointer<ffi.Void> ptr,
-  ) {
-    return _share_opaque_NativeBech32Address(
-      ptr,
-    );
-  }
-
-  late final _share_opaque_NativeBech32AddressPtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Pointer<ffi.Void> Function(
-              ffi.Pointer<ffi.Void>)>>('share_opaque_NativeBech32Address');
-  late final _share_opaque_NativeBech32Address =
-      _share_opaque_NativeBech32AddressPtr
-          .asFunction<ffi.Pointer<ffi.Void> Function(ffi.Pointer<ffi.Void>)>();
-
   void free_WireSyncReturn(
     WireSyncReturn ptr,
   ) {
@@ -1649,14 +1316,6 @@ final class wire_uint_8_list extends ffi.Struct {
   external int len;
 }
 
-final class wire_NativeBech32Address extends ffi.Struct {
-  external ffi.Pointer<ffi.Void> ptr;
-}
-
-final class wire_Bech32Address extends ffi.Struct {
-  external wire_NativeBech32Address native;
-}
-
 final class wire_WalletUnlocked extends ffi.Struct {
   external ffi.Pointer<wire_uint_8_list> private_key;
 
@@ -1664,7 +1323,7 @@ final class wire_WalletUnlocked extends ffi.Struct {
 
   external ffi.Pointer<wire_uint_8_list> node_url;
 
-  external wire_Bech32Address address;
+  external ffi.Pointer<wire_uint_8_list> b256_address;
 }
 
 final class wire_Provider extends ffi.Struct {
