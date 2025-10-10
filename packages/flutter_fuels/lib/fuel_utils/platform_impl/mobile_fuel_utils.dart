@@ -32,23 +32,14 @@ class FuelUtilsImpl extends BaseFuelUtils {
     final bytes = hex.decode(removeHexPrefix(transactionRequestHexOrJson));
     final txCost = await provider.estimateTransactionCost(
         encodedTx: Uint8List.fromList(bytes));
-    return TransactionCost(
-      gasPrice: txCost.gasPrice,
-      gasUsed: txCost.gasUsed,
-      minFee: txCost.totalFee,
-      maxFee: txCost.totalFee,
-    );
+    return TransactionCost(fee: txCost.totalFee);
   }
 
   @override
   Future<bool> isUserAccount(
       {required String network, required String address}) async {
     final provider = fuels.Provider(bridge: _bridge, nodeUrl: network);
-    final addressModel = await fuels.Bech32Address.fromB256String(
-      bridge: _bridge,
-      s: address,
-    );
-    return provider.isUserAccount(address: addressModel);
+    return provider.isUserAccount(address: address);
   }
 }
 

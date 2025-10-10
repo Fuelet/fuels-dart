@@ -141,14 +141,9 @@ class FuelsUtils {
   ): Promise<string> {
     let provider = new Provider(networkUrl);
     let transactionRequest = JSON.parse(transactionRequestJson);
-    const {gasPrice, gasUsed, minFee, maxFee, minGas, maxGas} = await provider.getTransactionCost(transactionRequest)
+    const {maxFee} = await provider.getTransactionCost(transactionRequest)
     const responseObject = {
-      gasPrice: gasPrice.toNumber(),
-      gasUsed: gasUsed.toNumber(),
-      minFee: minFee.toNumber(),
-      maxFee: maxFee.toNumber(),
-      minGas: minGas.toNumber(),
-      maxGas: maxGas.toNumber(),
+      fee: maxFee.toNumber(),
     }
     return JSON.stringify(responseObject);
   }

@@ -9,7 +9,8 @@ clean:
 
 gen:
     cargo build --manifest-path=native/Cargo.toml
-    fvm flutter pub get
+    flutter pub get
+    # fvm flutter pub get
     MAX_RETRIES=3; ATTEMPT=1; while [ $ATTEMPT -le $MAX_RETRIES ]; do \
         flutter_rust_bridge_codegen \
             --rust-input native/src/api.rs \
@@ -19,8 +20,10 @@ gen:
             --llvm-path /opt/homebrew/opt/llvm \
         && break || ((ATTEMPT++)); echo 'Retrying...';\
     done
-    fvm dart run build_runner build --delete-conflicting-outputs
-    fvm dart format .
+    dart run build_runner build --delete-conflicting-outputs
+    dart format .
+    # fvm dart run build_runner build --delete-conflicting-outputs
+    # fvm dart format .
     cargo build --manifest-path=native/Cargo.toml
 
 # vim:expandtab:sw=4:ts=4

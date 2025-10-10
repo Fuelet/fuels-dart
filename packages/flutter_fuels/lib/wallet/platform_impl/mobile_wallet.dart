@@ -75,11 +75,10 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
 
   static Future<MobileWalletUnlocked> fromRust(
       fuels.WalletUnlocked rustWalletUnlocked, String networkUrl) async {
-    final b256Address = await rustWalletUnlocked.address.toB256String();
     return MobileWalletUnlocked(
         rustWalletUnlocked: rustWalletUnlocked,
         networkUrl: networkUrl,
-        b256Address: addHexPrefix(b256Address));
+        b256Address: addHexPrefix(rustWalletUnlocked.b256Address));
   }
 
   @override
@@ -93,11 +92,10 @@ class MobileWalletUnlocked extends DartWalletUnlocked {
       {required String destinationB256Address,
       required int fractionalAmount,
       required String assetId}) async {
-    final to = await fuels.Bech32Address.fromB256String(
-        bridge: _rustWalletUnlocked.bridge,
-        s: removeHexPrefix(destinationB256Address));
     final (bytes, txIdBytes) = await _rustWalletUnlocked.genTransferTxRequest(
-        to: to, amount: fractionalAmount, asset: removeHexPrefix(assetId));
+        to: removeHexPrefix(destinationB256Address),
+        amount: fractionalAmount,
+        asset: removeHexPrefix(assetId));
     return (
       addHexPrefix(hex.encode(bytes)),
       addHexPrefix(hex.encode(txIdBytes))
