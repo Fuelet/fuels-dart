@@ -26,3 +26,4 @@ runs:
       uses: dtolnay/rust-toolchain@stable
       with:
         toolchain: 1.90.0
+        components: rustfmt
