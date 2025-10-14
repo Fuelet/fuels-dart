@@ -1,40 +1,28 @@
-// The Android Gradle Plugin builds the native code with the Android NDK.
-
-group 'com.fuelet.flutter_fuels'
-version '1.0'
-
-buildscript {
-    repositories {
-        google()
-        mavenCentral()
-    }
-
-    dependencies {
-        // The Android Gradle Plugin knows how to build native code with the NDK.
-        classpath 'com.android.tools.build:gradle:7.1.2'
-    }
+plugins {
+    id "com.android.library"
 }
 
-rootProject.allprojects {
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-
-apply plugin: 'com.android.library'
+group = "com.fuelet.flutter_fuels"
+version = "1.0"
 
 android {
-    compileSdkVersion 31
+    namespace = "com.fuelet.flutter_fuels"
+    compileSdk = 35
+    ndkVersion = "28.0.12433566"
 
     defaultConfig {
-        minSdkVersion 16
+        minSdk = 23
+        targetSdk = 35
     }
 
-    // Trigger the binary download/update over in CMakeLists.txt
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
+    }
+
     externalNativeBuild {
         cmake {
-            path "CMakeLists.txt"
+            version "3.22.1"
         }
     }
 }
