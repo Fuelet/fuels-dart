@@ -95,6 +95,9 @@ class _$InputCopyWithImpl<$Res, $Val extends Input>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of Input
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -114,6 +117,8 @@ class __$$Input_InputCoinImplCopyWithImpl<$Res>
       _$Input_InputCoinImpl _value, $Res Function(_$Input_InputCoinImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Input
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -182,7 +187,9 @@ class _$Input_InputCoinImpl implements Input_InputCoin {
   int get hashCode =>
       Object.hash(runtimeType, owner, amount, assetId, witnessIndex);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Input
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$Input_InputCoinImplCopyWith<_$Input_InputCoinImpl> get copyWith =>
@@ -287,7 +294,10 @@ abstract class Input_InputCoin implements Input {
   int get amount;
   String get assetId;
   int? get witnessIndex;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Input
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Input_InputCoinImplCopyWith<_$Input_InputCoinImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -309,6 +319,8 @@ class __$$Input_InputContractImplCopyWithImpl<$Res>
       $Res Function(_$Input_InputContractImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Input
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -348,7 +360,9 @@ class _$Input_InputContractImpl implements Input_InputContract {
   @override
   int get hashCode => Object.hash(runtimeType, contractId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Input
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$Input_InputContractImplCopyWith<_$Input_InputContractImpl> get copyWith =>
@@ -447,7 +461,10 @@ abstract class Input_InputContract implements Input {
       _$Input_InputContractImpl;
 
   String get contractId;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Input
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Input_InputContractImplCopyWith<_$Input_InputContractImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -469,6 +486,8 @@ class __$$Input_InputMessageImplCopyWithImpl<$Res>
       $Res Function(_$Input_InputMessageImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Input
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -538,7 +557,9 @@ class _$Input_InputMessageImpl implements Input_InputMessage {
   int get hashCode =>
       Object.hash(runtimeType, amount, sender, recipient, witnessIndex);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Input
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$Input_InputMessageImplCopyWith<_$Input_InputMessageImpl> get copyWith =>
@@ -643,7 +664,10 @@ abstract class Input_InputMessage implements Input {
   String get sender;
   String get recipient;
   int? get witnessIndex;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Input
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Input_InputMessageImplCopyWith<_$Input_InputMessageImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -662,6 +686,9 @@ class __$$Input_UnknownInputImplCopyWithImpl<$Res>
   __$$Input_UnknownInputImplCopyWithImpl(_$Input_UnknownInputImpl _value,
       $Res Function(_$Input_UnknownInputImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of Input
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -859,6 +886,9 @@ class _$OutputCopyWithImpl<$Res, $Val extends Output>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -878,6 +908,8 @@ class __$$Output_OutputCoinImplCopyWithImpl<$Res>
       $Res Function(_$Output_OutputCoinImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -933,7 +965,9 @@ class _$Output_OutputCoinImpl implements Output_OutputCoin {
   @override
   int get hashCode => Object.hash(runtimeType, to, amount, assetId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$Output_OutputCoinImplCopyWith<_$Output_OutputCoinImpl> get copyWith =>
@@ -1040,7 +1074,10 @@ abstract class Output_OutputCoin implements Output {
   String get to;
   int get amount;
   String get assetId;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Output_OutputCoinImplCopyWith<_$Output_OutputCoinImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1063,6 +1100,8 @@ class __$$Output_OutputContractImplCopyWithImpl<$Res>
       $Res Function(_$Output_OutputContractImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1102,7 +1141,9 @@ class _$Output_OutputContractImpl implements Output_OutputContract {
   @override
   int get hashCode => Object.hash(runtimeType, inputIndex);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$Output_OutputContractImplCopyWith<_$Output_OutputContractImpl>
@@ -1205,7 +1246,10 @@ abstract class Output_OutputContract implements Output {
       _$Output_OutputContractImpl;
 
   int get inputIndex;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Output_OutputContractImplCopyWith<_$Output_OutputContractImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -1227,6 +1271,8 @@ class __$$Output_OutputChangeImplCopyWithImpl<$Res>
       $Res Function(_$Output_OutputChangeImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1282,7 +1328,9 @@ class _$Output_OutputChangeImpl implements Output_OutputChange {
   @override
   int get hashCode => Object.hash(runtimeType, to, amount, assetId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$Output_OutputChangeImplCopyWith<_$Output_OutputChangeImpl> get copyWith =>
@@ -1389,7 +1437,10 @@ abstract class Output_OutputChange implements Output {
   String get to;
   int get amount;
   String get assetId;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Output_OutputChangeImplCopyWith<_$Output_OutputChangeImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -1412,6 +1463,8 @@ class __$$Output_OutputVariableImplCopyWithImpl<$Res>
       $Res Function(_$Output_OutputVariableImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1467,7 +1520,9 @@ class _$Output_OutputVariableImpl implements Output_OutputVariable {
   @override
   int get hashCode => Object.hash(runtimeType, to, amount, assetId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$Output_OutputVariableImplCopyWith<_$Output_OutputVariableImpl>
@@ -1574,7 +1629,10 @@ abstract class Output_OutputVariable implements Output {
   String get to;
   int get amount;
   String get assetId;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Output_OutputVariableImplCopyWith<_$Output_OutputVariableImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -1598,6 +1656,8 @@ class __$$Output_OutputContractCreatedImplCopyWithImpl<$Res>
       $Res Function(_$Output_OutputContractCreatedImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -1638,7 +1698,9 @@ class _$Output_OutputContractCreatedImpl
   @override
   int get hashCode => Object.hash(runtimeType, contractId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$Output_OutputContractCreatedImplCopyWith<
@@ -1742,7 +1804,10 @@ abstract class Output_OutputContractCreated implements Output {
       {required final String contractId}) = _$Output_OutputContractCreatedImpl;
 
   String get contractId;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Output_OutputContractCreatedImplCopyWith<
           _$Output_OutputContractCreatedImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -1762,6 +1827,9 @@ class __$$Output_UnknownOutputImplCopyWithImpl<$Res>
   __$$Output_UnknownOutputImplCopyWithImpl(_$Output_UnknownOutputImpl _value,
       $Res Function(_$Output_UnknownOutputImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of Output
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -2011,6 +2079,9 @@ class _$ReceiptCopyWithImpl<$Res, $Val extends Receipt>
   final $Val _value;
   // ignore: unused_field
   final $Res Function($Val) _then;
+
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -2030,6 +2101,8 @@ class __$$Receipt_CallImplCopyWithImpl<$Res>
       _$Receipt_CallImpl _value, $Res Function(_$Receipt_CallImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -2085,7 +2158,9 @@ class _$Receipt_CallImpl implements Receipt_Call {
   @override
   int get hashCode => Object.hash(runtimeType, to, amount, assetId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$Receipt_CallImplCopyWith<_$Receipt_CallImpl> get copyWith =>
@@ -2238,7 +2313,10 @@ abstract class Receipt_Call implements Receipt {
   String get to;
   int get amount;
   String get assetId;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Receipt_CallImplCopyWith<_$Receipt_CallImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -2258,6 +2336,9 @@ class __$$Receipt_ReturnReceiptImplCopyWithImpl<$Res>
   __$$Receipt_ReturnReceiptImplCopyWithImpl(_$Receipt_ReturnReceiptImpl _value,
       $Res Function(_$Receipt_ReturnReceiptImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -2436,6 +2517,9 @@ class __$$Receipt_ReturnDataImplCopyWithImpl<$Res>
   __$$Receipt_ReturnDataImplCopyWithImpl(_$Receipt_ReturnDataImpl _value,
       $Res Function(_$Receipt_ReturnDataImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -2613,6 +2697,9 @@ class __$$Receipt_PanicImplCopyWithImpl<$Res>
   __$$Receipt_PanicImplCopyWithImpl(
       _$Receipt_PanicImpl _value, $Res Function(_$Receipt_PanicImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -2790,6 +2877,9 @@ class __$$Receipt_RevertImplCopyWithImpl<$Res>
   __$$Receipt_RevertImplCopyWithImpl(
       _$Receipt_RevertImpl _value, $Res Function(_$Receipt_RevertImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -2967,6 +3057,9 @@ class __$$Receipt_LogImplCopyWithImpl<$Res>
   __$$Receipt_LogImplCopyWithImpl(
       _$Receipt_LogImpl _value, $Res Function(_$Receipt_LogImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -3144,6 +3237,9 @@ class __$$Receipt_LogDataImplCopyWithImpl<$Res>
   __$$Receipt_LogDataImplCopyWithImpl(
       _$Receipt_LogDataImpl _value, $Res Function(_$Receipt_LogDataImpl) _then)
       : super(_value, _then);
+
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
 }
 
 /// @nodoc
@@ -3324,6 +3420,8 @@ class __$$Receipt_TransferImplCopyWithImpl<$Res>
       $Res Function(_$Receipt_TransferImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -3390,7 +3488,9 @@ class _$Receipt_TransferImpl implements Receipt_Transfer {
   @override
   int get hashCode => Object.hash(runtimeType, from, to, amount, assetId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$Receipt_TransferImplCopyWith<_$Receipt_TransferImpl> get copyWith =>
@@ -3546,7 +3646,10 @@ abstract class Receipt_Transfer implements Receipt {
   String get to;
   int get amount;
   String get assetId;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Receipt_TransferImplCopyWith<_$Receipt_TransferImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -3568,6 +3671,8 @@ class __$$Receipt_TransferOutImplCopyWithImpl<$Res>
       $Res Function(_$Receipt_TransferOutImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -3634,7 +3739,9 @@ class _$Receipt_TransferOutImpl implements Receipt_TransferOut {
   @override
   int get hashCode => Object.hash(runtimeType, from, to, amount, assetId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$Receipt_TransferOutImplCopyWith<_$Receipt_TransferOutImpl> get copyWith =>
@@ -3790,7 +3897,10 @@ abstract class Receipt_TransferOut implements Receipt {
   String get to;
   int get amount;
   String get assetId;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Receipt_TransferOutImplCopyWith<_$Receipt_TransferOutImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -3812,6 +3922,8 @@ class __$$Receipt_ScriptResultImplCopyWithImpl<$Res>
       $Res Function(_$Receipt_ScriptResultImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -3850,7 +3962,9 @@ class _$Receipt_ScriptResultImpl implements Receipt_ScriptResult {
   @override
   int get hashCode => Object.hash(runtimeType, gasUsed);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$Receipt_ScriptResultImplCopyWith<_$Receipt_ScriptResultImpl>
@@ -4001,7 +4115,10 @@ abstract class Receipt_ScriptResult implements Receipt {
       _$Receipt_ScriptResultImpl;
 
   int get gasUsed;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Receipt_ScriptResultImplCopyWith<_$Receipt_ScriptResultImpl>
       get copyWith => throw _privateConstructorUsedError;
 }
@@ -4023,6 +4140,8 @@ class __$$Receipt_MessageOutImplCopyWithImpl<$Res>
       $Res Function(_$Receipt_MessageOutImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -4079,7 +4198,9 @@ class _$Receipt_MessageOutImpl implements Receipt_MessageOut {
   @override
   int get hashCode => Object.hash(runtimeType, sender, recipient, amount);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$Receipt_MessageOutImplCopyWith<_$Receipt_MessageOutImpl> get copyWith =>
@@ -4233,7 +4354,10 @@ abstract class Receipt_MessageOut implements Receipt {
   String get sender;
   String get recipient;
   int get amount;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Receipt_MessageOutImplCopyWith<_$Receipt_MessageOutImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -4255,6 +4379,8 @@ class __$$Receipt_MintImplCopyWithImpl<$Res>
       _$Receipt_MintImpl _value, $Res Function(_$Receipt_MintImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -4302,7 +4428,9 @@ class _$Receipt_MintImpl implements Receipt_Mint {
   @override
   int get hashCode => Object.hash(runtimeType, subId, contractId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$Receipt_MintImplCopyWith<_$Receipt_MintImpl> get copyWith =>
@@ -4453,7 +4581,10 @@ abstract class Receipt_Mint implements Receipt {
 
   String get subId;
   String get contractId;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Receipt_MintImplCopyWith<_$Receipt_MintImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
@@ -4475,6 +4606,8 @@ class __$$Receipt_BurnImplCopyWithImpl<$Res>
       _$Receipt_BurnImpl _value, $Res Function(_$Receipt_BurnImpl) _then)
       : super(_value, _then);
 
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
   @pragma('vm:prefer-inline')
   @override
   $Res call({
@@ -4522,7 +4655,9 @@ class _$Receipt_BurnImpl implements Receipt_Burn {
   @override
   int get hashCode => Object.hash(runtimeType, subId, contractId);
 
-  @JsonKey(ignore: true)
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   @override
   @pragma('vm:prefer-inline')
   _$$Receipt_BurnImplCopyWith<_$Receipt_BurnImpl> get copyWith =>
@@ -4673,7 +4808,10 @@ abstract class Receipt_Burn implements Receipt {
 
   String get subId;
   String get contractId;
-  @JsonKey(ignore: true)
+
+  /// Create a copy of Receipt
+  /// with the given fields replaced by the non-null parameter values.
+  @JsonKey(includeFromJson: false, includeToJson: false)
   _$$Receipt_BurnImplCopyWith<_$Receipt_BurnImpl> get copyWith =>
       throw _privateConstructorUsedError;
 }
