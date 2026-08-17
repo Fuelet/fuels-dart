@@ -22,6 +22,9 @@ android {
 
     externalNativeBuild {
         cmake {
+            // Runs the download of the prebuilt fuels binaries into src/main/jniLibs;
+            // without `path`, CMake never runs and libfuels.so is not packaged.
+            path "CMakeLists.txt"
             version "3.22.1"
         }
     }
